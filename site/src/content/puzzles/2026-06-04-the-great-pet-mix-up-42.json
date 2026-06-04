@@ -73,236 +73,125 @@
     {
       "id": "c1",
       "structured": {
-        "type": "eitherOr",
+        "type": "is",
         "a": {
-          "cat": 3,
+          "cat": 0,
           "item": 0
         },
-        "options": [
-          {
-            "cat": 2,
-            "item": 3
-          },
-          {
-            "cat": 2,
-            "item": 1
-          }
-        ]
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
       },
-      "text": "The Pretzels-muncher likes either Pink or Blue."
+      "text": "Ava's pet is the Cat."
     },
     {
       "id": "c2",
       "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 1
-          },
-          {
-            "cat": 0,
-            "item": 2
-          }
-        ]
-      },
-      "text": "The Hamster belongs to either Ben or Cora."
-    },
-    {
-      "id": "c3",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 0
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 0
-          },
-          {
-            "cat": 0,
-            "item": 1
-          }
-        ]
-      },
-      "text": "The Cat belongs to either Ava or Ben."
-    },
-    {
-      "id": "c4",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 3,
-            "item": 2
-          },
-          {
-            "cat": 3,
-            "item": 1
-          }
-        ]
-      },
-      "text": "The Hamster's owner snacks on either Cookies or Grapes."
-    },
-    {
-      "id": "c5",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 2,
-          "item": 0
-        },
-        "options": [
-          {
-            "cat": 1,
-            "item": 1
-          },
-          {
-            "cat": 1,
-            "item": 0
-          }
-        ]
-      },
-      "text": "The Red fan's pet is either the Dog or the Cat."
-    },
-    {
-      "id": "c6",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 2
-          },
-          {
-            "cat": 0,
-            "item": 0
-          }
-        ]
-      },
-      "text": "The Dog belongs to either Cora or Ava."
-    },
-    {
-      "id": "c7",
-      "structured": {
-        "type": "eitherOr",
+        "type": "is",
         "a": {
           "cat": 0,
           "item": 1
         },
-        "options": [
-          {
-            "cat": 2,
-            "item": 1
-          },
-          {
-            "cat": 2,
-            "item": 2
-          }
-        ]
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
       },
-      "text": "Ben's favorite color is either Blue or Green."
+      "text": "Ben's favorite color is Blue."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "Ben turns up his nose at Pretzels."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "Cora won't eat Pretzels either."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "Dev's snack is Grapes."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The Hamster's owner loves Blue."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "The Dog's owner skips the Grapes."
     },
     {
       "id": "c8",
       "structured": {
-        "type": "eitherOr",
+        "type": "is",
         "a": {
           "cat": 2,
-          "item": 1
+          "item": 0
         },
-        "options": [
-          {
-            "cat": 1,
-            "item": 3
-          },
-          {
-            "cat": 1,
-            "item": 1
-          }
-        ]
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
       },
-      "text": "The Blue fan's pet is either the Hamster or the Dog."
+      "text": "The Red fan munches Popcorn."
     },
     {
       "id": "c9",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 2,
-            "item": 2
-          },
-          {
-            "cat": 2,
-            "item": 0
-          }
-        ]
-      },
-      "text": "The Grapes-eater likes either Green or Red."
-    },
-    {
-      "id": "c10",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 2
-          },
-          {
-            "cat": 0,
-            "item": 1
-          }
-        ]
-      },
-      "text": "The Popcorn-eater is either Cora or Ben."
-    },
-    {
-      "id": "c11",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 2,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 1,
-            "item": 0
-          },
-          {
-            "cat": 1,
-            "item": 1
-          }
-        ]
-      },
-      "text": "The Pink fan's pet is either the Cat or the Dog."
-    },
-    {
-      "id": "c12",
       "structured": {
         "type": "isNot",
         "a": {
@@ -311,10 +200,40 @@
         },
         "b": {
           "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The Green fan avoids Pretzels."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
           "item": 3
         }
       },
-      "text": "The Green fan does not snack on Popcorn."
+      "text": "Ben's pet is the Hamster."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "The Frog's owner loves Green."
     }
   ],
   "seed": 42,

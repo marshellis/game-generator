@@ -62,7 +62,7 @@
           "item": 1
         }
       },
-      "text": "Cora is the proud owner of the Dog."
+      "text": "Cora's pet is the Dog, and she is obsessed."
     },
     {
       "id": "c2",
@@ -92,7 +92,7 @@
           "item": 2
         }
       },
-      "text": "Cora's color is not Green."
+      "text": "Cora can't stand Green."
     },
     {
       "id": "c4",
@@ -107,25 +107,40 @@
           "item": 2
         }
       },
-      "text": "The Frog's owner does not like Green."
+      "text": "The Frog's owner thinks Green is yucky."
     },
     {
       "id": "c5",
       "structured": {
-        "type": "isNot",
+        "type": "is",
         "a": {
-          "cat": 1,
-          "item": 0
+          "cat": 0,
+          "item": 1
         },
         "b": {
           "cat": 2,
-          "item": 1
+          "item": 2
         }
       },
-      "text": "The Cat's owner does not like Blue."
+      "text": "Ben's favorite color is Green."
     },
     {
       "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Ava's pet is the bouncy Frog."
+    },
+    {
+      "id": "c7",
       "structured": {
         "type": "is",
         "a": {

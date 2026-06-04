@@ -83,7 +83,7 @@
           "item": 0
         }
       },
-      "text": "Cora's pet is the Cat."
+      "text": "Cora's pet is the Cat (a very judgmental Cat)."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 3
         }
       },
-      "text": "Ben's favorite color is Pink."
+      "text": "Ben is proudly a Pink fan."
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 1
         }
       },
-      "text": "Dev does not like Blue."
+      "text": "Dev can't stand Blue."
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 2
         }
       },
-      "text": "The Cat's owner likes Green."
+      "text": "The Cat's owner loves Green."
     },
     {
       "id": "c6",
@@ -143,22 +143,37 @@
           "item": 1
         }
       },
-      "text": "The Frog's owner does not like Blue."
+      "text": "The Frog's owner thinks Blue is boring."
     },
     {
       "id": "c7",
       "structured": {
-        "type": "isNot",
+        "type": "is",
         "a": {
           "cat": 0,
-          "item": 2
+          "item": 3
         },
         "b": {
-          "cat": 2,
-          "item": 3
+          "cat": 1,
+          "item": 2
         }
       },
-      "text": "Cora's color is not Pink."
+      "text": "Dev's pet is the Frog."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Ava's pet is the Dog."
     }
   ],
   "seed": 3,

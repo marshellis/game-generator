@@ -13,8 +13,7 @@
         "Ben",
         "Cora",
         "Dev",
-        "Eli",
-        "Faye"
+        "Eli"
       ]
     },
     {
@@ -25,8 +24,7 @@
         "8",
         "9",
         "10",
-        "11",
-        "12"
+        "11"
       ]
     },
     {
@@ -36,8 +34,7 @@
         "Dog",
         "Frog",
         "Hamster",
-        "Parrot",
-        "Turtle"
+        "Parrot"
       ]
     },
     {
@@ -47,19 +44,7 @@
         "Blue",
         "Green",
         "Pink",
-        "Orange",
-        "Purple"
-      ]
-    },
-    {
-      "name": "Snack",
-      "items": [
-        "Pretzels",
-        "Grapes",
-        "Cookies",
-        "Popcorn",
-        "Carrots",
-        "Cheese"
+        "Orange"
       ]
     }
   ],
@@ -69,40 +54,28 @@
       1,
       2,
       3,
-      4,
-      5
+      4
     ],
     [
-      5,
+      3,
+      1,
       4,
       2,
-      1,
-      3,
       0
     ],
     [
-      5,
       3,
-      1,
       0,
       4,
+      1,
       2
     ],
     [
-      1,
-      5,
       4,
-      2,
-      0,
-      3
-    ],
-    [
-      1,
-      2,
-      4,
-      0,
       3,
-      5
+      1,
+      0,
+      2
     ]
   ],
   "clues": [
@@ -111,21 +84,21 @@
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 1,
-          "item": 5
+          "cat": 3,
+          "item": 2
         },
         "options": [
           {
-            "cat": 4,
-            "item": 1
+            "cat": 0,
+            "item": 4
           },
           {
-            "cat": 4,
-            "item": 4
+            "cat": 0,
+            "item": 0
           }
         ]
       },
-      "text": "The 12-year-old snacks on either Grapes or Carrots."
+      "text": "The Green fan is either Eli or Ava."
     },
     {
       "id": "c2",
@@ -133,7 +106,7 @@
         "type": "eitherOr",
         "a": {
           "cat": 2,
-          "item": 3
+          "item": 0
         },
         "options": [
           {
@@ -142,11 +115,11 @@
           },
           {
             "cat": 0,
-            "item": 5
+            "item": 3
           }
         ]
       },
-      "text": "The Hamster belongs to either Ben or Faye."
+      "text": "The Cat belongs to Ben or Dev."
     },
     {
       "id": "c3",
@@ -154,322 +127,154 @@
         "type": "eitherOr",
         "a": {
           "cat": 0,
-          "item": 3
+          "item": 4
         },
         "options": [
           {
-            "cat": 2,
-            "item": 0
+            "cat": 3,
+            "item": 2
           },
           {
-            "cat": 2,
-            "item": 2
+            "cat": 3,
+            "item": 0
           }
         ]
       },
-      "text": "Dev's pet is either the Cat or the Frog."
+      "text": "Eli's favorite color is Green or Red."
     },
     {
       "id": "c4",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 4,
+          "cat": 1,
           "item": 0
         },
         "options": [
           {
-            "cat": 3,
-            "item": 2
+            "cat": 0,
+            "item": 4
           },
           {
-            "cat": 3,
-            "item": 1
+            "cat": 0,
+            "item": 3
           }
         ]
       },
-      "text": "The Pretzels-muncher likes either Green or Blue."
+      "text": "The 7-year-old is either Eli or Dev."
     },
     {
       "id": "c5",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 4,
-          "item": 2
+          "cat": 0,
+          "item": 0
         },
         "options": [
           {
-            "cat": 3,
-            "item": 5
+            "cat": 1,
+            "item": 3
           },
           {
-            "cat": 3,
-            "item": 0
+            "cat": 1,
+            "item": 2
           }
         ]
       },
-      "text": "The Cookies-eater likes either Purple or Red."
+      "text": "Ava is 10 or 9."
     },
     {
       "id": "c6",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 0,
-          "item": 5
+          "cat": 2,
+          "item": 4
         },
         "options": [
           {
-            "cat": 4,
-            "item": 5
+            "cat": 3,
+            "item": 1
           },
           {
-            "cat": 4,
+            "cat": 3,
             "item": 0
           }
         ]
       },
-      "text": "Faye snacks on either Cheese or Pretzels."
+      "text": "The Parrot's owner likes Blue or Red."
     },
     {
       "id": "c7",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 4,
-          "item": 2
+          "cat": 3,
+          "item": 4
         },
         "options": [
           {
             "cat": 0,
-            "item": 1
+            "item": 0
           },
           {
             "cat": 0,
-            "item": 0
+            "item": 2
           }
         ]
       },
-      "text": "The Cookies-eater is either Ben or Ava."
+      "text": "The Orange fan is either Ava or Cora."
     },
     {
       "id": "c8",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 4,
-          "item": 0
+          "cat": 3,
+          "item": 1
         },
         "options": [
           {
-            "cat": 2,
-            "item": 0
+            "cat": 0,
+            "item": 2
           },
           {
-            "cat": 2,
-            "item": 3
+            "cat": 0,
+            "item": 4
           }
         ]
       },
-      "text": "The Pretzels-muncher's pet is either the Cat or the Hamster."
+      "text": "The Blue fan is either Cora or Eli."
     },
     {
       "id": "c9",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 1,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 4
-          },
-          {
-            "cat": 0,
-            "item": 1
-          }
-        ]
-      },
-      "text": "The 10-year-old is either Eli or Ben."
-    },
-    {
-      "id": "c10",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 2,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 2
-          },
-          {
-            "cat": 0,
-            "item": 3
-          }
-        ]
-      },
-      "text": "The Dog belongs to either Cora or Dev."
-    },
-    {
-      "id": "c11",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 4
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 2
-          },
-          {
-            "cat": 0,
-            "item": 5
-          }
-        ]
-      },
-      "text": "The Orange fan is either Cora or Faye."
-    },
-    {
-      "id": "c12",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 3,
-            "item": 2
-          },
-          {
-            "cat": 3,
-            "item": 3
-          }
-        ]
-      },
-      "text": "The 8-year-old likes either Green or Pink."
-    },
-    {
-      "id": "c13",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 4
-        },
-        "options": [
-          {
-            "cat": 0,
-            "item": 2
-          },
-          {
-            "cat": 0,
-            "item": 4
-          }
-        ]
-      },
-      "text": "The Orange fan is either Cora or Eli."
-    },
-    {
-      "id": "c14",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 2,
-            "item": 5
-          },
-          {
-            "cat": 2,
-            "item": 2
-          }
-        ]
-      },
-      "text": "The Blue fan's pet is either the Turtle or the Frog."
-    },
-    {
-      "id": "c15",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 2,
-          "item": 4
-        },
-        "options": [
-          {
-            "cat": 4,
-            "item": 3
-          },
-          {
-            "cat": 4,
-            "item": 0
-          }
-        ]
-      },
-      "text": "The Parrot's owner snacks on either Popcorn or Pretzels."
-    },
-    {
-      "id": "c16",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 2,
+          "cat": 0,
           "item": 2
         },
         "options": [
           {
-            "cat": 0,
-            "item": 5
-          },
-          {
-            "cat": 0,
-            "item": 4
-          }
-        ]
-      },
-      "text": "The Frog belongs to either Faye or Eli."
-    },
-    {
-      "id": "c17",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 0
-        },
-        "options": [
-          {
             "cat": 2,
             "item": 4
           },
           {
             "cat": 2,
-            "item": 0
+            "item": 3
           }
         ]
       },
-      "text": "The Red fan's pet is either the Parrot or the Cat."
+      "text": "Cora's pet is the Parrot or the Hamster."
     },
     {
-      "id": "c18",
+      "id": "c10",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 4,
-          "item": 1
+          "cat": 3,
+          "item": 4
         },
         "lesser": {
           "cat": 2,
@@ -477,42 +282,10 @@
         },
         "orderedCat": 1
       },
-      "text": "The Grapes-eater is older than the Dog's owner."
+      "text": "The Orange fan is older than the Dog's owner."
     },
     {
-      "id": "c19",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 3,
-          "item": 1
-        },
-        "lesser": {
-          "cat": 3,
-          "item": 4
-        },
-        "orderedCat": 1
-      },
-      "text": "The Blue fan is older than the Orange fan."
-    },
-    {
-      "id": "c20",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 4,
-          "item": 0
-        },
-        "lesser": {
-          "cat": 4,
-          "item": 5
-        },
-        "orderedCat": 1
-      },
-      "text": "The Pretzels-muncher is older than the Cheese-eater."
-    },
-    {
-      "id": "c21",
+      "id": "c11",
       "structured": {
         "type": "comparative",
         "greater": {
@@ -520,60 +293,44 @@
           "item": 1
         },
         "lesser": {
-          "cat": 4,
-          "item": 5
+          "cat": 3,
+          "item": 3
         },
         "orderedCat": 1
       },
-      "text": "The Dog's owner is older than the Cheese-eater."
+      "text": "The Dog's owner is older than the Pink fan."
     },
     {
-      "id": "c22",
+      "id": "c12",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 4,
-          "item": 4
+          "cat": 0,
+          "item": 3
         },
         "lesser": {
-          "cat": 4,
+          "cat": 2,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "Dev is older than the Frog's owner."
+    },
+    {
+      "id": "c13",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 2,
           "item": 0
         },
         "orderedCat": 1
       },
-      "text": "The Carrots-cruncher is older than the Pretzels-muncher."
-    },
-    {
-      "id": "c23",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 0,
-          "item": 4
-        },
-        "lesser": {
-          "cat": 3,
-          "item": 4
-        },
-        "orderedCat": 1
-      },
-      "text": "Eli is older than the Orange fan."
-    },
-    {
-      "id": "c24",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 3,
-          "item": 5
-        },
-        "lesser": {
-          "cat": 0,
-          "item": 4
-        },
-        "orderedCat": 1
-      },
-      "text": "The Purple fan is older than Eli."
+      "text": "Dev is older than the Cat's owner."
     }
   ],
   "seed": 8,

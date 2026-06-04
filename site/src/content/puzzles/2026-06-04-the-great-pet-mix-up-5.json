@@ -16,16 +16,6 @@
       ]
     },
     {
-      "name": "Age",
-      "ordered": true,
-      "items": [
-        "7",
-        "8",
-        "9",
-        "10"
-      ]
-    },
-    {
       "name": "Pet",
       "items": [
         "Cat",
@@ -41,6 +31,15 @@
         "Blue",
         "Green",
         "Pink"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Pretzels",
+        "Grapes",
+        "Cookies",
+        "Popcorn"
       ]
     }
   ],
@@ -77,20 +76,20 @@
         "type": "eitherOr",
         "a": {
           "cat": 3,
-          "item": 0
+          "item": 1
         },
         "options": [
           {
-            "cat": 2,
-            "item": 3
+            "cat": 0,
+            "item": 2
           },
           {
-            "cat": 2,
-            "item": 2
+            "cat": 0,
+            "item": 1
           }
         ]
       },
-      "text": "Whoever picked Red owns either the Hamster or the Frog — no other critter fits."
+      "text": "Only two kids will admit to the Grapes: Cora or Ben."
     },
     {
       "id": "c2",
@@ -98,20 +97,20 @@
         "type": "eitherOr",
         "a": {
           "cat": 3,
-          "item": 0
+          "item": 2
         },
         "options": [
           {
-            "cat": 0,
-            "item": 0
+            "cat": 2,
+            "item": 2
           },
           {
-            "cat": 0,
-            "item": 2
+            "cat": 2,
+            "item": 3
           }
         ]
       },
-      "text": "The Red fan is one of just two kids: Ava or Cora."
+      "text": "The Cookie fan's favorite color is Green or Pink."
     },
     {
       "id": "c3",
@@ -132,15 +131,15 @@
           }
         ]
       },
-      "text": "The 9-year-old's favorite color is either Green or Pink."
+      "text": "The Frog's owner snacks on Cookies or Popcorn."
     },
     {
       "id": "c4",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 1,
-          "item": 2
+          "cat": 0,
+          "item": 3
         },
         "options": [
           {
@@ -153,7 +152,7 @@
           }
         ]
       },
-      "text": "That same 9-year-old keeps either the Frog or the Hamster."
+      "text": "Dev's favorite color is Green or Pink."
     },
     {
       "id": "c5",
@@ -161,6 +160,69 @@
         "type": "eitherOr",
         "a": {
           "cat": 3,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The Popcorn fan owns either the Cat or the Frog."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Dev's pet is the Frog or the Hamster."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 3
+          },
+          {
+            "cat": 3,
+            "item": 2
+          }
+        ]
+      },
+      "text": "Ben snacks on Popcorn or Cookies."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
           "item": 0
         },
         "options": [
@@ -170,96 +232,89 @@
           },
           {
             "cat": 2,
-            "item": 1
+            "item": 0
           }
         ]
       },
-      "text": "The Red fan's pet is either the Hamster or the Dog."
-    },
-    {
-      "id": "c6",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 0,
-          "item": 2
-        },
-        "options": [
-          {
-            "cat": 3,
-            "item": 1
-          },
-          {
-            "cat": 3,
-            "item": 2
-          }
-        ]
-      },
-      "text": "Cora swears her favorite color is either Blue or Green."
-    },
-    {
-      "id": "c7",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 2,
-          "item": 3
-        },
-        "lesser": {
-          "cat": 2,
-          "item": 1
-        },
-        "orderedCat": 1
-      },
-      "text": "The Hamster's owner is older than the Dog's owner."
-    },
-    {
-      "id": "c8",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 2,
-          "item": 3
-        },
-        "lesser": {
-          "cat": 0,
-          "item": 1
-        },
-        "orderedCat": 1
-      },
-      "text": "The Hamster's owner has had more birthdays than Ben."
+      "text": "Ava's favorite color is Pink or Red."
     },
     {
       "id": "c9",
       "structured": {
-        "type": "comparative",
-        "greater": {
+        "type": "eitherOr",
+        "a": {
           "cat": 0,
-          "item": 2
+          "item": 1
         },
-        "lesser": {
-          "cat": 2,
-          "item": 2
-        },
-        "orderedCat": 1
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 1
+          }
+        ]
       },
-      "text": "Cora is older than whoever got stuck with the Frog."
+      "text": "Ben's pet is the Cat or the Dog."
     },
     {
       "id": "c10",
       "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 0,
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
           "item": 0
         },
-        "lesser": {
-          "cat": 3,
-          "item": 3
-        },
-        "orderedCat": 1
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 0
+          }
+        ]
       },
-      "text": "Ava is older than the kid who's wild about Pink."
+      "text": "The Red fan owns the Hamster or the Cat."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The Red fan is either Cora or Dev."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Ben's favorite color is Blue."
     }
   ],
   "seed": 5,

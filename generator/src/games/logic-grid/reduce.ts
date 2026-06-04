@@ -30,7 +30,11 @@ export function reduceClues(
     }
   }
   if (opts.redundancy > 0 && removed.length > 0) {
-    kept.push(...shuffle(removed, rng).slice(0, opts.redundancy));
+    // Add back direct positive ("is") clues first — those are the easy givens
+    // that make a puzzle approachable, rather than more negatives to chase.
+    const directs = shuffle(removed.filter((c) => c.type === "is"), rng);
+    const rest = shuffle(removed.filter((c) => c.type !== "is"), rng);
+    kept.push(...[...directs, ...rest].slice(0, opts.redundancy));
   }
   return kept;
 }

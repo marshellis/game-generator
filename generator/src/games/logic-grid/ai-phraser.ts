@@ -22,10 +22,12 @@ Hard rules — break any of these and the puzzle breaks:
 3. Keep person-anchored references. A phrase like "the kid whose pet is the Cat" identifies a PERSON by a clue — keep it pointing at that same person. NEVER replace it with a bare object ("...than the Cat" is wrong; "...than the kid with the cat" is right). A kid is a who; a pet/color/snack is a what.
 4. One sentence per clue. No new facts, no hedging, no ambiguity. The clue must still be solvable with certainty.
 
-Style:
-- Playful, vivid, a little silly — the kind of clue a kid grins at. Vary sentence structure across clues; don't start them all the same way.
-- Match the reading level to the grade given. Younger = shorter words and sentences.
-- It's fine to add tiny harmless color ("swears up and down", "absolutely refuses") as long as rule 1 holds.
+Style — be genuinely funny, not just "neutral but correct":
+- Give the kids and animals ATTITUDE. Lean on comedic devices that add no facts: dramatic refusals ("wouldn't be caught dead with the Dog"), bragging ("won't shut up about her Frog"), mild exasperation, silly nicknames for pets, over-the-top opinions about colors and snacks.
+- Vary sentence openings and rhythm — never start several clues the same way. A few can be tiny one-liners with a punch.
+- Parenthetical asides are great for jokes — but they must be pure flavor (feelings, jokes, nicknames), NEVER a new logical fact.
+- Match the reading level to the grade. Younger grades: short, bouncy, simple words. Older grades: drier wit is fine.
+- The bar: a kid should smirk at least every few clues. If a rewrite is just a polite restatement, push it further — without ever bending rule 1.
 
 Return your answer by calling the structured output with a "texts" array containing exactly one rewritten clue per input clue, in the same order.`;
 

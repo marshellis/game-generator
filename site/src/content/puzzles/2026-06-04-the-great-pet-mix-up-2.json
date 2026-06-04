@@ -62,7 +62,7 @@
           "item": 1
         }
       },
-      "text": "Ben's pet is not the Dog."
+      "text": "Ben would never, ever own the Dog."
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 2
         }
       },
-      "text": "Cora's pet is the Frog."
+      "text": "Cora's pet is the hoppy Frog."
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 1
         }
       },
-      "text": "Cora does not like Blue."
+      "text": "Cora can't stand Blue."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 2
         }
       },
-      "text": "The Dog's owner likes Green."
+      "text": "The Dog's owner is a big Green fan."
     },
     {
       "id": "c5",
@@ -122,7 +122,22 @@
           "item": 1
         }
       },
-      "text": "The Cat's owner likes Blue."
+      "text": "The Cat's owner is all about Blue."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Cora's favorite color is Red."
     }
   ],
   "seed": 2,
