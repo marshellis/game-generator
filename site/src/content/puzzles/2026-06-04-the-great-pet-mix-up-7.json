@@ -57,25 +57,25 @@
       4
     ],
     [
-      3,
+      4,
       1,
       2,
-      4,
+      3,
       0
     ],
     [
       4,
-      0,
       3,
+      0,
       1,
       2
     ],
     [
-      1,
-      3,
-      0,
+      2,
       4,
-      2
+      0,
+      1,
+      3
     ]
   ],
   "clues": [
@@ -84,24 +84,66 @@
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 3,
-          "item": 4
+          "cat": 2,
+          "item": 2
         },
         "options": [
           {
-            "cat": 2,
-            "item": 1
+            "cat": 1,
+            "item": 0
           },
           {
-            "cat": 2,
-            "item": 0
+            "cat": 1,
+            "item": 1
           }
         ]
       },
-      "text": "The Orange fan owns the Dog or the Cat."
+      "text": "The kid whose pet is Frog has either 7 or 8 for their age."
     },
     {
       "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 0
+          },
+          {
+            "cat": 3,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Cora's color is either Red or Blue."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 4
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The kid whose age is 7 is either Eli or Ben."
+    },
+    {
+      "id": "c4",
       "structured": {
         "type": "eitherOr",
         "a": {
@@ -111,28 +153,70 @@
         "options": [
           {
             "cat": 3,
-            "item": 3
+            "item": 4
           },
           {
             "cat": 3,
-            "item": 4
+            "item": 2
           }
         ]
       },
-      "text": "Ben's favorite color is Pink or Orange."
+      "text": "Ben's color is either Orange or Green."
     },
     {
-      "id": "c3",
+      "id": "c5",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 0,
+          "cat": 2,
           "item": 4
         },
         "options": [
           {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The kid whose pet is Parrot has either Green or Pink for their color."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 3
+          },
+          {
+            "cat": 2,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Ben's pet is either Hamster or Dog."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "options": [
+          {
             "cat": 1,
-            "item": 0
+            "item": 3
           },
           {
             "cat": 1,
@@ -140,10 +224,10 @@
           }
         ]
       },
-      "text": "Eli won't say whether he's 7 or 9."
+      "text": "Dev's age is either 10 or 9."
     },
     {
-      "id": "c4",
+      "id": "c8",
       "structured": {
         "type": "eitherOr",
         "a": {
@@ -153,99 +237,15 @@
         "options": [
           {
             "cat": 1,
-            "item": 2
+            "item": 1
           },
           {
             "cat": 1,
-            "item": 4
-          }
-        ]
-      },
-      "text": "The Hamster's owner is 9 or 11."
-    },
-    {
-      "id": "c5",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 0,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 2,
-            "item": 0
-          },
-          {
-            "cat": 2,
-            "item": 1
-          }
-        ]
-      },
-      "text": "Ben's pet is the Cat or the Dog."
-    },
-    {
-      "id": "c6",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 3,
-          "item": 4
-        },
-        "options": [
-          {
-            "cat": 0,
             "item": 3
-          },
-          {
-            "cat": 0,
-            "item": 2
           }
         ]
       },
-      "text": "The Orange fan is either Dev or Cora."
-    },
-    {
-      "id": "c7",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 0,
-          "item": 2
-        },
-        "options": [
-          {
-            "cat": 2,
-            "item": 3
-          },
-          {
-            "cat": 2,
-            "item": 0
-          }
-        ]
-      },
-      "text": "Cora's pet is the Hamster or the Cat."
-    },
-    {
-      "id": "c8",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 2,
-            "item": 4
-          },
-          {
-            "cat": 2,
-            "item": 2
-          }
-        ]
-      },
-      "text": "The 10-year-old owns the Parrot or the Frog."
+      "text": "The kid whose pet is Hamster has either 8 or 10 for their age."
     },
     {
       "id": "c9",
@@ -256,28 +256,28 @@
           "item": 1
         },
         "lesser": {
-          "cat": 2,
-          "item": 3
+          "cat": 0,
+          "item": 2
         },
         "orderedCat": 1
       },
-      "text": "The Dog's owner is older than the Hamster's owner."
+      "text": "The kid whose pet is Dog is older than Cora."
     },
     {
       "id": "c10",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 0,
+          "cat": 3,
           "item": 2
         },
         "lesser": {
           "cat": 3,
-          "item": 2
+          "item": 1
         },
         "orderedCat": 1
       },
-      "text": "Cora is older than the Green fan."
+      "text": "The kid whose color is Green is older than the kid whose color is Blue."
     },
     {
       "id": "c11",
@@ -288,12 +288,12 @@
           "item": 1
         },
         "lesser": {
-          "cat": 0,
-          "item": 1
+          "cat": 2,
+          "item": 0
         },
         "orderedCat": 1
       },
-      "text": "The Blue fan is older than Ben."
+      "text": "The kid whose color is Blue is older than the kid whose pet is Cat."
     },
     {
       "id": "c12",
@@ -301,15 +301,15 @@
         "type": "comparative",
         "greater": {
           "cat": 2,
-          "item": 4
+          "item": 0
         },
         "lesser": {
-          "cat": 3,
-          "item": 0
+          "cat": 2,
+          "item": 3
         },
         "orderedCat": 1
       },
-      "text": "The Parrot's owner is older than the Red fan."
+      "text": "The kid whose pet is Cat is older than the kid whose pet is Hamster."
     },
     {
       "id": "c13",
@@ -317,14 +317,14 @@
         "type": "is",
         "a": {
           "cat": 0,
-          "item": 0
+          "item": 2
         },
         "b": {
-          "cat": 2,
-          "item": 4
+          "cat": 3,
+          "item": 0
         }
       },
-      "text": "Ava's pet is the Parrot (it knows three words, all rude)."
+      "text": "Cora's color is Red."
     }
   ],
   "seed": 7,

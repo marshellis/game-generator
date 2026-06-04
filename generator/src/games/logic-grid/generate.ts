@@ -24,7 +24,7 @@ export function generatePuzzle(opts: GenerateOptions): Puzzle {
   const needOrdered = diff.advanced.includes("comparative");
 
   const theme = sliceTheme(
-    pickTheme(loadThemePacks(), diff.categories, diff.items, needOrdered),
+    pickTheme(loadThemePacks(), diff.categories, diff.items, needOrdered, rng),
     diff.categories,
     diff.items,
     needOrdered,

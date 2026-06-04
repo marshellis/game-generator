@@ -1,0 +1,11 @@
+{
+  "title": "Spellhaven First-Years",
+  "blurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
+  "categories": [
+    { "name": "Wizard", "subject": true, "items": ["Pip", "Hazel", "Dorian", "Maple", "Wren", "Cyrus"] },
+    { "name": "Familiar", "items": ["Cat", "Owl", "Toad", "Raven", "Bat", "Newt"] },
+    { "name": "Potion", "items": ["Fizzy", "Glow", "Sneeze", "Shrink", "Bounce", "Stink"] },
+    { "name": "Hat", "items": ["Red", "Blue", "Green", "Purple", "Gold", "Silver"] },
+    { "name": "Year", "ordered": true, "comparative": "in a higher year than", "items": ["1", "2", "3", "4", "5", "6"] }
+  ]
+}

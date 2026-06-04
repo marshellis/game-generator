@@ -1,0 +1,11 @@
+{
+  "title": "Trouble on the Soggy Biscuit",
+  "blurb": "The crew of the Soggy Biscuit split the loot in the dark, and now it's pure chaos. Match each pirate to their stuff before the captain wakes up.",
+  "categories": [
+    { "name": "Pirate", "subject": true, "items": ["Bones", "Patch", "Scarlet", "Skip", "Barnacle", "Pegleg"] },
+    { "name": "Treasure", "items": ["Gold Tooth", "Ruby", "Old Map", "Cursed Coin", "Pearl", "Soggy Boot"] },
+    { "name": "Job", "items": ["Captain", "Cook", "Lookout", "Swabbie", "Navigator", "Cabin Boy"] },
+    { "name": "Parrot", "items": ["Squawk", "Cracker", "Biscuit", "Pete", "Loudmouth", "Nugget"] },
+    { "name": "Years at Sea", "ordered": true, "comparative": "saltier than", "items": ["1", "3", "5", "7", "9", "11"] }
+  ]
+}

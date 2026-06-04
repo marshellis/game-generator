@@ -1,45 +1,45 @@
 {
-  "id": "2026-06-04-the-great-pet-mix-up-5",
-  "title": "The Great Pet Mix-Up",
-  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "id": "2026-06-04-spellhaven-first-years-5",
+  "title": "Spellhaven First-Years",
+  "themeBlurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
   "gameType": "logic-grid",
   "gradeLabel": "grade 5",
   "difficulty": "g5",
   "categories": [
     {
-      "name": "Kid",
+      "name": "Wizard",
       "items": [
-        "Ava",
-        "Ben",
-        "Cora",
-        "Dev"
+        "Pip",
+        "Hazel",
+        "Dorian",
+        "Maple"
       ]
     },
     {
-      "name": "Pet",
+      "name": "Familiar",
       "items": [
         "Cat",
-        "Dog",
-        "Frog",
-        "Hamster"
+        "Owl",
+        "Toad",
+        "Raven"
       ]
     },
     {
-      "name": "Color",
+      "name": "Potion",
+      "items": [
+        "Fizzy",
+        "Glow",
+        "Sneeze",
+        "Shrink"
+      ]
+    },
+    {
+      "name": "Hat",
       "items": [
         "Red",
         "Blue",
         "Green",
-        "Pink"
-      ]
-    },
-    {
-      "name": "Snack",
-      "items": [
-        "Pretzels",
-        "Grapes",
-        "Cookies",
-        "Popcorn"
+        "Purple"
       ]
     }
   ],
@@ -51,22 +51,22 @@
       3
     ],
     [
+      2,
       1,
       0,
-      3,
-      2
+      3
     ],
     [
       3,
+      2,
       1,
-      0,
-      2
+      0
     ],
     [
-      0,
       3,
-      1,
-      2
+      0,
+      2,
+      1
     ]
   ],
   "clues": [
@@ -81,28 +81,28 @@
         "options": [
           {
             "cat": 0,
-            "item": 2
+            "item": 3
           },
           {
             "cat": 0,
-            "item": 1
+            "item": 2
           }
         ]
       },
-      "text": "Only two kids will admit to the Grapes: Cora or Ben."
+      "text": "The wizard whose hat is Blue is either Maple or Dorian."
     },
     {
       "id": "c2",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 3,
-          "item": 2
+          "cat": 1,
+          "item": 0
         },
         "options": [
           {
             "cat": 2,
-            "item": 2
+            "item": 1
           },
           {
             "cat": 2,
@@ -110,41 +110,41 @@
           }
         ]
       },
-      "text": "The Cookie fan's favorite color is Green or Pink."
+      "text": "The wizard whose familiar is Cat has either Glow or Shrink for their potion."
     },
     {
       "id": "c3",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 1,
+          "cat": 2,
           "item": 2
         },
         "options": [
           {
             "cat": 3,
-            "item": 2
+            "item": 0
           },
           {
             "cat": 3,
-            "item": 3
+            "item": 2
           }
         ]
       },
-      "text": "The Frog's owner snacks on Cookies or Popcorn."
+      "text": "The wizard whose potion is Sneeze has either Red or Green for their hat."
     },
     {
       "id": "c4",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 0,
+          "cat": 1,
           "item": 3
         },
         "options": [
           {
             "cat": 2,
-            "item": 2
+            "item": 0
           },
           {
             "cat": 2,
@@ -152,49 +152,49 @@
           }
         ]
       },
-      "text": "Dev's favorite color is Green or Pink."
+      "text": "The wizard whose familiar is Raven has either Fizzy or Shrink for their potion."
     },
     {
       "id": "c5",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 3,
+          "cat": 2,
           "item": 3
         },
         "options": [
           {
             "cat": 1,
-            "item": 0
+            "item": 2
           },
           {
             "cat": 1,
-            "item": 2
+            "item": 1
           }
         ]
       },
-      "text": "The Popcorn fan owns either the Cat or the Frog."
+      "text": "The wizard whose potion is Shrink has either Toad or Owl for their familiar."
     },
     {
       "id": "c6",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 0,
-          "item": 3
+          "cat": 1,
+          "item": 1
         },
         "options": [
           {
-            "cat": 1,
-            "item": 2
+            "cat": 3,
+            "item": 0
           },
           {
-            "cat": 1,
-            "item": 3
+            "cat": 3,
+            "item": 1
           }
         ]
       },
-      "text": "Dev's pet is the Frog or the Hamster."
+      "text": "The wizard whose familiar is Owl has either Red or Blue for their hat."
     },
     {
       "id": "c7",
@@ -202,27 +202,6 @@
         "type": "eitherOr",
         "a": {
           "cat": 0,
-          "item": 1
-        },
-        "options": [
-          {
-            "cat": 3,
-            "item": 3
-          },
-          {
-            "cat": 3,
-            "item": 2
-          }
-        ]
-      },
-      "text": "Ben snacks on Popcorn or Cookies."
-    },
-    {
-      "id": "c8",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 0,
           "item": 0
         },
         "options": [
@@ -232,19 +211,19 @@
           },
           {
             "cat": 2,
-            "item": 0
+            "item": 1
           }
         ]
       },
-      "text": "Ava's favorite color is Pink or Red."
+      "text": "Pip's potion is either Shrink or Glow."
     },
     {
-      "id": "c9",
+      "id": "c8",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 0,
-          "item": 1
+          "cat": 3,
+          "item": 2
         },
         "options": [
           {
@@ -257,36 +236,15 @@
           }
         ]
       },
-      "text": "Ben's pet is the Cat or the Dog."
+      "text": "The wizard whose hat is Green has either Cat or Owl for their familiar."
     },
     {
-      "id": "c10",
+      "id": "c9",
       "structured": {
         "type": "eitherOr",
         "a": {
           "cat": 2,
-          "item": 0
-        },
-        "options": [
-          {
-            "cat": 1,
-            "item": 3
-          },
-          {
-            "cat": 1,
-            "item": 0
-          }
-        ]
-      },
-      "text": "The Red fan owns the Hamster or the Cat."
-    },
-    {
-      "id": "c11",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 2,
-          "item": 0
+          "item": 1
         },
         "options": [
           {
@@ -295,26 +253,47 @@
           },
           {
             "cat": 0,
-            "item": 3
+            "item": 0
           }
         ]
       },
-      "text": "The Red fan is either Cora or Dev."
+      "text": "The wizard whose potion is Glow is either Dorian or Pip."
     },
     {
-      "id": "c12",
+      "id": "c10",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 3
+          },
+          {
+            "cat": 2,
+            "item": 0
+          }
+        ]
+      },
+      "text": "Pip's potion is either Shrink or Fizzy."
+    },
+    {
+      "id": "c11",
       "structured": {
         "type": "is",
         "a": {
           "cat": 0,
-          "item": 1
+          "item": 0
         },
         "b": {
           "cat": 2,
-          "item": 1
+          "item": 3
         }
       },
-      "text": "Ben's favorite color is Blue."
+      "text": "Pip's potion is Shrink."
     }
   ],
   "seed": 5,

@@ -1,36 +1,36 @@
 {
-  "id": "2026-06-04-the-great-pet-mix-up-3",
-  "title": "The Great Pet Mix-Up",
-  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "id": "2026-06-04-spellhaven-first-years-3",
+  "title": "Spellhaven First-Years",
+  "themeBlurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
   "gameType": "logic-grid",
   "gradeLabel": "grade 3",
   "difficulty": "g3",
   "categories": [
     {
-      "name": "Kid",
+      "name": "Wizard",
       "items": [
-        "Ava",
-        "Ben",
-        "Cora",
-        "Dev"
+        "Pip",
+        "Hazel",
+        "Dorian",
+        "Maple"
       ]
     },
     {
-      "name": "Pet",
+      "name": "Familiar",
       "items": [
         "Cat",
-        "Dog",
-        "Frog",
-        "Hamster"
+        "Owl",
+        "Toad",
+        "Raven"
       ]
     },
     {
-      "name": "Color",
+      "name": "Potion",
       "items": [
-        "Red",
-        "Blue",
-        "Green",
-        "Pink"
+        "Fizzy",
+        "Glow",
+        "Sneeze",
+        "Shrink"
       ]
     }
   ],
@@ -42,16 +42,16 @@
       3
     ],
     [
-      1,
+      2,
       3,
-      0,
-      2
+      1,
+      0
     ],
     [
-      1,
-      3,
       2,
-      0
+      0,
+      1,
+      3
     ]
   ],
   "clues": [
@@ -68,22 +68,22 @@
           "item": 3
         }
       },
-      "text": "Ben's pet is the Hamster."
+      "text": "Hazel's familiar is Raven."
     },
     {
       "id": "c2",
       "structured": {
-        "type": "is",
+        "type": "isNot",
         "a": {
           "cat": 0,
           "item": 2
         },
         "b": {
           "cat": 1,
-          "item": 0
+          "item": 2
         }
       },
-      "text": "Cora's pet is the Cat (a very judgmental Cat)."
+      "text": "Dorian's familiar is not Toad."
     },
     {
       "id": "c3",
@@ -91,17 +91,47 @@
         "type": "is",
         "a": {
           "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Maple's familiar is Cat."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
           "item": 1
         },
         "b": {
           "cat": 2,
-          "item": 3
+          "item": 0
         }
       },
-      "text": "Ben is proudly a Pink fan."
+      "text": "Hazel's potion is Fizzy."
     },
     {
-      "id": "c4",
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Dorian's potion is Glow."
+    },
+    {
+      "id": "c6",
       "structured": {
         "type": "isNot",
         "a": {
@@ -110,40 +140,10 @@
         },
         "b": {
           "cat": 2,
-          "item": 1
-        }
-      },
-      "text": "Dev can't stand Blue."
-    },
-    {
-      "id": "c5",
-      "structured": {
-        "type": "is",
-        "a": {
-          "cat": 1,
-          "item": 0
-        },
-        "b": {
-          "cat": 2,
           "item": 2
         }
       },
-      "text": "The Cat's owner loves Green."
-    },
-    {
-      "id": "c6",
-      "structured": {
-        "type": "isNot",
-        "a": {
-          "cat": 1,
-          "item": 2
-        },
-        "b": {
-          "cat": 2,
-          "item": 1
-        }
-      },
-      "text": "The Frog's owner thinks Blue is boring."
+      "text": "Maple's potion is not Sneeze."
     },
     {
       "id": "c7",
@@ -151,29 +151,29 @@
         "type": "is",
         "a": {
           "cat": 0,
-          "item": 3
+          "item": 0
         },
         "b": {
           "cat": 1,
           "item": 2
         }
       },
-      "text": "Dev's pet is the Frog."
+      "text": "Pip's familiar is Toad."
     },
     {
       "id": "c8",
       "structured": {
         "type": "is",
         "a": {
-          "cat": 0,
-          "item": 0
+          "cat": 1,
+          "item": 1
         },
         "b": {
-          "cat": 1,
+          "cat": 2,
           "item": 1
         }
       },
-      "text": "Ava's pet is the Dog."
+      "text": "The wizard whose familiar is Owl has Glow for their potion."
     }
   ],
   "seed": 3,

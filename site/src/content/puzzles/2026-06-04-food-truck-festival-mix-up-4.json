@@ -1,0 +1,316 @@
+{
+  "id": "2026-06-04-food-truck-festival-mix-up-4",
+  "title": "Food Truck Festival Mix-Up",
+  "themeBlurb": "Six food trucks parked in the wrong spots and the festival map is useless. Figure out whose truck is whose before the lunch rush hits.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 4",
+  "difficulty": "g4",
+  "categories": [
+    {
+      "name": "Owner",
+      "items": [
+        "Tony",
+        "Bea",
+        "Nan",
+        "Wes"
+      ]
+    },
+    {
+      "name": "Dish",
+      "items": [
+        "Tacos",
+        "Burgers",
+        "Noodles",
+        "Waffles"
+      ]
+    },
+    {
+      "name": "Sauce",
+      "items": [
+        "Spicy Red",
+        "Garlic",
+        "Sweet Chili",
+        "Cheese"
+      ]
+    },
+    {
+      "name": "Mascot",
+      "items": [
+        "Dancing Taco",
+        "Happy Cow",
+        "Noodle Bot",
+        "Mr. Waffle"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      3,
+      2,
+      0,
+      1
+    ],
+    [
+      2,
+      3,
+      1,
+      0
+    ],
+    [
+      0,
+      2,
+      1,
+      3
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Bea's dish is Noodles."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Bea's sauce is not Sweet Chili."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "Tony's mascot is not Mr. Waffle."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "Nan's mascot is not Dancing Taco."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "Nan's mascot is not Mr. Waffle."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Tacos does not have Spicy Red for their sauce."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Noodles does not have Spicy Red for their sauce."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Tacos does not have Dancing Taco for their mascot."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Burgers does not have Dancing Taco for their mascot."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "The owner whose dish is Noodles does not have Happy Cow for their mascot."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The owner whose sauce is Spicy Red does not have Dancing Taco for their mascot."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "The owner whose sauce is Spicy Red does not have Happy Cow for their mascot."
+    },
+    {
+      "id": "c13",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The owner whose sauce is Garlic does not have Dancing Taco for their mascot."
+    },
+    {
+      "id": "c14",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "The owner whose sauce is Cheese has Noodle Bot for their mascot."
+    },
+    {
+      "id": "c15",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "Bea's mascot is Noodle Bot."
+    },
+    {
+      "id": "c16",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "Nan's mascot is Happy Cow."
+    }
+  ],
+  "seed": 4,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

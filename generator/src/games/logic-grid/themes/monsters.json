@@ -1,0 +1,11 @@
+{
+  "title": "Monster School Mix-Up",
+  "blurb": "Ms. Gorgon's class lined up for picture day, and now nobody remembers who's who. Sort out the little monsters before the slime dries.",
+  "categories": [
+    { "name": "Monster", "subject": true, "items": ["Glob", "Fang", "Murk", "Snot", "Wart", "Zog"] },
+    { "name": "Snack", "items": ["Eyeballs", "Swamp Juice", "Bug Pizza", "Toe Jam", "Mud Pie", "Ear Wax"] },
+    { "name": "Power", "items": ["Invisible", "Stinky Breath", "Extra Arms", "Fire Burps", "Wall Crawl", "Mind Reading"] },
+    { "name": "Slime", "items": ["Green", "Purple", "Orange", "Blue", "Pink", "Black"] },
+    { "name": "Grade", "ordered": true, "comparative": "in a higher grade than", "items": ["1", "2", "3", "4", "5", "6"] }
+  ]
+}

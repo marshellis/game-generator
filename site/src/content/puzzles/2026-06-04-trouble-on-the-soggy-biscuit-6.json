@@ -1,46 +1,46 @@
 {
-  "id": "2026-06-04-the-great-pet-mix-up-6",
-  "title": "The Great Pet Mix-Up",
-  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "id": "2026-06-04-trouble-on-the-soggy-biscuit-6",
+  "title": "Trouble on the Soggy Biscuit",
+  "themeBlurb": "The crew of the Soggy Biscuit split the loot in the dark, and now it's pure chaos. Match each pirate to their stuff before the captain wakes up.",
   "gameType": "logic-grid",
   "gradeLabel": "grade 6",
   "difficulty": "g6",
   "categories": [
     {
-      "name": "Kid",
+      "name": "Pirate",
       "items": [
-        "Ava",
-        "Ben",
-        "Cora",
-        "Dev"
+        "Bones",
+        "Patch",
+        "Scarlet",
+        "Skip"
       ]
     },
     {
-      "name": "Age",
+      "name": "Years at Sea",
       "ordered": true,
       "items": [
-        "7",
-        "8",
-        "9",
-        "10"
+        "1",
+        "3",
+        "5",
+        "7"
       ]
     },
     {
-      "name": "Pet",
+      "name": "Treasure",
       "items": [
-        "Cat",
-        "Dog",
-        "Frog",
-        "Hamster"
+        "Gold Tooth",
+        "Ruby",
+        "Old Map",
+        "Cursed Coin"
       ]
     },
     {
-      "name": "Color",
+      "name": "Job",
       "items": [
-        "Red",
-        "Blue",
-        "Green",
-        "Pink"
+        "Captain",
+        "Cook",
+        "Lookout",
+        "Swabbie"
       ]
     }
   ],
@@ -52,22 +52,22 @@
       3
     ],
     [
+      2,
       3,
       1,
+      0
+    ],
+    [
+      1,
+      3,
       0,
       2
     ],
     [
-      2,
-      3,
       1,
-      0
-    ],
-    [
-      3,
-      1,
+      0,
       2,
-      0
+      3
     ]
   ],
   "clues": [
@@ -77,20 +77,20 @@
         "type": "eitherOr",
         "a": {
           "cat": 2,
-          "item": 0
+          "item": 3
         },
         "options": [
           {
-            "cat": 3,
-            "item": 0
+            "cat": 0,
+            "item": 1
           },
           {
-            "cat": 3,
-            "item": 1
+            "cat": 0,
+            "item": 2
           }
         ]
       },
-      "text": "The Cat's owner likes Red or Blue."
+      "text": "The pirate whose treasure is Cursed Coin is either Patch or Scarlet."
     },
     {
       "id": "c2",
@@ -98,131 +98,136 @@
         "type": "eitherOr",
         "a": {
           "cat": 1,
-          "item": 0
+          "item": 1
         },
         "options": [
           {
-            "cat": 3,
+            "cat": 0,
             "item": 2
           },
           {
-            "cat": 3,
-            "item": 0
+            "cat": 0,
+            "item": 1
           }
         ]
       },
-      "text": "The 7-year-old's favorite color is Green or Red."
+      "text": "The pirate whose years at sea is 3 is either Scarlet or Patch."
     },
     {
       "id": "c3",
       "structured": {
-        "type": "comparative",
-        "greater": {
+        "type": "eitherOr",
+        "a": {
           "cat": 0,
           "item": 0
         },
-        "lesser": {
-          "cat": 0,
-          "item": 3
-        },
-        "orderedCat": 1
+        "options": [
+          {
+            "cat": 2,
+            "item": 1
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
       },
-      "text": "Ava is older than Dev, and never lets him forget it."
+      "text": "Bones's treasure is either Ruby or Cursed Coin."
     },
     {
       "id": "c4",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 2,
-          "item": 3
+          "cat": 3,
+          "item": 0
         },
         "lesser": {
-          "cat": 0,
-          "item": 2
+          "cat": 3,
+          "item": 1
         },
         "orderedCat": 1
       },
-      "text": "The Hamster's owner is older than Cora."
+      "text": "The pirate whose job is Captain is saltier than the pirate whose job is Cook."
     },
     {
       "id": "c5",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 3,
-          "item": 3
+          "cat": 0,
+          "item": 1
         },
         "lesser": {
-          "cat": 3,
+          "cat": 0,
           "item": 0
         },
         "orderedCat": 1
       },
-      "text": "The Pink fan is older than the Red fan."
+      "text": "Patch is saltier than Bones."
     },
     {
       "id": "c6",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 0,
+          "cat": 2,
           "item": 3
         },
         "lesser": {
           "cat": 2,
-          "item": 1
+          "item": 0
         },
         "orderedCat": 1
       },
-      "text": "Dev is older than the Dog's owner."
+      "text": "The pirate whose treasure is Cursed Coin is saltier than the pirate whose treasure is Gold Tooth."
     },
     {
       "id": "c7",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 0,
-          "item": 3
+          "cat": 2,
+          "item": 0
         },
         "lesser": {
-          "cat": 2,
+          "cat": 3,
           "item": 3
         },
         "orderedCat": 1
       },
-      "text": "Dev is older than the Hamster's owner."
+      "text": "The pirate whose treasure is Gold Tooth is saltier than the pirate whose job is Swabbie."
     },
     {
       "id": "c8",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 0,
-          "item": 3
+          "cat": 2,
+          "item": 1
         },
         "lesser": {
           "cat": 3,
-          "item": 1
+          "item": 2
         },
         "orderedCat": 1
       },
-      "text": "Dev is older than the Blue fan."
+      "text": "The pirate whose treasure is Ruby is saltier than the pirate whose job is Lookout."
     },
     {
       "id": "c9",
       "structured": {
         "type": "is",
         "a": {
-          "cat": 0,
-          "item": 3
+          "cat": 2,
+          "item": 2
         },
         "b": {
           "cat": 3,
-          "item": 0
+          "item": 3
         }
       },
-      "text": "Dev's favorite color is Red."
+      "text": "The pirate whose treasure is Old Map has Swabbie for their job."
     }
   ],
   "seed": 6,

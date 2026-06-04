@@ -1,45 +1,45 @@
 {
-  "id": "2026-06-04-the-great-pet-mix-up-42",
-  "title": "The Great Pet Mix-Up",
-  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "id": "2026-06-04-trouble-on-space-station-zip-99",
+  "title": "Trouble on Space Station Zip",
+  "themeBlurb": "Five astronauts, five jobs, and somebody reprogrammed the snack dispenser. Sort it out.",
   "gameType": "logic-grid",
   "gradeLabel": "grade 4",
   "difficulty": "g4",
   "categories": [
     {
-      "name": "Kid",
+      "name": "Astronaut",
       "items": [
-        "Ava",
-        "Ben",
-        "Cora",
-        "Dev"
+        "Nova",
+        "Pip",
+        "Quill",
+        "Rho"
       ]
     },
     {
-      "name": "Pet",
+      "name": "Job",
       "items": [
-        "Cat",
-        "Dog",
-        "Frog",
-        "Hamster"
+        "Pilot",
+        "Cook",
+        "Medic",
+        "Engineer"
       ]
     },
     {
-      "name": "Color",
+      "name": "Module",
       "items": [
-        "Red",
-        "Blue",
-        "Green",
-        "Pink"
+        "Red Bay",
+        "Blue Bay",
+        "Lab",
+        "Dome"
       ]
     },
     {
-      "name": "Snack",
+      "name": "Pet Robot",
       "items": [
-        "Pretzels",
-        "Grapes",
-        "Cookies",
-        "Popcorn"
+        "Bolt",
+        "Chip",
+        "Dot",
+        "Gizmo"
       ]
     }
   ],
@@ -52,21 +52,21 @@
     ],
     [
       0,
-      3,
-      1,
-      2
-    ],
-    [
-      3,
-      1,
-      0,
-      2
-    ],
-    [
-      0,
       2,
+      1,
+      3
+    ],
+    [
+      1,
       3,
-      1
+      2,
+      0
+    ],
+    [
+      3,
+      2,
+      1,
+      0
     ]
   ],
   "clues": [
@@ -76,14 +76,14 @@
         "type": "is",
         "a": {
           "cat": 0,
-          "item": 0
+          "item": 1
         },
         "b": {
           "cat": 1,
-          "item": 0
+          "item": 2
         }
       },
-      "text": "Ava's pet is the Cat."
+      "text": "Pip's job is Medic."
     },
     {
       "id": "c2",
@@ -91,44 +91,44 @@
         "type": "is",
         "a": {
           "cat": 0,
-          "item": 1
+          "item": 0
         },
         "b": {
           "cat": 2,
           "item": 1
         }
       },
-      "text": "Ben's favorite color is Blue."
+      "text": "Nova's module is Blue Bay."
     },
     {
       "id": "c3",
       "structured": {
-        "type": "isNot",
+        "type": "is",
         "a": {
           "cat": 0,
           "item": 1
         },
         "b": {
-          "cat": 3,
-          "item": 0
+          "cat": 2,
+          "item": 3
         }
       },
-      "text": "Ben turns up his nose at Pretzels."
+      "text": "Pip's module is Dome."
     },
     {
       "id": "c4",
       "structured": {
-        "type": "isNot",
+        "type": "is",
         "a": {
           "cat": 0,
-          "item": 2
+          "item": 0
         },
         "b": {
           "cat": 3,
-          "item": 0
+          "item": 3
         }
       },
-      "text": "Cora won't eat Pretzels either."
+      "text": "Nova's pet robot is Gizmo."
     },
     {
       "id": "c5",
@@ -136,32 +136,17 @@
         "type": "is",
         "a": {
           "cat": 0,
-          "item": 3
+          "item": 2
         },
         "b": {
           "cat": 3,
           "item": 1
         }
       },
-      "text": "Dev's snack is Grapes."
+      "text": "Quill's pet robot is Chip."
     },
     {
       "id": "c6",
-      "structured": {
-        "type": "is",
-        "a": {
-          "cat": 1,
-          "item": 3
-        },
-        "b": {
-          "cat": 2,
-          "item": 1
-        }
-      },
-      "text": "The Hamster's owner loves Blue."
-    },
-    {
-      "id": "c7",
       "structured": {
         "type": "isNot",
         "a": {
@@ -169,73 +154,73 @@
           "item": 1
         },
         "b": {
-          "cat": 3,
-          "item": 1
+          "cat": 2,
+          "item": 0
         }
       },
-      "text": "The Dog's owner skips the Grapes."
+      "text": "The astronaut whose job is Cook does not have Red Bay for their module."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "The astronaut whose job is Pilot has Gizmo for their pet robot."
     },
     {
       "id": "c8",
       "structured": {
         "type": "is",
         "a": {
-          "cat": 2,
-          "item": 0
+          "cat": 1,
+          "item": 3
         },
         "b": {
           "cat": 3,
-          "item": 3
+          "item": 0
         }
       },
-      "text": "The Red fan munches Popcorn."
+      "text": "The astronaut whose job is Engineer has Bolt for their pet robot."
     },
     {
       "id": "c9",
       "structured": {
-        "type": "isNot",
+        "type": "is",
         "a": {
-          "cat": 2,
+          "cat": 1,
           "item": 2
         },
         "b": {
           "cat": 3,
-          "item": 0
+          "item": 2
         }
       },
-      "text": "The Green fan avoids Pretzels."
+      "text": "The astronaut whose job is Medic has Dot for their pet robot."
     },
     {
       "id": "c10",
       "structured": {
         "type": "is",
         "a": {
-          "cat": 0,
+          "cat": 1,
           "item": 1
-        },
-        "b": {
-          "cat": 1,
-          "item": 3
-        }
-      },
-      "text": "Ben's pet is the Hamster."
-    },
-    {
-      "id": "c11",
-      "structured": {
-        "type": "is",
-        "a": {
-          "cat": 1,
-          "item": 2
         },
         "b": {
           "cat": 2,
           "item": 2
         }
       },
-      "text": "The Frog's owner loves Green."
+      "text": "The astronaut whose job is Cook has Lab for their module."
     }
   ],
-  "seed": 42,
+  "seed": 99,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

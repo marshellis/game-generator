@@ -1,0 +1,11 @@
+{
+  "title": "Food Truck Festival Mix-Up",
+  "blurb": "Six food trucks parked in the wrong spots and the festival map is useless. Figure out whose truck is whose before the lunch rush hits.",
+  "categories": [
+    { "name": "Owner", "subject": true, "items": ["Tony", "Bea", "Nan", "Wes", "Pat", "Cal"] },
+    { "name": "Dish", "items": ["Tacos", "Burgers", "Noodles", "Waffles", "Pizza", "Curry"] },
+    { "name": "Sauce", "items": ["Spicy Red", "Garlic", "Sweet Chili", "Cheese", "Mystery", "BBQ"] },
+    { "name": "Mascot", "items": ["Dancing Taco", "Happy Cow", "Noodle Bot", "Mr. Waffle", "Pizza Cat", "Curry Genie"] },
+    { "name": "Years Here", "ordered": true, "comparative": "more of a regular than", "items": ["1", "2", "3", "4", "5", "6"] }
+  ]
+}

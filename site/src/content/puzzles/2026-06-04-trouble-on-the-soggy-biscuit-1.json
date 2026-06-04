@@ -1,33 +1,33 @@
 {
-  "id": "2026-06-04-the-great-pet-mix-up-1",
-  "title": "The Great Pet Mix-Up",
-  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "id": "2026-06-04-trouble-on-the-soggy-biscuit-1",
+  "title": "Trouble on the Soggy Biscuit",
+  "themeBlurb": "The crew of the Soggy Biscuit split the loot in the dark, and now it's pure chaos. Match each pirate to their stuff before the captain wakes up.",
   "gameType": "logic-grid",
   "gradeLabel": "grade 1",
   "difficulty": "g1",
   "categories": [
     {
-      "name": "Kid",
+      "name": "Pirate",
       "items": [
-        "Ava",
-        "Ben",
-        "Cora"
+        "Bones",
+        "Patch",
+        "Scarlet"
       ]
     },
     {
-      "name": "Pet",
+      "name": "Treasure",
       "items": [
-        "Cat",
-        "Dog",
-        "Frog"
+        "Gold Tooth",
+        "Ruby",
+        "Old Map"
       ]
     },
     {
-      "name": "Color",
+      "name": "Job",
       "items": [
-        "Red",
-        "Blue",
-        "Green"
+        "Captain",
+        "Cook",
+        "Lookout"
       ]
     }
   ],
@@ -39,20 +39,20 @@
     ],
     [
       2,
-      0,
-      1
+      1,
+      0
     ],
     [
       0,
-      2,
-      1
+      1,
+      2
     ]
   ],
   "clues": [
     {
       "id": "c1",
       "structured": {
-        "type": "is",
+        "type": "isNot",
         "a": {
           "cat": 0,
           "item": 2
@@ -62,22 +62,22 @@
           "item": 1
         }
       },
-      "text": "Cora's pet is the Dog, and she is obsessed."
+      "text": "Scarlet's treasure is not Ruby."
     },
     {
       "id": "c2",
       "structured": {
-        "type": "is",
+        "type": "isNot",
         "a": {
           "cat": 0,
           "item": 0
         },
         "b": {
           "cat": 2,
-          "item": 0
+          "item": 1
         }
       },
-      "text": "Ava's favorite color is Red."
+      "text": "Bones's job is not Cook."
     },
     {
       "id": "c3",
@@ -89,10 +89,10 @@
         },
         "b": {
           "cat": 2,
-          "item": 2
+          "item": 0
         }
       },
-      "text": "Cora can't stand Green."
+      "text": "Scarlet's job is not Captain."
     },
     {
       "id": "c4",
@@ -100,17 +100,32 @@
         "type": "isNot",
         "a": {
           "cat": 1,
-          "item": 2
+          "item": 0
         },
         "b": {
           "cat": 2,
-          "item": 2
+          "item": 0
         }
       },
-      "text": "The Frog's owner thinks Green is yucky."
+      "text": "The pirate whose treasure is Gold Tooth does not have Captain for their job."
     },
     {
       "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The pirate whose treasure is Ruby has Cook for their job."
+    },
+    {
+      "id": "c6",
       "structured": {
         "type": "is",
         "a": {
@@ -118,14 +133,14 @@
           "item": 1
         },
         "b": {
-          "cat": 2,
-          "item": 2
+          "cat": 1,
+          "item": 1
         }
       },
-      "text": "Ben's favorite color is Green."
+      "text": "Patch's treasure is Ruby."
     },
     {
-      "id": "c6",
+      "id": "c7",
       "structured": {
         "type": "is",
         "a": {
@@ -137,22 +152,22 @@
           "item": 2
         }
       },
-      "text": "Ava's pet is the bouncy Frog."
+      "text": "Bones's treasure is Old Map."
     },
     {
-      "id": "c7",
+      "id": "c8",
       "structured": {
         "type": "is",
         "a": {
-          "cat": 0,
-          "item": 2
+          "cat": 1,
+          "item": 0
         },
         "b": {
           "cat": 2,
-          "item": 1
+          "item": 2
         }
       },
-      "text": "Cora's favorite color is Blue."
+      "text": "The pirate whose treasure is Gold Tooth has Lookout for their job."
     }
   ],
   "seed": 1,

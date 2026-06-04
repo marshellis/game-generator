@@ -1,5 +1,10 @@
 import petsRaw from "./themes/pets.json";
 import spaceRaw from "./themes/space.json";
+import monstersRaw from "./themes/monsters.json";
+import piratesRaw from "./themes/pirates.json";
+import wizardsRaw from "./themes/wizards.json";
+import foodtrucksRaw from "./themes/foodtrucks.json";
+import type { Rng } from "../../core/rng";
 
 /** A theme-authoring category. `subject` marks the "people" category whose items are
  *  named directly in clues; `comparative` gives an ordered category its natural relation
@@ -20,10 +25,25 @@ export interface ThemePack {
 }
 
 export function loadThemePacks(): ThemePack[] {
-  return [petsRaw as ThemePack, spaceRaw as ThemePack];
+  return [
+    petsRaw as ThemePack,
+    spaceRaw as ThemePack,
+    monstersRaw as ThemePack,
+    piratesRaw as ThemePack,
+    wizardsRaw as ThemePack,
+    foodtrucksRaw as ThemePack,
+  ];
 }
 
-export function pickTheme(packs: ThemePack[], categories: number, items: number, needOrdered: boolean): ThemePack {
+/** Pick a theme that can supply the requested size. With an `rng`, choose randomly
+ *  among the usable themes (so the puzzle set spans worlds); without one, the first. */
+export function pickTheme(
+  packs: ThemePack[],
+  categories: number,
+  items: number,
+  needOrdered: boolean,
+  rng?: Rng,
+): ThemePack {
   const usable = packs.filter((p) => {
     const enoughCats = p.categories.length >= categories;
     const enoughItems = p.categories.every((c) => c.items.length >= items);
@@ -31,7 +51,8 @@ export function pickTheme(packs: ThemePack[], categories: number, items: number,
     return enoughCats && enoughItems && hasOrdered;
   });
   if (usable.length === 0) throw new Error(`no theme pack supports ${categories}x${items} (ordered=${needOrdered})`);
-  return usable[0]!;
+  if (!rng) return usable[0]!;
+  return usable[Math.floor(rng() * usable.length)]!;
 }
 
 /** Reduce a theme to exactly `categories` categories of `items` items each.
