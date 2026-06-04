@@ -1,0 +1,10 @@
+@media print {
+  .no-print { display: none !important; }
+  body { margin: 0; }
+  .answer-key { page-break-before: always; }
+  main { max-width: none; padding: 0; }
+}
+.worksheet { padding: 16px; }
+.answer-key { padding: 16px; }
+.answer-key table { border-collapse: collapse; margin-top: 8px; }
+.answer-key th, .answer-key td { border: 1px solid #333; padding: 4px 10px; font-size: 13px; }
