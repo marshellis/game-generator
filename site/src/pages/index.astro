@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+
+const puzzles = (await getCollection("puzzles")).sort((a, b) =>
+  a.data.createdAt < b.data.createdAt ? 1 : -1,
+);
+---
+<Base title="Marshellis Games — Logic Puzzles">
+  <h1>Logic Grid Puzzles</h1>
+  <p style="color:var(--muted)">Read the clues, fill the grid, find the one answer.</p>
+  <ul style="list-style:none;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+    {puzzles.map((p) => (
+      <li style="border:1px solid var(--line);border-radius:10px;padding:14px">
+        <a href={`/puzzle/${p.data.id}`} style="font-weight:700;text-decoration:none">{p.data.title}</a>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px">
+          {p.data.gradeLabel} · {p.data.categories.length} categories · {p.data.clues.length} clues
+        </div>
+      </li>
+    ))}
+  </ul>
+</Base>
