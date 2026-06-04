@@ -74,8 +74,9 @@ function buildBoard(C: number, M: number, clues: StructuredClue[]): Board {
 }
 
 export function uniqueSolutionExists(C: number, M: number, clues: StructuredClue[]): boolean {
-  const b = buildBoard(C, M, clues);
+  let b: Board;
   try {
+    b = buildBoard(C, M, clues);
     b.propagate();
   } catch (e) {
     if (e instanceof Contradiction) return false;
@@ -86,8 +87,9 @@ export function uniqueSolutionExists(C: number, M: number, clues: StructuredClue
 
 /** True iff pure propagation (no branching) fully solves the puzzle. */
 export function isNoGuessSolvable(C: number, M: number, clues: StructuredClue[]): boolean {
-  const b = buildBoard(C, M, clues);
+  let b: Board;
   try {
+    b = buildBoard(C, M, clues);
     b.propagate();
   } catch (e) {
     if (e instanceof Contradiction) return false;

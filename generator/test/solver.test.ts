@@ -36,4 +36,13 @@ describe("solver", () => {
   it("detects non-unique vs unique", () => {
     expect(uniqueSolutionExists(2, 2, [])).toBe(false);
   });
+
+  it("returns false (does not throw) for directly conflicting clues", () => {
+    const conflicting: StructuredClue[] = [
+      { type: "is", a: { cat: 0, item: 0 }, b: { cat: 1, item: 0 } },
+      { type: "is", a: { cat: 0, item: 0 }, b: { cat: 1, item: 1 } },
+    ];
+    expect(uniqueSolutionExists(2, 2, conflicting)).toBe(false);
+    expect(isNoGuessSolvable(2, 2, conflicting)).toBe(false);
+  });
 });
