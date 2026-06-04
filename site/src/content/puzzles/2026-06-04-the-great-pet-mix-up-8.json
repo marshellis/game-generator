@@ -1,0 +1,539 @@
+{
+  "id": "2026-06-04-the-great-pet-mix-up-8",
+  "title": "The Great Pet Mix-Up",
+  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 8",
+  "difficulty": "g8",
+  "categories": [
+    {
+      "name": "Age",
+      "ordered": true,
+      "items": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ]
+    },
+    {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev",
+        "Eli",
+        "Faye"
+      ]
+    },
+    {
+      "name": "Pet",
+      "items": [
+        "Cat",
+        "Dog",
+        "Frog",
+        "Hamster",
+        "Parrot",
+        "Turtle"
+      ]
+    },
+    {
+      "name": "Color",
+      "items": [
+        "Red",
+        "Blue",
+        "Green",
+        "Pink",
+        "Orange",
+        "Purple"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Pretzels",
+        "Grapes",
+        "Cookies",
+        "Popcorn",
+        "Carrots",
+        "Cheese"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    [
+      5,
+      4,
+      2,
+      1,
+      3,
+      0
+    ],
+    [
+      5,
+      3,
+      1,
+      0,
+      4,
+      2
+    ],
+    [
+      1,
+      5,
+      4,
+      2,
+      0,
+      3
+    ],
+    [
+      1,
+      2,
+      4,
+      0,
+      3,
+      5
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 5
+        },
+        "options": [
+          {
+            "cat": 4,
+            "item": 1
+          },
+          {
+            "cat": 4,
+            "item": 4
+          }
+        ]
+      },
+      "text": "Faye goes with either Grapes or Carrots."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 0
+          },
+          {
+            "cat": 2,
+            "item": 2
+          }
+        ]
+      },
+      "text": "10 goes with either Cat or Frog."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 4,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Pretzels goes with either Green or Blue."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 5
+        },
+        "options": [
+          {
+            "cat": 4,
+            "item": 5
+          },
+          {
+            "cat": 4,
+            "item": 0
+          }
+        ]
+      },
+      "text": "12 goes with either Cheese or Pretzels."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 4,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 0
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Pretzels goes with either Cat or Hamster."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 4
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Dev goes with either 11 or 8."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 5
+          },
+          {
+            "cat": 3,
+            "item": 0
+          }
+        ]
+      },
+      "text": "Eli goes with either Purple or Red."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Dog goes with either 9 or 10."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 5
+          }
+        ]
+      },
+      "text": "Orange goes with either 9 or 12."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 4
+          }
+        ]
+      },
+      "text": "Orange goes with either 9 or 11."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 5
+          },
+          {
+            "cat": 2,
+            "item": 2
+          }
+        ]
+      },
+      "text": "Blue goes with either Turtle or Frog."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 4,
+            "item": 3
+          },
+          {
+            "cat": 4,
+            "item": 0
+          }
+        ]
+      },
+      "text": "Parrot goes with either Popcorn or Pretzels."
+    },
+    {
+      "id": "c13",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 5
+          },
+          {
+            "cat": 0,
+            "item": 4
+          }
+        ]
+      },
+      "text": "Frog goes with either 12 or 11."
+    },
+    {
+      "id": "c14",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Ben goes with either Green or Blue."
+    },
+    {
+      "id": "c15",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 4
+          },
+          {
+            "cat": 2,
+            "item": 0
+          }
+        ]
+      },
+      "text": "Red goes with either Parrot or Cat."
+    },
+    {
+      "id": "c16",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 4,
+          "item": 2
+        },
+        "orderedCat": 0
+      },
+      "text": "Orange has a higher Age than Cookies."
+    },
+    {
+      "id": "c17",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 4,
+          "item": 1
+        },
+        "orderedCat": 0
+      },
+      "text": "Orange has a higher Age than Grapes."
+    },
+    {
+      "id": "c18",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 1,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 4,
+          "item": 2
+        },
+        "orderedCat": 0
+      },
+      "text": "Dev has a higher Age than Cookies."
+    },
+    {
+      "id": "c19",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 1,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 1
+        },
+        "orderedCat": 0
+      },
+      "text": "Eli has a higher Age than Blue."
+    },
+    {
+      "id": "c20",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 1,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 1,
+          "item": 2
+        },
+        "orderedCat": 0
+      },
+      "text": "Ava has a higher Age than Cora."
+    },
+    {
+      "id": "c21",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 1,
+          "item": 5
+        },
+        "orderedCat": 0
+      },
+      "text": "Orange has a higher Age than Faye."
+    },
+    {
+      "id": "c22",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 4,
+          "item": 0
+        },
+        "orderedCat": 0
+      },
+      "text": "Pink has a higher Age than Pretzels."
+    }
+  ],
+  "seed": 8,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

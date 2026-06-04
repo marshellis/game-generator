@@ -1,0 +1,257 @@
+{
+  "id": "2026-06-04-the-great-pet-mix-up-5",
+  "title": "The Great Pet Mix-Up",
+  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 5",
+  "difficulty": "g5",
+  "categories": [
+    {
+      "name": "Age",
+      "ordered": true,
+      "items": [
+        "7",
+        "8",
+        "9",
+        "10"
+      ]
+    },
+    {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev"
+      ]
+    },
+    {
+      "name": "Pet",
+      "items": [
+        "Cat",
+        "Dog",
+        "Frog",
+        "Hamster"
+      ]
+    },
+    {
+      "name": "Color",
+      "items": [
+        "Red",
+        "Blue",
+        "Green",
+        "Pink"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      1,
+      0,
+      3,
+      2
+    ],
+    [
+      3,
+      1,
+      0,
+      2
+    ],
+    [
+      0,
+      3,
+      1,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 3
+          },
+          {
+            "cat": 2,
+            "item": 2
+          }
+        ]
+      },
+      "text": "Red goes with either Hamster or Frog."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Cora goes with either Green or Pink."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 2
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Cora goes with either Frog or Hamster."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 1
+          },
+          {
+            "cat": 3,
+            "item": 2
+          }
+        ]
+      },
+      "text": "9 goes with either Blue or Green."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 1,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 0
+        },
+        "orderedCat": 0
+      },
+      "text": "Cora has a higher Age than Cat."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 3
+        },
+        "orderedCat": 0
+      },
+      "text": "Frog has a higher Age than Hamster."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 1,
+          "item": 1
+        },
+        "orderedCat": 0
+      },
+      "text": "Blue has a higher Age than Ben."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 1,
+          "item": 0
+        },
+        "orderedCat": 0
+      },
+      "text": "Cat has a higher Age than Ava."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 1,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 0
+        },
+        "orderedCat": 0
+      },
+      "text": "Ava has a higher Age than Red."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 3
+        },
+        "orderedCat": 0
+      },
+      "text": "Green has a higher Age than Pink."
+    }
+  ],
+  "seed": 5,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}
