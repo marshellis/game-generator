@@ -83,7 +83,7 @@
           "item": 2
         }
       },
-      "text": "Bea's dish is Noodles."
+      "text": "Bea's truck is famous for its Noodles."
     },
     {
       "id": "c2",
@@ -98,7 +98,7 @@
           "item": 2
         }
       },
-      "text": "Bea's sauce is not Sweet Chili."
+      "text": "Bea wouldn't dream of using Sweet Chili."
     },
     {
       "id": "c3",
@@ -113,7 +113,7 @@
           "item": 3
         }
       },
-      "text": "Tony's mascot is not Mr. Waffle."
+      "text": "Tony's mascot is definitely not Mr. Waffle."
     },
     {
       "id": "c4",
@@ -128,7 +128,7 @@
           "item": 0
         }
       },
-      "text": "Nan's mascot is not Dancing Taco."
+      "text": "Nan's mascot is not the Dancing Taco."
     },
     {
       "id": "c5",
@@ -143,7 +143,7 @@
           "item": 3
         }
       },
-      "text": "Nan's mascot is not Mr. Waffle."
+      "text": "Nan's mascot isn't Mr. Waffle either."
     },
     {
       "id": "c6",
@@ -158,7 +158,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Tacos does not have Spicy Red for their sauce."
+      "text": "Whoever slings the Tacos refuses Spicy Red sauce."
     },
     {
       "id": "c7",
@@ -173,7 +173,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Noodles does not have Spicy Red for their sauce."
+      "text": "The Noodles truck won't touch Spicy Red sauce."
     },
     {
       "id": "c8",
@@ -188,7 +188,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Tacos does not have Dancing Taco for their mascot."
+      "text": "The Taco truck's mascot is, ironically, not the Dancing Taco."
     },
     {
       "id": "c9",
@@ -203,7 +203,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Burgers does not have Dancing Taco for their mascot."
+      "text": "The Burgers truck doesn't roll with the Dancing Taco."
     },
     {
       "id": "c10",
@@ -218,7 +218,7 @@
           "item": 1
         }
       },
-      "text": "The owner whose dish is Noodles does not have Happy Cow for their mascot."
+      "text": "The Noodles truck's mascot is not the Happy Cow."
     },
     {
       "id": "c11",
@@ -233,7 +233,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose sauce is Spicy Red does not have Dancing Taco for their mascot."
+      "text": "The Spicy Red truck's mascot isn't the Dancing Taco."
     },
     {
       "id": "c12",
@@ -248,7 +248,7 @@
           "item": 1
         }
       },
-      "text": "The owner whose sauce is Spicy Red does not have Happy Cow for their mascot."
+      "text": "The Spicy Red truck's mascot isn't the Happy Cow."
     },
     {
       "id": "c13",
@@ -263,7 +263,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose sauce is Garlic does not have Dancing Taco for their mascot."
+      "text": "The Garlic-sauce truck's mascot isn't the Dancing Taco."
     },
     {
       "id": "c14",
@@ -278,7 +278,7 @@
           "item": 2
         }
       },
-      "text": "The owner whose sauce is Cheese has Noodle Bot for their mascot."
+      "text": "The Cheese-sauce truck shows off the Noodle Bot."
     },
     {
       "id": "c15",
@@ -293,7 +293,7 @@
           "item": 2
         }
       },
-      "text": "Bea's mascot is Noodle Bot."
+      "text": "Bea's mascot is the Noodle Bot."
     },
     {
       "id": "c16",
@@ -308,7 +308,7 @@
           "item": 1
         }
       },
-      "text": "Nan's mascot is Happy Cow."
+      "text": "Nan's mascot is the Happy Cow."
     }
   ],
   "seed": 4,

@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Frog has either 7 or 8 for their age."
+      "text": "The Frog's owner is either 7 or 8."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "Cora's color is either Red or Blue."
+      "text": "Cora's favorite color is Red or Blue."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 7 is either Eli or Ben."
+      "text": "The 7-year-old is either Eli or Ben."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "Ben's color is either Orange or Green."
+      "text": "Ben's favorite color is Orange or Green."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Parrot has either Green or Pink for their color."
+      "text": "The Parrot's owner likes Green or Pink."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "Ben's pet is either Hamster or Dog."
+      "text": "Ben's pet is the Hamster or the Dog."
     },
     {
       "id": "c7",
@@ -224,7 +224,7 @@
           }
         ]
       },
-      "text": "Dev's age is either 10 or 9."
+      "text": "Dev is either 10 or 9."
     },
     {
       "id": "c8",
@@ -245,7 +245,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster has either 8 or 10 for their age."
+      "text": "The Hamster's owner is 8 or 10."
     },
     {
       "id": "c9",
@@ -261,7 +261,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Dog is older than Cora."
+      "text": "The Dog's owner is older than Cora."
     },
     {
       "id": "c10",
@@ -277,7 +277,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Green is older than the kid whose color is Blue."
+      "text": "The Green fan is older than the Blue fan."
     },
     {
       "id": "c11",
@@ -293,7 +293,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Blue is older than the kid whose pet is Cat."
+      "text": "The Blue fan is older than the Cat's owner."
     },
     {
       "id": "c12",
@@ -309,7 +309,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Cat is older than the kid whose pet is Hamster."
+      "text": "The Cat's owner is older than the Hamster's owner."
     },
     {
       "id": "c13",
@@ -324,7 +324,7 @@
           "item": 0
         }
       },
-      "text": "Cora's color is Red."
+      "text": "Cora's favorite color is Red."
     }
   ],
   "seed": 7,

@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Orange is either Cora or Eli."
+      "text": "The Orange fan is either Cora or Eli."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "Cora's pet is either Cat or Parrot."
+      "text": "Cora's pet is the Cat or the Parrot."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster is either Dev or Cora."
+      "text": "The Hamster belongs to Dev or Cora."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Cat has either 9 or 10 for their age."
+      "text": "The Cat's owner is 9 or 10."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog is either Ben or Cora."
+      "text": "The Dog belongs to Ben or Cora."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster has either 8 or 9 for their age."
+      "text": "The Hamster's owner is 8 or 9."
     },
     {
       "id": "c7",
@@ -219,7 +219,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Red is older than the kid whose pet is Cat."
+      "text": "The Red fan is older than the Cat's owner."
     },
     {
       "id": "c8",
@@ -235,7 +235,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Ben is older than the kid whose color is Red."
+      "text": "Ben is older than the Red fan."
     },
     {
       "id": "c9",
@@ -251,7 +251,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Cora is older than the kid whose color is Green."
+      "text": "Cora is older than the Green fan."
     },
     {
       "id": "c10",
@@ -267,7 +267,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Eli is older than the kid whose pet is Parrot."
+      "text": "Eli is older than the Parrot's owner."
     },
     {
       "id": "c11",
@@ -283,7 +283,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Blue is older than the kid whose color is Green."
+      "text": "The Blue fan is older than the Green fan."
     },
     {
       "id": "c12",
@@ -299,7 +299,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Green is older than the kid whose pet is Parrot."
+      "text": "The Green fan is older than the Parrot's owner."
     }
   ],
   "seed": 8,

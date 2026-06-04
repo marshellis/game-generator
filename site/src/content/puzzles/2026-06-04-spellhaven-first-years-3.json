@@ -68,7 +68,7 @@
           "item": 3
         }
       },
-      "text": "Hazel's familiar is Raven."
+      "text": "Hazel's familiar is the Raven."
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 2
         }
       },
-      "text": "Dorian's familiar is not Toad."
+      "text": "Dorian's familiar is not the Toad."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 0
         }
       },
-      "text": "Maple's familiar is Cat."
+      "text": "Maple's familiar is the Cat."
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 0
         }
       },
-      "text": "Hazel's potion is Fizzy."
+      "text": "Hazel brews the Fizzy potion."
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 1
         }
       },
-      "text": "Dorian's potion is Glow."
+      "text": "Dorian brews the Glow potion."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 2
         }
       },
-      "text": "Maple's potion is not Sneeze."
+      "text": "Maple's potion is not the Sneeze one."
     },
     {
       "id": "c7",
@@ -158,7 +158,7 @@
           "item": 2
         }
       },
-      "text": "Pip's familiar is Toad."
+      "text": "Pip's familiar is the Toad."
     },
     {
       "id": "c8",
@@ -173,7 +173,7 @@
           "item": 1
         }
       },
-      "text": "The wizard whose familiar is Owl has Glow for their potion."
+      "text": "The Owl's wizard brews the Glow potion."
     }
   ],
   "seed": 3,

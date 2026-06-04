@@ -62,7 +62,7 @@
           "item": 2
         }
       },
-      "text": "Pip's familiar is not Toad."
+      "text": "Pip's familiar is not the Toad."
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 2
         }
       },
-      "text": "Dorian's familiar is not Toad."
+      "text": "Dorian's familiar isn't the Toad either."
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 0
         }
       },
-      "text": "Hazel's potion is not Fizzy."
+      "text": "Hazel's potion is not the Fizzy one."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 0
         }
       },
-      "text": "Dorian's potion is not Fizzy."
+      "text": "Dorian's potion isn't Fizzy."
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 2
         }
       },
-      "text": "Dorian's potion is not Sneeze."
+      "text": "Dorian's potion isn't the Sneeze one."
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Cat does not have Fizzy for their potion."
+      "text": "The Cat's wizard does not brew the Fizzy potion."
     },
     {
       "id": "c7",
@@ -152,7 +152,7 @@
           "item": 2
         }
       },
-      "text": "Hazel's potion is Sneeze."
+      "text": "Hazel brews the Sneeze potion (achoo!)."
     },
     {
       "id": "c8",
@@ -167,7 +167,7 @@
           "item": 0
         }
       },
-      "text": "Pip's potion is Fizzy."
+      "text": "Pip brews the Fizzy potion."
     }
   ],
   "seed": 2,
