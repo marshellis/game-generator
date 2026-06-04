@@ -21,12 +21,12 @@ const headers = puzzle.categories.map((c) => c.name);
     <meta charset="utf-8" />
     <title>{puzzle.title} — worksheet</title>
     <style is:global>
-      body { font-family: ui-sans-serif, system-ui, sans-serif; color: #111; }
-      table { border-collapse: collapse; }
-      th, td { border: 1px solid #333; padding: 4px; text-align: center; font-size: 13px; }
-      td.cell { width: 30px; height: 30px; }
-      .clues li { margin-bottom: 6px; }
-      .logic-grid { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+      /* The grid is a standalone doc (no Base layout), so define the vars the LogicGrid component uses. */
+      :root { --ink: #0f172a; --muted: #64748b; --line: #94a3b8; --x: #dc2626; --o: #2563eb; }
+      body { font-family: ui-sans-serif, system-ui, sans-serif; color: #111; padding: 16px; }
+      /* The single interlocking grid + clues are styled by the LogicGrid component. */
+      .answer-key table { border-collapse: collapse; }
+      .answer-key th, .answer-key td { border: 1px solid #333; padding: 4px 10px; text-align: center; font-size: 13px; }
     </style>
   </head>
   <body>
