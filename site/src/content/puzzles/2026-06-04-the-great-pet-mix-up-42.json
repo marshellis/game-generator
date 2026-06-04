@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "Pretzels goes with either Pink or Blue."
+      "text": "The kid whose snack is Pretzels has either Pink or Blue for their color."
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "Hamster goes with either Ben or Cora."
+      "text": "The kid whose pet is Hamster is either Ben or Cora."
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "Cat goes with either Ava or Ben."
+      "text": "The kid whose pet is Cat is either Ava or Ben."
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "Hamster goes with either Cookies or Grapes."
+      "text": "The kid whose pet is Hamster has either Cookies or Grapes for their snack."
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "Red goes with either Dog or Cat."
+      "text": "The kid whose color is Red has either Dog or Cat for their pet."
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "Dog goes with either Cora or Ava."
+      "text": "The kid whose pet is Dog is either Cora or Ava."
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Ben goes with either Blue or Green."
+      "text": "Ben's color is either Blue or Green."
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "Blue goes with either Hamster or Dog."
+      "text": "The kid whose color is Blue has either Hamster or Dog for their pet."
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "Grapes goes with either Green or Red."
+      "text": "The kid whose snack is Grapes has either Green or Red for their color."
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "Popcorn goes with either Cora or Ben."
+      "text": "The kid whose snack is Popcorn is either Cora or Ben."
     },
     {
       "id": "c11",
@@ -299,7 +299,7 @@
           }
         ]
       },
-      "text": "Pink goes with either Cat or Dog."
+      "text": "The kid whose color is Pink has either Cat or Dog for their pet."
     },
     {
       "id": "c12",
@@ -314,7 +314,7 @@
           "item": 3
         }
       },
-      "text": "Green does not go with Popcorn."
+      "text": "The kid whose color is Green does not have Popcorn for their snack."
     }
   ],
   "seed": 42,

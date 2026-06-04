@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "Popcorn goes with either Green or Blue."
+      "text": "The kid whose snack is Popcorn has either Green or Blue for their color."
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "Grapes goes with either Ben or Ava."
+      "text": "The kid whose snack is Grapes is either Ben or Ava."
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "Red goes with either Dev or Cora."
+      "text": "The kid whose color is Red is either Dev or Cora."
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "Ava goes with either Popcorn or Pretzels."
+      "text": "Ava's snack is either Popcorn or Pretzels."
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "Dev goes with either Hamster or Dog."
+      "text": "Dev's pet is either Hamster or Dog."
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "Frog goes with either Ben or Dev."
+      "text": "The kid whose pet is Frog is either Ben or Dev."
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Blue goes with either Ben or Cora."
+      "text": "The kid whose color is Blue is either Ben or Cora."
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "Cookies goes with either Pink or Green."
+      "text": "The kid whose snack is Cookies has either Pink or Green for their color."
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "Dev goes with either Pretzels or Popcorn."
+      "text": "Dev's snack is either Pretzels or Popcorn."
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "Dog goes with either Ava or Ben."
+      "text": "The kid whose pet is Dog is either Ava or Ben."
     },
     {
       "id": "c11",
@@ -299,7 +299,7 @@
           }
         ]
       },
-      "text": "Blue goes with either Ben or Ava."
+      "text": "The kid whose color is Blue is either Ben or Ava."
     }
   ],
   "seed": 4,

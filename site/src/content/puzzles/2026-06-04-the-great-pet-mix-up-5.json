@@ -7,6 +7,15 @@
   "difficulty": "g5",
   "categories": [
     {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev"
+      ]
+    },
+    {
       "name": "Age",
       "ordered": true,
       "items": [
@@ -14,15 +23,6 @@
         "8",
         "9",
         "10"
-      ]
-    },
-    {
-      "name": "Kid",
-      "items": [
-        "Ava",
-        "Ben",
-        "Cora",
-        "Dev"
       ]
     },
     {
@@ -90,28 +90,28 @@
           }
         ]
       },
-      "text": "Red goes with either Hamster or Frog."
+      "text": "The kid whose color is Red has either Hamster or Frog for their pet."
     },
     {
       "id": "c2",
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 1,
-          "item": 2
+          "cat": 3,
+          "item": 0
         },
         "options": [
           {
-            "cat": 3,
-            "item": 2
+            "cat": 0,
+            "item": 0
           },
           {
-            "cat": 3,
-            "item": 3
+            "cat": 0,
+            "item": 2
           }
         ]
       },
-      "text": "Cora goes with either Green or Pink."
+      "text": "The kid whose color is Red is either Ava or Cora."
     },
     {
       "id": "c3",
@@ -123,6 +123,27 @@
         },
         "options": [
           {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The kid whose age is 9 has either Green or Pink for their color."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
             "cat": 2,
             "item": 2
           },
@@ -132,10 +153,31 @@
           }
         ]
       },
-      "text": "Cora goes with either Frog or Hamster."
+      "text": "The kid whose age is 9 has either Frog or Hamster for their pet."
     },
     {
-      "id": "c4",
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 3
+          },
+          {
+            "cat": 2,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The kid whose color is Red has either Hamster or Dog for their pet."
+    },
+    {
+      "id": "c6",
       "structured": {
         "type": "eitherOr",
         "a": {
@@ -153,55 +195,23 @@
           }
         ]
       },
-      "text": "9 goes with either Blue or Green."
-    },
-    {
-      "id": "c5",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 1,
-          "item": 2
-        },
-        "lesser": {
-          "cat": 2,
-          "item": 0
-        },
-        "orderedCat": 0
-      },
-      "text": "Cora has a higher Age than Cat."
-    },
-    {
-      "id": "c6",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 2,
-          "item": 2
-        },
-        "lesser": {
-          "cat": 2,
-          "item": 3
-        },
-        "orderedCat": 0
-      },
-      "text": "Frog has a higher Age than Hamster."
+      "text": "Cora's color is either Blue or Green."
     },
     {
       "id": "c7",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 3,
-          "item": 1
+          "cat": 2,
+          "item": 3
         },
         "lesser": {
-          "cat": 1,
+          "cat": 2,
           "item": 1
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Blue has a higher Age than Ben."
+      "text": "The kid whose pet is Hamster is older than the kid whose pet is Dog."
     },
     {
       "id": "c8",
@@ -209,47 +219,47 @@
         "type": "comparative",
         "greater": {
           "cat": 2,
-          "item": 0
+          "item": 3
         },
         "lesser": {
-          "cat": 1,
-          "item": 0
+          "cat": 0,
+          "item": 1
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Cat has a higher Age than Ava."
+      "text": "The kid whose pet is Hamster is older than Ben."
     },
     {
       "id": "c9",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 1,
-          "item": 0
+          "cat": 0,
+          "item": 2
         },
         "lesser": {
-          "cat": 3,
-          "item": 0
+          "cat": 2,
+          "item": 2
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Ava has a higher Age than Red."
+      "text": "Cora is older than the kid whose pet is Frog."
     },
     {
       "id": "c10",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 3,
-          "item": 2
+          "cat": 0,
+          "item": 0
         },
         "lesser": {
           "cat": 3,
           "item": 3
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Green has a higher Age than Pink."
+      "text": "Ava is older than the kid whose color is Pink."
     }
   ],
   "seed": 5,

@@ -7,6 +7,16 @@
   "difficulty": "g7",
   "categories": [
     {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev",
+        "Eli"
+      ]
+    },
+    {
       "name": "Age",
       "ordered": true,
       "items": [
@@ -15,16 +25,6 @@
         "9",
         "10",
         "11"
-      ]
-    },
-    {
-      "name": "Kid",
-      "items": [
-        "Ava",
-        "Ben",
-        "Cora",
-        "Dev",
-        "Eli"
       ]
     },
     {
@@ -101,21 +101,21 @@
       "structured": {
         "type": "eitherOr",
         "a": {
-          "cat": 0,
-          "item": 4
+          "cat": 2,
+          "item": 2
         },
         "options": [
           {
-            "cat": 4,
-            "item": 3
+            "cat": 1,
+            "item": 0
           },
           {
-            "cat": 4,
-            "item": 1
+            "cat": 1,
+            "item": 4
           }
         ]
       },
-      "text": "11 goes with either Popcorn or Grapes."
+      "text": "The kid whose pet is Frog has either 7 or 11 for their age."
     },
     {
       "id": "c2",
@@ -136,7 +136,7 @@
           }
         ]
       },
-      "text": "Cora goes with either Pretzels or Carrots."
+      "text": "The kid whose age is 9 has either Pretzels or Carrots for their snack."
     },
     {
       "id": "c3",
@@ -144,20 +144,20 @@
         "type": "eitherOr",
         "a": {
           "cat": 2,
-          "item": 0
+          "item": 1
         },
         "options": [
           {
-            "cat": 4,
-            "item": 4
+            "cat": 0,
+            "item": 3
           },
           {
-            "cat": 4,
-            "item": 3
+            "cat": 0,
+            "item": 2
           }
         ]
       },
-      "text": "Cat goes with either Carrots or Popcorn."
+      "text": "The kid whose pet is Dog is either Dev or Cora."
     },
     {
       "id": "c4",
@@ -178,31 +178,10 @@
           }
         ]
       },
-      "text": "8 goes with either Pink or Blue."
+      "text": "Ben's color is either Pink or Blue."
     },
     {
       "id": "c5",
-      "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
-          "item": 3
-        },
-        "options": [
-          {
-            "cat": 3,
-            "item": 1
-          },
-          {
-            "cat": 3,
-            "item": 0
-          }
-        ]
-      },
-      "text": "Dev goes with either Blue or Red."
-    },
-    {
-      "id": "c6",
       "structured": {
         "type": "eitherOr",
         "a": {
@@ -220,7 +199,28 @@
           }
         ]
       },
-      "text": "Ben goes with either Carrots or Popcorn."
+      "text": "The kid whose age is 8 has either Carrots or Popcorn for their snack."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 4,
+            "item": 3
+          },
+          {
+            "cat": 4,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The kid whose age is 7 has either Popcorn or Pretzels for their snack."
     },
     {
       "id": "c7",
@@ -241,7 +241,7 @@
           }
         ]
       },
-      "text": "Pink goes with either Ben or Cora."
+      "text": "The kid whose color is Pink has either 8 or 9 for their age."
     },
     {
       "id": "c8",
@@ -262,49 +262,39 @@
           }
         ]
       },
-      "text": "9 goes with either Cora or Dev."
+      "text": "Cora's age is either 9 or 10."
     },
     {
       "id": "c9",
       "structured": {
-        "type": "eitherOr",
-        "a": {
-          "cat": 1,
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 2,
           "item": 0
         },
-        "options": [
-          {
-            "cat": 3,
-            "item": 2
-          },
-          {
-            "cat": 3,
-            "item": 3
-          }
-        ]
+        "orderedCat": 1
       },
-      "text": "Ava goes with either Green or Pink."
+      "text": "The kid whose pet is Hamster is older than the kid whose pet is Cat."
     },
     {
       "id": "c10",
       "structured": {
-        "type": "eitherOr",
-        "a": {
+        "type": "comparative",
+        "greater": {
           "cat": 4,
-          "item": 3
+          "item": 0
         },
-        "options": [
-          {
-            "cat": 1,
-            "item": 0
-          },
-          {
-            "cat": 1,
-            "item": 1
-          }
-        ]
+        "lesser": {
+          "cat": 2,
+          "item": 2
+        },
+        "orderedCat": 1
       },
-      "text": "Popcorn goes with either Ava or Ben."
+      "text": "The kid whose snack is Pretzels is older than the kid whose pet is Frog."
     },
     {
       "id": "c11",
@@ -312,47 +302,47 @@
         "type": "comparative",
         "greater": {
           "cat": 3,
-          "item": 3
+          "item": 0
         },
         "lesser": {
           "cat": 4,
-          "item": 1
+          "item": 4
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Pink has a higher Age than Grapes."
+      "text": "The kid whose color is Red is older than the kid whose snack is Carrots."
     },
     {
       "id": "c12",
       "structured": {
         "type": "comparative",
         "greater": {
-          "cat": 2,
-          "item": 2
+          "cat": 0,
+          "item": 0
         },
         "lesser": {
           "cat": 2,
-          "item": 1
+          "item": 3
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Frog has a higher Age than Dog."
+      "text": "Ava is older than the kid whose pet is Hamster."
     },
     {
       "id": "c13",
       "structured": {
         "type": "comparative",
         "greater": {
+          "cat": 3,
+          "item": 1
+        },
+        "lesser": {
           "cat": 4,
           "item": 0
         },
-        "lesser": {
-          "cat": 2,
-          "item": 4
-        },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Pretzels has a higher Age than Parrot."
+      "text": "The kid whose color is Blue is older than the kid whose snack is Pretzels."
     },
     {
       "id": "c14",
@@ -360,15 +350,15 @@
         "type": "comparative",
         "greater": {
           "cat": 3,
-          "item": 0
+          "item": 4
         },
         "lesser": {
           "cat": 4,
-          "item": 4
+          "item": 1
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Red has a higher Age than Carrots."
+      "text": "The kid whose color is Orange is older than the kid whose snack is Grapes."
     },
     {
       "id": "c15",
@@ -379,44 +369,12 @@
           "item": 1
         },
         "lesser": {
-          "cat": 4,
+          "cat": 0,
           "item": 0
         },
-        "orderedCat": 0
+        "orderedCat": 1
       },
-      "text": "Dog has a higher Age than Pretzels."
-    },
-    {
-      "id": "c16",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 3,
-          "item": 4
-        },
-        "lesser": {
-          "cat": 4,
-          "item": 0
-        },
-        "orderedCat": 0
-      },
-      "text": "Orange has a higher Age than Pretzels."
-    },
-    {
-      "id": "c17",
-      "structured": {
-        "type": "comparative",
-        "greater": {
-          "cat": 2,
-          "item": 1
-        },
-        "lesser": {
-          "cat": 1,
-          "item": 1
-        },
-        "orderedCat": 0
-      },
-      "text": "Dog has a higher Age than Ben."
+      "text": "The kid whose pet is Dog is older than Ava."
     }
   ],
   "seed": 7,

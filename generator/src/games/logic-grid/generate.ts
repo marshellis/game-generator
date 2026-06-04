@@ -33,7 +33,15 @@ export function generatePuzzle(opts: GenerateOptions): Puzzle {
   const C = diff.categories;
   const M = diff.items;
   const orderedCats = new Set<number>();
-  theme.categories.forEach((c, i) => { if (c.ordered) orderedCats.add(i); });
+  const comparatives: Record<number, string> = {};
+  theme.categories.forEach((c, i) => {
+    if (c.ordered) orderedCats.add(i);
+    if (c.comparative) comparatives[i] = c.comparative;
+  });
+  // The "people" category whose items are named directly in clues.
+  let subjectCat = theme.categories.findIndex((c) => c.subject);
+  if (subjectCat < 0) subjectCat = theme.categories.findIndex((c) => !c.ordered);
+  if (subjectCat < 0) subjectCat = 0;
 
   const sol = generateSolution(C, M, rng);
   const all = enumerateClues(sol, { allowAdvanced: diff.advanced, orderedCats }, rng);
@@ -45,7 +53,13 @@ export function generatePuzzle(opts: GenerateOptions): Puzzle {
   }
 
   const phraser = opts.phraser ?? new TemplatePhraser();
-  const ctx = { categories: theme.categories, readingLevel: diff.readingLevel, themeBlurb: theme.blurb };
+  const ctx = {
+    categories: theme.categories,
+    readingLevel: diff.readingLevel,
+    themeBlurb: theme.blurb,
+    subjectCat,
+    comparatives,
+  };
   const clues = structured.map((s, i) => ({
     id: `c${i + 1}`,
     structured: s,
@@ -60,7 +74,8 @@ export function generatePuzzle(opts: GenerateOptions): Puzzle {
     gameType: "logic-grid",
     gradeLabel: opts.gradeLabel ?? diff.readingLevel,
     difficulty: diff.id,
-    categories: theme.categories,
+    // Strip authoring-only fields (subject/comparative); publish clean categories.
+    categories: theme.categories.map((c) => ({ name: c.name, ordered: c.ordered, items: c.items })),
     solution: sol,
     clues,
     seed: opts.seed,

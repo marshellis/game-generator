@@ -2,10 +2,10 @@
   "title": "The Great Pet Mix-Up",
   "blurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
   "categories": [
-    { "name": "Kid", "items": ["Ava", "Ben", "Cora", "Dev", "Eli", "Faye"] },
+    { "name": "Kid", "subject": true, "items": ["Ava", "Ben", "Cora", "Dev", "Eli", "Faye"] },
     { "name": "Pet", "items": ["Cat", "Dog", "Frog", "Hamster", "Parrot", "Turtle"] },
     { "name": "Color", "items": ["Red", "Blue", "Green", "Pink", "Orange", "Purple"] },
     { "name": "Snack", "items": ["Pretzels", "Grapes", "Cookies", "Popcorn", "Carrots", "Cheese"] },
-    { "name": "Age", "ordered": true, "items": ["7", "8", "9", "10", "11", "12"] }
+    { "name": "Age", "ordered": true, "comparative": "older than", "items": ["7", "8", "9", "10", "11", "12"] }
   ]
 }
