@@ -135,8 +135,8 @@ A `gradeLabel` (free text) plus a `difficulty` preset that resolves the knobs:
 - **Clue leanness** — how minimal / how much chained deduction is required.
 - **Reading level** — sentence length & vocabulary for the phrasing step.
 
-Presets ship for roughly **grades 2–8**; every knob is individually overridable
-on the CLI.
+Presets ship for **grades 1–8** (the platform-wide default grade range for all
+game systems for now); every knob is individually overridable on the CLI.
 
 ## Site UX
 
