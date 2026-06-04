@@ -1,0 +1,35 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import LogicGrid from "../../components/LogicGrid.astro";
+
+export async function getStaticPaths() {
+  const puzzles = await getCollection("puzzles");
+  return puzzles.map((p) => ({ params: { id: p.data.id } }));
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("puzzles", id!);
+const puzzle = entry!.data;
+---
+<Base title={`${puzzle.title} — Marshellis Games`}>
+  <p><a href="/">← All puzzles</a></p>
+  <h1>{puzzle.title}</h1>
+  <p style="color:var(--muted)">{puzzle.themeBlurb}</p>
+  <p>
+    <button id="check">Check</button>
+    <button id="reveal">Reveal solution</button>
+    <a href={`/puzzle/${puzzle.id}/print`}>Print worksheet →</a>
+  </p>
+  <p id="result" style="font-weight:600;min-height:1.4em"></p>
+
+  <LogicGrid puzzle={puzzle} interactive={true} />
+
+  <script type="application/json" id="puzzle-data" set:html={JSON.stringify({ id: puzzle.id, solution: puzzle.solution })} />
+  <script>
+    import { initPlayer } from "../../games/logic-grid/player.ts";
+    const el = document.getElementById("puzzle-data");
+    const { id, solution } = JSON.parse(el!.textContent!);
+    initPlayer(id, solution);
+  </script>
+</Base>

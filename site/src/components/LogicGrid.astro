@@ -1,0 +1,45 @@
+---
+import { categoryPairs, type PuzzleData } from "../games/logic-grid/grid";
+interface Props { puzzle: PuzzleData; interactive?: boolean; }
+const { puzzle, interactive = false } = Astro.props;
+const pairs = categoryPairs(puzzle);
+---
+<div class="logic-grid" data-interactive={interactive ? "1" : "0"}>
+  {pairs.map(([a, b]) => {
+    const A = puzzle.categories[a];
+    const B = puzzle.categories[b];
+    return (
+      <table class="pair" data-a={a} data-b={b}>
+        <thead>
+          <tr><th class="corner">{A.name} \ {B.name}</th>{B.items.map((bi) => <th>{bi}</th>)}</tr>
+        </thead>
+        <tbody>
+          {A.items.map((ai, aIdx) => (
+            <tr>
+              <th class="rowhdr">{ai}</th>
+              {B.items.map((_, bIdx) => (
+                <td class="cell" data-a={a} data-ai={aIdx} data-b={b} data-bi={bIdx}></td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  })}
+  <ol class="clues">
+    {puzzle.clues.map((c) => <li>{c.text}</li>)}
+  </ol>
+</div>
+
+<style>
+  .logic-grid { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  table.pair { border-collapse: collapse; }
+  table.pair th, table.pair td { border: 1px solid var(--line); padding: 4px; text-align: center; font-size: 13px; }
+  table.pair th.corner { background: #1e293b; color: #fff; font-size: 11px; }
+  table.pair th.rowhdr, table.pair thead th { background: #f1f5f9; white-space: nowrap; }
+  td.cell { width: 34px; height: 34px; cursor: pointer; font-weight: 700; font-size: 18px; user-select: none; }
+  td.cell[data-mark="x"] { color: var(--x); }
+  td.cell[data-mark="o"] { color: var(--o); }
+  .clues { min-width: 260px; flex: 1; }
+  .clues li { margin-bottom: 6px; }
+</style>
