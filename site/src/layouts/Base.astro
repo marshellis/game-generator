@@ -1,23 +1,29 @@
 ---
+import "../styles/global.css";
 interface Props { title: string; }
 const { title } = Astro.props;
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <style is:global>
-      :root { --ink: #0f172a; --muted: #64748b; --line: #cbd5e1; --x: #dc2626; --o: #2563eb; }
-      * { box-sizing: border-box; }
-      body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--ink); margin: 0; line-height: 1.5; }
-      main { max-width: 920px; margin: 0 auto; padding: 24px; }
-      a { color: var(--o); }
-      h1 { margin: 0 0 4px; }
-    </style>
   </head>
-  <body>
-    <main><slot /></main>
+  <body class="min-h-full bg-slate-50 text-slate-900 antialiased">
+    <header class="border-b border-slate-200 bg-white/80 backdrop-blur">
+      <div class="mx-auto flex max-w-5xl items-center gap-2 px-5 py-3">
+        <a href="/" class="flex items-center gap-2 font-extrabold tracking-tight text-slate-900 no-underline">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-600 text-sm text-white">M</span>
+          Marshellis Games
+        </a>
+      </div>
+    </header>
+    <main class="mx-auto max-w-5xl px-5 py-8">
+      <slot />
+    </main>
+    <footer class="mx-auto max-w-5xl px-5 py-10 text-xs text-slate-400">
+      Made for the Marshellis kids · games.marshellis.com
+    </footer>
   </body>
 </html>

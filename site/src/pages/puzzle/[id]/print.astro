@@ -2,6 +2,7 @@
 import { getCollection, getEntry } from "astro:content";
 import LogicGrid from "../../../components/LogicGrid.astro";
 import { answerKey } from "../../../games/logic-grid/grid";
+import "../../../styles/global.css";
 import "../../../styles/print.css";
 
 export async function getStaticPaths() {
@@ -20,28 +21,29 @@ const headers = puzzle.categories.map((c) => c.name);
   <head>
     <meta charset="utf-8" />
     <title>{puzzle.title} — worksheet</title>
-    <style is:global>
-      /* The grid is a standalone doc (no Base layout), so define the vars the LogicGrid component uses. */
-      :root { --ink: #0f172a; --muted: #64748b; --line: #94a3b8; --x: #dc2626; --o: #2563eb; }
-      body { font-family: ui-sans-serif, system-ui, sans-serif; color: #111; padding: 16px; }
-      /* The single interlocking grid + clues are styled by the LogicGrid component. */
-      .answer-key table { border-collapse: collapse; }
-      .answer-key th, .answer-key td { border: 1px solid #333; padding: 4px 10px; text-align: center; font-size: 13px; }
-    </style>
   </head>
-  <body>
-    <p class="no-print"><a href={`/puzzle/${puzzle.id}`}>← Back</a> · Use your browser's Print → Save as PDF.</p>
+  <body class="bg-white p-6 text-slate-900">
+    <p class="no-print mb-4 text-sm text-slate-500">
+      <a href={`/puzzle/${puzzle.id}`} class="text-brand-600 no-underline hover:underline">← Back</a>
+      · Use your browser's Print → Save as PDF.
+    </p>
+
     <section class="worksheet">
-      <h1>{puzzle.title}</h1>
-      <p>{puzzle.themeBlurb}</p>
+      <h1 class="text-2xl font-extrabold tracking-tight">{puzzle.title}</h1>
+      <p class="mt-1 mb-4 text-slate-600">{puzzle.themeBlurb}</p>
       <LogicGrid puzzle={puzzle} interactive={false} />
     </section>
-    <section class="answer-key">
-      <h2>Answer Key — {puzzle.title}</h2>
-      <table>
-        <thead><tr>{headers.map((h) => <th>{h}</th>)}</tr></thead>
+
+    <section class="answer-key mt-8">
+      <h2 class="text-lg font-bold">Answer Key — {puzzle.title}</h2>
+      <table class="mt-2 border-collapse">
+        <thead>
+          <tr>{headers.map((h) => <th class="border border-slate-700 px-3 py-1 text-sm font-semibold">{h}</th>)}</tr>
+        </thead>
         <tbody>
-          {key.map((row) => <tr>{headers.map((h) => <td>{row[h]}</td>)}</tr>)}
+          {key.map((row) => (
+            <tr>{headers.map((h) => <td class="border border-slate-700 px-3 py-1 text-center text-sm">{row[h]}</td>)}</tr>
+          ))}
         </tbody>
       </table>
     </section>

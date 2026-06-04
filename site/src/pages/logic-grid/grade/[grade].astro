@@ -1,0 +1,46 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const puzzles = (await getCollection("puzzles")).filter((p) => p.data.gameType === "logic-grid");
+  const grades = [...new Set(puzzles.map((p) => p.data.difficulty))];
+  return grades.map((g) => {
+    const inGrade = puzzles
+      .filter((p) => p.data.difficulty === g)
+      .sort((a, b) => (a.data.createdAt < b.data.createdAt ? 1 : -1));
+    return { params: { grade: g }, props: { puzzles: inGrade, label: inGrade[0]!.data.gradeLabel } };
+  });
+}
+
+const { puzzles, label } = Astro.props;
+---
+<Base title={`${label} — Logic Grid Puzzles`}>
+  <nav class="mb-4 text-sm text-slate-500">
+    <a href="/" class="text-slate-500 no-underline hover:underline">All games</a>
+    <span class="px-1">/</span>
+    <a href="/logic-grid" class="text-slate-500 no-underline hover:underline">Logic Grid</a>
+    <span class="px-1">/</span>
+    <span class="capitalize text-slate-700">{label}</span>
+  </nav>
+
+  <h1 class="text-3xl font-extrabold capitalize tracking-tight">{label}</h1>
+  <p class="mt-2 text-slate-500">Pick a puzzle.</p>
+
+  <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {puzzles.map((p) => (
+      <li>
+        <a href={`/puzzle/${p.data.id}`}
+           class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md">
+          <span class="text-base font-bold text-slate-900">{p.data.title}</span>
+          <span class="mt-1 text-sm text-slate-500">{p.data.themeBlurb}</span>
+          <span class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-slate-400">
+            <span class="rounded-full bg-slate-100 px-2 py-0.5">{p.data.categories.length} categories</span>
+            <span class="rounded-full bg-slate-100 px-2 py-0.5">{p.data.clues.length} clues</span>
+            <span class="rounded-full bg-slate-100 px-2 py-0.5">#{p.data.seed}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>

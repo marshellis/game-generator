@@ -66,7 +66,7 @@ const rowCats = Array.from({ length: N - 1 }, (_, i) => N - 1 - i);   // N-1 .. 
   .grid-scroll { overflow-x: auto; max-width: 100%; }
 
   table.lg { border-collapse: collapse; }
-  table.lg th, table.lg td { border: 1px solid var(--line); }
+  table.lg th, table.lg td { border: 1px solid #cbd5e1; }
 
   /* category labels */
   th.corner { background: #fff; border: none; }
@@ -86,9 +86,9 @@ const rowCats = Array.from({ length: N - 1 }, (_, i) => N - 1 - i);   // N-1 .. 
   /* cells */
   td.cell { width: 30px; height: 30px; min-width: 30px; cursor: pointer; text-align: center;
             font-weight: 700; font-size: 17px; line-height: 1; user-select: none; background: #fff; }
-  td.cell[data-mark="x"] { color: var(--x); }
-  td.cell[data-mark="o"] { color: var(--o); }
-  td.blank { background: #f8fafc; border: 1px solid var(--line); }
+  td.cell[data-mark="x"] { color: #dc2626; }
+  td.cell[data-mark="o"] { color: #2563eb; }
+  td.blank { background: #f8fafc; border: 1px solid #cbd5e1; }
 
   /* heavier separators between category blocks */
   th.block-edge-left, td.cell.block-edge-left { border-left: 2px solid #1e293b; }

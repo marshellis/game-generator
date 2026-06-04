@@ -13,17 +13,38 @@ const entry = await getEntry("puzzles", id!);
 const puzzle = entry!.data;
 ---
 <Base title={`${puzzle.title} — Marshellis Games`}>
-  <p><a href="/">← All puzzles</a></p>
-  <h1>{puzzle.title}</h1>
-  <p style="color:var(--muted)">{puzzle.themeBlurb}</p>
-  <p>
-    <button id="check">Check</button>
-    <button id="reveal">Reveal solution</button>
-    <a href={`/puzzle/${puzzle.id}/print`}>Print worksheet →</a>
-  </p>
-  <p id="result" style="font-weight:600;min-height:1.4em"></p>
+  <nav class="mb-4 text-sm text-slate-500">
+    <a href="/" class="text-slate-500 no-underline hover:underline">All games</a>
+    <span class="px-1">/</span>
+    <a href="/logic-grid" class="text-slate-500 no-underline hover:underline">Logic Grid</a>
+    <span class="px-1">/</span>
+    <a href={`/logic-grid/grade/${puzzle.difficulty}`} class="capitalize text-slate-500 no-underline hover:underline">{puzzle.gradeLabel}</a>
+  </nav>
 
-  <LogicGrid puzzle={puzzle} interactive={true} />
+  <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">{puzzle.title}</h1>
+  <p class="mt-1 max-w-2xl text-slate-500">{puzzle.themeBlurb}</p>
+
+  <div class="mt-5 flex flex-wrap items-center gap-3">
+    <button id="check"
+            class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
+      Check
+    </button>
+    <button id="reveal"
+            class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+      Reveal solution
+    </button>
+    <a href={`/puzzle/${puzzle.id}/print`}
+       class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">
+      Print worksheet →
+    </a>
+    <span id="result" class="text-sm font-semibold text-slate-700"></span>
+  </div>
+
+  <div class="mt-6">
+    <LogicGrid puzzle={puzzle} interactive={true} />
+  </div>
+
+  <p class="mt-6 text-xs text-slate-400">Tip: tap a cell to cycle blank → ✗ (no) → ◯ (yes).</p>
 
   <script type="application/json" id="puzzle-data" set:html={JSON.stringify({ id: puzzle.id, solution: puzzle.solution })} />
   <script>
