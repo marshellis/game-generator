@@ -2,6 +2,7 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generatePuzzle } from "./games/logic-grid/generate";
+import { aiPhrasePuzzle } from "./games/logic-grid/ai-phraser";
 import type { Difficulty } from "./games/logic-grid/difficulty";
 
 export interface CliArgs {
@@ -10,6 +11,8 @@ export interface CliArgs {
   date: string;
   gradeLabel?: string;
   overrides?: Partial<Difficulty>;
+  /** Rewrite clue text with the AI phraser (needs ANTHROPIC_API_KEY). */
+  ai?: boolean;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -29,6 +32,7 @@ export function parseArgs(argv: string[]): CliArgs {
     date: get("--date") ?? new Date().toISOString().slice(0, 10),
     gradeLabel: get("--grade"),
     overrides: Object.keys(overrides).length ? overrides : undefined,
+    ai: argv.includes("--ai"),
   };
 }
 
@@ -37,22 +41,29 @@ export function outputPathFor(id: string): string {
   return `../site/src/content/puzzles/${id}.json`;
 }
 
-function main(): void {
+async function main(): Promise<void> {
   // here = generator/src; generatorRoot = generator/; rel = ../site/...
   // resolve(generatorRoot, "../site/...") => <repo>/site/...
   const here = dirname(fileURLToPath(import.meta.url)); // generator/src
   const generatorRoot = resolve(here, ".."); // generator/
   const args = parseArgs(process.argv.slice(2));
-  const puzzle = generatePuzzle(args);
+  let puzzle = generatePuzzle(args);
+  if (args.ai) {
+    console.log("Rewriting clues with the AI phraser…");
+    puzzle = await aiPhrasePuzzle(puzzle);
+  }
   const rel = outputPathFor(puzzle.id); // ../site/src/content/puzzles/<id>.json
   const abs = resolve(generatorRoot, rel); // <repo>/site/src/content/puzzles/<id>.json
   mkdirSync(dirname(abs), { recursive: true });
   writeFileSync(abs, JSON.stringify(puzzle, null, 2) + "\n");
   console.log(`Wrote ${abs}`);
-  console.log(`Title: ${puzzle.title} — ${puzzle.clues.length} clues — difficulty ${puzzle.difficulty}`);
+  console.log(`Title: ${puzzle.title} — ${puzzle.clues.length} clues — difficulty ${puzzle.difficulty}${args.ai ? " (AI-phrased)" : ""}`);
 }
 
 // Run only when executed directly (not when imported by tests).
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 }

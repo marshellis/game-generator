@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red has either Hamster or Frog for their pet."
+      "text": "Whoever picked Red owns either the Hamster or the Frog — no other critter fits."
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red is either Ava or Cora."
+      "text": "The Red fan is one of just two kids: Ava or Cora."
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 9 has either Green or Pink for their color."
+      "text": "The 9-year-old's favorite color is either Green or Pink."
     },
     {
       "id": "c4",
@@ -153,7 +153,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 9 has either Frog or Hamster for their pet."
+      "text": "That same 9-year-old keeps either the Frog or the Hamster."
     },
     {
       "id": "c5",
@@ -174,7 +174,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red has either Hamster or Dog for their pet."
+      "text": "The Red fan's pet is either the Hamster or the Dog."
     },
     {
       "id": "c6",
@@ -195,7 +195,7 @@
           }
         ]
       },
-      "text": "Cora's color is either Blue or Green."
+      "text": "Cora swears her favorite color is either Blue or Green."
     },
     {
       "id": "c7",
@@ -211,7 +211,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Hamster is older than the kid whose pet is Dog."
+      "text": "The Hamster's owner is older than the Dog's owner."
     },
     {
       "id": "c8",
@@ -227,7 +227,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Hamster is older than Ben."
+      "text": "The Hamster's owner has had more birthdays than Ben."
     },
     {
       "id": "c9",
@@ -243,7 +243,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Cora is older than the kid whose pet is Frog."
+      "text": "Cora is older than whoever got stuck with the Frog."
     },
     {
       "id": "c10",
@@ -259,7 +259,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Ava is older than the kid whose color is Pink."
+      "text": "Ava is older than the kid who's wild about Pink."
     }
   ],
   "seed": 5,

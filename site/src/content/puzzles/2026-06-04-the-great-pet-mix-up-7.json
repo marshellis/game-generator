@@ -115,7 +115,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Frog has either 7 or 11 for their age."
+      "text": "The Frog's owner is either 7 or 11 — nothing in between."
     },
     {
       "id": "c2",
@@ -136,7 +136,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 9 has either Pretzels or Carrots for their snack."
+      "text": "The 9-year-old snacks on either Pretzels or Carrots."
     },
     {
       "id": "c3",
@@ -157,7 +157,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog is either Dev or Cora."
+      "text": "The Dog belongs to either Dev or Cora."
     },
     {
       "id": "c4",
@@ -178,7 +178,7 @@
           }
         ]
       },
-      "text": "Ben's color is either Pink or Blue."
+      "text": "Ben insists his color is either Pink or Blue."
     },
     {
       "id": "c5",
@@ -199,7 +199,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 8 has either Carrots or Popcorn for their snack."
+      "text": "The 8-year-old munches either Carrots or Popcorn."
     },
     {
       "id": "c6",
@@ -220,7 +220,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 7 has either Popcorn or Pretzels for their snack."
+      "text": "The 7-year-old's snack is either Popcorn or Pretzels."
     },
     {
       "id": "c7",
@@ -241,7 +241,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Pink has either 8 or 9 for their age."
+      "text": "The kid who loves Pink is either 8 or 9."
     },
     {
       "id": "c8",
@@ -262,7 +262,7 @@
           }
         ]
       },
-      "text": "Cora's age is either 9 or 10."
+      "text": "Cora is either 9 or 10 — and she won't say which."
     },
     {
       "id": "c9",
@@ -278,7 +278,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Hamster is older than the kid whose pet is Cat."
+      "text": "The Hamster's owner is older than the Cat's owner."
     },
     {
       "id": "c10",
@@ -294,7 +294,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose snack is Pretzels is older than the kid whose pet is Frog."
+      "text": "The Pretzels muncher is older than the Frog's owner."
     },
     {
       "id": "c11",
@@ -310,7 +310,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Red is older than the kid whose snack is Carrots."
+      "text": "The Red fan is older than the kid stuck with Carrots."
     },
     {
       "id": "c12",
@@ -326,7 +326,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Ava is older than the kid whose pet is Hamster."
+      "text": "Ava is older than the Hamster's owner."
     },
     {
       "id": "c13",
@@ -342,7 +342,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Blue is older than the kid whose snack is Pretzels."
+      "text": "The Blue fan is older than the Pretzels muncher."
     },
     {
       "id": "c14",
@@ -358,7 +358,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose color is Orange is older than the kid whose snack is Grapes."
+      "text": "The Orange fan is older than whoever's snacking on Grapes."
     },
     {
       "id": "c15",
@@ -374,7 +374,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Dog is older than Ava."
+      "text": "The Dog's owner is older than Ava."
     }
   ],
   "seed": 7,
