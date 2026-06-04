@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Pretzels has either Pink or Blue for their color."
+      "text": "The Pretzels-muncher likes either Pink or Blue."
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster is either Ben or Cora."
+      "text": "The Hamster belongs to either Ben or Cora."
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Cat is either Ava or Ben."
+      "text": "The Cat belongs to either Ava or Ben."
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster has either Cookies or Grapes for their snack."
+      "text": "The Hamster's owner snacks on either Cookies or Grapes."
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red has either Dog or Cat for their pet."
+      "text": "The Red fan's pet is either the Dog or the Cat."
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog is either Cora or Ava."
+      "text": "The Dog belongs to either Cora or Ava."
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Ben's color is either Blue or Green."
+      "text": "Ben's favorite color is either Blue or Green."
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue has either Hamster or Dog for their pet."
+      "text": "The Blue fan's pet is either the Hamster or the Dog."
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Grapes has either Green or Red for their color."
+      "text": "The Grapes-eater likes either Green or Red."
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Popcorn is either Cora or Ben."
+      "text": "The Popcorn-eater is either Cora or Ben."
     },
     {
       "id": "c11",
@@ -299,7 +299,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Pink has either Cat or Dog for their pet."
+      "text": "The Pink fan's pet is either the Cat or the Dog."
     },
     {
       "id": "c12",
@@ -314,7 +314,7 @@
           "item": 3
         }
       },
-      "text": "The kid whose color is Green does not have Popcorn for their snack."
+      "text": "The Green fan does not snack on Popcorn."
     }
   ],
   "seed": 42,

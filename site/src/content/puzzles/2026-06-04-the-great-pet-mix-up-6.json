@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog is either Ben or Dev."
+      "text": "The Dog belongs to either Ben or Dev."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Green is either Cora or Eli."
+      "text": "The Green fan is either Cora or Eli."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "Eli's pet is either Frog or Parrot."
+      "text": "Eli's pet is either the Frog or the Parrot."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue is either Ava or Eli."
+      "text": "The Blue fan is either Ava or Eli."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red has either 7 or 9 for their age."
+      "text": "The Red fan is either 7 or 9 years old."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog has either 10 or 11 for their age."
+      "text": "The Dog's owner is either 10 or 11."
     },
     {
       "id": "c7",
@@ -224,7 +224,7 @@
           }
         ]
       },
-      "text": "Ava's pet is either Parrot or Frog."
+      "text": "Ava's pet is either the Parrot or the Frog."
     },
     {
       "id": "c8",
@@ -245,7 +245,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 9 has either Orange or Pink for their color."
+      "text": "The 9-year-old likes either Orange or Pink."
     },
     {
       "id": "c9",
@@ -266,7 +266,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 9 has either Frog or Dog for their pet."
+      "text": "That same 9-year-old's pet is either the Frog or the Dog."
     },
     {
       "id": "c10",
@@ -287,7 +287,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Pink is either Ben or Ava."
+      "text": "The Pink fan is either Ben or Ava."
     },
     {
       "id": "c11",
@@ -308,7 +308,7 @@
           }
         ]
       },
-      "text": "The kid whose age is 9 is either Eli or Cora."
+      "text": "The 9-year-old is either Eli or Cora."
     },
     {
       "id": "c12",
@@ -324,7 +324,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Hamster is older than the kid whose pet is Cat."
+      "text": "The Hamster's owner is older than the Cat's owner."
     },
     {
       "id": "c13",
@@ -340,7 +340,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The kid whose pet is Parrot is older than the kid whose pet is Dog."
+      "text": "The Parrot's owner is older than the Dog's owner."
     }
   ],
   "seed": 6,

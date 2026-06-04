@@ -68,7 +68,7 @@
           "item": 3
         }
       },
-      "text": "Ben's pet is Hamster."
+      "text": "Ben's pet is the Hamster."
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 0
         }
       },
-      "text": "Cora's pet is Cat."
+      "text": "Cora's pet is the Cat."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 3
         }
       },
-      "text": "Ben's color is Pink."
+      "text": "Ben's favorite color is Pink."
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 1
         }
       },
-      "text": "Dev's color is not Blue."
+      "text": "Dev does not like Blue."
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose pet is Cat has Green for their color."
+      "text": "The Cat's owner likes Green."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Frog does not have Blue for their color."
+      "text": "The Frog's owner does not like Blue."
     },
     {
       "id": "c7",
