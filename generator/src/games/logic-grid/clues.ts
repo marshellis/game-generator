@@ -77,6 +77,7 @@ export function enumerateClues(sol: Solution, opts: EnumerateOptions, rng: Rng):
     for (const O of opts.orderedCats) {
       for (let a = 0; a < C; a++) {
         for (let b = 0; b < C; b++) {
+          if (a === O || b === O) continue;
           for (let ai = 0; ai < M; ai++) {
             for (let bi = 0; bi < M; bi++) {
               const g: Ref = { cat: a, item: ai };

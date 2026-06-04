@@ -23,4 +23,17 @@ describe("clue enumeration", () => {
     const clues = enumerateClues(sol, { allowAdvanced: ["comparative"], orderedCats: new Set() }, makeRng(7));
     expect(clues.some((c) => c.type === "comparative")).toBe(false);
   });
+
+  it("never generates a comparative whose refs are in the ordered category", () => {
+    const sol = generateSolution(4, 4, makeRng(5));
+    const orderedCats = new Set([3]);
+    const clues = enumerateClues(sol, { allowAdvanced: ["comparative"], orderedCats }, makeRng(5));
+    const comps = clues.filter((c) => c.type === "comparative");
+    expect(comps.length).toBeGreaterThan(0);
+    for (const c of comps) {
+      if (c.type !== "comparative") continue;
+      expect(c.greater.cat).not.toBe(c.orderedCat);
+      expect(c.lesser.cat).not.toBe(c.orderedCat);
+    }
+  });
 });
