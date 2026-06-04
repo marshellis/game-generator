@@ -1,0 +1,118 @@
+{
+  "id": "2026-06-04-mind-stretch-g1-12",
+  "title": "Mind Stretch",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            1,
+            5,
+            8
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            8,
+            17,
+            9
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            2,
+            5,
+            6
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Ivy has 1 shells. Sam gives Ivy 12 more. How many does Ivy have now?",
+          "answer": 13,
+          "unit": "shells"
+        },
+        {
+          "text": "Noah had 10 apples. Noah gave 2 to Theo. How many are left?",
+          "answer": 8,
+          "unit": "apples"
+        },
+        {
+          "text": "Sam has 15 shells. Lena gives Sam 8 more. How many does Sam have now?",
+          "answer": 23,
+          "unit": "shells"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            4,
+            null,
+            6,
+            7,
+            8
+          ],
+          "answer": 5
+        },
+        {
+          "sequence": [
+            0,
+            null,
+            20,
+            30,
+            40
+          ],
+          "answer": 10
+        },
+        {
+          "sequence": [
+            5,
+            10,
+            null,
+            20,
+            25
+          ],
+          "answer": 15
+        },
+        {
+          "sequence": [
+            2,
+            null,
+            6,
+            8,
+            10
+          ],
+          "answer": 4
+        }
+      ]
+    }
+  ],
+  "seed": 12,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

@@ -1,0 +1,40 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import MathPacket from "../../../components/MathPacket.astro";
+import "../../../styles/global.css";
+import "../../../styles/print.css";
+
+export async function getStaticPaths() {
+  const packets = await getCollection("packets");
+  return packets.map((p) => ({ params: { id: p.data.id } }));
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("packets", id!);
+const packet = entry!.data;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{packet.title} — worksheet</title>
+  </head>
+  <body class="bg-white p-6 text-slate-900">
+    <p class="no-print mb-4 text-sm text-slate-500">
+      <a href={`/packet/${packet.id}`} class="text-brand-600 no-underline hover:underline">← Back</a>
+      · Use your browser's Print → Save as PDF.
+    </p>
+
+    <section class="worksheet">
+      <div class="mb-4 flex items-baseline justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight">{packet.title}</h1>
+          <p class="text-slate-600">{packet.gradeLabel} · {packet.blurb}</p>
+        </div>
+        <div class="text-sm text-slate-500">Name: ______________</div>
+      </div>
+      <MathPacket packet={packet} mode="print" />
+    </section>
+  </body>
+</html>

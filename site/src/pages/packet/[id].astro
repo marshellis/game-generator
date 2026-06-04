@@ -1,0 +1,49 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import MathPacket from "../../components/MathPacket.astro";
+
+export async function getStaticPaths() {
+  const packets = await getCollection("packets");
+  return packets.map((p) => ({ params: { id: p.data.id } }));
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("packets", id!);
+const packet = entry!.data;
+---
+<Base title={`${packet.title} — Math Worksheets`}>
+  <nav class="mb-4 text-sm text-slate-500">
+    <a href="/" class="text-slate-500 no-underline hover:underline">All games</a>
+    <span class="px-1">/</span>
+    <a href="/math" class="text-slate-500 no-underline hover:underline">Math Worksheets</a>
+    <span class="px-1">/</span>
+    <a href={`/math/grade/${packet.difficulty}`} class="capitalize text-slate-500 no-underline hover:underline">{packet.gradeLabel}</a>
+  </nav>
+
+  <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">{packet.title}</h1>
+  <p class="mt-1 text-slate-500">{packet.blurb}</p>
+
+  <div class="mt-5 flex flex-wrap items-center gap-3">
+    <button id="check" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">Check</button>
+    <button id="reset" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Clear</button>
+    <a href={`/packet/${packet.id}/print`} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print worksheet →</a>
+    <button id="reveal" aria-pressed="false" class="ml-auto rounded-lg border border-amber-400 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 transition hover:bg-amber-100">👁 Reveal answers</button>
+  </div>
+  <p id="result" class="mt-3 min-h-5 text-sm font-semibold text-slate-700"></p>
+
+  <div id="packet-root" class="mt-6">
+    <MathPacket packet={packet} mode="play" />
+  </div>
+
+  <p class="mt-6 text-xs text-slate-400">Tip: tap a number to circle it; type answers in the boxes; for the symbol boxes type &lt; &gt; = or + − × (× can be typed as x).</p>
+
+  <script>
+    import { initPacket } from "../../games/math-packet/player.ts";
+    const root = document.getElementById("packet-root") as HTMLElement;
+    const { check, reveal, reset } = initPacket(root);
+    document.getElementById("check")?.addEventListener("click", check);
+    document.getElementById("reset")?.addEventListener("click", reset);
+    document.getElementById("reveal")?.addEventListener("click", reveal);
+  </script>
+</Base>

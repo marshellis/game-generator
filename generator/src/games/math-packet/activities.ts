@@ -1,0 +1,468 @@
+import type { Rng } from "../../core/rng";
+import { shuffle } from "../../core/rng";
+import type { GradeConfig } from "./grades";
+import { randInt, pick, distinctInts } from "./util";
+import type {
+  Activity,
+  ActivityType,
+  FindTheSumItem,
+  OrderOfOpsItem,
+} from "./types";
+
+export interface ActivityGen {
+  type: ActivityType;
+  eligible: (g: GradeConfig) => boolean;
+  generate: (g: GradeConfig, rng: Rng) => Activity;
+}
+
+// ---------------------------------------------------------------------------
+// Find the Sum — circle the number that equals two others combined.
+// ---------------------------------------------------------------------------
+
+/** Indices that equal some other distinct pair combined under `op`. */
+function magicIndices(nums: number[], op: "+" | "×"): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < nums.length; i++) {
+    let hit = false;
+    for (let j = 0; j < nums.length && !hit; j++) {
+      for (let k = j + 1; k < nums.length; k++) {
+        if (j === i || k === i) continue;
+        const v = op === "+" ? nums[j]! + nums[k]! : nums[j]! * nums[k]!;
+        if (v === nums[i]) { hit = true; break; }
+      }
+    }
+    if (hit) out.push(i);
+  }
+  return out;
+}
+
+function makeFindTheSum(g: GradeConfig, rng: Rng): FindTheSumItem {
+  const useProduct = g.grade >= 3 && rng() < 0.4;
+  const op: "+" | "×" = useProduct ? "×" : "+";
+  const size = g.grade < 3 ? 4 : 5;
+  const sumMax = [9, 9, 12, 15, 20, 25, 30, 40, 50][g.grade]!;
+
+  for (let attempt = 0; attempt < 500; attempt++) {
+    let a: number, b: number, ans: number;
+    if (op === "×") {
+      a = randInt(rng, 2, 9);
+      b = randInt(rng, 2, 9);
+      ans = a * b;
+    } else {
+      a = randInt(rng, 1, sumMax);
+      b = randInt(rng, 1, sumMax);
+      ans = a + b;
+    }
+    const set = new Set<number>([a, b, ans]);
+    if (set.size < 3) continue; // a===b or a+b collided
+    let guard = 0;
+    while (set.size < size && guard++ < 100) {
+      set.add(randInt(rng, 1, Math.max(ans - 1, 2)));
+    }
+    if (set.size < size) continue;
+    const numbers = shuffle([...set], rng);
+    const magic = magicIndices(numbers, op);
+    if (magic.length !== 1) continue;
+    return { numbers, answerIndex: magic[0]!, op };
+  }
+  throw new Error("findTheSum: could not build a unique cluster");
+}
+
+const findTheSum: ActivityGen = {
+  type: "findTheSum",
+  eligible: () => true,
+  generate: (g, rng) => {
+    const items: FindTheSumItem[] = [];
+    for (let i = 0; i < 3; i++) items.push(makeFindTheSum(g, rng));
+    return {
+      type: "findTheSum",
+      title: "Find the Sum",
+      instructions:
+        "In each group, one number equals two of the others " +
+        (g.grade >= 3 ? "added or multiplied" : "added") +
+        " together. Circle it.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Make Ten / Make Hundred — known + ___ = target.
+// ---------------------------------------------------------------------------
+
+const makeTen: ActivityGen = {
+  type: "makeTen",
+  eligible: (g) => g.grade <= 3,
+  generate: (g, rng) => {
+    const target = g.grade >= 3 ? 100 : pick(rng, [10, 20]);
+    const items = Array.from({ length: 6 }, () => {
+      const known = randInt(rng, 1, target - 1);
+      return { known, target, op: "+" as const, answer: target - known };
+    });
+    return {
+      type: "makeTen",
+      title: `Make ${target}`,
+      instructions: `Fill in the number that makes ${target}.`,
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Number Bonds — total at top, one part known, one part missing.
+// ---------------------------------------------------------------------------
+
+const numberBond: ActivityGen = {
+  type: "numberBond",
+  eligible: (g) => g.grade <= 2,
+  generate: (g, rng) => {
+    const max = g.grade === 1 ? 10 : 20;
+    const items = Array.from({ length: 6 }, () => {
+      const total = randInt(rng, 3, max);
+      const known = randInt(rng, 1, total - 1);
+      return { total, known, answer: total - known };
+    });
+    return {
+      type: "numberBond",
+      title: "Number Bonds",
+      instructions: "Find the missing part of each bond.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Missing Number — a ○ b = c with one slot blank.
+// ---------------------------------------------------------------------------
+
+const missingNumber: ActivityGen = {
+  type: "missingNumber",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => {
+    const items = Array.from({ length: 6 }, () => {
+      const op = pick(rng, g.ops);
+      let left: number, right: number, result: number;
+      if (op === "+") {
+        const cap = Math.min(g.maxNumber, g.grade <= 3 ? 100 : 1000);
+        left = randInt(rng, 1, cap);
+        right = randInt(rng, 1, cap);
+        result = left + right;
+      } else if (op === "−") {
+        const cap = Math.min(g.maxNumber, g.grade <= 3 ? 100 : 1000);
+        left = randInt(rng, 2, cap);
+        right = randInt(rng, 1, left);
+        result = left - right;
+      } else if (op === "×") {
+        left = randInt(rng, 2, g.grade <= 4 ? 9 : 12);
+        right = randInt(rng, 2, g.grade <= 4 ? 9 : 12);
+        result = left * right;
+      } else {
+        right = randInt(rng, 2, 9);
+        result = randInt(rng, 2, 9);
+        left = right * result; // exact division
+      }
+      const blank = pick(rng, ["left", "right", "result"] as const);
+      const answer = blank === "left" ? left : blank === "right" ? right : result;
+      return { left, op, right, result, blank, answer };
+    });
+    return {
+      type: "missingNumber",
+      title: "Missing Number",
+      instructions: "Find the number that makes each equation true.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Order of Operations — insert + − × to hit the target (unique solution).
+// ---------------------------------------------------------------------------
+
+const OPS3 = ["+", "−", "×"] as const;
+
+/** Evaluate operands with ops, × binding before + and −. */
+export function evalOps(operands: number[], ops: readonly ("+" | "−" | "×")[]): number {
+  const n = [...operands];
+  const o = [...ops];
+  for (let i = 0; i < o.length; ) {
+    if (o[i] === "×") {
+      n[i] = n[i]! * n[i + 1]!;
+      n.splice(i + 1, 1);
+      o.splice(i, 1);
+    } else i++;
+  }
+  let acc = n[0]!;
+  for (let i = 0; i < o.length; i++) acc = o[i] === "+" ? acc + n[i + 1]! : acc - n[i + 1]!;
+  return acc;
+}
+
+/** Count op-assignments to `operands` that evaluate to `target`. */
+function countSolutions(operands: number[], target: number): number {
+  const slots = operands.length - 1;
+  let count = 0;
+  for (let mask = 0; mask < 3 ** slots; mask++) {
+    const ops: ("+" | "−" | "×")[] = [];
+    let m = mask;
+    for (let s = 0; s < slots; s++) {
+      ops.push(OPS3[m % 3]!);
+      m = Math.floor(m / 3);
+    }
+    if (evalOps(operands, ops) === target) count++;
+  }
+  return count;
+}
+
+function makeOrderOfOps(g: GradeConfig, rng: Rng): OrderOfOpsItem {
+  const n = g.grade <= 4 ? 3 : g.grade <= 6 ? 4 : 4 + (rng() < 0.5 ? 1 : 0);
+  for (let attempt = 0; attempt < 500; attempt++) {
+    const operands = Array.from({ length: n }, () => randInt(rng, 1, 9));
+    const ops = Array.from({ length: n - 1 }, () => pick(rng, OPS3));
+    const target = evalOps(operands, ops);
+    if (target < 0 || target > 200) continue;
+    if (countSolutions(operands, target) !== 1) continue;
+    return { operands, ops, target };
+  }
+  throw new Error("orderOfOps: could not build a unique puzzle");
+}
+
+const orderOfOps: ActivityGen = {
+  type: "orderOfOps",
+  eligible: (g) => g.grade >= 3,
+  generate: (g, rng) => {
+    const items = Array.from({ length: 4 }, () => makeOrderOfOps(g, rng));
+    return {
+      type: "orderOfOps",
+      title: "Hit the Target",
+      instructions: "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Place Value — value of the digit in a named place.
+// ---------------------------------------------------------------------------
+
+const PLACES = ["ones", "tens", "hundreds", "thousands"] as const;
+const MAG = { ones: 1, tens: 10, hundreds: 100, thousands: 1000 } as const;
+
+const placeValue: ActivityGen = {
+  type: "placeValue",
+  eligible: (g) => g.grade >= 2 && g.grade <= 6,
+  generate: (g, rng) => {
+    const digits = Math.min(g.grade, 5); // g2→2 … g5→5, g6→5
+    const lo = 10 ** (digits - 1);
+    const hi = 10 ** digits - 1;
+    const items = Array.from({ length: 5 }, () => {
+      const number = randInt(rng, lo, hi);
+      // PLACES only goes up to "thousands"; never ask about a place we can't name.
+      const place = PLACES[randInt(rng, 0, Math.min(digits - 1, PLACES.length - 1))]!;
+      const digit = Math.floor(number / MAG[place]) % 10;
+      return { number, place, answer: digit * MAG[place] };
+    });
+    return {
+      type: "placeValue",
+      title: "Place Value",
+      instructions: "Write the value of the underlined place for each number.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Rounding — round to the nearest 10 / 100 / 1000.
+// ---------------------------------------------------------------------------
+
+const rounding: ActivityGen = {
+  type: "rounding",
+  eligible: (g) => g.grade >= 3 && g.grade <= 6,
+  generate: (g, rng) => {
+    const nearest = (g.grade === 3 ? 10 : g.grade === 4 ? 100 : 1000) as 10 | 100 | 1000;
+    const hi = Math.min(g.maxNumber, nearest * 99);
+    const items = Array.from({ length: 6 }, () => {
+      const number = randInt(rng, nearest, hi);
+      return { number, nearest, answer: Math.round(number / nearest) * nearest };
+    });
+    return {
+      type: "rounding",
+      title: `Round to the Nearest ${nearest}`,
+      instructions: `Round each number to the nearest ${nearest}.`,
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Comparison — < > = between numbers (or small expressions at higher grades).
+// ---------------------------------------------------------------------------
+
+const cmp = (a: number, b: number): "<" | ">" | "=" => (a < b ? "<" : a > b ? ">" : "=");
+
+const comparison: ActivityGen = {
+  type: "comparison",
+  eligible: (g) => g.grade <= 6,
+  generate: (g, rng) => {
+    const cap = Math.min(g.maxNumber, g.grade <= 2 ? 100 : 1000);
+    const items = Array.from({ length: 6 }, () => {
+      if (g.grade >= 3 && rng() < 0.5) {
+        // expression vs number, so it doubles as a fluency check
+        const a = randInt(rng, 1, 12);
+        const b = randInt(rng, 1, 12);
+        const useMul = g.grade >= 3 && rng() < 0.5;
+        const lv = useMul ? a * b : a + b;
+        const leftText = `${a} ${useMul ? "×" : "+"} ${b}`;
+        // pick a right value near lv so the answer isn't always obvious
+        const rv = lv + randInt(rng, -3, 3);
+        return { leftText, rightText: `${rv}`, answer: cmp(lv, rv) };
+      }
+      const l = randInt(rng, 1, cap);
+      // bias toward close values
+      const r = rng() < 0.25 ? l : l + randInt(rng, -Math.ceil(cap / 10), Math.ceil(cap / 10));
+      return { leftText: `${l}`, rightText: `${Math.max(0, r)}`, answer: cmp(l, Math.max(0, r)) };
+    });
+    return {
+      type: "comparison",
+      title: "Greater, Less, or Equal",
+      instructions: "Write < , > , or = between each pair.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Pattern — fill the missing term in an arithmetic sequence.
+// ---------------------------------------------------------------------------
+
+const pattern: ActivityGen = {
+  type: "pattern",
+  eligible: (g) => g.grade <= 5,
+  generate: (g, rng) => {
+    const items = Array.from({ length: 4 }, () => {
+      const steps = g.grade <= 1 ? [1, 2, 5, 10] : g.grade <= 3 ? [2, 3, 5, 10, 25] : [3, 6, 9, 25, 50, 100];
+      const step = pick(rng, steps) * (g.grade >= 2 && rng() < 0.35 ? -1 : 1);
+      const len = 5;
+      const start = step > 0 ? randInt(rng, 0, 10) : randInt(rng, step * -(len - 1) + 1, step * -(len - 1) + 30);
+      const full = Array.from({ length: len }, (_, i) => start + step * i);
+      const blank = randInt(rng, 1, len - 1);
+      const sequence: (number | null)[] = full.map((v, i) => (i === blank ? null : v));
+      return { sequence, answer: full[blank]! };
+    });
+    return {
+      type: "pattern",
+      title: "What Comes Next?",
+      instructions: "Find the rule and fill in the missing number.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Ten Frame — subitize: how many dots? (two five-frames, 0–10).
+// ---------------------------------------------------------------------------
+
+const tenFrame: ActivityGen = {
+  type: "tenFrame",
+  eligible: (g) => g.grade <= 2,
+  generate: (_g, rng) => {
+    const items = Array.from({ length: 4 }, () => {
+      const dots = randInt(rng, 1, 10);
+      return { dots, answer: dots };
+    });
+    return {
+      type: "tenFrame",
+      title: "How Many?",
+      instructions: "Write how many dots are filled in each ten-frame.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Word Problems — short generated story problems, single numeric answer.
+// ---------------------------------------------------------------------------
+
+const NAMES = ["Mara", "Theo", "Ivy", "Sam", "Lena", "Noah", "Ruby", "Eli", "Zoe", "Omar"];
+const OBJECTS = ["apples", "stickers", "marbles", "books", "cookies", "pencils", "shells", "coins"];
+
+const wordProblem: ActivityGen = {
+  type: "wordProblem",
+  eligible: () => true,
+  generate: (g, rng) => {
+    const items = Array.from({ length: 3 }, () => {
+      const A = pick(rng, NAMES);
+      let B = pick(rng, NAMES);
+      while (B === A) B = pick(rng, NAMES);
+      const obj = pick(rng, OBJECTS);
+      const op = pick(rng, g.ops);
+      const cap = g.grade <= 2 ? 20 : g.grade <= 4 ? 50 : 200;
+      if (op === "+") {
+        const x = randInt(rng, 1, cap), y = randInt(rng, 1, cap);
+        return { text: `${A} has ${x} ${obj}. ${B} gives ${A} ${y} more. How many does ${A} have now?`, answer: x + y, unit: obj };
+      }
+      if (op === "−") {
+        const x = randInt(rng, 5, cap), y = randInt(rng, 1, x);
+        return { text: `${A} had ${x} ${obj}. ${A} gave ${y} to ${B}. How many are left?`, answer: x - y, unit: obj };
+      }
+      if (op === "×") {
+        const x = randInt(rng, 2, 9), y = randInt(rng, 2, 9);
+        return { text: `${A} has ${x} bags with ${y} ${obj} in each bag. How many ${obj} in all?`, answer: x * y, unit: obj };
+      }
+      const y = randInt(rng, 2, 9), each = randInt(rng, 2, 9), x = y * each;
+      return { text: `${A} shares ${x} ${obj} equally among ${y} friends. How many does each friend get?`, answer: each, unit: obj };
+    });
+    return {
+      type: "wordProblem",
+      title: "Story Problems",
+      instructions: "Read each problem and write the answer.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Fractions — fill an equivalent fraction, or compare two fractions.
+// ---------------------------------------------------------------------------
+
+const fraction: ActivityGen = {
+  type: "fraction",
+  eligible: (g) => g.grade >= 4,
+  generate: (_g, rng) => {
+    const items = Array.from({ length: 5 }, () => {
+      if (rng() < 0.5) {
+        const den = pick(rng, [2, 3, 4, 5, 6]);
+        const num = randInt(rng, 1, den - 1);
+        const k = randInt(rng, 2, 4);
+        return { kind: "equiv" as const, num, den, newDen: den * k, answer: num * k };
+      }
+      const [aNum, aDen] = [randInt(rng, 1, 5), pick(rng, [2, 3, 4, 5, 6, 8])];
+      const [bNum, bDen] = [randInt(rng, 1, 5), pick(rng, [2, 3, 4, 5, 6, 8])];
+      return { kind: "compare" as const, aNum, aDen, bNum, bDen, answer: cmp(aNum * bDen, bNum * aDen) };
+    });
+    return {
+      type: "fraction",
+      title: "Fraction Workout",
+      instructions: "Fill the equal fraction, or write < , > , = between the two fractions.",
+      items,
+    };
+  },
+};
+
+/** All generators, in a stable display order. */
+export const ACTIVITY_GENS: ActivityGen[] = [
+  findTheSum,
+  tenFrame,
+  makeTen,
+  numberBond,
+  missingNumber,
+  comparison,
+  pattern,
+  placeValue,
+  rounding,
+  orderOfOps,
+  fraction,
+  wordProblem,
+];
+
+export function eligibleGens(g: GradeConfig): ActivityGen[] {
+  return ACTIVITY_GENS.filter((a) => a.eligible(g));
+}

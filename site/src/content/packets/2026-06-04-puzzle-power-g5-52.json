@@ -1,0 +1,149 @@
+{
+  "id": "2026-06-04-puzzle-power-g5-52",
+  "title": "Puzzle Power",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            56,
+            35,
+            8,
+            7,
+            54
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            18,
+            3,
+            17,
+            6,
+            8
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            19,
+            12,
+            23,
+            26,
+            42
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 98026,
+          "place": "ones",
+          "answer": 6
+        },
+        {
+          "number": 13993,
+          "place": "tens",
+          "answer": 90
+        },
+        {
+          "number": 71262,
+          "place": "thousands",
+          "answer": 1000
+        },
+        {
+          "number": 13639,
+          "place": "tens",
+          "answer": 30
+        },
+        {
+          "number": 20924,
+          "place": "tens",
+          "answer": 20
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 4,
+          "den": 5,
+          "newDen": 10,
+          "answer": 8
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 5,
+          "newDen": 15,
+          "answer": 3
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 4,
+          "answer": 2
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 8,
+          "bNum": 1,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 6,
+          "newDen": 24,
+          "answer": 8
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Zoe had 120 cookies. Zoe gave 109 to Noah. How many are left?",
+          "answer": 11,
+          "unit": "cookies"
+        },
+        {
+          "text": "Ivy had 23 cookies. Ivy gave 11 to Sam. How many are left?",
+          "answer": 12,
+          "unit": "cookies"
+        },
+        {
+          "text": "Zoe had 169 pencils. Zoe gave 146 to Omar. How many are left?",
+          "answer": 23,
+          "unit": "pencils"
+        }
+      ]
+    }
+  ],
+  "seed": 52,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

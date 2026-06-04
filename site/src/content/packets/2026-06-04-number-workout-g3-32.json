@@ -1,0 +1,172 @@
+{
+  "id": "2026-06-04-number-workout-g3-32",
+  "title": "Number Workout",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            12,
+            3,
+            25,
+            13
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            16,
+            7,
+            11,
+            4,
+            28
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            19,
+            20,
+            5,
+            4,
+            15
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Omar has 2 bags with 2 shells in each bag. How many shells in all?",
+          "answer": 4,
+          "unit": "shells"
+        },
+        {
+          "text": "Ivy has 2 bags with 7 pencils in each bag. How many pencils in all?",
+          "answer": 14,
+          "unit": "pencils"
+        },
+        {
+          "text": "Eli has 6 bags with 3 pencils in each bag. How many pencils in all?",
+          "answer": 18,
+          "unit": "pencils"
+        }
+      ]
+    },
+    {
+      "type": "makeTen",
+      "title": "Make 100",
+      "instructions": "Fill in the number that makes 100.",
+      "items": [
+        {
+          "known": 57,
+          "target": 100,
+          "op": "+",
+          "answer": 43
+        },
+        {
+          "known": 70,
+          "target": 100,
+          "op": "+",
+          "answer": 30
+        },
+        {
+          "known": 98,
+          "target": 100,
+          "op": "+",
+          "answer": 2
+        },
+        {
+          "known": 29,
+          "target": 100,
+          "op": "+",
+          "answer": 71
+        },
+        {
+          "known": 19,
+          "target": 100,
+          "op": "+",
+          "answer": 81
+        },
+        {
+          "known": 35,
+          "target": 100,
+          "op": "+",
+          "answer": 65
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            2,
+            8,
+            7
+          ],
+          "ops": [
+            "+",
+            "−"
+          ],
+          "target": 3
+        },
+        {
+          "operands": [
+            7,
+            6,
+            3
+          ],
+          "ops": [
+            "+",
+            "−"
+          ],
+          "target": 10
+        },
+        {
+          "operands": [
+            9,
+            2,
+            2
+          ],
+          "ops": [
+            "×",
+            "−"
+          ],
+          "target": 16
+        },
+        {
+          "operands": [
+            6,
+            7,
+            3
+          ],
+          "ops": [
+            "−",
+            "+"
+          ],
+          "target": 2
+        }
+      ]
+    }
+  ],
+  "seed": 32,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

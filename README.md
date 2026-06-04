@@ -34,6 +34,26 @@ npm run generate -- --difficulty g5 --seed 42 --date 2026-06-04
 
 This writes a JSON puzzle into `site/src/content/puzzles/`.
 
+## Generate a math worksheet (game 2)
+
+The second game is **printable daily math packets**: one page per grade holding a
+mixed set of 3–4 quick number-puzzle blocks (find-the-sum clusters, make-ten,
+number bonds, missing-number, order-of-operations, place value, rounding,
+comparison, patterns, ten-frames, story problems, fractions). Every item carries
+its own correct answer, so the printed answer key is guaranteed right by
+construction — the math analog of the logic grid's single-solution guarantee.
+
+```bash
+cd generator
+npm run generate -- --game math-packet --difficulty g3 --seed 31 --date 2026-06-04
+# --difficulty g1..g8 selects grade (number ranges + which puzzle types appear)
+```
+
+This writes a JSON packet into `site/src/content/packets/`. Each grade's eligible
+puzzle types and number ranges live in `generator/src/games/math-packet/grades.ts`
+and `activities.ts`. The site renders an interactive (tap/type/check) player and a
+printable worksheet + answer key, both mobile-friendly.
+
 ## Better phrasing (optional)
 
 The CLI uses deterministic template phrasing (e.g. "Ann goes with Dog."). For engaging,

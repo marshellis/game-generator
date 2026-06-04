@@ -1,0 +1,158 @@
+{
+  "id": "2026-06-04-mind-stretch-g4-42",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            28,
+            24,
+            18,
+            10,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            7,
+            11,
+            14,
+            13
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            24,
+            8,
+            13,
+            3
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            0,
+            null,
+            12,
+            18,
+            24
+          ],
+          "answer": 6
+        },
+        {
+          "sequence": [
+            2,
+            27,
+            52,
+            null,
+            102
+          ],
+          "answer": 77
+        },
+        {
+          "sequence": [
+            47,
+            41,
+            35,
+            29,
+            null
+          ],
+          "answer": 23
+        },
+        {
+          "sequence": [
+            109,
+            84,
+            null,
+            34,
+            9
+          ],
+          "answer": 59
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Mara has 9 bags with 2 pencils in each bag. How many pencils in all?",
+          "answer": 18,
+          "unit": "pencils"
+        },
+        {
+          "text": "Omar has 6 coins. Lena gives Omar 1 more. How many does Omar have now?",
+          "answer": 7,
+          "unit": "coins"
+        },
+        {
+          "text": "Sam shares 14 cookies equally among 2 friends. How many does each friend get?",
+          "answer": 7,
+          "unit": "cookies"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "279",
+          "rightText": "215",
+          "answer": ">"
+        },
+        {
+          "leftText": "822",
+          "rightText": "822",
+          "answer": "="
+        },
+        {
+          "leftText": "563",
+          "rightText": "550",
+          "answer": ">"
+        },
+        {
+          "leftText": "337",
+          "rightText": "301",
+          "answer": ">"
+        },
+        {
+          "leftText": "296",
+          "rightText": "365",
+          "answer": "<"
+        },
+        {
+          "leftText": "995",
+          "rightText": "981",
+          "answer": ">"
+        }
+      ]
+    }
+  ],
+  "seed": 42,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}
