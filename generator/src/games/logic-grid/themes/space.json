@@ -1,0 +1,11 @@
+{
+  "title": "Trouble on Space Station Zip",
+  "blurb": "Five astronauts, five jobs, and somebody reprogrammed the snack dispenser. Sort it out.",
+  "categories": [
+    { "name": "Astronaut", "items": ["Nova", "Pip", "Quill", "Rho", "Sol", "Vex"] },
+    { "name": "Job", "items": ["Pilot", "Cook", "Medic", "Engineer", "Botanist", "Captain"] },
+    { "name": "Module", "items": ["Red Bay", "Blue Bay", "Lab", "Dome", "Galley", "Bridge"] },
+    { "name": "Pet Robot", "items": ["Bolt", "Chip", "Dot", "Gizmo", "Widget", "Zap"] },
+    { "name": "Deck", "ordered": true, "items": ["1", "2", "3", "4", "5", "6"] }
+  ]
+}
