@@ -13,157 +13,121 @@
       "items": [
         {
           "numbers": [
-            1,
             9,
-            13,
-            12
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            8,
-            4,
-            15,
-            7
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
             14,
-            3,
-            10,
-            11
+            5,
+            10
           ],
-          "answerIndex": 0,
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            3,
+            5,
+            2
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            3,
+            9,
+            12,
+            4
+          ],
+          "answerIndex": 2,
           "op": "+"
         }
       ]
     },
     {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "type": "numberBond",
+      "title": "Number Bonds",
+      "instructions": "Find the missing part of each bond.",
       "items": [
         {
-          "start": 10,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 6
-            },
-            {
-              "op": "+",
-              "operand": 5
-            },
-            {
-              "op": "−",
-              "operand": 6
-            },
-            {
-              "op": "−",
-              "operand": 2
-            }
-          ],
-          "values": [
-            4,
-            9,
-            3,
-            1
-          ]
+          "total": 12,
+          "known": 6,
+          "answer": 6
         },
         {
-          "start": 6,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 1
-            },
-            {
-              "op": "−",
-              "operand": 7
-            },
-            {
-              "op": "+",
-              "operand": 10
-            },
-            {
-              "op": "+",
-              "operand": 8
-            }
-          ],
-          "values": [
-            7,
-            0,
-            10,
-            18
-          ]
+          "total": 7,
+          "known": 1,
+          "answer": 6
+        },
+        {
+          "total": 13,
+          "known": 2,
+          "answer": 11
+        },
+        {
+          "total": 13,
+          "known": 6,
+          "answer": 7
+        },
+        {
+          "total": 19,
+          "known": 2,
+          "answer": 17
+        },
+        {
+          "total": 4,
+          "known": 3,
+          "answer": 1
         }
       ]
     },
     {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
       "items": [
         {
-          "left": 27,
-          "op": "+",
-          "right": 61,
-          "result": 88,
-          "blank": "left",
-          "answer": 27
+          "coins": [
+            10,
+            10,
+            10,
+            5
+          ],
+          "answer": 35
         },
         {
-          "left": 82,
-          "op": "−",
-          "right": 76,
-          "result": 6,
-          "blank": "left",
-          "answer": 82
+          "coins": [
+            5,
+            5,
+            10,
+            5
+          ],
+          "answer": 25
         },
         {
-          "left": 10,
-          "op": "+",
-          "right": 80,
-          "result": 90,
-          "blank": "right",
-          "answer": 80
+          "coins": [
+            10,
+            25,
+            25,
+            5
+          ],
+          "answer": 65
         },
         {
-          "left": 24,
-          "op": "−",
-          "right": 8,
-          "result": 16,
-          "blank": "left",
-          "answer": 24
-        },
-        {
-          "left": 42,
-          "op": "−",
-          "right": 23,
-          "result": 19,
-          "blank": "result",
-          "answer": 19
-        },
-        {
-          "left": 39,
-          "op": "+",
-          "right": 33,
-          "result": 72,
-          "blank": "left",
-          "answer": 39
+          "coins": [
+            5,
+            1,
+            25,
+            5
+          ],
+          "answer": 36
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 6,
-    "score": 34
+    "maxTier": 3,
+    "steps": 3,
+    "score": 23
   },
   "seed": 21,
   "createdAt": "2026-06-04T00:00:00.000Z"

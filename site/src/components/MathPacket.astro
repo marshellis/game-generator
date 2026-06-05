@@ -248,6 +248,41 @@ const underlineIndex = (n: number, place: string) => {
           ))}
         </div>
       )}
+      {/* ---- Break Apart (expanded form) ---- */}
+      {act.type === "breakApart" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2">
+          {act.items.map((it) => (
+            <div class="flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              <span class="tabular-nums">{it.number}</span><span>=</span>
+              {it.parts.map((p, k) => (
+                <>
+                  {k > 0 && <span>+</span>}
+                  {k === it.blankIndex
+                    ? <input class={numCls + " w-20"} inputmode="numeric" data-answer={String(it.answer)} />
+                    : <span class="tabular-nums">{p}</span>}
+                </>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Coin Bubble (count the money) ---- */}
+      {act.type === "coinBubble" && (
+        <div class="flex flex-col gap-3">
+          {act.items.map((it) => (
+            <div class="flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              {it.coins.map((c) => (
+                <span class="grid h-10 w-10 place-items-center rounded-full border-2 border-amber-400 bg-amber-50 text-sm font-bold text-amber-800">{c}¢</span>
+              ))}
+              <span class="ml-1 text-lg font-semibold text-slate-700">=</span>
+              <input class={numCls + " w-20"} inputmode="numeric" data-answer={String(it.answer)} />
+              <span class="text-sm text-slate-500">¢</span>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ---- Snake (running-total chain) ---- */}
       {act.type === "snake" && (
         <div class="flex flex-col gap-4">

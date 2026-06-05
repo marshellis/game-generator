@@ -13,36 +13,36 @@
       "items": [
         {
           "numbers": [
-            2,
-            3,
+            8,
             4,
-            6,
-            1
+            2,
+            7,
+            5
           ],
-          "answerIndex": 3,
+          "answerIndex": 0,
           "op": "×"
         },
         {
           "numbers": [
             3,
+            7,
+            4,
+            5,
+            35
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            26,
+            49,
+            18,
             23,
-            9,
-            22,
-            1
+            20
           ],
           "answerIndex": 1,
           "op": "+"
-        },
-        {
-          "numbers": [
-            7,
-            28,
-            11,
-            4,
-            12
-          ],
-          "answerIndex": 1,
-          "op": "×"
         }
       ]
     },
@@ -92,94 +92,105 @@
       ]
     },
     {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 16894,
+          "parts": [
+            10000,
+            6000,
+            800,
+            90,
+            4
+          ],
+          "blankIndex": 4,
+          "answer": 4
+        },
+        {
+          "number": 13681,
+          "parts": [
+            10000,
+            3000,
+            600,
+            80,
+            1
+          ],
+          "blankIndex": 4,
+          "answer": 1
+        },
+        {
+          "number": 13215,
+          "parts": [
+            10000,
+            3000,
+            200,
+            10,
+            5
+          ],
+          "blankIndex": 4,
+          "answer": 5
+        },
+        {
+          "number": 96876,
+          "parts": [
+            90000,
+            6000,
+            800,
+            70,
+            6
+          ],
+          "blankIndex": 3,
+          "answer": 70
+        },
+        {
+          "number": 89707,
+          "parts": [
+            80000,
+            9000,
+            700,
+            7
+          ],
+          "blankIndex": 1,
+          "answer": 9000
+        }
+      ]
+    },
+    {
       "type": "rounding",
       "title": "Round to the Nearest 1000",
       "instructions": "Round each number to the nearest 1000.",
       "items": [
         {
-          "number": 8507,
+          "number": 82249,
           "nearest": 1000,
-          "answer": 9000
+          "answer": 82000
         },
         {
-          "number": 85838,
+          "number": 63192,
           "nearest": 1000,
-          "answer": 86000
+          "answer": 63000
         },
         {
-          "number": 5008,
+          "number": 68641,
           "nearest": 1000,
-          "answer": 5000
+          "answer": 69000
         },
         {
-          "number": 88301,
+          "number": 11185,
           "nearest": 1000,
-          "answer": 88000
+          "answer": 11000
         },
         {
-          "number": 4501,
+          "number": 25928,
           "nearest": 1000,
-          "answer": 5000
+          "answer": 26000
         },
         {
-          "number": 85033,
+          "number": 89402,
           "nearest": 1000,
-          "answer": 85000
-        }
-      ]
-    },
-    {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
-      "items": [
-        {
-          "left": 63,
-          "op": "÷",
-          "right": 7,
-          "result": 9,
-          "blank": "right",
-          "answer": 7
-        },
-        {
-          "left": 49,
-          "op": "÷",
-          "right": 7,
-          "result": 7,
-          "blank": "left",
-          "answer": 49
-        },
-        {
-          "left": 903,
-          "op": "−",
-          "right": 88,
-          "result": 815,
-          "blank": "right",
-          "answer": 88
-        },
-        {
-          "left": 27,
-          "op": "÷",
-          "right": 3,
-          "result": 9,
-          "blank": "right",
-          "answer": 3
-        },
-        {
-          "left": 6,
-          "op": "×",
-          "right": 3,
-          "result": 18,
-          "blank": "result",
-          "answer": 18
-        },
-        {
-          "left": 30,
-          "op": "÷",
-          "right": 6,
-          "result": 5,
-          "blank": "result",
-          "answer": 5
+          "answer": 89000
         }
       ]
     }
@@ -187,7 +198,7 @@
   "load": {
     "maxTier": 4,
     "steps": 4,
-    "score": 41
+    "score": 43
   },
   "seed": 63,
   "createdAt": "2026-06-04T00:00:00.000Z"

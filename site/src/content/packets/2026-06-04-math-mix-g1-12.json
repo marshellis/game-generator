@@ -14,32 +14,75 @@
         {
           "numbers": [
             4,
-            7,
             1,
-            6
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            7,
-            5,
-            12,
-            6
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            3,
-            4,
-            9,
+            2,
             5
           ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            16,
+            9,
+            1,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            7,
+            8,
+            3
+          ],
           "answerIndex": 2,
           "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "makeTen",
+      "title": "Make 20",
+      "instructions": "Fill in the number that makes 20.",
+      "items": [
+        {
+          "known": 19,
+          "target": 20,
+          "op": "+",
+          "answer": 1
+        },
+        {
+          "known": 18,
+          "target": 20,
+          "op": "+",
+          "answer": 2
+        },
+        {
+          "known": 3,
+          "target": 20,
+          "op": "+",
+          "answer": 17
+        },
+        {
+          "known": 12,
+          "target": 20,
+          "op": "+",
+          "answer": 8
+        },
+        {
+          "known": 11,
+          "target": 20,
+          "op": "+",
+          "answer": 9
+        },
+        {
+          "known": 8,
+          "target": 20,
+          "op": "+",
+          "answer": 12
         }
       ]
     },
@@ -49,57 +92,20 @@
       "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "dots": 4,
-          "answer": 4
+          "dots": 5,
+          "answer": 5
         },
         {
-          "dots": 9,
-          "answer": 9
-        },
-        {
-          "dots": 8,
-          "answer": 8
+          "dots": 5,
+          "answer": 5
         },
         {
           "dots": 8,
           "answer": 8
-        }
-      ]
-    },
-    {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
-      "items": [
-        {
-          "leftText": "16",
-          "rightText": "18",
-          "answer": "<"
         },
         {
-          "leftText": "3",
-          "rightText": "3",
-          "answer": "="
-        },
-        {
-          "leftText": "8",
-          "rightText": "8",
-          "answer": "="
-        },
-        {
-          "leftText": "16",
-          "rightText": "17",
-          "answer": "<"
-        },
-        {
-          "leftText": "20",
-          "rightText": "20",
-          "answer": "="
-        },
-        {
-          "leftText": "3",
-          "rightText": "3",
-          "answer": "="
+          "dots": 6,
+          "answer": 6
         }
       ]
     }
@@ -107,7 +113,7 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 19
+    "score": 20
   },
   "seed": 12,
   "createdAt": "2026-06-04T00:00:00.000Z"

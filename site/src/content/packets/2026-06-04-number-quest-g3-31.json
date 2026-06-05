@@ -13,120 +13,36 @@
       "items": [
         {
           "numbers": [
+            9,
+            11,
             7,
-            10,
-            5,
-            2,
-            9
+            54,
+            63
           ],
-          "answerIndex": 1,
+          "answerIndex": 4,
           "op": "×"
         },
         {
           "numbers": [
-            4,
-            5,
-            8,
+            11,
+            7,
+            14,
             2,
-            1
+            3
           ],
           "answerIndex": 2,
           "op": "×"
         },
         {
           "numbers": [
-            23,
-            21,
             3,
-            12,
-            11
+            17,
+            8,
+            1,
+            14
           ],
-          "answerIndex": 0,
+          "answerIndex": 1,
           "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
-      "items": [
-        {
-          "sequence": [
-            18,
-            16,
-            14,
-            null,
-            10
-          ],
-          "answer": 12
-        },
-        {
-          "sequence": [
-            38,
-            null,
-            34,
-            32,
-            30
-          ],
-          "answer": 36
-        },
-        {
-          "sequence": [
-            3,
-            28,
-            53,
-            null,
-            103
-          ],
-          "answer": 78
-        },
-        {
-          "sequence": [
-            56,
-            null,
-            36,
-            26,
-            16
-          ],
-          "answer": 46
-        }
-      ]
-    },
-    {
-      "type": "rounding",
-      "title": "Round to the Nearest 10",
-      "instructions": "Round each number to the nearest 10.",
-      "items": [
-        {
-          "number": 125,
-          "nearest": 10,
-          "answer": 130
-        },
-        {
-          "number": 247,
-          "nearest": 10,
-          "answer": 250
-        },
-        {
-          "number": 536,
-          "nearest": 10,
-          "answer": 540
-        },
-        {
-          "number": 315,
-          "nearest": 10,
-          "answer": 320
-        },
-        {
-          "number": 845,
-          "nearest": 10,
-          "answer": 850
-        },
-        {
-          "number": 811,
-          "nearest": 10,
-          "answer": 810
         }
       ]
     },
@@ -136,19 +52,103 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Lena has 22 shells. Zoe gives Lena 30 more. How many does Lena have now?",
-          "answer": 52,
-          "unit": "shells"
+          "text": "Sam has 49 apples. Noah gives Sam 10 more. How many does Sam have now?",
+          "answer": 59,
+          "unit": "apples"
         },
         {
-          "text": "Lena had 23 cookies. Lena gave 22 to Ivy. How many are left?",
-          "answer": 1,
-          "unit": "cookies"
+          "text": "Omar had 36 marbles. Omar gave 2 to Ruby. How many are left?",
+          "answer": 34,
+          "unit": "marbles"
         },
         {
-          "text": "Ruby has 7 bags with 7 coins in each bag. How many coins in all?",
-          "answer": 49,
-          "unit": "coins"
+          "text": "Noah has 27 apples. Theo gives Noah 16 more. How many does Noah have now?",
+          "answer": 43,
+          "unit": "apples"
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            100,
+            50,
+            10,
+            100,
+            50
+          ],
+          "answer": 310
+        },
+        {
+          "coins": [
+            1,
+            10,
+            25,
+            10,
+            5
+          ],
+          "answer": 51
+        },
+        {
+          "coins": [
+            25,
+            10,
+            10,
+            100,
+            25
+          ],
+          "answer": 170
+        },
+        {
+          "coins": [
+            50,
+            100,
+            100,
+            25,
+            50
+          ],
+          "answer": 325
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 863,
+          "nearest": 10,
+          "answer": 860
+        },
+        {
+          "number": 288,
+          "nearest": 10,
+          "answer": 290
+        },
+        {
+          "number": 853,
+          "nearest": 10,
+          "answer": 850
+        },
+        {
+          "number": 778,
+          "nearest": 10,
+          "answer": 780
+        },
+        {
+          "number": 898,
+          "nearest": 10,
+          "answer": 900
+        },
+        {
+          "number": 296,
+          "nearest": 10,
+          "answer": 300
         }
       ]
     }

@@ -13,184 +13,182 @@
       "items": [
         {
           "numbers": [
-            30,
+            48,
+            28,
             44,
-            26,
-            14,
-            25
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            20,
-            4,
-            11,
             18,
-            9
+            30
           ],
           "answerIndex": 0,
           "op": "+"
         },
         {
           "numbers": [
-            11,
-            19,
-            29,
-            28,
-            40
+            4,
+            7,
+            27,
+            9,
+            36
           ],
           "answerIndex": 4,
-          "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
-      "items": [
-        {
-          "leftText": "915",
-          "rightText": "855",
-          "answer": ">"
+          "op": "×"
         },
         {
-          "leftText": "463",
-          "rightText": "463",
-          "answer": "="
-        },
-        {
-          "leftText": "190",
-          "rightText": "114",
-          "answer": ">"
-        },
-        {
-          "leftText": "8 × 3",
-          "rightText": "22",
-          "answer": ">"
-        },
-        {
-          "leftText": "246",
-          "rightText": "174",
-          "answer": ">"
-        },
-        {
-          "leftText": "563",
-          "rightText": "464",
-          "answer": ">"
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 7,
-          "ops": [
-            {
-              "op": "÷",
-              "operand": 7
-            },
-            {
-              "op": "×",
-              "operand": 8
-            },
-            {
-              "op": "+",
-              "operand": 192
-            },
-            {
-              "op": "+",
-              "operand": 96
-            },
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
-              "op": "−",
-              "operand": 799
-            }
-          ],
-          "values": [
-            1,
-            8,
-            200,
-            296,
-            888,
-            89
-          ]
-        },
-        {
-          "start": 7,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 4
-            },
-            {
-              "op": "−",
-              "operand": 24
-            },
-            {
-              "op": "+",
-              "operand": 202
-            },
-            {
-              "op": "−",
-              "operand": 91
-            },
-            {
-              "op": "×",
-              "operand": 4
-            },
-            {
-              "op": "+",
-              "operand": 250
-            }
-          ],
-          "values": [
-            28,
+          "numbers": [
+            9,
             4,
-            206,
-            115,
-            460,
-            710
-          ]
+            14,
+            5,
+            20
+          ],
+          "answerIndex": 4,
+          "op": "×"
         }
       ]
     },
     {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
       "items": [
         {
-          "text": "Zoe shares 21 pencils equally among 3 friends. How many does each friend get?",
-          "answer": 7,
-          "unit": "pencils"
+          "number": 90617,
+          "nearest": 1000,
+          "answer": 91000
         },
         {
-          "text": "Omar has 6 bags with 6 marbles in each bag. How many marbles in all?",
-          "answer": 36,
-          "unit": "marbles"
+          "number": 59912,
+          "nearest": 1000,
+          "answer": 60000
         },
         {
-          "text": "Eli had 23 cookies. Eli gave 15 to Theo. How many are left?",
-          "answer": 8,
-          "unit": "cookies"
+          "number": 20659,
+          "nearest": 1000,
+          "answer": 21000
+        },
+        {
+          "number": 59830,
+          "nearest": 1000,
+          "answer": 60000
+        },
+        {
+          "number": 46373,
+          "nearest": 1000,
+          "answer": 46000
+        },
+        {
+          "number": 25229,
+          "nearest": 1000,
+          "answer": 25000
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 5,
+          "bNum": 1,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 2,
+          "aDen": 2,
+          "bNum": 2,
+          "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 6,
+          "newDen": 24,
+          "answer": 4
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 2,
+          "bNum": 3,
+          "bDen": 3,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 3,
+          "bNum": 4,
+          "bDen": 5,
+          "answer": ">"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 807,
+          "op": "−",
+          "right": 319,
+          "result": 488,
+          "blank": "result",
+          "answer": 488
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 12,
+          "result": 96,
+          "blank": "right",
+          "answer": 12
+        },
+        {
+          "left": 5,
+          "op": "×",
+          "right": 2,
+          "result": 10,
+          "blank": "left",
+          "answer": 5
+        },
+        {
+          "left": 10,
+          "op": "×",
+          "right": 10,
+          "result": 100,
+          "blank": "left",
+          "answer": 10
+        },
+        {
+          "left": 54,
+          "op": "÷",
+          "right": 9,
+          "result": 6,
+          "blank": "right",
+          "answer": 9
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 5,
+          "result": 10,
+          "blank": "result",
+          "answer": 10
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 9,
-    "score": 43
+    "maxTier": 4,
+    "steps": 4,
+    "score": 42
   },
   "seed": 62,
   "createdAt": "2026-06-04T00:00:00.000Z"

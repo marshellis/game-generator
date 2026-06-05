@@ -130,6 +130,19 @@ function checkActivity(act: Activity): void {
         }
       }
       break;
+    case "breakApart":
+      for (const it of act.items) {
+        expect(it.parts.reduce((a, b) => a + b, 0)).toBe(it.number); // parts sum to the number
+        expect(it.parts.length).toBeGreaterThanOrEqual(2);
+        expect(it.parts[it.blankIndex]).toBe(it.answer);
+      }
+      break;
+    case "coinBubble":
+      for (const it of act.items) {
+        expect(it.coins.reduce((a, b) => a + b, 0)).toBe(it.answer);
+        expect(it.coins.every((c) => [1, 5, 10, 25, 50, 100].includes(c))).toBe(true);
+      }
+      break;
     case "snake":
       for (const it of act.items) {
         expect(it.values.length).toBe(it.ops.length);

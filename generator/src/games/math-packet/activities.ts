@@ -8,6 +8,8 @@ import type {
   FindTheSumItem,
   OrderOfOpsItem,
   SnakeItem,
+  BreakApartItem,
+  CoinBubbleItem,
 } from "./types";
 
 export interface ActivityGen {
@@ -514,6 +516,60 @@ const snake: ActivityGen = {
   }),
 };
 
+// ---------------------------------------------------------------------------
+// Break Apart — write a number in expanded form with one part missing.
+// ---------------------------------------------------------------------------
+
+const breakApart: ActivityGen = {
+  type: "breakApart",
+  eligible: (g) => g.grade >= 2 && g.grade <= 6,
+  generate: (g, rng) => {
+    const digits = Math.min(g.grade, 5); // g2→2 … g5→5, g6→5
+    const lo = 10 ** (digits - 1);
+    const hi = 10 ** digits - 1;
+    const items: BreakApartItem[] = Array.from({ length: 5 }, () => {
+      let number = randInt(rng, lo, hi);
+      // build place-value parts; keep only nonzero so there's always a real blank
+      let parts = String(number).split("").map((d, i, arr) => Number(d) * 10 ** (arr.length - 1 - i)).filter((p) => p > 0);
+      if (parts.length < 2) { number = lo + randInt(rng, 1, 8) * (lo / 10 || 1); parts = String(number).split("").map((d, i, arr) => Number(d) * 10 ** (arr.length - 1 - i)).filter((p) => p > 0); }
+      const blankIndex = randInt(rng, 0, parts.length - 1);
+      return { number, parts, blankIndex, answer: parts[blankIndex]! };
+    });
+    return {
+      type: "breakApart",
+      title: "Break Apart",
+      instructions: "Write the missing part of each number.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Coin Bubble — count the coins (values in cents) and write the total.
+// ---------------------------------------------------------------------------
+
+const COINS_LOW = [1, 5, 10, 25];
+const COINS_HIGH = [1, 5, 10, 25, 50, 100];
+
+const coinBubble: ActivityGen = {
+  type: "coinBubble",
+  eligible: (g) => g.grade >= 1 && g.grade <= 4,
+  generate: (g, rng) => {
+    const values = g.grade >= 3 ? COINS_HIGH : COINS_LOW;
+    const count = g.grade <= 1 ? 3 : g.grade === 2 ? 4 : 5;
+    const items: CoinBubbleItem[] = Array.from({ length: 4 }, () => {
+      const coins = Array.from({ length: count }, () => pick(rng, values));
+      return { coins, answer: coins.reduce((a, b) => a + b, 0) };
+    });
+    return {
+      type: "coinBubble",
+      title: "Count the Money",
+      instructions: "Add up the coins and write the total in cents.",
+      items,
+    };
+  },
+};
+
 /** All generators, in a stable display order. */
 export const ACTIVITY_GENS: ActivityGen[] = [
   findTheSum,
@@ -525,6 +581,8 @@ export const ACTIVITY_GENS: ActivityGen[] = [
   pattern,
   placeValue,
   rounding,
+  breakApart,
+  coinBubble,
   orderOfOps,
   snake,
   fraction,

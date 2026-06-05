@@ -13,107 +13,103 @@
       "items": [
         {
           "numbers": [
-            10,
-            11,
             5,
-            6
+            12,
+            7,
+            8
           ],
           "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            10,
+            1,
+            7,
+            9
+          ],
+          "answerIndex": 0,
           "op": "+"
         },
         {
           "numbers": [
             9,
-            13,
-            4,
-            2
+            5,
+            3,
+            4
           ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            4,
-            2,
-            6,
-            1
-          ],
-          "answerIndex": 2,
+          "answerIndex": 0,
           "op": "+"
         }
       ]
     },
     {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "leftText": "1",
-          "rightText": "3",
-          "answer": "<"
+          "dots": 9,
+          "answer": 9
         },
         {
-          "leftText": "12",
-          "rightText": "11",
-          "answer": ">"
+          "dots": 10,
+          "answer": 10
         },
         {
-          "leftText": "11",
-          "rightText": "10",
-          "answer": ">"
-        },
-        {
-          "leftText": "15",
-          "rightText": "15",
-          "answer": "="
-        },
-        {
-          "leftText": "1",
-          "rightText": "0",
-          "answer": ">"
-        },
-        {
-          "leftText": "10",
-          "rightText": "9",
-          "answer": ">"
-        }
-      ]
-    },
-    {
-      "type": "numberBond",
-      "title": "Number Bonds",
-      "instructions": "Find the missing part of each bond.",
-      "items": [
-        {
-          "total": 9,
-          "known": 5,
+          "dots": 4,
           "answer": 4
         },
         {
-          "total": 5,
-          "known": 4,
-          "answer": 1
+          "dots": 10,
+          "answer": 10
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            1,
+            3,
+            5,
+            7,
+            null
+          ],
+          "answer": 9
         },
         {
-          "total": 10,
-          "known": 3,
-          "answer": 7
+          "sequence": [
+            8,
+            null,
+            12,
+            14,
+            16
+          ],
+          "answer": 10
         },
         {
-          "total": 9,
-          "known": 8,
-          "answer": 1
+          "sequence": [
+            0,
+            2,
+            4,
+            6,
+            null
+          ],
+          "answer": 8
         },
         {
-          "total": 9,
-          "known": 4,
-          "answer": 5
-        },
-        {
-          "total": 10,
-          "known": 3,
-          "answer": 7
+          "sequence": [
+            0,
+            null,
+            20,
+            30,
+            40
+          ],
+          "answer": 10
         }
       ]
     }
@@ -121,7 +117,7 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 22
+    "score": 21
   },
   "seed": 11,
   "createdAt": "2026-06-04T00:00:00.000Z"

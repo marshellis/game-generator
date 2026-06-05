@@ -13,91 +13,83 @@
       "items": [
         {
           "numbers": [
-            10,
-            8,
-            18,
-            12,
-            6
+            5,
+            15,
+            16,
+            11,
+            12
           ],
           "answerIndex": 2,
           "op": "+"
         },
         {
           "numbers": [
-            11,
-            2,
-            4,
+            8,
             3,
-            13
+            24,
+            7,
+            14
           ],
-          "answerIndex": 4,
-          "op": "+"
+          "answerIndex": 2,
+          "op": "×"
         },
         {
           "numbers": [
-            7,
-            10,
+            20,
             5,
-            2,
-            6
+            6,
+            7,
+            30
           ],
-          "answerIndex": 1,
+          "answerIndex": 4,
           "op": "×"
         }
       ]
     },
     {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
       "items": [
         {
-          "left": 40,
-          "op": "−",
-          "right": 19,
-          "result": 21,
-          "blank": "right",
-          "answer": 19
+          "coins": [
+            10,
+            25,
+            10,
+            5,
+            50
+          ],
+          "answer": 100
         },
         {
-          "left": 31,
-          "op": "−",
-          "right": 25,
-          "result": 6,
-          "blank": "left",
-          "answer": 31
+          "coins": [
+            1,
+            1,
+            50,
+            1,
+            1
+          ],
+          "answer": 54
         },
         {
-          "left": 71,
-          "op": "+",
-          "right": 14,
-          "result": 85,
-          "blank": "left",
-          "answer": 71
+          "coins": [
+            25,
+            50,
+            50,
+            25,
+            25
+          ],
+          "answer": 175
         },
         {
-          "left": 69,
-          "op": "−",
-          "right": 47,
-          "result": 22,
-          "blank": "right",
-          "answer": 47
-        },
-        {
-          "left": 32,
-          "op": "−",
-          "right": 5,
-          "result": 27,
-          "blank": "left",
-          "answer": 32
-        },
-        {
-          "left": 7,
-          "op": "×",
-          "right": 8,
-          "result": 56,
-          "blank": "left",
-          "answer": 7
+          "coins": [
+            5,
+            1,
+            1,
+            100,
+            25
+          ],
+          "answer": 132
         }
       ]
     },
@@ -107,62 +99,56 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Omar has 18 cookies. Theo gives Omar 27 more. How many does Omar have now?",
-          "answer": 45,
-          "unit": "cookies"
-        },
-        {
-          "text": "Theo had 18 stickers. Theo gave 3 to Mara. How many are left?",
-          "answer": 15,
-          "unit": "stickers"
-        },
-        {
-          "text": "Eli has 49 coins. Noah gives Eli 11 more. How many does Eli have now?",
-          "answer": 60,
+          "text": "Zoe has 28 coins. Mara gives Zoe 14 more. How many does Zoe have now?",
+          "answer": 42,
           "unit": "coins"
+        },
+        {
+          "text": "Sam has 5 apples. Noah gives Sam 9 more. How many does Sam have now?",
+          "answer": 14,
+          "unit": "apples"
+        },
+        {
+          "text": "Lena has 6 bags with 9 stickers in each bag. How many stickers in all?",
+          "answer": 54,
+          "unit": "stickers"
         }
       ]
     },
     {
-      "type": "makeTen",
-      "title": "Make 100",
-      "instructions": "Fill in the number that makes 100.",
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "known": 50,
-          "target": 100,
-          "op": "+",
-          "answer": 50
+          "leftText": "12 + 3",
+          "rightText": "12",
+          "answer": ">"
         },
         {
-          "known": 13,
-          "target": 100,
-          "op": "+",
-          "answer": 87
+          "leftText": "440",
+          "rightText": "456",
+          "answer": "<"
         },
         {
-          "known": 56,
-          "target": 100,
-          "op": "+",
-          "answer": 44
+          "leftText": "527",
+          "rightText": "536",
+          "answer": "<"
         },
         {
-          "known": 44,
-          "target": 100,
-          "op": "+",
-          "answer": 56
+          "leftText": "947",
+          "rightText": "970",
+          "answer": "<"
         },
         {
-          "known": 98,
-          "target": 100,
-          "op": "+",
-          "answer": 2
+          "leftText": "6 + 12",
+          "rightText": "15",
+          "answer": ">"
         },
         {
-          "known": 58,
-          "target": 100,
-          "op": "+",
-          "answer": 42
+          "leftText": "664",
+          "rightText": "664",
+          "answer": "="
         }
       ]
     }
@@ -170,7 +156,7 @@
   "load": {
     "maxTier": 3,
     "steps": 4,
-    "score": 35
+    "score": 32
   },
   "seed": 32,
   "createdAt": "2026-06-04T00:00:00.000Z"

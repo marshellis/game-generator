@@ -13,10 +13,10 @@
       "items": [
         {
           "numbers": [
-            4,
-            7,
-            11,
-            5
+            6,
+            12,
+            17,
+            11
           ],
           "answerIndex": 2,
           "op": "+"
@@ -25,98 +25,81 @@
           "numbers": [
             11,
             12,
-            20,
-            8
+            7,
+            5
           ],
-          "answerIndex": 2,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            6,
-            20,
-            11,
-            9
+            1,
+            9,
+            10,
+            5
           ],
-          "answerIndex": 1,
+          "answerIndex": 2,
           "op": "+"
         }
       ]
     },
     {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
+      "type": "numberBond",
+      "title": "Number Bonds",
+      "instructions": "Find the missing part of each bond.",
       "items": [
         {
-          "text": "Mara has 12 marbles. Eli gives Mara 12 more. How many does Mara have now?",
-          "answer": 24,
-          "unit": "marbles"
+          "total": 10,
+          "known": 3,
+          "answer": 7
         },
         {
-          "text": "Zoe had 15 apples. Zoe gave 13 to Noah. How many are left?",
-          "answer": 2,
-          "unit": "apples"
+          "total": 6,
+          "known": 4,
+          "answer": 2
         },
         {
-          "text": "Omar had 13 marbles. Omar gave 6 to Sam. How many are left?",
-          "answer": 7,
-          "unit": "marbles"
+          "total": 13,
+          "known": 2,
+          "answer": 11
+        },
+        {
+          "total": 3,
+          "known": 2,
+          "answer": 1
+        },
+        {
+          "total": 7,
+          "known": 1,
+          "answer": 6
+        },
+        {
+          "total": 13,
+          "known": 8,
+          "answer": 5
         }
       ]
     },
     {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "left": 62,
-          "op": "−",
-          "right": 38,
-          "result": 24,
-          "blank": "result",
-          "answer": 24
+          "dots": 9,
+          "answer": 9
         },
         {
-          "left": 85,
-          "op": "−",
-          "right": 49,
-          "result": 36,
-          "blank": "result",
-          "answer": 36
+          "dots": 6,
+          "answer": 6
         },
         {
-          "left": 85,
-          "op": "−",
-          "right": 63,
-          "result": 22,
-          "blank": "right",
-          "answer": 63
+          "dots": 1,
+          "answer": 1
         },
         {
-          "left": 73,
-          "op": "−",
-          "right": 68,
-          "result": 5,
-          "blank": "left",
-          "answer": 73
-        },
-        {
-          "left": 17,
-          "op": "+",
-          "right": 82,
-          "result": 99,
-          "blank": "result",
-          "answer": 99
-        },
-        {
-          "left": 99,
-          "op": "−",
-          "right": 67,
-          "result": 32,
-          "blank": "left",
-          "answer": 99
+          "dots": 8,
+          "answer": 8
         }
       ]
     }
@@ -124,7 +107,7 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 27
+    "score": 20
   },
   "seed": 22,
   "createdAt": "2026-06-04T00:00:00.000Z"

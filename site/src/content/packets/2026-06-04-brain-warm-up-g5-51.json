@@ -13,33 +13,33 @@
       "items": [
         {
           "numbers": [
-            8,
-            15,
-            4,
-            19,
-            6
-          ],
-          "answerIndex": 3,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            37,
+            26,
             6,
-            9,
-            54,
-            32
+            30,
+            5,
+            10
           ],
-          "answerIndex": 3,
+          "answerIndex": 2,
           "op": "×"
         },
         {
           "numbers": [
-            8,
-            26,
-            4,
+            28,
             18,
+            32,
+            14,
             19
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            12,
+            9,
+            11,
+            8
           ],
           "answerIndex": 1,
           "op": "+"
@@ -52,47 +52,43 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 1,
+          "start": 9,
           "ops": [
             {
-              "op": "+",
-              "operand": 129
+              "op": "÷",
+              "operand": 9
             },
             {
               "op": "+",
+              "operand": 103
+            },
+            {
+              "op": "−",
               "operand": 96
             },
             {
-              "op": "÷",
-              "operand": 2
-            },
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
               "op": "−",
-              "operand": 235
+              "operand": 8
+            },
+            {
+              "op": "+",
+              "operand": 67
             }
           ],
           "values": [
-            130,
-            226,
-            113,
-            339,
-            104
+            1,
+            104,
+            8,
+            0,
+            67
           ]
         },
         {
-          "start": 5,
+          "start": 10,
           "ops": [
             {
-              "op": "+",
-              "operand": 57
-            },
-            {
-              "op": "−",
-              "operand": 35
+              "op": "×",
+              "operand": 9
             },
             {
               "op": "×",
@@ -100,20 +96,56 @@
             },
             {
               "op": "−",
-              "operand": 32
+              "operand": 308
+            },
+            {
+              "op": "−",
+              "operand": 68
             },
             {
               "op": "×",
-              "operand": 4
+              "operand": 5
             }
           ],
           "values": [
-            62,
-            27,
-            135,
-            103,
-            412
+            90,
+            450,
+            142,
+            74,
+            370
           ]
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 67434,
+          "place": "ones",
+          "answer": 4
+        },
+        {
+          "number": 72336,
+          "place": "thousands",
+          "answer": 2000
+        },
+        {
+          "number": 74262,
+          "place": "thousands",
+          "answer": 4000
+        },
+        {
+          "number": 92284,
+          "place": "thousands",
+          "answer": 2000
+        },
+        {
+          "number": 69212,
+          "place": "thousands",
+          "answer": 9000
         }
       ]
     },
@@ -124,80 +156,43 @@
       "items": [
         {
           "sequence": [
-            1,
-            51,
-            101,
+            5,
+            8,
             null,
-            201
+            14,
+            17
           ],
-          "answer": 151
+          "answer": 11
         },
         {
           "sequence": [
             9,
-            109,
-            209,
-            309,
+            34,
+            59,
+            84,
             null
-          ],
-          "answer": 409
-        },
-        {
-          "sequence": [
-            9,
-            null,
-            209,
-            309,
-            409
           ],
           "answer": 109
         },
         {
           "sequence": [
-            5,
-            14,
-            23,
+            9,
+            59,
+            109,
             null,
-            41
+            209
           ],
-          "answer": 32
-        }
-      ]
-    },
-    {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
-      "items": [
-        {
-          "leftText": "898",
-          "rightText": "940",
-          "answer": "<"
+          "answer": 159
         },
         {
-          "leftText": "840",
-          "rightText": "928",
-          "answer": "<"
-        },
-        {
-          "leftText": "355",
-          "rightText": "364",
-          "answer": "<"
-        },
-        {
-          "leftText": "879",
-          "rightText": "828",
-          "answer": ">"
-        },
-        {
-          "leftText": "9 + 9",
-          "rightText": "20",
-          "answer": "<"
-        },
-        {
-          "leftText": "8 + 10",
-          "rightText": "16",
-          "answer": ">"
+          "sequence": [
+            3,
+            103,
+            203,
+            303,
+            null
+          ],
+          "answer": 403
         }
       ]
     }
@@ -205,7 +200,7 @@
   "load": {
     "maxTier": 5,
     "steps": 8,
-    "score": 41
+    "score": 45
   },
   "seed": 51,
   "createdAt": "2026-06-04T00:00:00.000Z"

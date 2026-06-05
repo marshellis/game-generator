@@ -123,6 +123,18 @@ const activity = z.discriminatedUnion("type", [
       values: z.array(z.number()),
     })),
   }),
+  z.object({
+    type: z.literal("breakApart"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({ number: z.number(), parts: z.array(z.number()), blankIndex: z.number(), answer: z.number() })),
+  }),
+  z.object({
+    type: z.literal("coinBubble"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({ coins: z.array(z.number()), answer: z.number() })),
+  }),
 ]);
 
 const packets = defineCollection({

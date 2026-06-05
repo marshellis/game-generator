@@ -13,120 +13,68 @@
       "items": [
         {
           "numbers": [
-            15,
-            3,
-            13,
-            21,
-            8
-          ],
-          "answerIndex": 3,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            14,
-            4,
-            18,
-            15,
-            13
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            13,
-            9,
-            54,
-            6,
-            46
-          ],
-          "answerIndex": 2,
-          "op": "×"
-        }
-      ]
-    },
-    {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
-      "items": [
-        {
-          "sequence": [
-            9,
-            null,
+            7,
             27,
-            36,
+            19,
+            8,
+            4
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            48,
+            6,
+            8,
+            35,
             45
           ],
-          "answer": 18
+          "answerIndex": 0,
+          "op": "×"
         },
         {
-          "sequence": [
-            2,
-            52,
-            102,
-            152,
-            null
-          ],
-          "answer": 202
-        },
-        {
-          "sequence": [
-            106,
-            81,
-            null,
-            31,
-            6
-          ],
-          "answer": 56
-        },
-        {
-          "sequence": [
-            3,
+          "numbers": [
+            22,
             28,
-            null,
-            78,
-            103
+            15,
+            9,
+            37
           ],
-          "answer": 53
+          "answerIndex": 4,
+          "op": "+"
         }
       ]
     },
     {
-      "type": "rounding",
-      "title": "Round to the Nearest 1000",
-      "instructions": "Round each number to the nearest 1000.",
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "number": 59497,
-          "nearest": 1000,
-          "answer": 59000
+          "number": 82256,
+          "place": "thousands",
+          "answer": 2000
         },
         {
-          "number": 37440,
-          "nearest": 1000,
-          "answer": 37000
+          "number": 31161,
+          "place": "thousands",
+          "answer": 1000
         },
         {
-          "number": 62635,
-          "nearest": 1000,
-          "answer": 63000
+          "number": 66430,
+          "place": "ones",
+          "answer": 0
         },
         {
-          "number": 98016,
-          "nearest": 1000,
-          "answer": 98000
+          "number": 92253,
+          "place": "hundreds",
+          "answer": 200
         },
         {
-          "number": 89766,
-          "nearest": 1000,
-          "answer": 90000
-        },
-        {
-          "number": 63166,
-          "nearest": 1000,
-          "answer": 63000
+          "number": 28251,
+          "place": "ones",
+          "answer": 1
         }
       ]
     },
@@ -144,41 +92,113 @@
         },
         {
           "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 6,
-          "answer": 3
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 6,
-          "answer": 3
+          "num": 2,
+          "den": 4,
+          "newDen": 12,
+          "answer": 6
         },
         {
           "kind": "compare",
           "aNum": 5,
           "aDen": 5,
-          "bNum": 4,
-          "bDen": 2,
-          "answer": "<"
+          "bNum": 1,
+          "bDen": 5,
+          "answer": ">"
         },
         {
           "kind": "compare",
-          "aNum": 3,
-          "aDen": 8,
-          "bNum": 4,
+          "aNum": 2,
+          "aDen": 2,
+          "bNum": 1,
+          "bDen": 4,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 2,
+          "bNum": 3,
           "bDen": 5,
           "answer": "<"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 10,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 26
+            },
+            {
+              "op": "+",
+              "operand": 103
+            },
+            {
+              "op": "−",
+              "operand": 132
+            },
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 165
+            }
+          ],
+          "values": [
+            36,
+            139,
+            7,
+            14,
+            179
+          ]
+        },
+        {
+          "start": 3,
+          "ops": [
+            {
+              "op": "−",
+              "operand": 1
+            },
+            {
+              "op": "+",
+              "operand": 87
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "−",
+              "operand": 120
+            }
+          ],
+          "values": [
+            2,
+            89,
+            356,
+            178,
+            58
+          ]
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 4,
-    "steps": 4,
-    "score": 39
+    "maxTier": 5,
+    "steps": 8,
+    "score": 48
   },
   "seed": 53,
   "createdAt": "2026-06-04T00:00:00.000Z"

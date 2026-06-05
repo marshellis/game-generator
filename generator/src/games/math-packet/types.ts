@@ -18,7 +18,9 @@ export type ActivityType =
   | "tenFrame"
   | "wordProblem"
   | "fraction"
-  | "snake";
+  | "snake"
+  | "breakApart"
+  | "coinBubble";
 
 /** Find the one number in the cluster that equals two of the others combined. */
 export interface FindTheSumItem {
@@ -96,6 +98,20 @@ export interface SnakeItem {
   values: number[]; // length === ops.length; values[i] is the answer after step i
 }
 
+/** Expanded-form decomposition: number = part + part + ... with one part blank. */
+export interface BreakApartItem {
+  number: number;
+  parts: number[]; // nonzero place values, e.g. 364 → [300, 60, 4]
+  blankIndex: number;
+  answer: number;
+}
+
+/** Count the money: a handful of coins (values in cents); total them. */
+export interface CoinBubbleItem {
+  coins: number[]; // cent values, e.g. [25, 10, 10, 5, 1]
+  answer: number; // total cents
+}
+
 /** Either fill an equivalent fraction or compare two fractions. */
 export type FractionItem =
   | { kind: "equiv"; num: number; den: number; newDen: number; answer: number }
@@ -118,7 +134,9 @@ export type Activity =
   | (ActivityBase & { type: "tenFrame"; items: TenFrameItem[] })
   | (ActivityBase & { type: "wordProblem"; items: WordProblemItem[] })
   | (ActivityBase & { type: "fraction"; items: FractionItem[] })
-  | (ActivityBase & { type: "snake"; items: SnakeItem[] });
+  | (ActivityBase & { type: "snake"; items: SnakeItem[] })
+  | (ActivityBase & { type: "breakApart"; items: BreakApartItem[] })
+  | (ActivityBase & { type: "coinBubble"; items: CoinBubbleItem[] });
 
 /**
  * Measured difficulty of a packet (per the grade-appropriateness framework):

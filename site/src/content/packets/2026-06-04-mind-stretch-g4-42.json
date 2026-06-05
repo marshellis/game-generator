@@ -13,102 +13,36 @@
       "items": [
         {
           "numbers": [
+            29,
+            13,
+            16,
+            10,
+            28
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            5,
+            1,
             6,
-            31,
-            42,
-            7,
-            25
+            2,
+            3
           ],
           "answerIndex": 2,
           "op": "×"
         },
         {
           "numbers": [
-            1,
-            2,
-            4,
-            8,
-            6
-          ],
-          "answerIndex": 3,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            9,
-            11,
-            2,
+            17,
+            21,
+            7,
             14,
-            18
+            1
           ],
-          "answerIndex": 4,
-          "op": "×"
-        }
-      ]
-    },
-    {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
-      "items": [
-        {
-          "text": "Ivy has 19 coins. Omar gives Ivy 39 more. How many does Ivy have now?",
-          "answer": 58,
-          "unit": "coins"
-        },
-        {
-          "text": "Theo has 3 bags with 8 pencils in each bag. How many pencils in all?",
-          "answer": 24,
-          "unit": "pencils"
-        },
-        {
-          "text": "Zoe has 39 pencils. Eli gives Zoe 43 more. How many does Zoe have now?",
-          "answer": 82,
-          "unit": "pencils"
-        }
-      ]
-    },
-    {
-      "type": "fraction",
-      "title": "Fraction Workout",
-      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
-      "items": [
-        {
-          "kind": "equiv",
-          "num": 5,
-          "den": 6,
-          "newDen": 12,
-          "answer": 10
-        },
-        {
-          "kind": "compare",
-          "aNum": 5,
-          "aDen": 6,
-          "bNum": 4,
-          "bDen": 5,
-          "answer": ">"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 6,
-          "newDen": 18,
-          "answer": 3
-        },
-        {
-          "kind": "compare",
-          "aNum": 4,
-          "aDen": 3,
-          "bNum": 3,
-          "bDen": 5,
-          "answer": ">"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 6,
-          "answer": 3
+          "answerIndex": 1,
+          "op": "+"
         }
       ]
     },
@@ -118,44 +52,36 @@
       "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "left": 628,
-          "op": "+",
-          "right": 999,
-          "result": 1627,
-          "blank": "left",
-          "answer": 628
+          "left": 35,
+          "op": "÷",
+          "right": 5,
+          "result": 7,
+          "blank": "right",
+          "answer": 5
         },
         {
-          "left": 9,
-          "op": "×",
-          "right": 7,
-          "result": 63,
-          "blank": "left",
+          "left": 27,
+          "op": "÷",
+          "right": 3,
+          "result": 9,
+          "blank": "result",
           "answer": 9
         },
         {
-          "left": 4,
-          "op": "×",
-          "right": 7,
-          "result": 28,
+          "left": 367,
+          "op": "+",
+          "right": 768,
+          "result": 1135,
           "blank": "left",
-          "answer": 4
+          "answer": 367
         },
         {
-          "left": 8,
-          "op": "×",
-          "right": 8,
-          "result": 64,
-          "blank": "result",
-          "answer": 64
-        },
-        {
-          "left": 2,
-          "op": "×",
-          "right": 8,
-          "result": 16,
-          "blank": "right",
-          "answer": 8
+          "left": 49,
+          "op": "÷",
+          "right": 7,
+          "result": 7,
+          "blank": "left",
+          "answer": 49
         },
         {
           "left": 64,
@@ -164,6 +90,90 @@
           "result": 8,
           "blank": "result",
           "answer": 8
+        },
+        {
+          "left": 776,
+          "op": "+",
+          "right": 842,
+          "result": 1618,
+          "blank": "right",
+          "answer": 842
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 3,
+          "bNum": 4,
+          "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 5,
+          "bNum": 3,
+          "bDen": 6,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 3,
+          "newDen": 12,
+          "answer": 8
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 4,
+          "newDen": 12,
+          "answer": 6
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 5,
+          "newDen": 10,
+          "answer": 6
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 6649,
+          "place": "thousands",
+          "answer": 6000
+        },
+        {
+          "number": 3462,
+          "place": "hundreds",
+          "answer": 400
+        },
+        {
+          "number": 8994,
+          "place": "hundreds",
+          "answer": 900
+        },
+        {
+          "number": 1116,
+          "place": "hundreds",
+          "answer": 100
+        },
+        {
+          "number": 3861,
+          "place": "hundreds",
+          "answer": 800
         }
       ]
     }

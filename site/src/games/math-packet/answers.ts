@@ -31,5 +31,9 @@ export function keyForActivity(act: Activity): string[] {
       );
     case "snake":
       return act.items.map((it) => [String(it.start), ...it.values.map(String)].join(" → "));
+    case "breakApart":
+      return act.items.map((it) => `${it.number} = ${it.parts.join(" + ")}`);
+    case "coinBubble":
+      return act.items.map((it) => `${it.answer}¢`);
   }
 }

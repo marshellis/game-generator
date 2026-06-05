@@ -14,118 +14,123 @@
         {
           "numbers": [
             12,
-            8,
-            13,
-            5
+            17,
+            5,
+            8
           ],
-          "answerIndex": 2,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
             8,
-            6,
+            4,
             1,
-            9
+            12
           ],
           "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            10,
-            7,
-            17,
-            4
+            12,
+            14,
+            8,
+            20
           ],
-          "answerIndex": 2,
+          "answerIndex": 3,
           "op": "+"
         }
       ]
     },
     {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "left": 76,
-          "op": "−",
-          "right": 72,
-          "result": 4,
-          "blank": "result",
-          "answer": 4
+          "text": "Eli had 17 cookies. Eli gave 10 to Ruby. How many are left?",
+          "answer": 7,
+          "unit": "cookies"
         },
         {
-          "left": 98,
-          "op": "+",
-          "right": 10,
-          "result": 108,
-          "blank": "left",
-          "answer": 98
+          "text": "Ivy had 14 coins. Ivy gave 11 to Omar. How many are left?",
+          "answer": 3,
+          "unit": "coins"
         },
         {
-          "left": 53,
-          "op": "−",
-          "right": 34,
-          "result": 19,
-          "blank": "right",
-          "answer": 34
-        },
-        {
-          "left": 7,
-          "op": "−",
-          "right": 5,
-          "result": 2,
-          "blank": "right",
-          "answer": 5
-        },
-        {
-          "left": 6,
-          "op": "+",
-          "right": 7,
-          "result": 13,
-          "blank": "left",
-          "answer": 6
-        },
-        {
-          "left": 68,
-          "op": "+",
-          "right": 80,
-          "result": 148,
-          "blank": "left",
-          "answer": 68
+          "text": "Omar has 2 coins. Theo gives Omar 17 more. How many does Omar have now?",
+          "answer": 19,
+          "unit": "coins"
         }
       ]
     },
     {
-      "type": "tenFrame",
-      "title": "How Many?",
-      "instructions": "Write how many dots are filled in each ten-frame.",
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "dots": 10,
-          "answer": 10
+          "start": 7,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 9
+            },
+            {
+              "op": "+",
+              "operand": 1
+            },
+            {
+              "op": "+",
+              "operand": 6
+            },
+            {
+              "op": "−",
+              "operand": 2
+            }
+          ],
+          "values": [
+            16,
+            17,
+            23,
+            21
+          ]
         },
         {
-          "dots": 6,
-          "answer": 6
-        },
-        {
-          "dots": 1,
-          "answer": 1
-        },
-        {
-          "dots": 8,
-          "answer": 8
+          "start": 1,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 6
+            },
+            {
+              "op": "+",
+              "operand": 13
+            },
+            {
+              "op": "−",
+              "operand": 19
+            },
+            {
+              "op": "+",
+              "operand": 1
+            }
+          ],
+          "values": [
+            7,
+            20,
+            1,
+            2
+          ]
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 3,
-    "steps": 3,
-    "score": 24
+    "maxTier": 5,
+    "steps": 6,
+    "score": 34
   },
   "seed": 23,
   "createdAt": "2026-06-04T00:00:00.000Z"
