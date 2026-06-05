@@ -1,0 +1,157 @@
+{
+  "id": "2026-06-04-number-quest-g6-62",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            3,
+            6,
+            5,
+            7,
+            9
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            18,
+            31,
+            9,
+            22
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            25,
+            23,
+            18,
+            1,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 2,
+          "bNum": 3,
+          "bDen": 3,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 3,
+          "bNum": 4,
+          "bDen": 5,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 6,
+          "newDen": 24,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 8,
+          "bNum": 3,
+          "bDen": 5,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Eli shares 30 coins equally among 6 friends. How many does each friend get?",
+          "answer": 5,
+          "unit": "coins"
+        },
+        {
+          "text": "Ruby shares 8 marbles equally among 2 friends. How many does each friend get?",
+          "answer": 4,
+          "unit": "marbles"
+        },
+        {
+          "text": "Zoe has 6 bags with 7 cookies in each bag. How many cookies in all?",
+          "answer": 42,
+          "unit": "cookies"
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 75721,
+          "place": "tens",
+          "answer": 20
+        },
+        {
+          "number": 49692,
+          "place": "tens",
+          "answer": 90
+        },
+        {
+          "number": 11167,
+          "place": "thousands",
+          "answer": 1000
+        },
+        {
+          "number": 43620,
+          "place": "tens",
+          "answer": 20
+        },
+        {
+          "number": 96912,
+          "place": "thousands",
+          "answer": 6000
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 4,
+    "score": 39,
+    "stars": 3
+  },
+  "seed": 62,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

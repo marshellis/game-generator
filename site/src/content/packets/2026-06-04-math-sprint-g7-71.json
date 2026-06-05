@@ -1,0 +1,209 @@
+{
+  "id": "2026-06-04-math-sprint-g7-71",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            4,
+            22,
+            24,
+            20,
+            8
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            12,
+            16,
+            3,
+            18
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            2,
+            30,
+            32,
+            11,
+            23
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                5,
+                13,
+                16,
+                18
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                11,
+                8,
+                6,
+                5
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                6,
+                29,
+                20,
+                9
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              29,
+              11,
+              18
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                11,
+                9,
+                2,
+                4
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                11,
+                13,
+                7,
+                20
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                23,
+                28,
+                3,
+                31
+              ],
+              "answerIndex": 3
+            }
+          ],
+          "final": {
+            "numbers": [
+              31,
+              11,
+              20
+            ],
+            "answerIndex": 0
+          }
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Noah has 59 shells. Eli gives Noah 64 more. How many does Noah have now?",
+          "answer": 123,
+          "unit": "shells"
+        },
+        {
+          "text": "Mara has 4 bags with 9 books in each bag. How many books in all?",
+          "answer": 36,
+          "unit": "books"
+        },
+        {
+          "text": "Omar shares 6 stickers equally among 3 friends. How many does each friend get?",
+          "answer": 2,
+          "unit": "stickers"
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 5,
+          "newDen": 10,
+          "answer": 4
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 4,
+          "bNum": 4,
+          "bDen": 8,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 6,
+          "newDen": 18,
+          "answer": 9
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 5,
+          "newDen": 20,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 8,
+          "bNum": 2,
+          "bDen": 6,
+          "answer": "<"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 7,
+    "score": 46,
+    "stars": 4
+  },
+  "seed": 71,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

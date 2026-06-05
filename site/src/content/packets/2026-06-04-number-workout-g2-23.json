@@ -1,6 +1,6 @@
 {
-  "id": "2026-06-04-math-sprint-g2-21",
-  "title": "Math Sprint",
+  "id": "2026-06-04-number-workout-g2-23",
+  "title": "Number Workout",
   "blurb": "A 3-puzzle mix for Grade 2.",
   "gameType": "math-packet",
   "gradeLabel": "Grade 2",
@@ -13,30 +13,30 @@
       "items": [
         {
           "numbers": [
+            18,
+            12,
+            4,
+            6
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            5,
             8,
-            11,
-            6,
-            5
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            6,
             7,
-            2,
-            5
+            1
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            2,
-            1,
+            3,
             6,
-            7
+            5,
+            9
           ],
           "answerIndex": 3,
           "op": "+"
@@ -49,16 +49,16 @@
       "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "dots": 7,
-          "answer": 7
+          "dots": 3,
+          "answer": 3
         },
         {
-          "dots": 9,
-          "answer": 9
+          "dots": 10,
+          "answer": 10
         },
         {
-          "dots": 9,
-          "answer": 9
+          "dots": 10,
+          "answer": 10
         },
         {
           "dots": 7,
@@ -72,33 +72,39 @@
       "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "number": 63,
-          "place": "ones",
-          "answer": 3
-        },
-        {
-          "number": 39,
-          "place": "ones",
-          "answer": 9
-        },
-        {
-          "number": 38,
+          "number": 64,
           "place": "tens",
-          "answer": 30
+          "answer": 60
         },
         {
-          "number": 48,
+          "number": 95,
+          "place": "tens",
+          "answer": 90
+        },
+        {
+          "number": 27,
+          "place": "tens",
+          "answer": 20
+        },
+        {
+          "number": 18,
           "place": "ones",
           "answer": 8
         },
         {
-          "number": 93,
+          "number": 82,
           "place": "tens",
-          "answer": 90
+          "answer": 80
         }
       ]
     }
   ],
-  "seed": 21,
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 21,
+    "stars": 1
+  },
+  "seed": 23,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

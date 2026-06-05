@@ -13,105 +13,91 @@
       "items": [
         {
           "numbers": [
-            28,
-            24,
-            18,
-            10,
-            7
-          ],
-          "answerIndex": 0,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            1,
+            16,
+            23,
+            5,
             7,
-            11,
-            14,
-            13
-          ],
-          "answerIndex": 3,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            1,
-            24,
-            8,
-            13,
-            3
+            19
           ],
           "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            3,
+            5,
+            7,
+            15
+          ],
+          "answerIndex": 4,
           "op": "×"
+        },
+        {
+          "numbers": [
+            14,
+            11,
+            16,
+            2,
+            5
+          ],
+          "answerIndex": 2,
+          "op": "+"
         }
       ]
     },
     {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "sequence": [
-            0,
-            null,
-            12,
-            18,
-            24
-          ],
+          "left": 602,
+          "op": "−",
+          "right": 467,
+          "result": 135,
+          "blank": "right",
+          "answer": 467
+        },
+        {
+          "left": 6,
+          "op": "×",
+          "right": 9,
+          "result": 54,
+          "blank": "left",
           "answer": 6
         },
         {
-          "sequence": [
-            2,
-            27,
-            52,
-            null,
-            102
-          ],
-          "answer": 77
+          "left": 18,
+          "op": "÷",
+          "right": 9,
+          "result": 2,
+          "blank": "right",
+          "answer": 9
         },
         {
-          "sequence": [
-            47,
-            41,
-            35,
-            29,
-            null
-          ],
-          "answer": 23
+          "left": 27,
+          "op": "÷",
+          "right": 3,
+          "result": 9,
+          "blank": "result",
+          "answer": 9
         },
         {
-          "sequence": [
-            109,
-            84,
-            null,
-            34,
-            9
-          ],
-          "answer": 59
-        }
-      ]
-    },
-    {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
-      "items": [
-        {
-          "text": "Mara has 9 bags with 2 pencils in each bag. How many pencils in all?",
-          "answer": 18,
-          "unit": "pencils"
+          "left": 3,
+          "op": "×",
+          "right": 8,
+          "result": 24,
+          "blank": "result",
+          "answer": 24
         },
         {
-          "text": "Omar has 6 coins. Lena gives Omar 1 more. How many does Omar have now?",
-          "answer": 7,
-          "unit": "coins"
-        },
-        {
-          "text": "Sam shares 14 cookies equally among 2 friends. How many does each friend get?",
-          "answer": 7,
-          "unit": "cookies"
+          "left": 14,
+          "op": "÷",
+          "right": 7,
+          "result": 2,
+          "blank": "result",
+          "answer": 2
         }
       ]
     },
@@ -121,38 +107,90 @@
       "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "leftText": "279",
-          "rightText": "215",
-          "answer": ">"
-        },
-        {
-          "leftText": "822",
-          "rightText": "822",
-          "answer": "="
-        },
-        {
-          "leftText": "563",
-          "rightText": "550",
-          "answer": ">"
-        },
-        {
-          "leftText": "337",
-          "rightText": "301",
-          "answer": ">"
-        },
-        {
-          "leftText": "296",
-          "rightText": "365",
+          "leftText": "423",
+          "rightText": "521",
           "answer": "<"
         },
         {
-          "leftText": "995",
-          "rightText": "981",
+          "leftText": "10 + 12",
+          "rightText": "24",
+          "answer": "<"
+        },
+        {
+          "leftText": "416",
+          "rightText": "321",
           "answer": ">"
+        },
+        {
+          "leftText": "9 × 10",
+          "rightText": "89",
+          "answer": ">"
+        },
+        {
+          "leftText": "418",
+          "rightText": "418",
+          "answer": "="
+        },
+        {
+          "leftText": "570",
+          "rightText": "570",
+          "answer": "="
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 3,
+          "bNum": 3,
+          "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 5,
+          "bNum": 2,
+          "bDen": 6,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 4,
+          "den": 5,
+          "newDen": 20,
+          "answer": 16
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 2,
+          "bNum": 5,
+          "bDen": 4,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 8,
+          "bNum": 5,
+          "bDen": 3,
+          "answer": "<"
         }
       ]
     }
   ],
+  "load": {
+    "maxTier": 4,
+    "steps": 4,
+    "score": 36,
+    "stars": 3
+  },
   "seed": 42,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

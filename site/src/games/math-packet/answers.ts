@@ -29,5 +29,20 @@ export function keyForActivity(act: Activity): string[] {
       return act.items.map((it) =>
         it.kind === "equiv" ? `${it.num}/${it.den} = ${it.answer}/${it.newDen}` : `${it.aNum}/${it.aDen} ${it.answer} ${it.bNum}/${it.bDen}`,
       );
+    case "snake":
+      return act.items.map((it) => [String(it.start), ...it.values.map(String)].join(" → "));
+    case "breakApart":
+      return act.items.map((it) => `${it.number} = ${it.parts.join(" + ")}`);
+    case "coinBubble":
+      return act.items.map((it) => `${it.answer}¢`);
+    case "stdAlgorithm":
+      return act.items.map((it) => `${it.a} ${it.op} ${it.b} = ${it.answer}`);
+    case "match":
+      return act.items.map((it) => String(it.answer));
+    case "sumChain":
+      return act.items.map((it) => {
+        const subs = it.subClusters.map((c) => c.numbers[c.answerIndex]).join(", ");
+        return `${subs} → ${it.final.numbers[it.final.answerIndex]}`;
+      });
   }
 }

@@ -1,0 +1,147 @@
+{
+  "id": "2026-06-04-puzzle-power-g2-21",
+  "title": "Puzzle Power",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            11,
+            10,
+            9,
+            20
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            12,
+            15,
+            11
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            11,
+            8,
+            4,
+            15
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 6
+          },
+          "options": [
+            6,
+            7,
+            4
+          ],
+          "answer": 6
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 1
+          },
+          "options": [
+            1,
+            2,
+            3
+          ],
+          "answer": 1
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 5
+          },
+          "options": [
+            6,
+            4,
+            5
+          ],
+          "answer": 5
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 9
+          },
+          "options": [
+            8,
+            9,
+            7
+          ],
+          "answer": 9
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "75",
+          "rightText": "75",
+          "answer": "="
+        },
+        {
+          "leftText": "31",
+          "rightText": "31",
+          "answer": "="
+        },
+        {
+          "leftText": "61",
+          "rightText": "62",
+          "answer": "<"
+        },
+        {
+          "leftText": "83",
+          "rightText": "83",
+          "answer": "="
+        },
+        {
+          "leftText": "39",
+          "rightText": "29",
+          "answer": ">"
+        },
+        {
+          "leftText": "92",
+          "rightText": "89",
+          "answer": ">"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 21,
+    "stars": 1
+  },
+  "seed": 21,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

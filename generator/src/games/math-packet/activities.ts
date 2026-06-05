@@ -7,6 +7,13 @@ import type {
   ActivityType,
   FindTheSumItem,
   OrderOfOpsItem,
+  SnakeItem,
+  BreakApartItem,
+  CoinBubbleItem,
+  StdAlgoItem,
+  MatchItem,
+  NestedSumItem,
+  SumCluster,
 } from "./types";
 
 export interface ActivityGen {
@@ -447,6 +454,260 @@ const fraction: ActivityGen = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Snake — a running-total chain. Start at the first number, apply each step in
+// order, write the result. Multi-step: difficulty scales with chain length,
+// operation mix, and number range. Always integer, bounded, non-negative, with
+// a single forward-computed answer.
+// ---------------------------------------------------------------------------
+
+const SNAKE_LEN = [0, 3, 4, 4, 5, 5, 6, 6, 7];
+const SNAKE_CAP = [0, 30, 50, 99, 200, 500, 999, 999, 2000];
+
+function makeSnake(g: GradeConfig, rng: Rng): SnakeItem {
+  const length = SNAKE_LEN[g.grade]!;
+  const cap = SNAKE_CAP[g.grade]!;
+  for (let attempt = 0; attempt < 300; attempt++) {
+    const start = randInt(rng, 1, Math.min(12, cap));
+    let value = start;
+    const chain: SnakeItem["ops"] = [];
+    const values: number[] = [];
+    let ok = true;
+    for (let i = 0; i < length; i++) {
+      let applied = false;
+      for (const op of shuffle([...g.ops], rng)) {
+        if (op === "+") {
+          const room = cap - value;
+          if (room < 1) continue;
+          const operand = randInt(rng, 1, Math.min(room, Math.max(2, Math.floor(cap / 3))));
+          value += operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        } else if (op === "−") {
+          if (value < 2) continue;
+          const operand = randInt(rng, 1, value);
+          value -= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        } else if (op === "×") {
+          const maxFactor = Math.floor(cap / Math.max(value, 1));
+          if (value < 1 || maxFactor < 2) continue;
+          const operand = randInt(rng, 2, Math.min(maxFactor, 9));
+          value *= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        } else {
+          const divs: number[] = [];
+          for (let d = 2; d <= 9; d++) if (value % d === 0) divs.push(d);
+          if (!divs.length) continue;
+          const operand = pick(rng, divs);
+          value /= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        }
+      }
+      if (!applied) {
+        if (value < cap) { value += 1; chain.push({ op: "+", operand: 1 }); values.push(value); }
+        else if (value > 1) { value -= 1; chain.push({ op: "−", operand: 1 }); values.push(value); }
+        else { ok = false; break; }
+      }
+    }
+    if (ok && chain.length === length) return { start, ops: chain, values };
+  }
+  throw new Error("snake: could not build a valid chain");
+}
+
+const snake: ActivityGen = {
+  type: "snake",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => ({
+    type: "snake",
+    title: "Number Snake",
+    instructions: "Start at the first number. Do each step in order and write the result in each box.",
+    items: [makeSnake(g, rng), makeSnake(g, rng)],
+  }),
+};
+
+// ---------------------------------------------------------------------------
+// Break Apart — write a number in expanded form with one part missing.
+// ---------------------------------------------------------------------------
+
+const breakApart: ActivityGen = {
+  type: "breakApart",
+  eligible: (g) => g.grade >= 2 && g.grade <= 6,
+  generate: (g, rng) => {
+    const digits = Math.min(g.grade, 5); // g2→2 … g5→5, g6→5
+    const lo = 10 ** (digits - 1);
+    const hi = 10 ** digits - 1;
+    const items: BreakApartItem[] = Array.from({ length: 5 }, () => {
+      let number = randInt(rng, lo, hi);
+      // build place-value parts; keep only nonzero so there's always a real blank
+      let parts = String(number).split("").map((d, i, arr) => Number(d) * 10 ** (arr.length - 1 - i)).filter((p) => p > 0);
+      if (parts.length < 2) { number = lo + randInt(rng, 1, 8) * (lo / 10 || 1); parts = String(number).split("").map((d, i, arr) => Number(d) * 10 ** (arr.length - 1 - i)).filter((p) => p > 0); }
+      const blankIndex = randInt(rng, 0, parts.length - 1);
+      return { number, parts, blankIndex, answer: parts[blankIndex]! };
+    });
+    return {
+      type: "breakApart",
+      title: "Break Apart",
+      instructions: "Write the missing part of each number.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Coin Bubble — count the coins (values in cents) and write the total.
+// ---------------------------------------------------------------------------
+
+const COINS_LOW = [1, 5, 10, 25];
+const COINS_HIGH = [1, 5, 10, 25, 50, 100];
+
+const coinBubble: ActivityGen = {
+  type: "coinBubble",
+  eligible: (g) => g.grade >= 1 && g.grade <= 4,
+  generate: (g, rng) => {
+    const values = g.grade >= 3 ? COINS_HIGH : COINS_LOW;
+    const count = g.grade <= 1 ? 3 : g.grade === 2 ? 4 : 5;
+    const items: CoinBubbleItem[] = Array.from({ length: 4 }, () => {
+      const coins = Array.from({ length: count }, () => pick(rng, values));
+      return { coins, answer: coins.reduce((a, b) => a + b, 0) };
+    });
+    return {
+      type: "coinBubble",
+      title: "Count the Money",
+      instructions: "Add up the coins and write the total in cents.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Standard Algorithm — vertical column arithmetic (the regrouping load lever).
+// ---------------------------------------------------------------------------
+
+const stdAlgorithm: ActivityGen = {
+  type: "stdAlgorithm",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => {
+    const items: StdAlgoItem[] = Array.from({ length: 4 }, () => {
+      const cap = [0, 0, 99, 999, 9999, 99999, 999999, 999999, 999999][g.grade]!;
+      const pool = g.ops.filter((o) => o === "+" || o === "−" || o === "×");
+      const op = pick(rng, pool.length ? pool : (["+"] as const));
+      if (op === "×") {
+        const a = randInt(rng, 12, g.grade <= 4 ? 99 : 999);
+        const b = randInt(rng, 2, g.grade <= 4 ? 9 : 99);
+        return { a, op, b, answer: a * b };
+      }
+      const lo = Math.max(10, Math.floor(cap / 10));
+      if (op === "−") {
+        const a = randInt(rng, lo, cap);
+        const b = randInt(rng, lo, a);
+        return { a, op, b, answer: a - b };
+      }
+      const a = randInt(rng, lo, cap);
+      const b = randInt(rng, lo, cap);
+      return { a, op, b, answer: a + b };
+    });
+    return {
+      type: "stdAlgorithm",
+      title: "Line It Up",
+      instructions: "Solve each one. Line up the digits and regroup when you need to.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Match the Value — a quantity shown one way (ten-frame / expanded form); tap
+// the matching number. (Representation matching.)
+// ---------------------------------------------------------------------------
+
+function threeOptions(rng: Rng, answer: number, lo: number, hi: number): number[] {
+  const span = Math.max(2, Math.floor(answer * 0.25));
+  const set = new Set<number>([answer]);
+  let guard = 0;
+  while (set.size < 3 && guard++ < 200) {
+    const d = answer + randInt(rng, -span, span);
+    if (d >= lo && d <= hi && d !== answer) set.add(d);
+  }
+  while (set.size < 3) set.add(answer + set.size); // fallback
+  return shuffle([...set], rng);
+}
+
+const expand = (n: number): number[] =>
+  String(n).split("").map((d, i, a) => Number(d) * 10 ** (a.length - 1 - i)).filter((p) => p > 0);
+
+const match: ActivityGen = {
+  type: "match",
+  eligible: (g) => g.grade <= 6,
+  generate: (g, rng) => {
+    const items: MatchItem[] = Array.from({ length: 4 }, () => {
+      if (g.grade <= 2) {
+        const dots = randInt(rng, 1, 10);
+        return { prompt: { kind: "tenFrame" as const, dots }, options: threeOptions(rng, dots, 0, 10), answer: dots };
+      }
+      const digits = Math.min(g.grade, 4);
+      const lo = 10 ** (digits - 1), hi = 10 ** digits - 1;
+      const number = randInt(rng, lo, hi);
+      return { prompt: { kind: "expanded" as const, parts: expand(number) }, options: threeOptions(rng, number, lo, hi), answer: number };
+    });
+    return {
+      type: "match",
+      title: "Match the Value",
+      instructions: "Tap the number that matches each picture.",
+      items,
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Find the Sum Challenge — nested: solve the sub-clusters, then the cluster
+// built from their answers. Multi-step (tier 5).
+// ---------------------------------------------------------------------------
+
+/** Build a +-cluster of `size` whose unique sum-number equals `target`. */
+function makeClusterWithAnswer(rng: Rng, target: number, size: number): SumCluster {
+  for (let attempt = 0; attempt < 500; attempt++) {
+    const a = randInt(rng, 1, target - 1);
+    const b = target - a;
+    if (a === b) continue;
+    const set = new Set<number>([a, b, target]);
+    if (set.size < 3) continue;
+    let guard = 0;
+    while (set.size < size && guard++ < 100) set.add(randInt(rng, 1, target + 4));
+    if (set.size < size) continue;
+    const numbers = shuffle([...set], rng);
+    const magic = magicIndices(numbers, "+");
+    if (magic.length === 1 && numbers[magic[0]!] === target) return { numbers, answerIndex: magic[0]! };
+  }
+  throw new Error("makeClusterWithAnswer: could not build a unique cluster");
+}
+
+function makeNestedSum(rng: Rng): NestedSumItem {
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const v1 = randInt(rng, 5, 20);
+    let v2 = randInt(rng, 5, 20);
+    let guard = 0;
+    while (v2 === v1 && guard++ < 20) v2 = randInt(rng, 5, 20);
+    if (v2 === v1) continue;
+    const target = v1 + v2;
+    const subClusters = [
+      makeClusterWithAnswer(rng, v1, 4),
+      makeClusterWithAnswer(rng, v2, 4),
+      makeClusterWithAnswer(rng, target, 4),
+    ];
+    const finalNumbers = shuffle([v1, v2, target], rng);
+    const magic = magicIndices(finalNumbers, "+");
+    if (magic.length !== 1) continue; // safety: exactly one sum-number
+    return { subClusters, final: { numbers: finalNumbers, answerIndex: magic[0]! } };
+  }
+  throw new Error("makeNestedSum: could not build a nested puzzle");
+}
+
+const sumChain: ActivityGen = {
+  type: "sumChain",
+  eligible: (g) => g.grade >= 4,
+  generate: (_g, rng) => ({
+    type: "sumChain",
+    title: "Find the Sum Challenge",
+    instructions: "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+    items: [makeNestedSum(rng), makeNestedSum(rng)],
+  }),
+};
+
 /** All generators, in a stable display order. */
 export const ACTIVITY_GENS: ActivityGen[] = [
   findTheSum,
@@ -458,7 +719,13 @@ export const ACTIVITY_GENS: ActivityGen[] = [
   pattern,
   placeValue,
   rounding,
+  breakApart,
+  coinBubble,
+  stdAlgorithm,
+  match,
   orderOfOps,
+  snake,
+  sumChain,
   fraction,
   wordProblem,
 ];

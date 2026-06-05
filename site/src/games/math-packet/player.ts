@@ -95,6 +95,35 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
     });
   }
 
+  let revealed = false;
+  // The player's own work, captured before a reveal so Hide can restore it.
+  type Snap = { nums: string[]; choices: string[]; clusters: string[] };
+  let snap: Snap | null = null;
+
+  const captureSnap = (): Snap => ({
+    nums: numInputs().map((i) => i.value),
+    choices: choices().map((g) => g.dataset.selected ?? ""),
+    clusters: clusters().map((c) => c.dataset.selected ?? ""),
+  });
+  const markChip = (cl: HTMLElement, idx: string | undefined, kind: "sel" | "ok") => {
+    const chips = [...cl.querySelectorAll<HTMLButtonElement>("button.chip")];
+    chips.forEach((c) => c.classList.remove("!border-brand-500", "ring-2", "ring-brand-500", ...CHIP_OK, ...CHIP_BAD));
+    if (idx === undefined || idx === "") { delete cl.dataset.selected; return; }
+    cl.dataset.selected = idx;
+    const cls = kind === "ok" ? CHIP_OK : ["!border-brand-500", "ring-2", "ring-brand-500"];
+    chips[Number(idx)]?.classList.add(...cls);
+  };
+  const restoreSnap = (s: Snap) => {
+    numInputs().forEach((inp, i) => { inp.value = s.nums[i] ?? ""; clearStatus(inp); });
+    choices().forEach((g, i) => {
+      g.querySelectorAll<HTMLElement>("button.seg").forEach((b) => setSeg(b, "none"));
+      const v = s.choices[i];
+      if (v) { g.dataset.selected = v; const seg = [...g.querySelectorAll<HTMLElement>("button.seg")].find((b) => b.dataset.val === v); seg && setSeg(seg, "sel"); }
+      else delete g.dataset.selected;
+    });
+    clusters().forEach((c, i) => markChip(c, s.clusters[i], "sel"));
+  };
+
   const say = (msg: string, tone: "win" | "go" | "none") => {
     const el = document.getElementById("result");
     if (!el) return;
@@ -106,6 +135,7 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
   const fill = (tpl: string, c: number, n: number) => tpl.replaceAll("{c}", String(c)).replaceAll("{n}", String(n));
 
   function check() {
+    if (revealed) { say("Hide the answers first to check your own work.", "none"); return; }
     let correct = 0, total = 0;
     for (const inp of numInputs()) {
       clearStatus(inp);
@@ -150,30 +180,44 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
     }
   }
 
-  function reveal() {
+  const revealBtn = () => document.getElementById("reveal");
+  const setRevealLabel = (on: boolean) => {
+    const b = revealBtn();
+    if (!b) return;
+    const noun = b.dataset.noun ?? "answers";
+    b.textContent = on ? `Hide ${noun}` : `👁 Reveal ${noun}`;
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  };
+
+  function showAnswers() {
     for (const inp of numInputs()) { inp.value = inp.dataset.answer ?? ""; clearStatus(inp); inp.classList.add(...GREEN); }
     for (const grp of choices()) {
-      const segs = [...grp.querySelectorAll<HTMLElement>("button.seg")];
-      segs.forEach((b) => setSeg(b, b.dataset.val === grp.dataset.answer ? "ok" : "none"));
+      grp.querySelectorAll<HTMLElement>("button.seg").forEach((b) => setSeg(b, b.dataset.val === grp.dataset.answer ? "ok" : "none"));
       grp.dataset.selected = grp.dataset.answer;
     }
-    for (const cl of clusters()) {
-      const chips = [...cl.querySelectorAll<HTMLButtonElement>("button.chip")];
-      chips.forEach((c, i) => {
-        c.classList.remove("!border-brand-500", "ring-brand-500", ...CHIP_BAD);
-        const isAns = String(i) === cl.dataset.answerIndex;
-        c.classList.toggle("!border-green-500", isAns);
-        c.classList.toggle("ring-2", isAns);
-        c.classList.toggle("ring-green-400", isAns);
-      });
-      cl.dataset.selected = cl.dataset.answerIndex;
+    for (const cl of clusters()) markChip(cl, cl.dataset.answerIndex, "ok");
+  }
+
+  /** Toggle: reveal the answer key, or hide it and restore the player's work. */
+  function reveal() {
+    if (!revealed) {
+      snap = captureSnap();
+      showAnswers();
+      revealed = true;
+      setRevealLabel(true);
+      say("Showing the answers.", "none");
+      const el = document.getElementById("result");
+      if (el) el.className = "mt-3 min-h-5 text-sm font-semibold text-amber-700";
+    } else {
+      if (snap) restoreSnap(snap);
+      revealed = false;
+      setRevealLabel(false);
+      say("", "none");
     }
-    say("Answers revealed.", "none");
-    const el = document.getElementById("result");
-    if (el) el.className = "mt-3 min-h-5 text-sm font-semibold text-amber-700";
   }
 
   function reset() {
+    if (revealed) { revealed = false; setRevealLabel(false); }
     for (const inp of numInputs()) { inp.value = ""; clearStatus(inp); }
     for (const grp of choices()) {
       delete grp.dataset.selected;

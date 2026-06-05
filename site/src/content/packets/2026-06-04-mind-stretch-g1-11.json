@@ -1,6 +1,6 @@
 {
-  "id": "2026-06-04-number-workout-g1-11",
-  "title": "Number Workout",
+  "id": "2026-06-04-mind-stretch-g1-11",
+  "title": "Mind Stretch",
   "blurb": "A 3-puzzle mix for Grade 1.",
   "gameType": "math-packet",
   "gradeLabel": "Grade 1",
@@ -13,32 +13,32 @@
       "items": [
         {
           "numbers": [
-            3,
+            10,
+            11,
             5,
-            1,
             6
-          ],
-          "answerIndex": 3,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            4,
-            12,
-            2,
-            8
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            10,
-            6,
-            7,
-            3
+            9,
+            13,
+            4,
+            2
           ],
-          "answerIndex": 0,
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            2,
+            6,
+            1
+          ],
+          "answerIndex": 2,
           "op": "+"
         }
       ]
@@ -49,46 +49,69 @@
       "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
+          "dots": 1,
+          "answer": 1
+        },
+        {
+          "dots": 9,
+          "answer": 9
+        },
+        {
           "dots": 10,
           "answer": 10
         },
         {
-          "dots": 3,
-          "answer": 3
-        },
-        {
-          "dots": 2,
-          "answer": 2
-        },
-        {
-          "dots": 8,
-          "answer": 8
+          "dots": 6,
+          "answer": 6
         }
       ]
     },
     {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
       "items": [
         {
-          "text": "Sam had 7 cookies. Sam gave 6 to Noah. How many are left?",
-          "answer": 1,
-          "unit": "cookies"
+          "coins": [
+            10,
+            5,
+            10
+          ],
+          "answer": 25
         },
         {
-          "text": "Zoe has 17 apples. Sam gives Zoe 10 more. How many does Zoe have now?",
-          "answer": 27,
-          "unit": "apples"
+          "coins": [
+            10,
+            1,
+            10
+          ],
+          "answer": 21
         },
         {
-          "text": "Noah had 6 cookies. Noah gave 4 to Ivy. How many are left?",
-          "answer": 2,
-          "unit": "cookies"
+          "coins": [
+            10,
+            10,
+            1
+          ],
+          "answer": 21
+        },
+        {
+          "coins": [
+            5,
+            1,
+            5
+          ],
+          "answer": 11
         }
       ]
     }
   ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 21,
+    "stars": 1
+  },
   "seed": 11,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

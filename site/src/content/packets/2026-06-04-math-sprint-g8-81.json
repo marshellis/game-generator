@@ -1,0 +1,196 @@
+{
+  "id": "2026-06-04-math-sprint-g8-81",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            46,
+            1,
+            41,
+            15,
+            56
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            12,
+            21,
+            11,
+            6,
+            33
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            42,
+            54,
+            44,
+            12,
+            39
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Omar has 54 stickers. Noah gives Omar 178 more. How many does Omar have now?",
+          "answer": 232,
+          "unit": "stickers"
+        },
+        {
+          "text": "Ivy had 140 coins. Ivy gave 81 to Noah. How many are left?",
+          "answer": 59,
+          "unit": "coins"
+        },
+        {
+          "text": "Mara shares 10 marbles equally among 5 friends. How many does each friend get?",
+          "answer": 2,
+          "unit": "marbles"
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                3,
+                16,
+                8,
+                13
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                10,
+                5,
+                3,
+                13
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                16,
+                29,
+                32,
+                13
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              29,
+              16,
+              13
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                24,
+                20,
+                3,
+                17
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                11,
+                4,
+                10,
+                7
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                26,
+                30,
+                31,
+                5
+              ],
+              "answerIndex": 2
+            }
+          ],
+          "final": {
+            "numbers": [
+              11,
+              31,
+              20
+            ],
+            "answerIndex": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 253377,
+          "op": "+",
+          "b": 753065,
+          "answer": 1006442
+        },
+        {
+          "a": 573508,
+          "op": "−",
+          "b": 491477,
+          "answer": 82031
+        },
+        {
+          "a": 999696,
+          "op": "−",
+          "b": 409293,
+          "answer": 590403
+        },
+        {
+          "a": 352,
+          "op": "×",
+          "b": 57,
+          "answer": 20064
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 7,
+    "score": 49,
+    "stars": 4
+  },
+  "seed": 81,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

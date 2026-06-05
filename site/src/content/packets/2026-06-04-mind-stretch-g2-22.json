@@ -1,0 +1,110 @@
+{
+  "id": "2026-06-04-mind-stretch-g2-22",
+  "title": "Mind Stretch",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            13,
+            9,
+            5,
+            14
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            16,
+            1,
+            11,
+            5
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            17,
+            9,
+            8,
+            14
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 9,
+          "answer": 9
+        },
+        {
+          "dots": 6,
+          "answer": 6
+        },
+        {
+          "dots": 5,
+          "answer": 5
+        },
+        {
+          "dots": 6,
+          "answer": 6
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 65,
+          "place": "tens",
+          "answer": 60
+        },
+        {
+          "number": 76,
+          "place": "tens",
+          "answer": 70
+        },
+        {
+          "number": 85,
+          "place": "tens",
+          "answer": 80
+        },
+        {
+          "number": 78,
+          "place": "tens",
+          "answer": 70
+        },
+        {
+          "number": 86,
+          "place": "tens",
+          "answer": 80
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 20,
+    "stars": 1
+  },
+  "seed": 22,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

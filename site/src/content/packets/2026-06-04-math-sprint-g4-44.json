@@ -1,0 +1,236 @@
+{
+  "id": "2026-06-04-math-sprint-g4-44",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            29,
+            18,
+            13,
+            10,
+            16
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            5,
+            4,
+            8,
+            12,
+            3
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            7,
+            35,
+            13,
+            5,
+            2
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 8526,
+          "place": "hundreds",
+          "answer": 500
+        },
+        {
+          "number": 9516,
+          "place": "thousands",
+          "answer": 9000
+        },
+        {
+          "number": 8328,
+          "place": "ones",
+          "answer": 8
+        },
+        {
+          "number": 5223,
+          "place": "thousands",
+          "answer": 5000
+        },
+        {
+          "number": 3949,
+          "place": "hundreds",
+          "answer": 900
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 8737,
+          "parts": [
+            8000,
+            700,
+            30,
+            7
+          ],
+          "blankIndex": 2,
+          "answer": 30
+        },
+        {
+          "number": 2955,
+          "parts": [
+            2000,
+            900,
+            50,
+            5
+          ],
+          "blankIndex": 3,
+          "answer": 5
+        },
+        {
+          "number": 4798,
+          "parts": [
+            4000,
+            700,
+            90,
+            8
+          ],
+          "blankIndex": 0,
+          "answer": 4000
+        },
+        {
+          "number": 7607,
+          "parts": [
+            7000,
+            600,
+            7
+          ],
+          "blankIndex": 0,
+          "answer": 7000
+        },
+        {
+          "number": 9932,
+          "parts": [
+            9000,
+            900,
+            30,
+            2
+          ],
+          "blankIndex": 1,
+          "answer": 900
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                10,
+                15,
+                7,
+                17
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                14,
+                7,
+                6,
+                13
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                1,
+                25,
+                30,
+                29
+              ],
+              "answerIndex": 2
+            }
+          ],
+          "final": {
+            "numbers": [
+              30,
+              13,
+              17
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                6,
+                9,
+                4,
+                15
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                20,
+                5,
+                17,
+                3
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                5,
+                26,
+                9,
+                35
+              ],
+              "answerIndex": 3
+            }
+          ],
+          "final": {
+            "numbers": [
+              15,
+              20,
+              35
+            ],
+            "answerIndex": 2
+          }
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 7,
+    "score": 45,
+    "stars": 4
+  },
+  "seed": 44,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

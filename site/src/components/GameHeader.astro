@@ -1,0 +1,62 @@
+---
+/**
+ * Shared play-page header for every game (logic grid, math packets, future).
+ * Renders the breadcrumb, title/blurb, and the standard control row + result
+ * line. Each game's client script wires behaviour to these stable IDs:
+ *   #check  #clear  #reveal  #result
+ * Buttons are opt-in via props so a game only shows what it supports.
+ */
+interface Crumb { label: string; href?: string }
+interface Props {
+  crumbs: Crumb[];
+  title: string;
+  blurb?: string;
+  printHref?: string;
+  answerHref?: string;
+  showCheck?: boolean;
+  showClear?: boolean;
+  /** Noun used in the reveal toggle, e.g. "answers" or "solution". Omit to hide. */
+  revealNoun?: string;
+}
+const {
+  crumbs, title, blurb, printHref, answerHref,
+  showCheck = true, showClear = true, revealNoun,
+} = Astro.props;
+---
+<header>
+  <nav class="mb-4 text-sm text-slate-500">
+    {crumbs.map((c, i) => (
+      <>
+        {i > 0 && <span class="px-1">/</span>}
+        {c.href
+          ? <a href={c.href} class="capitalize text-slate-500 no-underline hover:underline">{c.label}</a>
+          : <span class="capitalize text-slate-700">{c.label}</span>}
+      </>
+    ))}
+  </nav>
+
+  <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h1>
+  {blurb && <p class="mt-1 max-w-2xl text-slate-500">{blurb}</p>}
+
+  <div class="mt-5 flex flex-wrap items-center gap-3">
+    {showCheck && (
+      <button id="check" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">Check</button>
+    )}
+    {showClear && (
+      <button id="clear" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Clear</button>
+    )}
+    {printHref && (
+      <a href={printHref} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print</a>
+    )}
+    {answerHref && (
+      <a href={answerHref} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print answer key</a>
+    )}
+    {revealNoun && (
+      <button id="reveal" aria-pressed="false" data-noun={revealNoun}
+              class="ml-auto rounded-lg border border-amber-400 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 transition hover:bg-amber-100">
+        👁 Reveal {revealNoun}
+      </button>
+    )}
+  </div>
+  <p id="result" class="mt-3 min-h-5 text-sm font-semibold text-slate-700"></p>
+</header>

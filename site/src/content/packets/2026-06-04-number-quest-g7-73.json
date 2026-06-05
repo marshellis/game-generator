@@ -1,0 +1,166 @@
+{
+  "id": "2026-06-04-number-quest-g7-73",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            40,
+            16,
+            14,
+            39,
+            26
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            37,
+            10,
+            14,
+            23,
+            6
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            20,
+            40,
+            60,
+            46,
+            39
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 822465,
+          "op": "+",
+          "b": 679360,
+          "answer": 1501825
+        },
+        {
+          "a": 717232,
+          "op": "−",
+          "b": 473325,
+          "answer": 243907
+        },
+        {
+          "a": 703991,
+          "op": "+",
+          "b": 183959,
+          "answer": 887950
+        },
+        {
+          "a": 612396,
+          "op": "+",
+          "b": 312887,
+          "answer": 925283
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Omar shares 15 marbles equally among 5 friends. How many does each friend get?",
+          "answer": 3,
+          "unit": "marbles"
+        },
+        {
+          "text": "Theo shares 12 books equally among 3 friends. How many does each friend get?",
+          "answer": 4,
+          "unit": "books"
+        },
+        {
+          "text": "Omar has 69 apples. Zoe gives Omar 115 more. How many does Omar have now?",
+          "answer": 184,
+          "unit": "apples"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 286,
+          "op": "+",
+          "right": 997,
+          "result": 1283,
+          "blank": "right",
+          "answer": 997
+        },
+        {
+          "left": 12,
+          "op": "×",
+          "right": 9,
+          "result": 108,
+          "blank": "left",
+          "answer": 12
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 10,
+          "result": 20,
+          "blank": "result",
+          "answer": 20
+        },
+        {
+          "left": 5,
+          "op": "×",
+          "right": 3,
+          "result": 15,
+          "blank": "left",
+          "answer": 5
+        },
+        {
+          "left": 926,
+          "op": "−",
+          "right": 311,
+          "result": 615,
+          "blank": "result",
+          "answer": 615
+        },
+        {
+          "left": 550,
+          "op": "−",
+          "right": 188,
+          "result": 362,
+          "blank": "right",
+          "answer": 188
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 44,
+    "stars": 4
+  },
+  "seed": 73,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

@@ -13,36 +13,73 @@
       "items": [
         {
           "numbers": [
-            8,
-            13,
+            3,
             17,
             10,
-            23
+            16,
+            14
           ],
-          "answerIndex": 4,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
             12,
-            13,
-            25,
-            7,
-            22
+            3,
+            4,
+            15,
+            14
           ],
-          "answerIndex": 2,
+          "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            28,
-            15,
-            23,
-            24,
-            13
+            10,
+            5,
+            1,
+            8,
+            2
           ],
           "answerIndex": 0,
-          "op": "+"
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 29,
+          "nearest": 10,
+          "answer": 30
+        },
+        {
+          "number": 205,
+          "nearest": 10,
+          "answer": 210
+        },
+        {
+          "number": 968,
+          "nearest": 10,
+          "answer": 970
+        },
+        {
+          "number": 200,
+          "nearest": 10,
+          "answer": 200
+        },
+        {
+          "number": 940,
+          "nearest": 10,
+          "answer": 940
+        },
+        {
+          "number": 614,
+          "nearest": 10,
+          "answer": 610
         }
       ]
     },
@@ -52,140 +89,66 @@
       "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "leftText": "9",
-          "rightText": "0",
-          "answer": ">"
-        },
-        {
-          "leftText": "11 + 12",
-          "rightText": "25",
-          "answer": "<"
-        },
-        {
-          "leftText": "386",
-          "rightText": "386",
+          "leftText": "8 × 9",
+          "rightText": "72",
           "answer": "="
         },
         {
-          "leftText": "725",
-          "rightText": "788",
+          "leftText": "2 + 3",
+          "rightText": "4",
+          "answer": ">"
+        },
+        {
+          "leftText": "817",
+          "rightText": "897",
           "answer": "<"
         },
         {
-          "leftText": "10 + 5",
-          "rightText": "17",
+          "leftText": "52",
+          "rightText": "70",
           "answer": "<"
         },
         {
-          "leftText": "473",
-          "rightText": "546",
+          "leftText": "3 × 7",
+          "rightText": "20",
+          "answer": ">"
+        },
+        {
+          "leftText": "637",
+          "rightText": "736",
           "answer": "<"
         }
       ]
     },
     {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "operands": [
-            3,
-            7,
-            4
-          ],
-          "ops": [
-            "×",
-            "+"
-          ],
-          "target": 25
+          "text": "Omar has 4 bags with 8 pencils in each bag. How many pencils in all?",
+          "answer": 32,
+          "unit": "pencils"
         },
         {
-          "operands": [
-            5,
-            5,
-            5
-          ],
-          "ops": [
-            "+",
-            "+"
-          ],
-          "target": 15
+          "text": "Eli has 8 bags with 9 marbles in each bag. How many marbles in all?",
+          "answer": 72,
+          "unit": "marbles"
         },
         {
-          "operands": [
-            8,
-            6,
-            2
-          ],
-          "ops": [
-            "+",
-            "+"
-          ],
-          "target": 16
-        },
-        {
-          "operands": [
-            9,
-            4,
-            1
-          ],
-          "ops": [
-            "+",
-            "−"
-          ],
-          "target": 12
-        }
-      ]
-    },
-    {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
-      "items": [
-        {
-          "sequence": [
-            1,
-            null,
-            11,
-            16,
-            21
-          ],
-          "answer": 6
-        },
-        {
-          "sequence": [
-            6,
-            16,
-            null,
-            36,
-            46
-          ],
-          "answer": 26
-        },
-        {
-          "sequence": [
-            6,
-            9,
-            null,
-            15,
-            18
-          ],
-          "answer": 12
-        },
-        {
-          "sequence": [
-            7,
-            null,
-            13,
-            16,
-            19
-          ],
-          "answer": 10
+          "text": "Noah has 4 bags with 5 books in each bag. How many books in all?",
+          "answer": 20,
+          "unit": "books"
         }
       ]
     }
   ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 34,
+    "stars": 3
+  },
   "seed": 31,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }
