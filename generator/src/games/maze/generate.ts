@@ -4,7 +4,7 @@ import { loadThemes, pickTheme } from "./themes";
 import { carveMaze } from "./carve";
 import { farthestCell, solutionPath, braid } from "./solve";
 import { slugify, makeMazeId } from "./serialize";
-import { DIRS, type Maze } from "./types";
+import { type Maze } from "./types";
 
 export interface GenerateMazeOptions {
   difficulty: string;

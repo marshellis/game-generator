@@ -9,7 +9,7 @@ const packetCount = packets.length;
 const packetGrades = new Set(packets.map((p) => p.data.difficulty)).size;
 const mazes = await getCollection("mazes");
 const mazeCount = mazes.length;
-const mazeGrades = new Set(mazes.map((m) => m.data.difficulty)).size;
+const mazeGrades = Math.max(...mazes.map((m) => Number(m.data.difficulty.replace(/\D/g, ""))));
 ---
 <Base title="Marshellis Games">
   <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Marshellis Games</h1>

@@ -85,7 +85,7 @@ export function initMaze(data: MazeData): void {
     } else {
       solEl.style.display = "none"; trailEl.style.display = "";
       revealBtn.setAttribute("aria-pressed", "false");
-      if (result) result.textContent = "";
+      if (result) result.textContent = same(trail[trail.length - 1]!, data.end) ? "🎉 You made it!" : "";
     }
   });
 
