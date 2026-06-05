@@ -1,0 +1,219 @@
+{
+  "id": "2026-06-04-puzzle-lab-g8-82",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            26,
+            41,
+            17,
+            45,
+            19
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            51,
+            11,
+            33,
+            40,
+            19
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            63,
+            46,
+            44,
+            17,
+            13
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 789,
+          "op": "+",
+          "right": 235,
+          "result": 1024,
+          "blank": "right",
+          "answer": 235
+        },
+        {
+          "left": 247,
+          "op": "−",
+          "right": 213,
+          "result": 34,
+          "blank": "left",
+          "answer": 247
+        },
+        {
+          "left": 7,
+          "op": "×",
+          "right": 7,
+          "result": 49,
+          "blank": "right",
+          "answer": 7
+        },
+        {
+          "left": 68,
+          "op": "+",
+          "right": 442,
+          "result": 510,
+          "blank": "left",
+          "answer": 68
+        },
+        {
+          "left": 15,
+          "op": "÷",
+          "right": 3,
+          "result": 5,
+          "blank": "right",
+          "answer": 3
+        },
+        {
+          "left": 14,
+          "op": "÷",
+          "right": 2,
+          "result": 7,
+          "blank": "left",
+          "answer": 14
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            3,
+            3,
+            8,
+            4,
+            2
+          ],
+          "ops": [
+            "×",
+            "+",
+            "−",
+            "+"
+          ],
+          "target": 15
+        },
+        {
+          "operands": [
+            5,
+            3,
+            1,
+            2
+          ],
+          "ops": [
+            "×",
+            "−",
+            "+"
+          ],
+          "target": 16
+        },
+        {
+          "operands": [
+            3,
+            7,
+            5,
+            6,
+            4
+          ],
+          "ops": [
+            "+",
+            "+",
+            "+",
+            "−"
+          ],
+          "target": 17
+        },
+        {
+          "operands": [
+            1,
+            8,
+            4,
+            8,
+            6
+          ],
+          "ops": [
+            "×",
+            "+",
+            "−",
+            "+"
+          ],
+          "target": 10
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 4,
+          "newDen": 12,
+          "answer": 3
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 6,
+          "newDen": 24,
+          "answer": 4
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 8,
+          "bNum": 5,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 6,
+          "newDen": 18,
+          "answer": 9
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 4,
+          "newDen": 12,
+          "answer": 9
+        }
+      ]
+    }
+  ],
+  "seed": 82,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

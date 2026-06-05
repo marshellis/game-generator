@@ -1,0 +1,184 @@
+{
+  "id": "2026-06-04-math-mix-g6-62",
+  "title": "Math Mix",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            17,
+            55,
+            30,
+            34,
+            25
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            9,
+            19,
+            44,
+            14,
+            25
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            28,
+            2,
+            25,
+            29
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 21178,
+          "nearest": 1000,
+          "answer": 21000
+        },
+        {
+          "number": 8713,
+          "nearest": 1000,
+          "answer": 9000
+        },
+        {
+          "number": 15252,
+          "nearest": 1000,
+          "answer": 15000
+        },
+        {
+          "number": 63237,
+          "nearest": 1000,
+          "answer": 63000
+        },
+        {
+          "number": 15943,
+          "nearest": 1000,
+          "answer": 16000
+        },
+        {
+          "number": 88199,
+          "nearest": 1000,
+          "answer": 88000
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 13370,
+          "place": "ones",
+          "answer": 0
+        },
+        {
+          "number": 14952,
+          "place": "thousands",
+          "answer": 4000
+        },
+        {
+          "number": 65393,
+          "place": "thousands",
+          "answer": 5000
+        },
+        {
+          "number": 32144,
+          "place": "hundreds",
+          "answer": 100
+        },
+        {
+          "number": 49399,
+          "place": "thousands",
+          "answer": 9000
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            8,
+            7,
+            3,
+            3
+          ],
+          "ops": [
+            "×",
+            "×",
+            "−"
+          ],
+          "target": 165
+        },
+        {
+          "operands": [
+            8,
+            9,
+            7,
+            3
+          ],
+          "ops": [
+            "×",
+            "−",
+            "−"
+          ],
+          "target": 62
+        },
+        {
+          "operands": [
+            8,
+            3,
+            6,
+            1
+          ],
+          "ops": [
+            "−",
+            "+",
+            "×"
+          ],
+          "target": 11
+        },
+        {
+          "operands": [
+            9,
+            3,
+            2,
+            6
+          ],
+          "ops": [
+            "+",
+            "−",
+            "+"
+          ],
+          "target": 16
+        }
+      ]
+    }
+  ],
+  "seed": 62,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

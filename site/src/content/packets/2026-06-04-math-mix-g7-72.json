@@ -1,0 +1,181 @@
+{
+  "id": "2026-06-04-math-mix-g7-72",
+  "title": "Math Mix",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            8,
+            2,
+            6,
+            4,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            21,
+            15,
+            7,
+            3,
+            10
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            14,
+            7,
+            2,
+            3,
+            11
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            1,
+            4,
+            3,
+            9
+          ],
+          "ops": [
+            "+",
+            "×",
+            "×"
+          ],
+          "target": 109
+        },
+        {
+          "operands": [
+            7,
+            3,
+            8,
+            1
+          ],
+          "ops": [
+            "+",
+            "×",
+            "+"
+          ],
+          "target": 32
+        },
+        {
+          "operands": [
+            9,
+            2,
+            2,
+            4
+          ],
+          "ops": [
+            "+",
+            "+",
+            "×"
+          ],
+          "target": 19
+        },
+        {
+          "operands": [
+            2,
+            7,
+            9,
+            1
+          ],
+          "ops": [
+            "+",
+            "×",
+            "+"
+          ],
+          "target": 66
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 5,
+          "newDen": 15,
+          "answer": 6
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 3,
+          "bNum": 4,
+          "bDen": 5,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 5,
+          "bNum": 4,
+          "bDen": 3,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 6,
+          "newDen": 24,
+          "answer": 4
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 8,
+          "answer": 4
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Sam has 142 marbles. Theo gives Sam 22 more. How many does Sam have now?",
+          "answer": 164,
+          "unit": "marbles"
+        },
+        {
+          "text": "Theo has 9 bags with 8 apples in each bag. How many apples in all?",
+          "answer": 72,
+          "unit": "apples"
+        },
+        {
+          "text": "Zoe had 121 stickers. Zoe gave 17 to Lena. How many are left?",
+          "answer": 104,
+          "unit": "stickers"
+        }
+      ]
+    }
+  ],
+  "seed": 72,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

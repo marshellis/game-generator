@@ -4,6 +4,9 @@ import { getCollection } from "astro:content";
 
 const puzzles = await getCollection("puzzles");
 const logicCount = puzzles.filter((p) => p.data.gameType === "logic-grid").length;
+const packets = await getCollection("packets");
+const packetCount = packets.length;
+const packetGrades = new Set(packets.map((p) => p.data.difficulty)).size;
 ---
 <Base title="Marshellis Games">
   <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Marshellis Games</h1>
@@ -27,13 +30,19 @@ const logicCount = puzzles.filter((p) => p.data.gameType === "logic-grid").lengt
     </li>
 
     <li>
-      <div aria-disabled="true"
-           class="flex h-full cursor-not-allowed flex-col rounded-2xl border border-dashed border-slate-300 bg-white/60 p-6 opacity-70">
-        <div class="text-4xl grayscale">🔢</div>
-        <div class="mt-3 text-xl font-bold text-slate-500">Math Worksheets</div>
-        <p class="mt-1 text-sm text-slate-400">Printable number puzzles for practicing mental math. Coming soon.</p>
-        <span class="mt-5 inline-flex w-fit rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-400">Coming soon</span>
-      </div>
+      <a href="/math"
+         class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md">
+        <div class="text-4xl">🔢</div>
+        <div class="mt-3 text-xl font-bold text-slate-900">Math Worksheets</div>
+        <p class="mt-1 text-sm text-slate-500">A daily mix of quick number puzzles — circle, fill, and solve. Play on screen or print.</p>
+        <div class="mt-4 flex items-center gap-2 text-xs font-medium text-slate-400">
+          <span class="rounded-full bg-slate-100 px-2 py-0.5">{packetCount} days</span>
+          <span class="rounded-full bg-slate-100 px-2 py-0.5">Grades 1–{packetGrades}</span>
+        </div>
+        <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 transition-all group-hover:gap-2">
+          Play now <span aria-hidden="true">→</span>
+        </span>
+      </a>
     </li>
   </ul>
 </Base>

@@ -1,0 +1,23 @@
+---
+/**
+ * A tap-to-pick answer for symbol slots (comparison < = >, order-of-ops + − ×,
+ * fraction compare). Screen: a segmented button group player.ts wires up.
+ * Print: a blank box to write the symbol in.
+ */
+interface Props {
+  options: string[];
+  answer: string;
+  mode: "play" | "print";
+}
+const { options, answer, mode } = Astro.props;
+---
+{mode === "play" ? (
+  <span class="js-choice inline-flex select-none overflow-hidden rounded-lg border-2 border-slate-300 align-middle" data-answer={answer}>
+    {options.map((v) => (
+      <button type="button" data-val={v}
+              class="seg grid h-9 w-9 place-items-center text-lg font-bold leading-none text-slate-500 transition hover:bg-slate-100">{v}</button>
+    ))}
+  </span>
+) : (
+  <span class="inline-block h-9 w-10 rounded-md border-2 border-slate-300 align-middle"></span>
+)}

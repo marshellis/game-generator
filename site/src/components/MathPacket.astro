@@ -1,0 +1,265 @@
+---
+/**
+ * Renders one math packet. The question markup is identical for screen and
+ * print; `mode="play"` is enhanced by player.ts (tap/typing + checking),
+ * `mode="print"` appends a guaranteed-correct answer key.
+ *
+ * Mobile-first: activity cards stack in one column on phones and flow into two
+ * columns from `sm:` up. Inputs/chips are large tap targets with numeric
+ * keypads.
+ */
+import type { CollectionEntry } from "astro:content";
+import { keyForActivity } from "../games/math-packet/answers";
+import SignChoice from "./SignChoice.astro";
+
+interface Props {
+  packet: CollectionEntry<"packets">["data"];
+  mode?: "play" | "print";
+}
+const { packet, mode = "play" } = Astro.props;
+const acts = packet.activities;
+
+const numCls =
+  "ans-num inline-block w-16 rounded-md border-2 border-slate-300 bg-white px-1 py-1 text-center text-lg font-bold text-brand-700 focus:border-brand-500 focus:outline-none";
+
+// place-value: which digit (from the left) to underline
+const underlineIndex = (n: number, place: string) => {
+  const s = String(n);
+  const mag = { ones: 0, tens: 1, hundreds: 2, thousands: 3 }[place] ?? 0;
+  return s.length - 1 - mag;
+};
+---
+
+<div class="packet flex flex-col gap-5">
+  {acts.map((act, ai) => (
+    <section class="activity rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5" data-activity={ai}>
+      <div class="mb-1 flex items-baseline gap-2">
+        <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-600 text-xs font-bold text-white">{ai + 1}</span>
+        <h2 class="text-lg font-extrabold tracking-tight text-slate-900">{act.title}</h2>
+      </div>
+      <p class="mb-4 text-sm text-slate-500">{act.instructions}</p>
+
+      {/* ---- Find the Sum ---- */}
+      {act.type === "findTheSum" && (
+        <div class="grid gap-4 sm:grid-cols-3">
+          {act.items.map((it, ii) => (
+            <div class="js-cluster flex flex-wrap items-center justify-center gap-2 rounded-xl bg-slate-50 p-3"
+                 data-answer-index={String(it.answerIndex)} data-i={`${ai}-${ii}`}>
+              {it.numbers.map((n, ni) => (
+                <button type="button" data-idx={String(ni)}
+                        class="chip grid h-12 w-12 place-items-center rounded-full border-2 border-slate-300 bg-white text-lg font-bold text-slate-800 transition">
+                  {n}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Make Ten / Hundred ---- */}
+      {act.type === "makeTen" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2 lg:grid-cols-3">
+          {act.items.map((it) => (
+            <div class="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              <span>{it.known}</span><span>+</span>
+              <input class={numCls} inputmode="numeric" data-answer={String(it.answer)} />
+              <span>=</span><span>{it.target}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Number Bonds ---- */}
+      {act.type === "numberBond" && (
+        <div class="flex flex-wrap gap-5">
+          {act.items.map((it) => (
+            <div class="inline-flex flex-col items-center rounded-lg bg-slate-50 px-3 py-3">
+              <div class="grid h-12 w-12 place-items-center rounded-full border-2 border-brand-500 bg-white text-lg font-bold text-brand-700">{it.total}</div>
+              <div class="mt-1 text-slate-400">╱ ╲</div>
+              <div class="-mt-1 flex gap-3">
+                <div class="grid h-12 w-12 place-items-center rounded-full border-2 border-slate-300 bg-white text-lg font-bold text-slate-800">{it.known}</div>
+                <input class={numCls + " w-12"} inputmode="numeric" data-answer={String(it.answer)} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Missing Number ---- */}
+      {act.type === "missingNumber" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2">
+          {act.items.map((it) => (
+            <div class="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              {it.blank === "left"
+                ? <input class={numCls + " w-24"} inputmode="numeric" data-answer={String(it.answer)} />
+                : <span>{it.left}</span>}
+              <span>{it.op}</span>
+              {it.blank === "right"
+                ? <input class={numCls + " w-24"} inputmode="numeric" data-answer={String(it.answer)} />
+                : <span>{it.right}</span>}
+              <span>=</span>
+              {it.blank === "result"
+                ? <input class={numCls + " w-24"} inputmode="numeric" data-answer={String(it.answer)} />
+                : <span>{it.result}</span>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Order of Operations ---- */}
+      {act.type === "orderOfOps" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2">
+          {act.items.map((it) => (
+            <div class="flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              {it.operands.map((n, k) => (
+                <>
+                  <span>{n}</span>
+                  {k < it.ops.length && (
+                    <SignChoice options={["+", "−", "×"]} answer={it.ops[k]!} mode={mode} />
+                  )}
+                </>
+              ))}
+              <span>=</span><span class="text-brand-700">{it.target}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Place Value ---- */}
+      {act.type === "placeValue" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2 lg:grid-cols-3">
+          {act.items.map((it) => (
+            <div class="flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-2">
+              <span class="tabular-nums tracking-widest">
+                {String(it.number).split("").map((d, di) => (
+                  <span class={di === underlineIndex(it.number, it.place) ? "underline decoration-brand-500 decoration-2 underline-offset-4" : ""}>{d}</span>
+                ))}
+              </span>
+              <span class="text-slate-400">→</span>
+              <input class={numCls + " w-24"} inputmode="numeric" data-answer={String(it.answer)} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Rounding ---- */}
+      {act.type === "rounding" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2 lg:grid-cols-3">
+          {act.items.map((it) => (
+            <div class="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              <span class="tabular-nums">{it.number}</span>
+              <span class="text-slate-400">→</span>
+              <input class={numCls + " w-24"} inputmode="numeric" data-answer={String(it.answer)} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Comparison ---- */}
+      {act.type === "comparison" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2 lg:grid-cols-3">
+          {act.items.map((it) => (
+            <div class="flex items-center justify-center gap-3 rounded-lg bg-slate-50 px-3 py-2">
+              <span class="min-w-12 text-right tabular-nums">{it.leftText}</span>
+              <SignChoice options={["<", "=", ">"]} answer={it.answer} mode={mode} />
+              <span class="min-w-12 tabular-nums">{it.rightText}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Pattern ---- */}
+      {act.type === "pattern" && (
+        <div class="flex flex-col gap-3">
+          {act.items.map((it) => (
+            <div class="flex flex-wrap items-center gap-2">
+              {it.sequence.map((v) => (
+                v === null
+                  ? <input class={numCls + " w-16"} inputmode="numeric" data-answer={String(it.answer)} />
+                  : <span class="grid h-11 min-w-16 place-items-center rounded-md bg-slate-50 px-2 text-lg font-semibold text-slate-800">{v}</span>
+              ))}
+              <span class="text-slate-400">…</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Ten Frame ---- */}
+      {act.type === "tenFrame" && (
+        <div class="flex flex-wrap gap-5">
+          {act.items.map((it) => (
+            <div class="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+              <div class="grid grid-cols-5 grid-rows-2 gap-0.5">
+                {Array.from({ length: 10 }, (_, c) => (
+                  <span class="grid h-7 w-7 place-items-center border border-slate-400">
+                    {c < it.dots && <span class="h-4 w-4 rounded-full bg-brand-600"></span>}
+                  </span>
+                ))}
+              </div>
+              <span class="text-slate-400">=</span>
+              <input class={numCls + " w-16"} inputmode="numeric" data-answer={String(it.answer)} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Word Problems ---- */}
+      {act.type === "wordProblem" && (
+        <ol class="flex flex-col gap-3">
+          {act.items.map((it) => (
+            <li class="rounded-lg bg-slate-50 px-3 py-2 text-slate-800">
+              <span>{it.text}</span>
+              <span class="ml-2 inline-flex items-center gap-1 whitespace-nowrap">
+                <input class={numCls + " w-20"} inputmode="numeric" data-answer={String(it.answer)} />
+                {it.unit && <span class="text-sm text-slate-500">{it.unit}</span>}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {/* ---- Fractions ---- */}
+      {act.type === "fraction" && (
+        <div class="grid gap-3 text-lg font-semibold text-slate-800 sm:grid-cols-2 lg:grid-cols-3">
+          {act.items.map((it) => (
+            <div class="flex items-center justify-center gap-3 rounded-lg bg-slate-50 px-3 py-2">
+              {it.kind === "equiv" ? (
+                <>
+                  <span class="inline-flex flex-col items-center leading-none">
+                    <span>{it.num}</span><span class="border-t border-slate-700 px-1">{it.den}</span>
+                  </span>
+                  <span>=</span>
+                  <span class="inline-flex flex-col items-center leading-none">
+                    <input class={numCls + " w-12"} inputmode="numeric" data-answer={String(it.answer)} />
+                    <span class="mt-1 border-t border-slate-700 px-1">{it.newDen}</span>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span class="inline-flex flex-col items-center leading-none">
+                    <span>{it.aNum}</span><span class="border-t border-slate-700 px-1">{it.aDen}</span>
+                  </span>
+                  <SignChoice options={["<", "=", ">"]} answer={it.answer} mode={mode} />
+                  <span class="inline-flex flex-col items-center leading-none">
+                    <span>{it.bNum}</span><span class="border-t border-slate-700 px-1">{it.bDen}</span>
+                  </span>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  ))}
+
+  {mode === "print" && (
+    <section class="answer-key mt-4">
+      <h2 class="text-lg font-bold">Answer Key — {packet.title}</h2>
+      <ol class="mt-2 flex flex-col gap-1 text-sm">
+        {acts.map((act, ai) => (
+          <li><span class="font-semibold">{ai + 1}. {act.title}:</span> {keyForActivity(act).join("  ·  ")}</li>
+        ))}
+      </ol>
+    </section>
+  )}
+</div>

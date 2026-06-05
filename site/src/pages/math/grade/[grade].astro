@@ -1,0 +1,46 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const packets = await getCollection("packets");
+  const grades = [...new Set(packets.map((p) => p.data.difficulty))];
+  return grades.map((g) => {
+    const inGrade = packets
+      .filter((p) => p.data.difficulty === g)
+      .sort((a, b) => (a.data.id < b.data.id ? 1 : -1));
+    return { params: { grade: g }, props: { packets: inGrade, label: inGrade[0]!.data.gradeLabel } };
+  });
+}
+
+const { packets, label } = Astro.props;
+---
+<Base title={`${label} — Math Worksheets`}>
+  <nav class="mb-4 text-sm text-slate-500">
+    <a href="/" class="text-slate-500 no-underline hover:underline">All games</a>
+    <span class="px-1">/</span>
+    <a href="/math" class="text-slate-500 no-underline hover:underline">Math Worksheets</a>
+    <span class="px-1">/</span>
+    <span class="capitalize text-slate-700">{label}</span>
+  </nav>
+
+  <h1 class="text-3xl font-extrabold capitalize tracking-tight">{label}</h1>
+  <p class="mt-2 text-slate-500">Pick a day.</p>
+
+  <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {packets.map((p) => (
+      <li>
+        <a href={`/packet/${p.data.id}`}
+           class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md">
+          <span class="text-base font-bold text-slate-900">{p.data.title}</span>
+          <span class="mt-1 text-sm text-slate-500">{p.data.blurb}</span>
+          <span class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-slate-400">
+            {p.data.activities.map((a) => (
+              <span class="rounded-full bg-slate-100 px-2 py-0.5">{a.title}</span>
+            ))}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>

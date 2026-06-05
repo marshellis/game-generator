@@ -1,0 +1,127 @@
+{
+  "id": "2026-06-04-number-workout-g2-22",
+  "title": "Number Workout",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            1,
+            2,
+            6,
+            7
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            17,
+            9,
+            11
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 72,
+          "op": "−",
+          "right": 34,
+          "result": 38,
+          "blank": "right",
+          "answer": 34
+        },
+        {
+          "left": 43,
+          "op": "+",
+          "right": 49,
+          "result": 92,
+          "blank": "result",
+          "answer": 92
+        },
+        {
+          "left": 34,
+          "op": "−",
+          "right": 22,
+          "result": 12,
+          "blank": "right",
+          "answer": 22
+        },
+        {
+          "left": 72,
+          "op": "−",
+          "right": 59,
+          "result": 13,
+          "blank": "result",
+          "answer": 13
+        },
+        {
+          "left": 75,
+          "op": "+",
+          "right": 29,
+          "result": 104,
+          "blank": "right",
+          "answer": 29
+        },
+        {
+          "left": 92,
+          "op": "+",
+          "right": 12,
+          "result": 104,
+          "blank": "left",
+          "answer": 92
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 9,
+          "answer": 9
+        },
+        {
+          "dots": 4,
+          "answer": 4
+        },
+        {
+          "dots": 10,
+          "answer": 10
+        },
+        {
+          "dots": 7,
+          "answer": 7
+        }
+      ]
+    }
+  ],
+  "seed": 22,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

@@ -1,0 +1,121 @@
+/**
+ * A "packet" is one day's printable worksheet for a grade: a mix of 3–4
+ * different mini-puzzle blocks, each block holding several items. Every item
+ * carries its own correct `answer` so the printed answer key is guaranteed
+ * right by construction (the math analog of the logic grid's single solution).
+ */
+
+export type ActivityType =
+  | "findTheSum"
+  | "makeTen"
+  | "numberBond"
+  | "missingNumber"
+  | "orderOfOps"
+  | "placeValue"
+  | "rounding"
+  | "comparison"
+  | "pattern"
+  | "tenFrame"
+  | "wordProblem"
+  | "fraction";
+
+/** Find the one number in the cluster that equals two of the others combined. */
+export interface FindTheSumItem {
+  numbers: number[];
+  answerIndex: number;
+  op: "+" | "×";
+}
+/** known ○ ___ = target  (a make-ten / make-hundred style fill). */
+export interface MakeTenItem {
+  known: number;
+  target: number;
+  op: "+";
+  answer: number;
+}
+/** A part-part-whole bond: total at top, one known part, one missing part. */
+export interface NumberBondItem {
+  total: number;
+  known: number;
+  answer: number; // the missing part
+}
+/** a ○ b = c with exactly one of the three slots blanked out. */
+export interface MissingNumberItem {
+  left: number;
+  op: "+" | "−" | "×" | "÷";
+  right: number;
+  result: number;
+  blank: "left" | "right" | "result";
+  answer: number;
+}
+/** Insert + − × between the operands (in order) to hit the target. */
+export interface OrderOfOpsItem {
+  operands: number[];
+  ops: ("+" | "−" | "×")[]; // the unique solution, length = operands.length - 1
+  target: number;
+}
+/** Value of the digit in a named place, e.g. tens place of 472 → 70. */
+export interface PlaceValueItem {
+  number: number;
+  place: "ones" | "tens" | "hundreds" | "thousands";
+  answer: number;
+}
+export interface RoundingItem {
+  number: number;
+  nearest: 10 | 100 | 1000;
+  answer: number;
+}
+/** Compare two (possibly tiny-expression) sides with < > =. */
+export interface ComparisonItem {
+  leftText: string;
+  rightText: string;
+  answer: "<" | ">" | "=";
+}
+/** Arithmetic sequence with exactly one blank slot. */
+export interface PatternItem {
+  sequence: (number | null)[];
+  answer: number;
+}
+/** Subitize: how many dots are shown across two five-frames (0–10). */
+export interface TenFrameItem {
+  dots: number;
+  answer: number;
+}
+export interface WordProblemItem {
+  text: string;
+  answer: number;
+  unit?: string;
+}
+/** Either fill an equivalent fraction or compare two fractions. */
+export type FractionItem =
+  | { kind: "equiv"; num: number; den: number; newDen: number; answer: number }
+  | { kind: "compare"; aNum: number; aDen: number; bNum: number; bDen: number; answer: "<" | ">" | "=" };
+
+interface ActivityBase {
+  title: string;
+  instructions: string;
+}
+export type Activity =
+  | (ActivityBase & { type: "findTheSum"; items: FindTheSumItem[] })
+  | (ActivityBase & { type: "makeTen"; items: MakeTenItem[] })
+  | (ActivityBase & { type: "numberBond"; items: NumberBondItem[] })
+  | (ActivityBase & { type: "missingNumber"; items: MissingNumberItem[] })
+  | (ActivityBase & { type: "orderOfOps"; items: OrderOfOpsItem[] })
+  | (ActivityBase & { type: "placeValue"; items: PlaceValueItem[] })
+  | (ActivityBase & { type: "rounding"; items: RoundingItem[] })
+  | (ActivityBase & { type: "comparison"; items: ComparisonItem[] })
+  | (ActivityBase & { type: "pattern"; items: PatternItem[] })
+  | (ActivityBase & { type: "tenFrame"; items: TenFrameItem[] })
+  | (ActivityBase & { type: "wordProblem"; items: WordProblemItem[] })
+  | (ActivityBase & { type: "fraction"; items: FractionItem[] });
+
+export interface Packet {
+  id: string;
+  title: string;
+  blurb: string;
+  gameType: "math-packet";
+  gradeLabel: string;
+  difficulty: string; // "g1".."g8"
+  activities: Activity[];
+  seed: number;
+  createdAt: string;
+}
