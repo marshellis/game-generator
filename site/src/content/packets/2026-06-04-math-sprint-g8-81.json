@@ -13,127 +13,36 @@
       "items": [
         {
           "numbers": [
-            38,
-            77,
-            39,
+            46,
+            1,
+            41,
             15,
-            22
+            56
           ],
-          "answerIndex": 1,
+          "answerIndex": 4,
           "op": "+"
         },
         {
           "numbers": [
-            19,
-            7,
-            5,
-            17,
-            35
+            12,
+            21,
+            11,
+            6,
+            33
           ],
           "answerIndex": 4,
-          "op": "×"
+          "op": "+"
         },
         {
           "numbers": [
-            23,
-            56,
-            13,
-            7,
-            8
+            42,
+            54,
+            44,
+            12,
+            39
           ],
           "answerIndex": 1,
-          "op": "×"
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 10,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 9
-            },
-            {
-              "op": "+",
-              "operand": 13
-            },
-            {
-              "op": "÷",
-              "operand": 7
-            },
-            {
-              "op": "−",
-              "operand": 2
-            },
-            {
-              "op": "÷",
-              "operand": 4
-            },
-            {
-              "op": "÷",
-              "operand": 4
-            },
-            {
-              "op": "÷",
-              "operand": 2
-            }
-          ],
-          "values": [
-            1,
-            14,
-            2,
-            0,
-            0,
-            0,
-            0
-          ]
-        },
-        {
-          "start": 9,
-          "ops": [
-            {
-              "op": "÷",
-              "operand": 3
-            },
-            {
-              "op": "+",
-              "operand": 160
-            },
-            {
-              "op": "×",
-              "operand": 4
-            },
-            {
-              "op": "−",
-              "operand": 334
-            },
-            {
-              "op": "×",
-              "operand": 6
-            },
-            {
-              "op": "+",
-              "operand": 5
-            },
-            {
-              "op": "+",
-              "operand": 55
-            }
-          ],
-          "values": [
-            3,
-            163,
-            652,
-            318,
-            1908,
-            1913,
-            1968
-          ]
+          "op": "+"
         }
       ]
     },
@@ -143,19 +52,104 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Sam shares 16 apples equally among 2 friends. How many does each friend get?",
-          "answer": 8,
-          "unit": "apples"
+          "text": "Omar has 54 stickers. Noah gives Omar 178 more. How many does Omar have now?",
+          "answer": 232,
+          "unit": "stickers"
         },
         {
-          "text": "Sam has 17 coins. Zoe gives Sam 18 more. How many does Sam have now?",
-          "answer": 35,
+          "text": "Ivy had 140 coins. Ivy gave 81 to Noah. How many are left?",
+          "answer": 59,
           "unit": "coins"
         },
         {
-          "text": "Theo has 8 bags with 5 cookies in each bag. How many cookies in all?",
-          "answer": 40,
-          "unit": "cookies"
+          "text": "Mara shares 10 marbles equally among 5 friends. How many does each friend get?",
+          "answer": 2,
+          "unit": "marbles"
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                3,
+                16,
+                8,
+                13
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                10,
+                5,
+                3,
+                13
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                16,
+                29,
+                32,
+                13
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              29,
+              16,
+              13
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                24,
+                20,
+                3,
+                17
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                11,
+                4,
+                10,
+                7
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                26,
+                30,
+                31,
+                5
+              ],
+              "answerIndex": 2
+            }
+          ],
+          "final": {
+            "numbers": [
+              11,
+              31,
+              20
+            ],
+            "answerIndex": 1
+          }
         }
       ]
     },
@@ -165,36 +159,37 @@
       "instructions": "Solve each one. Line up the digits and regroup when you need to.",
       "items": [
         {
-          "a": 351,
-          "op": "×",
-          "b": 72,
-          "answer": 25272
-        },
-        {
-          "a": 608763,
-          "op": "−",
-          "b": 181871,
-          "answer": 426892
-        },
-        {
-          "a": 707232,
+          "a": 253377,
           "op": "+",
-          "b": 275558,
-          "answer": 982790
+          "b": 753065,
+          "answer": 1006442
         },
         {
-          "a": 647536,
+          "a": 573508,
           "op": "−",
-          "b": 622708,
-          "answer": 24828
+          "b": 491477,
+          "answer": 82031
+        },
+        {
+          "a": 999696,
+          "op": "−",
+          "b": 409293,
+          "answer": 590403
+        },
+        {
+          "a": 352,
+          "op": "×",
+          "b": 57,
+          "answer": 20064
         }
       ]
     }
   ],
   "load": {
     "maxTier": 5,
-    "steps": 10,
-    "score": 52
+    "steps": 7,
+    "score": 49,
+    "stars": 4
   },
   "seed": 81,
   "createdAt": "2026-06-04T00:00:00.000Z"

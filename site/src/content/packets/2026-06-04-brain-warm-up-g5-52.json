@@ -13,152 +13,135 @@
       "items": [
         {
           "numbers": [
-            15,
-            24,
-            2,
-            22,
-            14
+            1,
+            20,
+            8,
+            12,
+            17
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            4,
-            5,
-            24,
-            6,
-            19
+            28,
+            16,
+            8,
+            3,
+            25
           ],
-          "answerIndex": 2,
-          "op": "×"
+          "answerIndex": 0,
+          "op": "+"
         },
         {
           "numbers": [
-            6,
+            28,
+            17,
+            20,
             8,
-            2,
-            5,
-            10
+            16
           ],
-          "answerIndex": 4,
-          "op": "×"
+          "answerIndex": 0,
+          "op": "+"
         }
       ]
     },
     {
-      "type": "fraction",
-      "title": "Fraction Workout",
-      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
       "items": [
         {
-          "kind": "compare",
-          "aNum": 4,
-          "aDen": 2,
-          "bNum": 4,
-          "bDen": 2,
-          "answer": "="
+          "number": 22556,
+          "parts": [
+            20000,
+            2000,
+            500,
+            50,
+            6
+          ],
+          "blankIndex": 0,
+          "answer": 20000
         },
         {
-          "kind": "equiv",
-          "num": 1,
-          "den": 5,
-          "newDen": 10,
-          "answer": 2
+          "number": 65992,
+          "parts": [
+            60000,
+            5000,
+            900,
+            90,
+            2
+          ],
+          "blankIndex": 3,
+          "answer": 90
         },
         {
-          "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 8,
+          "number": 55535,
+          "parts": [
+            50000,
+            5000,
+            500,
+            30,
+            5
+          ],
+          "blankIndex": 0,
+          "answer": 50000
+        },
+        {
+          "number": 37142,
+          "parts": [
+            30000,
+            7000,
+            100,
+            40,
+            2
+          ],
+          "blankIndex": 1,
+          "answer": 7000
+        },
+        {
+          "number": 71291,
+          "parts": [
+            70000,
+            1000,
+            200,
+            90,
+            1
+          ],
+          "blankIndex": 1,
+          "answer": 1000
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 16144,
+          "place": "ones",
           "answer": 4
         },
         {
-          "kind": "compare",
-          "aNum": 1,
-          "aDen": 6,
-          "bNum": 5,
-          "bDen": 2,
-          "answer": "<"
+          "number": 74680,
+          "place": "hundreds",
+          "answer": 600
         },
         {
-          "kind": "compare",
-          "aNum": 3,
-          "aDen": 5,
-          "bNum": 3,
-          "bDen": 6,
-          "answer": ">"
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 11,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 5
-            },
-            {
-              "op": "×",
-              "operand": 6
-            },
-            {
-              "op": "−",
-              "operand": 17
-            },
-            {
-              "op": "−",
-              "operand": 255
-            },
-            {
-              "op": "−",
-              "operand": 25
-            }
-          ],
-          "values": [
-            55,
-            330,
-            313,
-            58,
-            33
-          ]
+          "number": 70330,
+          "place": "tens",
+          "answer": 30
         },
         {
-          "start": 4,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 4
-            },
-            {
-              "op": "÷",
-              "operand": 9
-            },
-            {
-              "op": "+",
-              "operand": 155
-            },
-            {
-              "op": "−",
-              "operand": 60
-            },
-            {
-              "op": "÷",
-              "operand": 5
-            }
-          ],
-          "values": [
-            0,
-            0,
-            155,
-            95,
-            19
-          ]
+          "number": 14013,
+          "place": "hundreds",
+          "answer": 0
+        },
+        {
+          "number": 62406,
+          "place": "ones",
+          "answer": 6
         }
       ]
     },
@@ -168,42 +151,43 @@
       "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "leftText": "304",
-          "rightText": "304",
+          "leftText": "90",
+          "rightText": "90",
           "answer": "="
         },
         {
-          "leftText": "8 × 8",
-          "rightText": "66",
+          "leftText": "2 × 8",
+          "rightText": "18",
           "answer": "<"
         },
         {
-          "leftText": "447",
-          "rightText": "431",
+          "leftText": "7 × 7",
+          "rightText": "46",
           "answer": ">"
         },
         {
-          "leftText": "525",
-          "rightText": "571",
-          "answer": "<"
-        },
-        {
-          "leftText": "677",
-          "rightText": "689",
-          "answer": "<"
-        },
-        {
-          "leftText": "313",
-          "rightText": "257",
+          "leftText": "1 × 8",
+          "rightText": "6",
           "answer": ">"
+        },
+        {
+          "leftText": "2 × 11",
+          "rightText": "23",
+          "answer": "<"
+        },
+        {
+          "leftText": "55",
+          "rightText": "135",
+          "answer": "<"
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 8,
-    "score": 44
+    "maxTier": 3,
+    "steps": 4,
+    "score": 37,
+    "stars": 3
   },
   "seed": 52,
   "createdAt": "2026-06-04T00:00:00.000Z"

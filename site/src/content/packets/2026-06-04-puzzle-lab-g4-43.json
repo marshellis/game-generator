@@ -13,13 +13,13 @@
       "items": [
         {
           "numbers": [
-            25,
-            8,
-            17,
-            15,
-            20
+            26,
+            16,
+            24,
+            12,
+            28
           ],
-          "answerIndex": 0,
+          "answerIndex": 4,
           "op": "+"
         },
         {
@@ -47,134 +47,146 @@
       ]
     },
     {
-      "type": "fraction",
-      "title": "Fraction Workout",
-      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "kind": "compare",
-          "aNum": 1,
-          "aDen": 3,
-          "bNum": 2,
-          "bDen": 2,
+          "leftText": "15",
+          "rightText": "15",
+          "answer": "="
+        },
+        {
+          "leftText": "1 × 11",
+          "rightText": "13",
           "answer": "<"
         },
         {
-          "kind": "compare",
-          "aNum": 2,
-          "aDen": 6,
-          "bNum": 4,
-          "bDen": 3,
+          "leftText": "204",
+          "rightText": "212",
           "answer": "<"
         },
         {
-          "kind": "compare",
-          "aNum": 3,
-          "aDen": 3,
-          "bNum": 5,
-          "bDen": 2,
+          "leftText": "12 + 2",
+          "rightText": "16",
           "answer": "<"
         },
         {
-          "kind": "compare",
-          "aNum": 4,
-          "aDen": 4,
-          "bNum": 4,
-          "bDen": 3,
-          "answer": "<"
-        },
-        {
-          "kind": "compare",
-          "aNum": 1,
-          "aDen": 2,
-          "bNum": 2,
-          "bDen": 5,
+          "leftText": "10 + 4",
+          "rightText": "11",
           "answer": ">"
+        },
+        {
+          "leftText": "5 + 8",
+          "rightText": "16",
+          "answer": "<"
         }
       ]
     },
     {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
       "items": [
         {
-          "left": 9,
-          "op": "×",
-          "right": 2,
-          "result": 18,
-          "blank": "result",
-          "answer": 18
+          "number": 1639,
+          "parts": [
+            1000,
+            600,
+            30,
+            9
+          ],
+          "blankIndex": 2,
+          "answer": 30
         },
         {
-          "left": 863,
-          "op": "+",
-          "right": 106,
-          "result": 969,
-          "blank": "left",
-          "answer": 863
+          "number": 1549,
+          "parts": [
+            1000,
+            500,
+            40,
+            9
+          ],
+          "blankIndex": 3,
+          "answer": 9
         },
         {
-          "left": 5,
-          "op": "×",
-          "right": 5,
-          "result": 25,
-          "blank": "right",
-          "answer": 5
+          "number": 1950,
+          "parts": [
+            1000,
+            900,
+            50
+          ],
+          "blankIndex": 0,
+          "answer": 1000
         },
         {
-          "left": 21,
-          "op": "÷",
-          "right": 3,
-          "result": 7,
-          "blank": "left",
-          "answer": 21
+          "number": 5786,
+          "parts": [
+            5000,
+            700,
+            80,
+            6
+          ],
+          "blankIndex": 1,
+          "answer": 700
         },
         {
-          "left": 15,
-          "op": "÷",
-          "right": 3,
-          "result": 5,
-          "blank": "right",
-          "answer": 3
-        },
-        {
-          "left": 10,
-          "op": "÷",
-          "right": 2,
-          "result": 5,
-          "blank": "right",
-          "answer": 2
+          "number": 4456,
+          "parts": [
+            4000,
+            400,
+            50,
+            6
+          ],
+          "blankIndex": 2,
+          "answer": 50
         }
       ]
     },
     {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
+      "type": "rounding",
+      "title": "Round to the Nearest 100",
+      "instructions": "Round each number to the nearest 100.",
       "items": [
         {
-          "text": "Mara had 48 shells. Mara gave 26 to Eli. How many are left?",
-          "answer": 22,
-          "unit": "shells"
+          "number": 7557,
+          "nearest": 100,
+          "answer": 7600
         },
         {
-          "text": "Eli has 41 cookies. Theo gives Eli 26 more. How many does Eli have now?",
-          "answer": 67,
-          "unit": "cookies"
+          "number": 2432,
+          "nearest": 100,
+          "answer": 2400
         },
         {
-          "text": "Mara has 4 bags with 8 books in each bag. How many books in all?",
-          "answer": 32,
-          "unit": "books"
+          "number": 6520,
+          "nearest": 100,
+          "answer": 6500
+        },
+        {
+          "number": 2213,
+          "nearest": 100,
+          "answer": 2200
+        },
+        {
+          "number": 9550,
+          "nearest": 100,
+          "answer": 9600
+        },
+        {
+          "number": 2131,
+          "nearest": 100,
+          "answer": 2100
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 4,
+    "maxTier": 3,
     "steps": 4,
-    "score": 38
+    "score": 37,
+    "stars": 3
   },
   "seed": 43,
   "createdAt": "2026-06-04T00:00:00.000Z"

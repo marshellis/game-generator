@@ -33,6 +33,7 @@ const puzzles = defineCollection({
 // --- Game 2: math packets ---------------------------------------------------
 
 const sign = z.enum(["<", ">", "="]);
+const cluster = z.object({ numbers: z.array(z.number()), answerIndex: z.number() });
 
 const activity = z.discriminatedUnion("type", [
   z.object({
@@ -141,6 +142,28 @@ const activity = z.discriminatedUnion("type", [
     instructions: z.string(),
     items: z.array(z.object({ a: z.number(), op: z.enum(["+", "−", "×"]), b: z.number(), answer: z.number() })),
   }),
+  z.object({
+    type: z.literal("match"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({
+      prompt: z.discriminatedUnion("kind", [
+        z.object({ kind: z.literal("tenFrame"), dots: z.number() }),
+        z.object({ kind: z.literal("expanded"), parts: z.array(z.number()) }),
+      ]),
+      options: z.array(z.number()),
+      answer: z.number(),
+    })),
+  }),
+  z.object({
+    type: z.literal("sumChain"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({
+      subClusters: z.array(cluster),
+      final: cluster,
+    })),
+  }),
 ]);
 
 const packets = defineCollection({
@@ -153,7 +176,7 @@ const packets = defineCollection({
     gradeLabel: z.string(),
     difficulty: z.string(),
     activities: z.array(activity),
-    load: z.object({ maxTier: z.number(), steps: z.number(), score: z.number() }),
+    load: z.object({ maxTier: z.number(), steps: z.number(), score: z.number(), stars: z.number() }),
     seed: z.number(),
     createdAt: z.string(),
   }),

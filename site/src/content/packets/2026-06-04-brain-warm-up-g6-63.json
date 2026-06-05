@@ -13,101 +13,111 @@
       "items": [
         {
           "numbers": [
-            6,
-            22,
-            24,
-            4,
-            15
-          ],
-          "answerIndex": 2,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            12,
-            2,
-            6,
-            15,
-            3
+            20,
+            26,
+            28,
+            33,
+            5
           ],
           "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            23,
-            34,
-            13,
+            4,
+            5,
+            20,
             11,
-            14
+            8
           ],
-          "answerIndex": 1,
-          "op": "+"
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            45,
+            5,
+            9,
+            22,
+            17
+          ],
+          "answerIndex": 0,
+          "op": "×"
         }
       ]
     },
     {
-      "type": "breakApart",
-      "title": "Break Apart",
-      "instructions": "Write the missing part of each number.",
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
       "items": [
         {
-          "number": 90159,
-          "parts": [
-            90000,
-            100,
-            50,
-            9
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              6000,
+              100,
+              70,
+              9
+            ]
+          },
+          "options": [
+            6179,
+            4885,
+            6648
           ],
-          "blankIndex": 1,
-          "answer": 100
+          "answer": 6179
         },
         {
-          "number": 38170,
-          "parts": [
-            30000,
-            8000,
-            100,
-            70
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              9000,
+              800,
+              80,
+              8
+            ]
+          },
+          "options": [
+            7886,
+            8698,
+            9888
           ],
-          "blankIndex": 2,
-          "answer": 100
+          "answer": 9888
         },
         {
-          "number": 17294,
-          "parts": [
-            10000,
-            7000,
-            200,
-            90,
-            4
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              4000,
+              900,
+              70,
+              4
+            ]
+          },
+          "options": [
+            4974,
+            4014,
+            4204
           ],
-          "blankIndex": 3,
-          "answer": 90
+          "answer": 4974
         },
         {
-          "number": 99199,
-          "parts": [
-            90000,
-            9000,
-            100,
-            90,
-            9
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              9000,
+              600,
+              20,
+              1
+            ]
+          },
+          "options": [
+            7365,
+            9341,
+            9621
           ],
-          "blankIndex": 4,
-          "answer": 9
-        },
-        {
-          "number": 98889,
-          "parts": [
-            90000,
-            8000,
-            800,
-            80,
-            9
-          ],
-          "blankIndex": 0,
-          "answer": 90000
+          "answer": 9621
         }
       ]
     },
@@ -119,127 +129,86 @@
         {
           "kind": "equiv",
           "num": 1,
-          "den": 2,
-          "newDen": 6,
-          "answer": 3
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 8,
+          "den": 6,
+          "newDen": 24,
           "answer": 4
         },
         {
           "kind": "compare",
           "aNum": 4,
-          "aDen": 4,
-          "bNum": 4,
-          "bDen": 2,
+          "aDen": 8,
+          "bNum": 3,
+          "bDen": 6,
+          "answer": "="
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 2,
+          "bNum": 2,
+          "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 4,
+          "newDen": 8,
+          "answer": 6
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 6,
+          "bNum": 2,
+          "bDen": 3,
           "answer": "<"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 6,
-          "newDen": 24,
-          "answer": 4
-        },
-        {
-          "kind": "equiv",
-          "num": 5,
-          "den": 6,
-          "newDen": 24,
-          "answer": 20
         }
       ]
     },
     {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
       "items": [
         {
-          "start": 11,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 230
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "÷",
-              "operand": 2
-            },
-            {
-              "op": "+",
-              "operand": 57
-            },
-            {
-              "op": "+",
-              "operand": 140
-            },
-            {
-              "op": "−",
-              "operand": 314
-            }
-          ],
-          "values": [
-            241,
-            482,
-            241,
-            298,
-            438,
-            124
-          ]
+          "number": 88459,
+          "nearest": 1000,
+          "answer": 88000
         },
         {
-          "start": 11,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
-              "op": "÷",
-              "operand": 3
-            },
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
-              "op": "+",
-              "operand": 235
-            },
-            {
-              "op": "÷",
-              "operand": 4
-            },
-            {
-              "op": "×",
-              "operand": 3
-            }
-          ],
-          "values": [
-            33,
-            11,
-            33,
-            268,
-            67,
-            201
-          ]
+          "number": 79227,
+          "nearest": 1000,
+          "answer": 79000
+        },
+        {
+          "number": 50767,
+          "nearest": 1000,
+          "answer": 51000
+        },
+        {
+          "number": 41976,
+          "nearest": 1000,
+          "answer": 42000
+        },
+        {
+          "number": 71183,
+          "nearest": 1000,
+          "answer": 71000
+        },
+        {
+          "number": 13438,
+          "nearest": 1000,
+          "answer": 13000
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 9,
-    "score": 51
+    "maxTier": 4,
+    "steps": 4,
+    "score": 41,
+    "stars": 4
   },
   "seed": 63,
   "createdAt": "2026-06-04T00:00:00.000Z"

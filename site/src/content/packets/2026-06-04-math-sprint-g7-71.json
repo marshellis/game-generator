@@ -13,36 +13,121 @@
       "items": [
         {
           "numbers": [
-            27,
-            15,
             4,
-            31,
-            10
-          ],
-          "answerIndex": 3,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            4,
-            26,
-            6,
             22,
-            17
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
+            24,
             20,
-            6,
-            31,
-            27,
-            11
+            8
           ],
           "answerIndex": 2,
           "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            12,
+            16,
+            3,
+            18
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            2,
+            30,
+            32,
+            11,
+            23
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                5,
+                13,
+                16,
+                18
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                11,
+                8,
+                6,
+                5
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                6,
+                29,
+                20,
+                9
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              29,
+              11,
+              18
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                11,
+                9,
+                2,
+                4
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                11,
+                13,
+                7,
+                20
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                23,
+                28,
+                3,
+                31
+              ],
+              "answerIndex": 3
+            }
+          ],
+          "final": {
+            "numbers": [
+              31,
+              11,
+              20
+            ],
+            "answerIndex": 0
+          }
         }
       ]
     },
@@ -52,100 +137,19 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Mara had 154 pencils. Mara gave 148 to Eli. How many are left?",
-          "answer": 6,
-          "unit": "pencils"
-        },
-        {
-          "text": "Eli had 106 shells. Eli gave 77 to Omar. How many are left?",
-          "answer": 29,
+          "text": "Noah has 59 shells. Eli gives Noah 64 more. How many does Noah have now?",
+          "answer": 123,
           "unit": "shells"
         },
         {
-          "text": "Ruby has 83 coins. Noah gives Ruby 99 more. How many does Ruby have now?",
-          "answer": 182,
-          "unit": "coins"
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 1,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
-              "op": "÷",
-              "operand": 3
-            },
-            {
-              "op": "+",
-              "operand": 275
-            },
-            {
-              "op": "−",
-              "operand": 34
-            },
-            {
-              "op": "+",
-              "operand": 164
-            },
-            {
-              "op": "÷",
-              "operand": 7
-            }
-          ],
-          "values": [
-            3,
-            1,
-            276,
-            242,
-            406,
-            58
-          ]
+          "text": "Mara has 4 bags with 9 books in each bag. How many books in all?",
+          "answer": 36,
+          "unit": "books"
         },
         {
-          "start": 6,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 6
-            },
-            {
-              "op": "−",
-              "operand": 11
-            },
-            {
-              "op": "×",
-              "operand": 5
-            },
-            {
-              "op": "+",
-              "operand": 320
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "−",
-              "operand": 601
-            }
-          ],
-          "values": [
-            36,
-            25,
-            125,
-            445,
-            890,
-            289
-          ]
+          "text": "Omar shares 6 stickers equally among 3 friends. How many does each friend get?",
+          "answer": 2,
+          "unit": "stickers"
         }
       ]
     },
@@ -156,39 +160,39 @@
       "items": [
         {
           "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 4,
-          "answer": 2
-        },
-        {
-          "kind": "equiv",
-          "num": 4,
+          "num": 2,
           "den": 5,
-          "newDen": 15,
-          "answer": 12
+          "newDen": 10,
+          "answer": 4
         },
         {
           "kind": "compare",
-          "aNum": 3,
-          "aDen": 5,
-          "bNum": 1,
-          "bDen": 5,
-          "answer": ">"
+          "aNum": 1,
+          "aDen": 4,
+          "bNum": 4,
+          "bDen": 8,
+          "answer": "<"
         },
         {
           "kind": "equiv",
           "num": 3,
           "den": 6,
-          "newDen": 12,
-          "answer": 6
+          "newDen": 18,
+          "answer": 9
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 5,
+          "newDen": 20,
+          "answer": 8
         },
         {
           "kind": "compare",
-          "aNum": 2,
-          "aDen": 6,
-          "bNum": 4,
-          "bDen": 3,
+          "aNum": 1,
+          "aDen": 8,
+          "bNum": 2,
+          "bDen": 6,
           "answer": "<"
         }
       ]
@@ -196,8 +200,9 @@
   ],
   "load": {
     "maxTier": 5,
-    "steps": 9,
-    "score": 49
+    "steps": 7,
+    "score": 46,
+    "stars": 4
   },
   "seed": 71,
   "createdAt": "2026-06-04T00:00:00.000Z"

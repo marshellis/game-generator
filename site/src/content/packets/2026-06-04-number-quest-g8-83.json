@@ -13,36 +13,58 @@
       "items": [
         {
           "numbers": [
-            56,
-            4,
-            39,
+            3,
+            20,
             17,
-            8
+            6,
+            4
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            9,
+            49,
+            54,
+            6,
+            12
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            30,
+            25,
+            14,
+            1,
+            5
           ],
           "answerIndex": 0,
           "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Omar had 188 marbles. Omar gave 98 to Ivy. How many are left?",
+          "answer": 90,
+          "unit": "marbles"
         },
         {
-          "numbers": [
-            15,
-            3,
-            28,
-            13,
-            27
-          ],
-          "answerIndex": 2,
-          "op": "+"
+          "text": "Noah has 9 bags with 2 stickers in each bag. How many stickers in all?",
+          "answer": 18,
+          "unit": "stickers"
         },
         {
-          "numbers": [
-            13,
-            12,
-            14,
-            36,
-            22
-          ],
-          "answerIndex": 3,
-          "op": "+"
+          "text": "Mara had 76 apples. Mara gave 30 to Ruby. How many are left?",
+          "answer": 46,
+          "unit": "apples"
         }
       ]
     },
@@ -53,19 +75,17 @@
       "items": [
         {
           "operands": [
-            9,
             4,
-            3,
-            3,
-            8
+            5,
+            5,
+            2
           ],
           "ops": [
             "×",
-            "×",
             "−",
-            "+"
+            "×"
           ],
-          "target": 113
+          "target": 10
         },
         {
           "operands": [
@@ -118,84 +138,102 @@
       ]
     },
     {
-      "type": "stdAlgorithm",
-      "title": "Line It Up",
-      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "a": 661877,
-          "op": "+",
-          "b": 623589,
-          "answer": 1285466
+          "start": 3,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 1
+            },
+            {
+              "op": "+",
+              "operand": 41
+            },
+            {
+              "op": "×",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 220
+            },
+            {
+              "op": "−",
+              "operand": 4
+            },
+            {
+              "op": "×",
+              "operand": 5
+            },
+            {
+              "op": "÷",
+              "operand": 5
+            }
+          ],
+          "values": [
+            4,
+            45,
+            225,
+            5,
+            1,
+            5,
+            1
+          ]
         },
         {
-          "a": 12,
-          "op": "×",
-          "b": 87,
-          "answer": 1044
-        },
-        {
-          "a": 813,
-          "op": "×",
-          "b": 7,
-          "answer": 5691
-        },
-        {
-          "a": 516139,
-          "op": "+",
-          "b": 141002,
-          "answer": 657141
-        }
-      ]
-    },
-    {
-      "type": "fraction",
-      "title": "Fraction Workout",
-      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
-      "items": [
-        {
-          "kind": "equiv",
-          "num": 2,
-          "den": 6,
-          "newDen": 12,
-          "answer": 4
-        },
-        {
-          "kind": "compare",
-          "aNum": 3,
-          "aDen": 8,
-          "bNum": 2,
-          "bDen": 5,
-          "answer": "<"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 3,
-          "newDen": 9,
-          "answer": 3
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 6,
-          "newDen": 12,
-          "answer": 2
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 4,
-          "newDen": 16,
-          "answer": 4
+          "start": 1,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 624
+            },
+            {
+              "op": "÷",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 15
+            },
+            {
+              "op": "÷",
+              "operand": 5
+            },
+            {
+              "op": "+",
+              "operand": 552
+            },
+            {
+              "op": "+",
+              "operand": 576
+            },
+            {
+              "op": "+",
+              "operand": 507
+            }
+          ],
+          "values": [
+            625,
+            125,
+            110,
+            22,
+            574,
+            1150,
+            1657
+          ]
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 4,
-    "steps": 8,
-    "score": 50
+    "maxTier": 5,
+    "steps": 14,
+    "score": 54,
+    "stars": 5
   },
   "seed": 83,
   "createdAt": "2026-06-04T00:00:00.000Z"

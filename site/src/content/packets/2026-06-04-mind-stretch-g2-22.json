@@ -13,98 +13,88 @@
       "items": [
         {
           "numbers": [
-            11,
-            20,
+            13,
             9,
-            7
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            9,
-            1,
-            10,
-            5
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            3,
-            10,
-            9,
-            1
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "coinBubble",
-      "title": "Count the Money",
-      "instructions": "Add up the coins and write the total in cents.",
-      "items": [
-        {
-          "coins": [
-            25,
-            10,
-            1,
-            10
-          ],
-          "answer": 46
-        },
-        {
-          "coins": [
-            10,
-            25,
-            25,
-            5
-          ],
-          "answer": 65
-        },
-        {
-          "coins": [
             5,
-            25,
-            10,
-            5
+            14
           ],
-          "answer": 45
+          "answerIndex": 3,
+          "op": "+"
         },
         {
-          "coins": [
-            10,
-            10,
-            10,
-            10
+          "numbers": [
+            16,
+            1,
+            11,
+            5
           ],
-          "answer": 40
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            17,
+            9,
+            8,
+            14
+          ],
+          "answerIndex": 0,
+          "op": "+"
         }
       ]
     },
     {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "text": "Eli had 14 cookies. Eli gave 12 to Zoe. How many are left?",
-          "answer": 2,
-          "unit": "cookies"
+          "dots": 9,
+          "answer": 9
         },
         {
-          "text": "Eli had 19 pencils. Eli gave 3 to Sam. How many are left?",
-          "answer": 16,
-          "unit": "pencils"
+          "dots": 6,
+          "answer": 6
         },
         {
-          "text": "Ivy had 17 shells. Ivy gave 17 to Theo. How many are left?",
-          "answer": 0,
-          "unit": "shells"
+          "dots": 5,
+          "answer": 5
+        },
+        {
+          "dots": 6,
+          "answer": 6
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 65,
+          "place": "tens",
+          "answer": 60
+        },
+        {
+          "number": 76,
+          "place": "tens",
+          "answer": 70
+        },
+        {
+          "number": 85,
+          "place": "tens",
+          "answer": 80
+        },
+        {
+          "number": 78,
+          "place": "tens",
+          "answer": 70
+        },
+        {
+          "number": 86,
+          "place": "tens",
+          "answer": 80
         }
       ]
     }
@@ -112,7 +102,8 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 25
+    "score": 20,
+    "stars": 1
   },
   "seed": 22,
   "createdAt": "2026-06-04T00:00:00.000Z"

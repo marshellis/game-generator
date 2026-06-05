@@ -47,130 +47,69 @@
       ]
     },
     {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
-          "operands": [
-            6,
-            6,
-            9,
-            4
-          ],
-          "ops": [
-            "−",
-            "+",
-            "+"
-          ],
-          "target": 13
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 2,
+          "bNum": 3,
+          "bDen": 3,
+          "answer": ">"
         },
         {
-          "operands": [
-            3,
-            8,
-            4,
-            6
-          ],
-          "ops": [
-            "×",
-            "−",
-            "×"
-          ],
-          "target": 0
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 3,
+          "bNum": 4,
+          "bDen": 5,
+          "answer": ">"
         },
         {
-          "operands": [
-            7,
-            3,
-            4,
-            5
-          ],
-          "ops": [
-            "+",
-            "×",
-            "−"
-          ],
-          "target": 14
+          "kind": "equiv",
+          "num": 2,
+          "den": 6,
+          "newDen": 24,
+          "answer": 8
         },
         {
-          "operands": [
-            7,
-            3,
-            7,
-            9
-          ],
-          "ops": [
-            "−",
-            "+",
-            "−"
-          ],
-          "target": 2
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 8,
+          "bNum": 3,
+          "bDen": 5,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
         }
       ]
     },
     {
-      "type": "breakApart",
-      "title": "Break Apart",
-      "instructions": "Write the missing part of each number.",
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "number": 64639,
-          "parts": [
-            60000,
-            4000,
-            600,
-            30,
-            9
-          ],
-          "blankIndex": 3,
-          "answer": 30
+          "text": "Eli shares 30 coins equally among 6 friends. How many does each friend get?",
+          "answer": 5,
+          "unit": "coins"
         },
         {
-          "number": 77074,
-          "parts": [
-            70000,
-            7000,
-            70,
-            4
-          ],
-          "blankIndex": 0,
-          "answer": 70000
+          "text": "Ruby shares 8 marbles equally among 2 friends. How many does each friend get?",
+          "answer": 4,
+          "unit": "marbles"
         },
         {
-          "number": 56820,
-          "parts": [
-            50000,
-            6000,
-            800,
-            20
-          ],
-          "blankIndex": 1,
-          "answer": 6000
-        },
-        {
-          "number": 18556,
-          "parts": [
-            10000,
-            8000,
-            500,
-            50,
-            6
-          ],
-          "blankIndex": 3,
-          "answer": 50
-        },
-        {
-          "number": 73219,
-          "parts": [
-            70000,
-            3000,
-            200,
-            10,
-            9
-          ],
-          "blankIndex": 4,
-          "answer": 9
+          "text": "Zoe has 6 bags with 7 cookies in each bag. How many cookies in all?",
+          "answer": 42,
+          "unit": "cookies"
         }
       ]
     },
@@ -180,37 +119,38 @@
       "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "number": 54171,
-          "place": "hundreds",
-          "answer": 100
+          "number": 75721,
+          "place": "tens",
+          "answer": 20
         },
         {
-          "number": 40808,
-          "place": "thousands",
-          "answer": 0
+          "number": 49692,
+          "place": "tens",
+          "answer": 90
         },
         {
-          "number": 61964,
-          "place": "thousands",
-          "answer": 1000
-        },
-        {
-          "number": 11349,
+          "number": 11167,
           "place": "thousands",
           "answer": 1000
         },
         {
-          "number": 34543,
-          "place": "ones",
-          "answer": 3
+          "number": 43620,
+          "place": "tens",
+          "answer": 20
+        },
+        {
+          "number": 96912,
+          "place": "thousands",
+          "answer": 6000
         }
       ]
     }
   ],
   "load": {
     "maxTier": 4,
-    "steps": 7,
-    "score": 45
+    "steps": 4,
+    "score": 39,
+    "stars": 3
   },
   "seed": 62,
   "createdAt": "2026-06-04T00:00:00.000Z"

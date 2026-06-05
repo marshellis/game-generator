@@ -13,102 +13,110 @@
       "items": [
         {
           "numbers": [
-            24,
+            2,
+            9,
+            3,
             15,
-            4,
-            6,
-            12
+            27
           ],
-          "answerIndex": 0,
+          "answerIndex": 4,
           "op": "×"
         },
         {
           "numbers": [
-            3,
-            17,
-            43,
-            37,
-            26
+            30,
+            35,
+            29,
+            5,
+            23
           ],
-          "answerIndex": 2,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            21,
-            50,
-            27,
-            29,
-            42
+            24,
+            8,
+            3,
+            9,
+            21
           ],
-          "answerIndex": 1,
-          "op": "+"
+          "answerIndex": 0,
+          "op": "×"
         }
       ]
     },
     {
-      "type": "breakApart",
-      "title": "Break Apart",
-      "instructions": "Write the missing part of each number.",
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
       "items": [
         {
-          "number": 76822,
-          "parts": [
-            70000,
-            6000,
-            800,
-            20,
-            2
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              300,
+              10
+            ]
+          },
+          "options": [
+            1926,
+            2301,
+            2310
           ],
-          "blankIndex": 0,
-          "answer": 70000
+          "answer": 2310
         },
         {
-          "number": 24651,
-          "parts": [
-            20000,
-            4000,
-            600,
-            50,
-            1
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              800,
+              80,
+              4
+            ]
+          },
+          "options": [
+            3367,
+            3525,
+            2884
           ],
-          "blankIndex": 4,
-          "answer": 1
+          "answer": 2884
         },
         {
-          "number": 69243,
-          "parts": [
-            60000,
-            9000,
-            200,
-            40,
-            3
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              6000,
+              100,
+              10,
+              7
+            ]
+          },
+          "options": [
+            6117,
+            6809,
+            5193
           ],
-          "blankIndex": 4,
-          "answer": 3
+          "answer": 6117
         },
         {
-          "number": 80439,
-          "parts": [
-            80000,
-            400,
-            30,
-            9
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              8000,
+              600,
+              20,
+              7
+            ]
+          },
+          "options": [
+            8627,
+            6966,
+            9135
           ],
-          "blankIndex": 0,
-          "answer": 80000
-        },
-        {
-          "number": 38391,
-          "parts": [
-            30000,
-            8000,
-            300,
-            90,
-            1
-          ],
-          "blankIndex": 1,
-          "answer": 8000
+          "answer": 8627
         }
       ]
     },
@@ -118,71 +126,98 @@
       "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "leftText": "5 + 6",
-          "rightText": "9",
-          "answer": ">"
-        },
-        {
-          "leftText": "11 + 12",
-          "rightText": "24",
+          "leftText": "750",
+          "rightText": "815",
           "answer": "<"
         },
         {
-          "leftText": "2 × 3",
-          "rightText": "4",
+          "leftText": "132",
+          "rightText": "192",
+          "answer": "<"
+        },
+        {
+          "leftText": "836",
+          "rightText": "836",
+          "answer": "="
+        },
+        {
+          "leftText": "2 × 12",
+          "rightText": "22",
           "answer": ">"
         },
         {
-          "leftText": "3 + 12",
-          "rightText": "13",
-          "answer": ">"
+          "leftText": "937",
+          "rightText": "937",
+          "answer": "="
         },
         {
-          "leftText": "569",
-          "rightText": "508",
-          "answer": ">"
-        },
-        {
-          "leftText": "511",
-          "rightText": "434",
-          "answer": ">"
+          "leftText": "9 + 1",
+          "rightText": "11",
+          "answer": "<"
         }
       ]
     },
     {
-      "type": "rounding",
-      "title": "Round to the Nearest 1000",
-      "instructions": "Round each number to the nearest 1000.",
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
       "items": [
         {
-          "number": 61546,
-          "nearest": 1000,
-          "answer": 62000
+          "number": 46765,
+          "parts": [
+            40000,
+            6000,
+            700,
+            60,
+            5
+          ],
+          "blankIndex": 0,
+          "answer": 40000
         },
         {
-          "number": 72580,
-          "nearest": 1000,
-          "answer": 73000
+          "number": 45538,
+          "parts": [
+            40000,
+            5000,
+            500,
+            30,
+            8
+          ],
+          "blankIndex": 4,
+          "answer": 8
         },
         {
-          "number": 67626,
-          "nearest": 1000,
-          "answer": 68000
+          "number": 30431,
+          "parts": [
+            30000,
+            400,
+            30,
+            1
+          ],
+          "blankIndex": 1,
+          "answer": 400
         },
         {
-          "number": 91202,
-          "nearest": 1000,
-          "answer": 91000
+          "number": 60978,
+          "parts": [
+            60000,
+            900,
+            70,
+            8
+          ],
+          "blankIndex": 2,
+          "answer": 70
         },
         {
-          "number": 74406,
-          "nearest": 1000,
-          "answer": 74000
-        },
-        {
-          "number": 25681,
-          "nearest": 1000,
-          "answer": 26000
+          "number": 62280,
+          "parts": [
+            60000,
+            2000,
+            200,
+            80
+          ],
+          "blankIndex": 1,
+          "answer": 2000
         }
       ]
     }
@@ -190,7 +225,8 @@
   "load": {
     "maxTier": 3,
     "steps": 4,
-    "score": 39
+    "score": 36,
+    "stars": 3
   },
   "seed": 61,
   "createdAt": "2026-06-04T00:00:00.000Z"

@@ -13,36 +13,110 @@
       "items": [
         {
           "numbers": [
-            14,
-            29,
-            5,
-            15,
-            17
+            3,
+            17,
+            10,
+            16,
+            14
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            7,
-            52,
-            11,
-            56,
-            8
-          ],
-          "answerIndex": 3,
-          "op": "×"
-        },
-        {
-          "numbers": [
             12,
-            7,
+            3,
             4,
-            16,
-            9
+            15,
+            14
           ],
           "answerIndex": 3,
           "op": "+"
+        },
+        {
+          "numbers": [
+            10,
+            5,
+            1,
+            8,
+            2
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 29,
+          "nearest": 10,
+          "answer": 30
+        },
+        {
+          "number": 205,
+          "nearest": 10,
+          "answer": 210
+        },
+        {
+          "number": 968,
+          "nearest": 10,
+          "answer": 970
+        },
+        {
+          "number": 200,
+          "nearest": 10,
+          "answer": 200
+        },
+        {
+          "number": 940,
+          "nearest": 10,
+          "answer": 940
+        },
+        {
+          "number": 614,
+          "nearest": 10,
+          "answer": 610
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "8 × 9",
+          "rightText": "72",
+          "answer": "="
+        },
+        {
+          "leftText": "2 + 3",
+          "rightText": "4",
+          "answer": ">"
+        },
+        {
+          "leftText": "817",
+          "rightText": "897",
+          "answer": "<"
+        },
+        {
+          "leftText": "52",
+          "rightText": "70",
+          "answer": "<"
+        },
+        {
+          "leftText": "3 × 7",
+          "rightText": "20",
+          "answer": ">"
+        },
+        {
+          "leftText": "637",
+          "rightText": "736",
+          "answer": "<"
         }
       ]
     },
@@ -52,119 +126,28 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Noah has 10 books. Theo gives Noah 43 more. How many does Noah have now?",
-          "answer": 53,
-          "unit": "books"
+          "text": "Omar has 4 bags with 8 pencils in each bag. How many pencils in all?",
+          "answer": 32,
+          "unit": "pencils"
         },
         {
-          "text": "Ruby has 5 bags with 4 shells in each bag. How many shells in all?",
+          "text": "Eli has 8 bags with 9 marbles in each bag. How many marbles in all?",
+          "answer": 72,
+          "unit": "marbles"
+        },
+        {
+          "text": "Noah has 4 bags with 5 books in each bag. How many books in all?",
           "answer": 20,
-          "unit": "shells"
-        },
-        {
-          "text": "Mara has 2 bags with 8 books in each bag. How many books in all?",
-          "answer": 16,
           "unit": "books"
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 2,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 2
-            },
-            {
-              "op": "+",
-              "operand": 25
-            },
-            {
-              "op": "−",
-              "operand": 14
-            },
-            {
-              "op": "×",
-              "operand": 9
-            }
-          ],
-          "values": [
-            0,
-            25,
-            11,
-            99
-          ]
-        },
-        {
-          "start": 8,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "−",
-              "operand": 15
-            },
-            {
-              "op": "×",
-              "operand": 5
-            },
-            {
-              "op": "−",
-              "operand": 4
-            }
-          ],
-          "values": [
-            16,
-            1,
-            5,
-            1
-          ]
-        }
-      ]
-    },
-    {
-      "type": "stdAlgorithm",
-      "title": "Line It Up",
-      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
-      "items": [
-        {
-          "a": 81,
-          "op": "×",
-          "b": 2,
-          "answer": 162
-        },
-        {
-          "a": 410,
-          "op": "−",
-          "b": 337,
-          "answer": 73
-        },
-        {
-          "a": 313,
-          "op": "−",
-          "b": 180,
-          "answer": 133
-        },
-        {
-          "a": 93,
-          "op": "×",
-          "b": 8,
-          "answer": 744
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 7,
-    "score": 44
+    "maxTier": 3,
+    "steps": 4,
+    "score": 34,
+    "stars": 3
   },
   "seed": 31,
   "createdAt": "2026-06-04T00:00:00.000Z"

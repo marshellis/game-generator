@@ -1,0 +1,217 @@
+{
+  "id": "2026-06-04-mind-stretch-g3-34",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            14,
+            15,
+            10,
+            12,
+            1
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            42,
+            34,
+            25,
+            7
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            27,
+            3,
+            5,
+            9,
+            18
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "makeTen",
+      "title": "Make 100",
+      "instructions": "Fill in the number that makes 100.",
+      "items": [
+        {
+          "known": 37,
+          "target": 100,
+          "op": "+",
+          "answer": 63
+        },
+        {
+          "known": 71,
+          "target": 100,
+          "op": "+",
+          "answer": 29
+        },
+        {
+          "known": 3,
+          "target": 100,
+          "op": "+",
+          "answer": 97
+        },
+        {
+          "known": 76,
+          "target": 100,
+          "op": "+",
+          "answer": 24
+        },
+        {
+          "known": 57,
+          "target": 100,
+          "op": "+",
+          "answer": 43
+        },
+        {
+          "known": 69,
+          "target": 100,
+          "op": "+",
+          "answer": 31
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              400,
+              20,
+              7
+            ]
+          },
+          "options": [
+            475,
+            427,
+            341
+          ],
+          "answer": 427
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              600,
+              40,
+              7
+            ]
+          },
+          "options": [
+            573,
+            647,
+            523
+          ],
+          "answer": 647
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              200,
+              7
+            ]
+          },
+          "options": [
+            223,
+            231,
+            207
+          ],
+          "answer": 207
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              500,
+              7
+            ]
+          },
+          "options": [
+            507,
+            487,
+            491
+          ],
+          "answer": 507
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            41,
+            31,
+            null,
+            11,
+            1
+          ],
+          "answer": 21
+        },
+        {
+          "sequence": [
+            114,
+            89,
+            64,
+            null,
+            14
+          ],
+          "answer": 39
+        },
+        {
+          "sequence": [
+            4,
+            9,
+            14,
+            null,
+            24
+          ],
+          "answer": 19
+        },
+        {
+          "sequence": [
+            7,
+            12,
+            17,
+            null,
+            27
+          ],
+          "answer": 22
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 33,
+    "stars": 3
+  },
+  "seed": 34,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

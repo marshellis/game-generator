@@ -13,32 +13,32 @@
       "items": [
         {
           "numbers": [
+            10,
+            11,
             5,
-            12,
-            7,
-            8
+            6
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            10,
-            1,
-            7,
-            9
+            9,
+            13,
+            4,
+            2
           ],
-          "answerIndex": 0,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            9,
-            5,
-            3,
-            4
+            4,
+            2,
+            6,
+            1
           ],
-          "answerIndex": 0,
+          "answerIndex": 2,
           "op": "+"
         }
       ]
@@ -49,6 +49,10 @@
       "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
+          "dots": 1,
+          "answer": 1
+        },
+        {
           "dots": 9,
           "answer": 9
         },
@@ -57,59 +61,47 @@
           "answer": 10
         },
         {
-          "dots": 4,
-          "answer": 4
-        },
-        {
-          "dots": 10,
-          "answer": 10
+          "dots": 6,
+          "answer": 6
         }
       ]
     },
     {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
       "items": [
         {
-          "sequence": [
-            1,
-            3,
+          "coins": [
+            10,
             5,
-            7,
-            null
+            10
           ],
-          "answer": 9
+          "answer": 25
         },
         {
-          "sequence": [
-            8,
-            null,
-            12,
-            14,
-            16
+          "coins": [
+            10,
+            1,
+            10
           ],
-          "answer": 10
+          "answer": 21
         },
         {
-          "sequence": [
-            0,
-            2,
-            4,
-            6,
-            null
+          "coins": [
+            10,
+            10,
+            1
           ],
-          "answer": 8
+          "answer": 21
         },
         {
-          "sequence": [
-            0,
-            null,
-            20,
-            30,
-            40
+          "coins": [
+            5,
+            1,
+            5
           ],
-          "answer": 10
+          "answer": 11
         }
       ]
     }
@@ -117,7 +109,8 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 21
+    "score": 21,
+    "stars": 1
   },
   "seed": 11,
   "createdAt": "2026-06-04T00:00:00.000Z"

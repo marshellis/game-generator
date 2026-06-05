@@ -13,157 +13,97 @@
       "items": [
         {
           "numbers": [
-            6,
             18,
-            17,
-            12
+            12,
+            4,
+            6
           ],
-          "answerIndex": 1,
+          "answerIndex": 0,
           "op": "+"
         },
         {
           "numbers": [
             5,
-            1,
             8,
-            9
+            7,
+            1
           ],
-          "answerIndex": 3,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            14,
-            21,
-            9,
-            12
+            3,
+            6,
+            5,
+            9
           ],
-          "answerIndex": 1,
+          "answerIndex": 3,
           "op": "+"
         }
       ]
     },
     {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "left": 61,
-          "op": "−",
-          "right": 38,
-          "result": 23,
-          "blank": "result",
-          "answer": 23
-        },
-        {
-          "left": 24,
-          "op": "−",
-          "right": 23,
-          "result": 1,
-          "blank": "result",
-          "answer": 1
-        },
-        {
-          "left": 61,
-          "op": "−",
-          "right": 46,
-          "result": 15,
-          "blank": "result",
-          "answer": 15
-        },
-        {
-          "left": 21,
-          "op": "−",
-          "right": 21,
-          "result": 0,
-          "blank": "left",
-          "answer": 21
-        },
-        {
-          "left": 81,
-          "op": "+",
-          "right": 52,
-          "result": 133,
-          "blank": "right",
-          "answer": 52
-        },
-        {
-          "left": 52,
-          "op": "−",
-          "right": 3,
-          "result": 49,
-          "blank": "right",
+          "dots": 3,
           "answer": 3
+        },
+        {
+          "dots": 10,
+          "answer": 10
+        },
+        {
+          "dots": 10,
+          "answer": 10
+        },
+        {
+          "dots": 7,
+          "answer": 7
         }
       ]
     },
     {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "start": 5,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 1
-            },
-            {
-              "op": "−",
-              "operand": 1
-            },
-            {
-              "op": "−",
-              "operand": 3
-            },
-            {
-              "op": "+",
-              "operand": 1
-            }
-          ],
-          "values": [
-            4,
-            3,
-            0,
-            1
-          ]
+          "number": 64,
+          "place": "tens",
+          "answer": 60
         },
         {
-          "start": 12,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 1
-            },
-            {
-              "op": "+",
-              "operand": 15
-            },
-            {
-              "op": "−",
-              "operand": 6
-            },
-            {
-              "op": "+",
-              "operand": 2
-            }
-          ],
-          "values": [
-            13,
-            28,
-            22,
-            24
-          ]
+          "number": 95,
+          "place": "tens",
+          "answer": 90
+        },
+        {
+          "number": 27,
+          "place": "tens",
+          "answer": 20
+        },
+        {
+          "number": 18,
+          "place": "ones",
+          "answer": 8
+        },
+        {
+          "number": 82,
+          "place": "tens",
+          "answer": 80
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 6,
-    "score": 35
+    "maxTier": 3,
+    "steps": 3,
+    "score": 21,
+    "stars": 1
   },
   "seed": 23,
   "createdAt": "2026-06-04T00:00:00.000Z"

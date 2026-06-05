@@ -21,7 +21,9 @@ export type ActivityType =
   | "snake"
   | "breakApart"
   | "coinBubble"
-  | "stdAlgorithm";
+  | "stdAlgorithm"
+  | "match"
+  | "sumChain";
 
 /** Find the one number in the cluster that equals two of the others combined. */
 export interface FindTheSumItem {
@@ -121,6 +123,31 @@ export interface StdAlgoItem {
   answer: number;
 }
 
+/**
+ * Match the Value: a quantity shown in one representation (a ten-frame, or
+ * expanded form), plus number options — tap the one with the same value.
+ */
+export interface MatchItem {
+  prompt: { kind: "tenFrame"; dots: number } | { kind: "expanded"; parts: number[] };
+  options: number[];
+  answer: number; // the value the prompt represents (one of options)
+}
+
+/** A single find-the-sum cluster (also the building block of the nested one). */
+export interface SumCluster {
+  numbers: number[];
+  answerIndex: number;
+}
+
+/**
+ * Find the Sum Challenge (nested): solve several sub-clusters, then the cluster
+ * built from their answers. Multi-step — the final depends on the sub-answers.
+ */
+export interface NestedSumItem {
+  subClusters: SumCluster[];
+  final: SumCluster; // final.numbers are the sub-clusters' answers
+}
+
 /** Either fill an equivalent fraction or compare two fractions. */
 export type FractionItem =
   | { kind: "equiv"; num: number; den: number; newDen: number; answer: number }
@@ -146,7 +173,9 @@ export type Activity =
   | (ActivityBase & { type: "snake"; items: SnakeItem[] })
   | (ActivityBase & { type: "breakApart"; items: BreakApartItem[] })
   | (ActivityBase & { type: "coinBubble"; items: CoinBubbleItem[] })
-  | (ActivityBase & { type: "stdAlgorithm"; items: StdAlgoItem[] });
+  | (ActivityBase & { type: "stdAlgorithm"; items: StdAlgoItem[] })
+  | (ActivityBase & { type: "match"; items: MatchItem[] })
+  | (ActivityBase & { type: "sumChain"; items: NestedSumItem[] });
 
 /**
  * Measured difficulty of a packet (per the grade-appropriateness framework):
@@ -157,6 +186,8 @@ export interface Load {
   maxTier: number;
   steps: number;
   score: number;
+  /** Stored 1–5 difficulty rating (grade-independent), for sorting/labels. */
+  stars: number;
 }
 
 export interface Packet {

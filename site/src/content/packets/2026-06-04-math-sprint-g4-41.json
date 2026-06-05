@@ -13,35 +13,35 @@
       "items": [
         {
           "numbers": [
-            17,
             14,
-            11,
-            19,
-            25
-          ],
-          "answerIndex": 4,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            1,
-            19,
+            13,
+            26,
             12,
-            8,
             20
           ],
-          "answerIndex": 4,
+          "answerIndex": 2,
           "op": "+"
         },
         {
           "numbers": [
+            9,
+            54,
             6,
-            5,
-            21,
-            19,
-            15
+            24,
+            22
           ],
-          "answerIndex": 2,
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            25,
+            23,
+            6,
+            19,
+            1
+          ],
+          "answerIndex": 0,
           "op": "+"
         }
       ]
@@ -52,105 +52,123 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 3,
+          "start": 4,
           "ops": [
             {
               "op": "−",
               "operand": 3
             },
             {
-              "op": "+",
-              "operand": 10
-            },
-            {
               "op": "×",
               "operand": 3
             },
             {
-              "op": "+",
-              "operand": 58
+              "op": "−",
+              "operand": 3
             },
             {
               "op": "+",
-              "operand": 33
+              "operand": 47
+            },
+            {
+              "op": "+",
+              "operand": 23
             }
           ],
           "values": [
+            1,
+            3,
             0,
-            10,
-            30,
-            88,
-            121
+            47,
+            70
           ]
         },
         {
-          "start": 11,
+          "start": 6,
           "ops": [
             {
               "op": "×",
-              "operand": 3
+              "operand": 8
             },
             {
-              "op": "+",
-              "operand": 10
+              "op": "×",
+              "operand": 3
             },
             {
               "op": "+",
               "operand": 41
             },
             {
-              "op": "+",
-              "operand": 2
+              "op": "−",
+              "operand": 83
             },
             {
-              "op": "×",
-              "operand": 2
+              "op": "+",
+              "operand": 32
             }
           ],
           "values": [
-            33,
-            43,
-            84,
-            86,
-            172
+            48,
+            144,
+            185,
+            102,
+            134
           ]
         }
       ]
     },
     {
-      "type": "rounding",
-      "title": "Round to the Nearest 100",
-      "instructions": "Round each number to the nearest 100.",
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
       "items": [
         {
-          "number": 3800,
-          "nearest": 100,
-          "answer": 3800
+          "operands": [
+            2,
+            5,
+            9
+          ],
+          "ops": [
+            "×",
+            "−"
+          ],
+          "target": 1
         },
         {
-          "number": 4798,
-          "nearest": 100,
-          "answer": 4800
+          "operands": [
+            7,
+            2,
+            6
+          ],
+          "ops": [
+            "×",
+            "×"
+          ],
+          "target": 84
         },
         {
-          "number": 1975,
-          "nearest": 100,
-          "answer": 2000
+          "operands": [
+            2,
+            3,
+            8
+          ],
+          "ops": [
+            "+",
+            "×"
+          ],
+          "target": 26
         },
         {
-          "number": 4747,
-          "nearest": 100,
-          "answer": 4700
-        },
-        {
-          "number": 9076,
-          "nearest": 100,
-          "answer": 9100
-        },
-        {
-          "number": 9762,
-          "nearest": 100,
-          "answer": 9800
+          "operands": [
+            8,
+            7,
+            9
+          ],
+          "ops": [
+            "×",
+            "+"
+          ],
+          "target": 65
         }
       ]
     },
@@ -160,27 +178,28 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Noah has 9 bags with 7 stickers in each bag. How many stickers in all?",
-          "answer": 63,
-          "unit": "stickers"
+          "text": "Eli had 41 pencils. Eli gave 5 to Ivy. How many are left?",
+          "answer": 36,
+          "unit": "pencils"
         },
         {
-          "text": "Theo has 45 shells. Ivy gives Theo 41 more. How many does Theo have now?",
-          "answer": 86,
+          "text": "Sam shares 18 shells equally among 6 friends. How many does each friend get?",
+          "answer": 3,
           "unit": "shells"
         },
         {
-          "text": "Eli has 37 coins. Omar gives Eli 12 more. How many does Eli have now?",
-          "answer": 49,
-          "unit": "coins"
+          "text": "Ruby has 5 bags with 8 cookies in each bag. How many cookies in all?",
+          "answer": 40,
+          "unit": "cookies"
         }
       ]
     }
   ],
   "load": {
     "maxTier": 5,
-    "steps": 8,
-    "score": 47
+    "steps": 10,
+    "score": 49,
+    "stars": 4
   },
   "seed": 41,
   "createdAt": "2026-06-04T00:00:00.000Z"

@@ -13,36 +13,104 @@
       "items": [
         {
           "numbers": [
-            2,
-            10,
-            4,
-            14,
-            7
+            17,
+            7,
+            12,
+            21,
+            3
           ],
           "answerIndex": 3,
           "op": "×"
         },
         {
           "numbers": [
-            41,
-            39,
-            22,
-            19,
-            37
+            21,
+            23,
+            16,
+            44,
+            1
           ],
-          "answerIndex": 0,
+          "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            21,
-            28,
-            6,
+            34,
             22,
-            13
+            12,
+            4,
+            14
           ],
-          "answerIndex": 1,
+          "answerIndex": 0,
           "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 62446,
+          "nearest": 1000,
+          "answer": 62000
+        },
+        {
+          "number": 19587,
+          "nearest": 1000,
+          "answer": 20000
+        },
+        {
+          "number": 90566,
+          "nearest": 1000,
+          "answer": 91000
+        },
+        {
+          "number": 54946,
+          "nearest": 1000,
+          "answer": 55000
+        },
+        {
+          "number": 20873,
+          "nearest": 1000,
+          "answer": 21000
+        },
+        {
+          "number": 20083,
+          "nearest": 1000,
+          "answer": 20000
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 62012,
+          "op": "−",
+          "b": 54042,
+          "answer": 7970
+        },
+        {
+          "a": 41327,
+          "op": "+",
+          "b": 63721,
+          "answer": 105048
+        },
+        {
+          "a": 66603,
+          "op": "−",
+          "b": 66035,
+          "answer": 568
+        },
+        {
+          "a": 638,
+          "op": "×",
+          "b": 8,
+          "answer": 5104
         }
       ]
     },
@@ -53,27 +121,18 @@
       "items": [
         {
           "kind": "compare",
-          "aNum": 2,
-          "aDen": 6,
-          "bNum": 4,
-          "bDen": 3,
-          "answer": "<"
-        },
-        {
-          "kind": "compare",
-          "aNum": 3,
+          "aNum": 4,
           "aDen": 3,
           "bNum": 1,
-          "bDen": 4,
+          "bDen": 2,
           "answer": ">"
         },
         {
-          "kind": "compare",
-          "aNum": 5,
-          "aDen": 3,
-          "bNum": 2,
-          "bDen": 5,
-          "answer": ">"
+          "kind": "equiv",
+          "num": 1,
+          "den": 4,
+          "newDen": 8,
+          "answer": 2
         },
         {
           "kind": "equiv",
@@ -84,74 +143,19 @@
         },
         {
           "kind": "compare",
-          "aNum": 1,
+          "aNum": 4,
+          "aDen": 2,
+          "bNum": 5,
+          "bDen": 5,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
           "aDen": 5,
-          "bNum": 4,
-          "bDen": 3,
-          "answer": "<"
-        }
-      ]
-    },
-    {
-      "type": "placeValue",
-      "title": "Place Value",
-      "instructions": "Write the value of the underlined place for each number.",
-      "items": [
-        {
-          "number": 14746,
-          "place": "ones",
-          "answer": 6
-        },
-        {
-          "number": 45971,
-          "place": "hundreds",
-          "answer": 900
-        },
-        {
-          "number": 22017,
-          "place": "ones",
-          "answer": 7
-        },
-        {
-          "number": 46424,
-          "place": "hundreds",
-          "answer": 400
-        },
-        {
-          "number": 80780,
-          "place": "thousands",
-          "answer": 0
-        }
-      ]
-    },
-    {
-      "type": "stdAlgorithm",
-      "title": "Line It Up",
-      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
-      "items": [
-        {
-          "a": 72007,
-          "op": "−",
-          "b": 19606,
-          "answer": 52401
-        },
-        {
-          "a": 522,
-          "op": "×",
-          "b": 92,
-          "answer": 48024
-        },
-        {
-          "a": 67061,
-          "op": "−",
-          "b": 15735,
-          "answer": 51326
-        },
-        {
-          "a": 95370,
-          "op": "−",
-          "b": 17967,
-          "answer": 77403
+          "bNum": 1,
+          "bDen": 5,
+          "answer": ">"
         }
       ]
     }
@@ -159,7 +163,8 @@
   "load": {
     "maxTier": 4,
     "steps": 4,
-    "score": 42
+    "score": 45,
+    "stars": 4
   },
   "seed": 53,
   "createdAt": "2026-06-04T00:00:00.000Z"

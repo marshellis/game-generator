@@ -13,33 +13,33 @@
       "items": [
         {
           "numbers": [
-            17,
-            14,
-            11,
             19,
-            8
+            6,
+            5,
+            12,
+            24
           ],
-          "answerIndex": 3,
+          "answerIndex": 4,
           "op": "+"
         },
         {
           "numbers": [
+            6,
+            24,
+            23,
+            5,
+            30
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            36,
+            4,
+            9,
             22,
-            15,
-            33,
-            29,
-            18
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            21,
-            19,
-            1,
-            7,
-            3
+            34
           ],
           "answerIndex": 0,
           "op": "×"
@@ -47,33 +47,46 @@
       ]
     },
     {
-      "type": "stdAlgorithm",
-      "title": "Line It Up",
-      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
-          "a": 35672,
-          "op": "−",
-          "b": 29797,
-          "answer": 5875
+          "kind": "compare",
+          "aNum": 2,
+          "aDen": 8,
+          "bNum": 2,
+          "bDen": 2,
+          "answer": "<"
         },
         {
-          "a": 350,
-          "op": "×",
-          "b": 60,
-          "answer": 21000
+          "kind": "equiv",
+          "num": 3,
+          "den": 4,
+          "newDen": 8,
+          "answer": 6
         },
         {
-          "a": 65788,
-          "op": "−",
-          "b": 11468,
-          "answer": 54320
+          "kind": "equiv",
+          "num": 1,
+          "den": 4,
+          "newDen": 8,
+          "answer": 2
         },
         {
-          "a": 14,
-          "op": "×",
-          "b": 92,
-          "answer": 1288
+          "kind": "equiv",
+          "num": 2,
+          "den": 5,
+          "newDen": 20,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 2,
+          "aDen": 4,
+          "bNum": 2,
+          "bDen": 8,
+          "answer": ">"
         }
       ]
     },
@@ -83,115 +96,100 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 1,
+          "start": 12,
           "ops": [
             {
               "op": "+",
-              "operand": 44
-            },
-            {
-              "op": "÷",
-              "operand": 9
-            },
-            {
-              "op": "×",
-              "operand": 9
-            },
-            {
-              "op": "×",
-              "operand": 9
+              "operand": 133
             },
             {
               "op": "−",
-              "operand": 277
+              "operand": 40
+            },
+            {
+              "op": "−",
+              "operand": 51
+            },
+            {
+              "op": "−",
+              "operand": 52
+            },
+            {
+              "op": "÷",
+              "operand": 2
             }
           ],
           "values": [
-            45,
-            5,
-            45,
-            405,
-            128
+            145,
+            105,
+            54,
+            2,
+            1
           ]
         },
         {
-          "start": 10,
+          "start": 2,
           "ops": [
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "×",
+              "operand": 8
+            },
             {
               "op": "−",
               "operand": 1
             },
             {
-              "op": "÷",
-              "operand": 9
-            },
-            {
-              "op": "×",
-              "operand": 7
-            },
-            {
-              "op": "+",
-              "operand": 110
-            },
-            {
               "op": "−",
-              "operand": 59
+              "operand": 3
+            },
+            {
+              "op": "÷",
+              "operand": 4
             }
           ],
           "values": [
-            9,
             1,
+            8,
             7,
-            117,
-            58
+            4,
+            1
           ]
         }
       ]
     },
     {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "sequence": [
-            6,
-            15,
-            24,
-            33,
-            null
-          ],
-          "answer": 42
+          "number": 58292,
+          "place": "hundreds",
+          "answer": 200
         },
         {
-          "sequence": [
-            6,
-            106,
-            206,
-            306,
-            null
-          ],
-          "answer": 406
+          "number": 37204,
+          "place": "tens",
+          "answer": 0
         },
         {
-          "sequence": [
-            6,
-            31,
-            null,
-            81,
-            106
-          ],
-          "answer": 56
+          "number": 44339,
+          "place": "thousands",
+          "answer": 4000
         },
         {
-          "sequence": [
-            8,
-            58,
-            108,
-            158,
-            null
-          ],
-          "answer": 208
+          "number": 12751,
+          "place": "thousands",
+          "answer": 2000
+        },
+        {
+          "number": 57604,
+          "place": "hundreds",
+          "answer": 600
         }
       ]
     }
@@ -199,7 +197,8 @@
   "load": {
     "maxTier": 5,
     "steps": 8,
-    "score": 47
+    "score": 48,
+    "stars": 4
   },
   "seed": 51,
   "createdAt": "2026-06-04T00:00:00.000Z"

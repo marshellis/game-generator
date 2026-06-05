@@ -13,35 +13,35 @@
       "items": [
         {
           "numbers": [
-            33,
-            11,
-            20,
-            13,
-            25
+            16,
+            23,
+            5,
+            7,
+            19
           ],
-          "answerIndex": 0,
+          "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            5,
-            1,
-            6,
+            8,
             3,
-            2
+            5,
+            7,
+            15
           ],
-          "answerIndex": 2,
+          "answerIndex": 4,
           "op": "×"
         },
         {
           "numbers": [
-            17,
-            21,
-            7,
             14,
-            1
+            11,
+            16,
+            2,
+            5
           ],
-          "answerIndex": 1,
+          "answerIndex": 2,
           "op": "+"
         }
       ]
@@ -52,12 +52,28 @@
       "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "left": 35,
-          "op": "÷",
-          "right": 5,
-          "result": 7,
+          "left": 602,
+          "op": "−",
+          "right": 467,
+          "result": 135,
           "blank": "right",
-          "answer": 5
+          "answer": 467
+        },
+        {
+          "left": 6,
+          "op": "×",
+          "right": 9,
+          "result": 54,
+          "blank": "left",
+          "answer": 6
+        },
+        {
+          "left": 18,
+          "op": "÷",
+          "right": 9,
+          "result": 2,
+          "blank": "right",
+          "answer": 9
         },
         {
           "left": 27,
@@ -68,91 +84,57 @@
           "answer": 9
         },
         {
-          "left": 367,
-          "op": "+",
-          "right": 768,
-          "result": 1135,
-          "blank": "left",
-          "answer": 367
+          "left": 3,
+          "op": "×",
+          "right": 8,
+          "result": 24,
+          "blank": "result",
+          "answer": 24
         },
         {
-          "left": 49,
+          "left": 14,
           "op": "÷",
           "right": 7,
-          "result": 7,
-          "blank": "left",
-          "answer": 49
-        },
-        {
-          "left": 64,
-          "op": "÷",
-          "right": 8,
-          "result": 8,
+          "result": 2,
           "blank": "result",
-          "answer": 8
-        },
-        {
-          "left": 776,
-          "op": "+",
-          "right": 842,
-          "result": 1618,
-          "blank": "right",
-          "answer": 842
+          "answer": 2
         }
       ]
     },
     {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "operands": [
-            8,
-            9,
-            2
-          ],
-          "ops": [
-            "×",
-            "×"
-          ],
-          "target": 144
+          "leftText": "423",
+          "rightText": "521",
+          "answer": "<"
         },
         {
-          "operands": [
-            1,
-            4,
-            7
-          ],
-          "ops": [
-            "×",
-            "+"
-          ],
-          "target": 11
+          "leftText": "10 + 12",
+          "rightText": "24",
+          "answer": "<"
         },
         {
-          "operands": [
-            5,
-            8,
-            6
-          ],
-          "ops": [
-            "+",
-            "−"
-          ],
-          "target": 7
+          "leftText": "416",
+          "rightText": "321",
+          "answer": ">"
         },
         {
-          "operands": [
-            3,
-            7,
-            1
-          ],
-          "ops": [
-            "×",
-            "×"
-          ],
-          "target": 21
+          "leftText": "9 × 10",
+          "rightText": "89",
+          "answer": ">"
+        },
+        {
+          "leftText": "418",
+          "rightText": "418",
+          "answer": "="
+        },
+        {
+          "leftText": "570",
+          "rightText": "570",
+          "answer": "="
         }
       ]
     },
@@ -163,11 +145,19 @@
       "items": [
         {
           "kind": "compare",
-          "aNum": 4,
-          "aDen": 5,
-          "bNum": 1,
+          "aNum": 5,
+          "aDen": 3,
+          "bNum": 3,
           "bDen": 8,
           "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 5,
+          "bNum": 2,
+          "bDen": 6,
+          "answer": "<"
         },
         {
           "kind": "equiv",
@@ -178,35 +168,28 @@
         },
         {
           "kind": "compare",
-          "aNum": 2,
+          "aNum": 3,
           "aDen": 2,
-          "bNum": 3,
+          "bNum": 5,
           "bDen": 4,
           "answer": ">"
         },
         {
           "kind": "compare",
-          "aNum": 4,
-          "aDen": 4,
-          "bNum": 2,
-          "bDen": 3,
-          "answer": ">"
-        },
-        {
-          "kind": "compare",
           "aNum": 5,
-          "aDen": 2,
-          "bNum": 2,
-          "bDen": 5,
-          "answer": ">"
+          "aDen": 8,
+          "bNum": 5,
+          "bDen": 3,
+          "answer": "<"
         }
       ]
     }
   ],
   "load": {
     "maxTier": 4,
-    "steps": 6,
-    "score": 45
+    "steps": 4,
+    "score": 36,
+    "stars": 3
   },
   "seed": 42,
   "createdAt": "2026-06-04T00:00:00.000Z"

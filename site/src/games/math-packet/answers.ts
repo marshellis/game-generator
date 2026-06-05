@@ -37,5 +37,12 @@ export function keyForActivity(act: Activity): string[] {
       return act.items.map((it) => `${it.answer}¢`);
     case "stdAlgorithm":
       return act.items.map((it) => `${it.a} ${it.op} ${it.b} = ${it.answer}`);
+    case "match":
+      return act.items.map((it) => String(it.answer));
+    case "sumChain":
+      return act.items.map((it) => {
+        const subs = it.subClusters.map((c) => c.numbers[c.answerIndex]).join(", ");
+        return `${subs} → ${it.final.numbers[it.final.answerIndex]}`;
+      });
   }
 }

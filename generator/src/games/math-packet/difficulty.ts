@@ -24,6 +24,7 @@ export const TIER: Record<Activity["type"], number> = {
   pattern: 2,
   placeValue: 2,
   coinBubble: 2,
+  match: 2,
   rounding: 3,
   missingNumber: 3,
   findTheSum: 3,
@@ -33,6 +34,7 @@ export const TIER: Record<Activity["type"], number> = {
   fraction: 4,
   orderOfOps: 4,
   snake: 5,
+  sumChain: 5,
 };
 
 const digitsOf = (n: number): number => Math.abs(Math.trunc(n)).toString().length;
@@ -56,19 +58,30 @@ function stepsFor(act: Activity): number {
       return Math.max(...act.items.map((i) => i.ops.length));
     case "orderOfOps":
       return Math.max(...act.items.map((i) => i.ops.length)) + 1;
+    case "sumChain":
+      return Math.max(...act.items.map((i) => i.subClusters.length + 1));
     default:
       return 1;
   }
+}
+
+/** A stored, grade-independent 1–5 difficulty rating from the absolute score. */
+export function starsFor(score: number): number {
+  if (score <= 22) return 1;
+  if (score <= 31) return 2;
+  if (score <= 40) return 3;
+  if (score <= 49) return 4;
+  return 5;
 }
 
 export function scoreActivity(act: Activity): Load {
   const tier = TIER[act.type];
   const steps = stepsFor(act);
   const score = tier * 2 + steps + magnitudeLoad(act);
-  return { maxTier: tier, steps, score };
+  return { maxTier: tier, steps, score, stars: starsFor(score) };
 }
 
-/** Aggregate over a packet: max tier, total steps, summed score. */
+/** Aggregate over a packet: max tier, total steps, summed score, 1–5 stars. */
 export function scorePacket(activities: Activity[]): Load {
   let maxTier = 0, steps = 0, score = 0;
   for (const act of activities) {
@@ -77,7 +90,7 @@ export function scorePacket(activities: Activity[]): Load {
     steps += l.steps;
     score += l.score;
   }
-  return { maxTier, steps, score };
+  return { maxTier, steps, score, stars: starsFor(score) };
 }
 
 /**

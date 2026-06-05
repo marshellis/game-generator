@@ -150,6 +150,31 @@ function checkActivity(act: Activity): void {
         expect(it.answer).toBeGreaterThanOrEqual(0); // subtraction never negative
       }
       break;
+    case "match":
+      for (const it of act.items) {
+        expect(it.options).toContain(it.answer); // the correct value is selectable
+        expect(new Set(it.options).size).toBe(it.options.length); // distinct options
+        if (it.prompt.kind === "tenFrame") expect(it.prompt.dots).toBe(it.answer);
+        else expect(it.prompt.parts.reduce((a, b) => a + b, 0)).toBe(it.answer);
+      }
+      break;
+    case "sumChain":
+      for (const it of act.items) {
+        // sub-cluster answers populate the final cluster
+        const subAnswers = it.subClusters.map((c) => c.numbers[c.answerIndex]!);
+        expect([...it.final.numbers].sort((a, b) => a - b)).toEqual([...subAnswers].sort((a, b) => a - b));
+        // each sub-cluster is itself a valid single-magic find-the-sum
+        for (const c of it.subClusters) {
+          const m = c.numbers.filter((n, i) =>
+            c.numbers.some((x, j) => c.numbers.some((y, k) => j < k && j !== i && k !== i && x + y === n)),
+          );
+          expect(m).toEqual([c.numbers[c.answerIndex]]);
+        }
+        // the final circled number = sum of the other two
+        const others = it.final.numbers.filter((_, i) => i !== it.final.answerIndex);
+        expect(others.reduce((a, b) => a + b, 0)).toBe(it.final.numbers[it.final.answerIndex]);
+      }
+      break;
     case "snake":
       for (const it of act.items) {
         expect(it.values.length).toBe(it.ops.length);

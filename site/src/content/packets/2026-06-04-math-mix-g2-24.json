@@ -1,10 +1,10 @@
 {
-  "id": "2026-06-04-mind-stretch-g1-13",
-  "title": "Mind Stretch",
-  "blurb": "A 3-puzzle mix for Grade 1.",
+  "id": "2026-06-04-math-mix-g2-24",
+  "title": "Math Mix",
+  "blurb": "A 3-puzzle mix for Grade 2.",
   "gameType": "math-packet",
-  "gradeLabel": "Grade 1",
-  "difficulty": "g1",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
   "activities": [
     {
       "type": "findTheSum",
@@ -13,32 +13,32 @@
       "items": [
         {
           "numbers": [
-            2,
-            5,
             4,
-            1
-          ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            9,
-            6,
-            5,
-            14
-          ],
-          "answerIndex": 3,
-          "op": "+"
-        },
-        {
-          "numbers": [
+            3,
             7,
-            8,
-            14,
-            15
+            2
           ],
-          "answerIndex": 3,
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            11,
+            5,
+            15,
+            10
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            4,
+            7,
+            3
+          ],
+          "answerIndex": 2,
           "op": "+"
         }
       ]
@@ -49,10 +49,10 @@
       "instructions": "Fill in the number that makes 10.",
       "items": [
         {
-          "known": 1,
+          "known": 3,
           "target": 10,
           "op": "+",
-          "answer": 9
+          "answer": 7
         },
         {
           "known": 7,
@@ -61,16 +61,10 @@
           "answer": 3
         },
         {
-          "known": 4,
+          "known": 6,
           "target": 10,
           "op": "+",
-          "answer": 6
-        },
-        {
-          "known": 7,
-          "target": 10,
-          "op": "+",
-          "answer": 3
+          "answer": 4
         },
         {
           "known": 1,
@@ -83,29 +77,44 @@
           "target": 10,
           "op": "+",
           "answer": 1
+        },
+        {
+          "known": 5,
+          "target": 10,
+          "op": "+",
+          "answer": 5
         }
       ]
     },
     {
-      "type": "tenFrame",
-      "title": "How Many?",
-      "instructions": "Write how many dots are filled in each ten-frame.",
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "dots": 8,
-          "answer": 8
+          "number": 20,
+          "place": "ones",
+          "answer": 0
         },
         {
-          "dots": 7,
-          "answer": 7
+          "number": 68,
+          "place": "tens",
+          "answer": 60
         },
         {
-          "dots": 5,
-          "answer": 5
+          "number": 11,
+          "place": "ones",
+          "answer": 1
         },
         {
-          "dots": 7,
-          "answer": 7
+          "number": 29,
+          "place": "tens",
+          "answer": 20
+        },
+        {
+          "number": 52,
+          "place": "ones",
+          "answer": 2
         }
       ]
     }
@@ -113,9 +122,9 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 20,
-    "stars": 1
+    "score": 23,
+    "stars": 2
   },
-  "seed": 13,
+  "seed": 24,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

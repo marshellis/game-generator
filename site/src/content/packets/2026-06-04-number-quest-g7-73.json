@@ -13,36 +13,36 @@
       "items": [
         {
           "numbers": [
-            2,
-            1,
-            9,
-            12,
+            40,
+            16,
+            14,
+            39,
+            26
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            37,
+            10,
+            14,
+            23,
             6
           ],
-          "answerIndex": 3,
-          "op": "×"
+          "answerIndex": 0,
+          "op": "+"
         },
         {
           "numbers": [
-            26,
-            32,
-            7,
-            56,
-            8
+            20,
+            40,
+            60,
+            46,
+            39
           ],
-          "answerIndex": 3,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            9,
-            45,
-            26,
-            5,
-            43
-          ],
-          "answerIndex": 1,
-          "op": "×"
+          "answerIndex": 2,
+          "op": "+"
         }
       ]
     },
@@ -52,83 +52,28 @@
       "instructions": "Solve each one. Line up the digits and regroup when you need to.",
       "items": [
         {
-          "a": 848260,
+          "a": 822465,
           "op": "+",
-          "b": 581990,
-          "answer": 1430250
+          "b": 679360,
+          "answer": 1501825
         },
         {
-          "a": 518027,
+          "a": 717232,
           "op": "−",
-          "b": 169838,
-          "answer": 348189
+          "b": 473325,
+          "answer": 243907
         },
         {
-          "a": 911539,
-          "op": "−",
-          "b": 379580,
-          "answer": 531959
-        },
-        {
-          "a": 583470,
+          "a": 703991,
           "op": "+",
-          "b": 651877,
-          "answer": 1235347
-        }
-      ]
-    },
-    {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
-      "items": [
-        {
-          "left": 9,
-          "op": "×",
-          "right": 9,
-          "result": 81,
-          "blank": "right",
-          "answer": 9
+          "b": 183959,
+          "answer": 887950
         },
         {
-          "left": 28,
-          "op": "÷",
-          "right": 7,
-          "result": 4,
-          "blank": "left",
-          "answer": 28
-        },
-        {
-          "left": 10,
-          "op": "×",
-          "right": 7,
-          "result": 70,
-          "blank": "right",
-          "answer": 7
-        },
-        {
-          "left": 5,
-          "op": "×",
-          "right": 6,
-          "result": 30,
-          "blank": "result",
-          "answer": 30
-        },
-        {
-          "left": 42,
-          "op": "÷",
-          "right": 7,
-          "result": 6,
-          "blank": "left",
-          "answer": 42
-        },
-        {
-          "left": 10,
-          "op": "×",
-          "right": 6,
-          "result": 60,
-          "blank": "result",
-          "answer": 60
+          "a": 612396,
+          "op": "+",
+          "b": 312887,
+          "answer": 925283
         }
       ]
     },
@@ -138,19 +83,74 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Theo has 108 marbles. Mara gives Theo 56 more. How many does Theo have now?",
-          "answer": 164,
+          "text": "Omar shares 15 marbles equally among 5 friends. How many does each friend get?",
+          "answer": 3,
           "unit": "marbles"
         },
         {
-          "text": "Theo shares 32 books equally among 8 friends. How many does each friend get?",
+          "text": "Theo shares 12 books equally among 3 friends. How many does each friend get?",
           "answer": 4,
           "unit": "books"
         },
         {
-          "text": "Ivy has 114 books. Mara gives Ivy 168 more. How many does Ivy have now?",
-          "answer": 282,
-          "unit": "books"
+          "text": "Omar has 69 apples. Zoe gives Omar 115 more. How many does Omar have now?",
+          "answer": 184,
+          "unit": "apples"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 286,
+          "op": "+",
+          "right": 997,
+          "result": 1283,
+          "blank": "right",
+          "answer": 997
+        },
+        {
+          "left": 12,
+          "op": "×",
+          "right": 9,
+          "result": 108,
+          "blank": "left",
+          "answer": 12
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 10,
+          "result": 20,
+          "blank": "result",
+          "answer": 20
+        },
+        {
+          "left": 5,
+          "op": "×",
+          "right": 3,
+          "result": 15,
+          "blank": "left",
+          "answer": 5
+        },
+        {
+          "left": 926,
+          "op": "−",
+          "right": 311,
+          "result": 615,
+          "blank": "result",
+          "answer": 615
+        },
+        {
+          "left": 550,
+          "op": "−",
+          "right": 188,
+          "result": 362,
+          "blank": "right",
+          "answer": 188
         }
       ]
     }
@@ -158,7 +158,8 @@
   "load": {
     "maxTier": 3,
     "steps": 4,
-    "score": 42
+    "score": 44,
+    "stars": 4
   },
   "seed": 73,
   "createdAt": "2026-06-04T00:00:00.000Z"
