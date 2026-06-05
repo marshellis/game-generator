@@ -4,10 +4,10 @@ import { N, E, S, W } from "../src/games/maze/types";
 
 const adj = (a: any, b: any) => Math.abs(a.r - b.r) + Math.abs(a.c - b.c) === 1;
 const openBetween = (open: number[][], a: any, b: any) => {
-  if (b.r === a.r - 1) return !!(open[a.r][a.c] & N);
-  if (b.r === a.r + 1) return !!(open[a.r][a.c] & S);
-  if (b.c === a.c + 1) return !!(open[a.r][a.c] & E);
-  return !!(open[a.r][a.c] & W);
+  if (b.r === a.r - 1) return !!(open[a.r]![a.c]! & N);
+  if (b.r === a.r + 1) return !!(open[a.r]![a.c]! & S);
+  if (b.c === a.c + 1) return !!(open[a.r]![a.c]! & E);
+  return !!(open[a.r]![a.c]! & W);
 };
 
 describe("generateMaze", () => {

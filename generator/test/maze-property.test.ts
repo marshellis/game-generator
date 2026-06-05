@@ -3,10 +3,10 @@ import { generateMaze } from "../src/games/maze/generate";
 import { N, E, S, W } from "../src/games/maze/types";
 
 const openBetween = (open: number[][], a: any, b: any) => {
-  if (b.r === a.r - 1) return !!(open[a.r][a.c] & N);
-  if (b.r === a.r + 1) return !!(open[a.r][a.c] & S);
-  if (b.c === a.c + 1) return !!(open[a.r][a.c] & E);
-  return !!(open[a.r][a.c] & W);
+  if (b.r === a.r - 1) return !!(open[a.r]![a.c]! & N);
+  if (b.r === a.r + 1) return !!(open[a.r]![a.c]! & S);
+  if (b.c === a.c + 1) return !!(open[a.r]![a.c]! & E);
+  return !!(open[a.r]![a.c]! & W);
 };
 
 describe("property: every generated maze is valid", () => {

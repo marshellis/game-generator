@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 import { generatePuzzle } from "./games/logic-grid/generate";
 import type { Difficulty } from "./games/logic-grid/difficulty";
 import { generatePacket } from "./games/math-packet/generate";
+import { generateMaze } from "./games/maze/generate";
 
 export interface CliArgs {
-  game: "logic-grid" | "math-packet";
+  game: "logic-grid" | "math-packet" | "maze";
   difficulty: string;
   seed: number;
   date: string;
@@ -28,7 +29,7 @@ export function parseArgs(argv: string[]): CliArgs {
   const game = (get("--game") ?? "logic-grid") as CliArgs["game"];
   return {
     game,
-    difficulty: get("--difficulty") ?? (game === "math-packet" ? "g3" : "g5"),
+    difficulty: get("--difficulty") ?? (game === "math-packet" ? "g3" : game === "maze" ? "g3" : "g5"),
     seed: Number(get("--seed") ?? "1"),
     date: get("--date") ?? new Date().toISOString().slice(0, 10),
     gradeLabel: get("--grade"),
@@ -46,12 +47,27 @@ export function packetOutputPathFor(id: string): string {
   return `../site/src/content/packets/${id}.json`;
 }
 
+/** Path (relative to generator/) of the JSON file for a given maze id. */
+export function mazeOutputPathFor(id: string): string {
+  return `../site/src/content/mazes/${id}.json`;
+}
+
 function main(): void {
   // here = generator/src; generatorRoot = generator/; rel = ../site/...
   // resolve(generatorRoot, "../site/...") => <repo>/site/...
   const here = dirname(fileURLToPath(import.meta.url)); // generator/src
   const generatorRoot = resolve(here, ".."); // generator/
   const args = parseArgs(process.argv.slice(2));
+
+  if (args.game === "maze") {
+    const maze = generateMaze(args);
+    const abs = resolve(generatorRoot, mazeOutputPathFor(maze.id));
+    mkdirSync(dirname(abs), { recursive: true });
+    writeFileSync(abs, JSON.stringify(maze, null, 2) + "\n");
+    console.log(`Wrote ${abs}`);
+    console.log(`Title: ${maze.title} — ${maze.cols}x${maze.rows} — difficulty ${maze.difficulty}`);
+    return;
+  }
 
   if (args.game === "math-packet") {
     const packet = generatePacket(args);
