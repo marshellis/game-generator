@@ -62,7 +62,7 @@
           "item": 1
         }
       },
-      "text": "Scarlet's treasure is not Ruby."
+      "text": "Scarlet's treasure is not the Ruby."
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 1
         }
       },
-      "text": "Bones's job is not Cook."
+      "text": "Bones is not the Cook."
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 0
         }
       },
-      "text": "Scarlet's job is not Captain."
+      "text": "Scarlet is not the Captain."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 0
         }
       },
-      "text": "The pirate whose treasure is Gold Tooth does not have Captain for their job."
+      "text": "Whoever's got the Gold Tooth is not the Captain."
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 1
         }
       },
-      "text": "The pirate whose treasure is Ruby has Cook for their job."
+      "text": "Whoever's got the Ruby is the Cook."
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 1
         }
       },
-      "text": "Patch's treasure is Ruby."
+      "text": "Patch's treasure is the Ruby."
     },
     {
       "id": "c7",
@@ -152,7 +152,7 @@
           "item": 2
         }
       },
-      "text": "Bones's treasure is Old Map."
+      "text": "Bones's treasure is the Old Map."
     },
     {
       "id": "c8",
@@ -167,7 +167,7 @@
           "item": 2
         }
       },
-      "text": "The pirate whose treasure is Gold Tooth has Lookout for their job."
+      "text": "Whoever's got the Gold Tooth is the Lookout."
     }
   ],
   "seed": 1,

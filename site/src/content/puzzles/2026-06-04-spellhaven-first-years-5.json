@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "The wizard whose hat is Blue is either Maple or Dorian."
+      "text": "The Blue hat belongs to either Maple or Dorian."
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Cat has either Glow or Shrink for their potion."
+      "text": "The Cat's wizard brews either Glow or Shrink."
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Sneeze has either Red or Green for their hat."
+      "text": "The Sneeze-potion wizard wears a Red or Green hat."
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Raven has either Fizzy or Shrink for their potion."
+      "text": "The Raven's wizard brews either Fizzy or Shrink."
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Shrink has either Toad or Owl for their familiar."
+      "text": "The Shrink-potion wizard's familiar is the Toad or the Owl."
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Owl has either Red or Blue for their hat."
+      "text": "The Owl's wizard wears a Red or Blue hat."
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Pip's potion is either Shrink or Glow."
+      "text": "Pip brews either Shrink or Glow."
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "The wizard whose hat is Green has either Cat or Owl for their familiar."
+      "text": "The Green-hatted wizard's familiar is the Cat or the Owl."
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Glow is either Dorian or Pip."
+      "text": "The Glow potion is brewed by either Dorian or Pip."
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "Pip's potion is either Shrink or Fizzy."
+      "text": "Pip brews either Shrink or Fizzy."
     },
     {
       "id": "c11",
@@ -293,7 +293,7 @@
           "item": 3
         }
       },
-      "text": "Pip's potion is Shrink."
+      "text": "Pip brews the Shrink potion."
     }
   ],
   "seed": 5,

@@ -35,7 +35,11 @@ const puzzle = entry!.data;
     </button>
     <a href={`/puzzle/${puzzle.id}/print`}
        class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">
-      Print worksheet →
+      Print
+    </a>
+    <a href={`/puzzle/${puzzle.id}/answer`}
+       class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">
+      Print answer key
     </a>
     {/* Reveal is pushed to the right and styled distinctly so it isn't clicked by accident. */}
     <button id="reveal" aria-pressed="false"

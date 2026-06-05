@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The pirate whose treasure is Cursed Coin is either Patch or Scarlet."
+      "text": "The Cursed Coin belongs to Patch or Scarlet."
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The pirate whose years at sea is 3 is either Scarlet or Patch."
+      "text": "The pirate with 3 years at sea is Scarlet or Patch."
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "Bones's treasure is either Ruby or Cursed Coin."
+      "text": "Bones's treasure is the Ruby or the Cursed Coin."
     },
     {
       "id": "c4",
@@ -148,7 +148,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose job is Captain is saltier than the pirate whose job is Cook."
+      "text": "The Captain is saltier than the Cook."
     },
     {
       "id": "c5",
@@ -180,7 +180,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Cursed Coin is saltier than the pirate whose treasure is Gold Tooth."
+      "text": "The Cursed Coin's owner is saltier than the Gold Tooth's owner."
     },
     {
       "id": "c7",
@@ -196,7 +196,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Gold Tooth is saltier than the pirate whose job is Swabbie."
+      "text": "The Gold Tooth's owner is saltier than the Swabbie."
     },
     {
       "id": "c8",
@@ -212,7 +212,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Ruby is saltier than the pirate whose job is Lookout."
+      "text": "The Ruby's owner is saltier than the Lookout."
     },
     {
       "id": "c9",
@@ -227,7 +227,7 @@
           "item": 3
         }
       },
-      "text": "The pirate whose treasure is Old Map has Swabbie for their job."
+      "text": "The Old Map's owner is the Swabbie."
     }
   ],
   "seed": 6,

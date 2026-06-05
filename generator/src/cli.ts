@@ -2,7 +2,6 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generatePuzzle } from "./games/logic-grid/generate";
-import { aiPhrasePuzzle } from "./games/logic-grid/ai-phraser";
 import type { Difficulty } from "./games/logic-grid/difficulty";
 import { generatePacket } from "./games/math-packet/generate";
 
@@ -13,8 +12,6 @@ export interface CliArgs {
   date: string;
   gradeLabel?: string;
   overrides?: Partial<Difficulty>;
-  /** Rewrite clue text with the AI phraser (needs ANTHROPIC_API_KEY). */
-  ai?: boolean;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -36,7 +33,6 @@ export function parseArgs(argv: string[]): CliArgs {
     date: get("--date") ?? new Date().toISOString().slice(0, 10),
     gradeLabel: get("--grade"),
     overrides: Object.keys(overrides).length ? overrides : undefined,
-    ai: argv.includes("--ai"),
   };
 }
 
@@ -50,7 +46,7 @@ export function packetOutputPathFor(id: string): string {
   return `../site/src/content/packets/${id}.json`;
 }
 
-async function main(): Promise<void> {
+function main(): void {
   // here = generator/src; generatorRoot = generator/; rel = ../site/...
   // resolve(generatorRoot, "../site/...") => <repo>/site/...
   const here = dirname(fileURLToPath(import.meta.url)); // generator/src
@@ -67,23 +63,17 @@ async function main(): Promise<void> {
     return;
   }
 
-  let puzzle = generatePuzzle(args);
-  if (args.ai) {
-    console.log("Rewriting clues with the AI phraser…");
-    puzzle = await aiPhrasePuzzle(puzzle);
-  }
+  const puzzle = generatePuzzle(args);
   const rel = outputPathFor(puzzle.id); // ../site/src/content/puzzles/<id>.json
   const abs = resolve(generatorRoot, rel); // <repo>/site/src/content/puzzles/<id>.json
   mkdirSync(dirname(abs), { recursive: true });
   writeFileSync(abs, JSON.stringify(puzzle, null, 2) + "\n");
   console.log(`Wrote ${abs}`);
-  console.log(`Title: ${puzzle.title} — ${puzzle.clues.length} clues — difficulty ${puzzle.difficulty}${args.ai ? " (AI-phrased)" : ""}`);
+  console.log(`Title: ${puzzle.title} — ${puzzle.clues.length} clues — difficulty ${puzzle.difficulty}`);
+  console.log("Clues use plain template phrasing. Rewrite the text fields in-session for theme-flavored, funny wording (keep `structured` unchanged).");
 }
 
 // Run only when executed directly (not when imported by tests).
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+  main();
 }

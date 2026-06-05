@@ -98,7 +98,7 @@
           "item": 1
         }
       },
-      "text": "Nova's module is Blue Bay."
+      "text": "Nova bunks in the Blue Bay."
     },
     {
       "id": "c3",
@@ -113,7 +113,7 @@
           "item": 3
         }
       },
-      "text": "Pip's module is Dome."
+      "text": "Pip works out of the Dome."
     },
     {
       "id": "c4",
@@ -128,7 +128,7 @@
           "item": 3
         }
       },
-      "text": "Nova's pet robot is Gizmo."
+      "text": "Nova's robot sidekick is Gizmo."
     },
     {
       "id": "c5",
@@ -143,7 +143,7 @@
           "item": 1
         }
       },
-      "text": "Quill's pet robot is Chip."
+      "text": "Quill's robot sidekick is Chip."
     },
     {
       "id": "c6",
@@ -158,7 +158,7 @@
           "item": 0
         }
       },
-      "text": "The astronaut whose job is Cook does not have Red Bay for their module."
+      "text": "The Cook is not stationed in the Red Bay."
     },
     {
       "id": "c7",
@@ -173,7 +173,7 @@
           "item": 3
         }
       },
-      "text": "The astronaut whose job is Pilot has Gizmo for their pet robot."
+      "text": "The Pilot's robot is Gizmo."
     },
     {
       "id": "c8",
@@ -188,7 +188,7 @@
           "item": 0
         }
       },
-      "text": "The astronaut whose job is Engineer has Bolt for their pet robot."
+      "text": "The Engineer's robot is Bolt."
     },
     {
       "id": "c9",
@@ -203,7 +203,7 @@
           "item": 2
         }
       },
-      "text": "The astronaut whose job is Medic has Dot for their pet robot."
+      "text": "The Medic's robot is Dot."
     },
     {
       "id": "c10",
@@ -218,7 +218,7 @@
           "item": 2
         }
       },
-      "text": "The astronaut whose job is Cook has Lab for their module."
+      "text": "The Cook works out of the Lab."
     }
   ],
   "seed": 99,

@@ -1,0 +1,46 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import { answerKey } from "../../../games/logic-grid/grid";
+import "../../../styles/global.css";
+import "../../../styles/print.css";
+
+export async function getStaticPaths() {
+  const puzzles = await getCollection("puzzles");
+  return puzzles.map((p) => ({ params: { id: p.data.id } }));
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("puzzles", id!);
+const puzzle = entry!.data;
+const key = answerKey(puzzle);
+const headers = puzzle.categories.map((c) => c.name);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{puzzle.title} — answer key</title>
+  </head>
+  <body class="bg-white p-6 text-slate-900">
+    <p class="no-print mb-4 text-sm text-slate-500">
+      <a href={`/puzzle/${puzzle.id}`} class="text-brand-600 no-underline hover:underline">← Back</a>
+      · Use your browser's Print → Save as PDF.
+      · <a href={`/puzzle/${puzzle.id}/print`} class="text-brand-600 no-underline hover:underline">Worksheet →</a>
+    </p>
+
+    <section class="answer-key">
+      <h1 class="text-2xl font-extrabold tracking-tight">Answer Key</h1>
+      <p class="mt-1 mb-4 text-slate-600">{puzzle.title}</p>
+      <table class="border-collapse">
+        <thead>
+          <tr>{headers.map((h) => <th class="border border-slate-700 px-3 py-1 text-sm font-semibold">{h}</th>)}</tr>
+        </thead>
+        <tbody>
+          {key.map((row) => (
+            <tr>{headers.map((h) => <td class="border border-slate-700 px-3 py-1 text-center text-sm">{row[h]}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>
