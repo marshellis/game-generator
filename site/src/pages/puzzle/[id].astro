@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
+import GameHeader from "../../components/GameHeader.astro";
 import LogicGrid from "../../components/LogicGrid.astro";
 
 export async function getStaticPaths() {
@@ -13,41 +14,18 @@ const entry = await getEntry("puzzles", id!);
 const puzzle = entry!.data;
 ---
 <Base title={`${puzzle.title} — Marshellis Games`}>
-  <nav class="mb-4 text-sm text-slate-500">
-    <a href="/" class="text-slate-500 no-underline hover:underline">All games</a>
-    <span class="px-1">/</span>
-    <a href="/logic-grid" class="text-slate-500 no-underline hover:underline">Logic Grid</a>
-    <span class="px-1">/</span>
-    <a href={`/logic-grid/grade/${puzzle.difficulty}`} class="capitalize text-slate-500 no-underline hover:underline">{puzzle.gradeLabel}</a>
-  </nav>
-
-  <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">{puzzle.title}</h1>
-  <p class="mt-1 max-w-2xl text-slate-500">{puzzle.themeBlurb}</p>
-
-  <div class="mt-5 flex flex-wrap items-center gap-3">
-    <button id="check"
-            class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
-      Check
-    </button>
-    <button id="clear"
-            class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-      Clear
-    </button>
-    <a href={`/puzzle/${puzzle.id}/print`}
-       class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">
-      Print
-    </a>
-    <a href={`/puzzle/${puzzle.id}/answer`}
-       class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">
-      Print answer key
-    </a>
-    {/* Reveal is pushed to the right and styled distinctly so it isn't clicked by accident. */}
-    <button id="reveal" aria-pressed="false"
-            class="ml-auto rounded-lg border border-amber-400 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 transition hover:bg-amber-100">
-      👁 Reveal solution
-    </button>
-  </div>
-  <p id="result" class="mt-3 min-h-5 text-sm font-semibold text-slate-700"></p>
+  <GameHeader
+    crumbs={[
+      { label: "All games", href: "/" },
+      { label: "Logic Grid", href: "/logic-grid" },
+      { label: puzzle.gradeLabel, href: `/logic-grid/grade/${puzzle.difficulty}` },
+    ]}
+    title={puzzle.title}
+    blurb={puzzle.themeBlurb}
+    printHref={`/puzzle/${puzzle.id}/print`}
+    answerHref={`/puzzle/${puzzle.id}/answer`}
+    revealNoun="solution"
+  />
 
   <div class="mt-6">
     <LogicGrid puzzle={puzzle} interactive={true} />

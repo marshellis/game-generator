@@ -9,7 +9,6 @@
  * keypads.
  */
 import type { CollectionEntry } from "astro:content";
-import { keyForActivity } from "../games/math-packet/answers";
 import SignChoice from "./SignChoice.astro";
 
 interface Props {
@@ -251,15 +250,4 @@ const underlineIndex = (n: number, place: string) => {
       )}
     </section>
   ))}
-
-  {mode === "print" && (
-    <section class="answer-key mt-4">
-      <h2 class="text-lg font-bold">Answer Key — {packet.title}</h2>
-      <ol class="mt-2 flex flex-col gap-1 text-sm">
-        {acts.map((act, ai) => (
-          <li><span class="font-semibold">{ai + 1}. {act.title}:</span> {keyForActivity(act).join("  ·  ")}</li>
-        ))}
-      </ol>
-    </section>
-  )}
 </div>
