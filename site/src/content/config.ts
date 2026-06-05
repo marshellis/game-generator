@@ -182,4 +182,27 @@ const packets = defineCollection({
   }),
 });
 
-export const collections = { puzzles, packets };
+const cell = z.object({ r: z.number(), c: z.number() });
+const mazes = defineCollection({
+  type: "data",
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    themeBlurb: z.string(),
+    gameType: z.literal("maze"),
+    gradeLabel: z.string(),
+    difficulty: z.string(),
+    cols: z.number(),
+    rows: z.number(),
+    open: z.array(z.array(z.number())),
+    start: cell,
+    end: cell,
+    theme: z.object({ startIcon: z.string(), endIcon: z.string() }),
+    solution: z.array(cell),
+    difficultyRating: z.number(),
+    seed: z.number(),
+    createdAt: z.string(),
+  }),
+});
+
+export const collections = { puzzles, packets, mazes };
