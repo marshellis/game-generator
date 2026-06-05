@@ -10,6 +10,7 @@
  */
 import type { CollectionEntry } from "astro:content";
 import { keyForActivity } from "../games/math-packet/answers";
+import SignChoice from "./SignChoice.astro";
 
 interface Props {
   packet: CollectionEntry<"packets">["data"];
@@ -20,8 +21,6 @@ const acts = packet.activities;
 
 const numCls =
   "ans-num inline-block w-16 rounded-md border-2 border-slate-300 bg-white px-1 py-1 text-center text-lg font-bold text-brand-700 focus:border-brand-500 focus:outline-none";
-const signCls =
-  "ans-sign inline-block w-12 rounded-md border-2 border-slate-300 bg-white px-1 py-1 text-center text-xl font-bold text-brand-700 focus:border-brand-500 focus:outline-none";
 
 // place-value: which digit (from the left) to underline
 const underlineIndex = (n: number, place: string) => {
@@ -116,7 +115,7 @@ const underlineIndex = (n: number, place: string) => {
                 <>
                   <span>{n}</span>
                   {k < it.ops.length && (
-                    <input class={signCls} maxlength="1" data-answer-op={it.ops[k]} />
+                    <SignChoice options={["+", "−", "×"]} answer={it.ops[k]!} mode={mode} />
                   )}
                 </>
               ))}
@@ -162,7 +161,7 @@ const underlineIndex = (n: number, place: string) => {
           {act.items.map((it) => (
             <div class="flex items-center justify-center gap-3 rounded-lg bg-slate-50 px-3 py-2">
               <span class="min-w-12 text-right tabular-nums">{it.leftText}</span>
-              <input class={signCls} maxlength="1" data-answer={it.answer} />
+              <SignChoice options={["<", "=", ">"]} answer={it.answer} mode={mode} />
               <span class="min-w-12 tabular-nums">{it.rightText}</span>
             </div>
           ))}
@@ -240,7 +239,7 @@ const underlineIndex = (n: number, place: string) => {
                   <span class="inline-flex flex-col items-center leading-none">
                     <span>{it.aNum}</span><span class="border-t border-slate-700 px-1">{it.aDen}</span>
                   </span>
-                  <input class={signCls} maxlength="1" data-answer={it.answer} />
+                  <SignChoice options={["<", "=", ">"]} answer={it.answer} mode={mode} />
                   <span class="inline-flex flex-col items-center leading-none">
                     <span>{it.bNum}</span><span class="border-t border-slate-700 px-1">{it.bDen}</span>
                   </span>

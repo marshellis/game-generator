@@ -1,21 +1,51 @@
 /**
- * Client-side enhancement for a math packet: typing/tapping, answer checking,
- * reveal, and reset. Correct answers live in the DOM as data-* attributes
- * (emitted by MathPacket.astro), so this script needs no puzzle payload.
+ * Client-side enhancement for a math packet: tapping/typing, answer checking,
+ * reveal, reset, and a little celebration. Correct answers live in the DOM as
+ * data-* attributes (emitted by MathPacket.astro / SignChoice.astro), so this
+ * script needs no puzzle payload.
  */
 
 const GREEN = ["!border-green-500", "bg-green-50"];
 const RED = ["!border-red-400", "bg-red-50"];
 const CHIP_OK = ["!border-green-500", "ring-2", "ring-green-400"];
 const CHIP_BAD = ["!border-red-400", "ring-2", "ring-red-300"];
+const SEG_SEL = ["bg-brand-600", "text-white"];
+const SEG_OK = ["bg-green-500", "text-white"];
+const SEG_BAD = ["bg-red-400", "text-white"];
 
-/** Normalize a typed comparison/operator symbol to its canonical glyph. */
-function normSign(v: string): string {
-  const t = v.trim();
-  if (t === "x" || t === "X" || t === "*") return "×";
-  if (t === "-" || t === "–" || t === "—") return "−";
-  return t;
+const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+
+function shake(el: Element) {
+  if (reduceMotion()) return;
+  (el as HTMLElement).animate(
+    [{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" },
+     { transform: "translateX(-3px)" }, { transform: "translateX(3px)" }, { transform: "translateX(0)" }],
+    { duration: 320, easing: "ease-in-out" },
+  );
 }
+
+function confetti() {
+  if (reduceMotion()) return;
+  const colors = ["#4f46e5", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4", "#a855f7"];
+  for (let i = 0; i < 70; i++) {
+    const d = document.createElement("div");
+    const size = 7 + Math.random() * 8;
+    d.style.cssText =
+      `position:fixed;top:-24px;left:${Math.random() * 100}vw;width:${size}px;height:${size}px;` +
+      `background:${colors[i % colors.length]};z-index:9999;border-radius:2px;pointer-events:none;`;
+    document.body.appendChild(d);
+    const dur = 1300 + Math.random() * 1400;
+    d.animate(
+      [{ transform: `translateY(0) rotate(0deg)`, opacity: 1 },
+       { transform: `translateY(105vh) rotate(${(Math.random() < 0.5 ? -1 : 1) * (360 + Math.random() * 540)}deg)`, opacity: 0.9 }],
+      { duration: dur, easing: "cubic-bezier(.18,.6,.4,1)" },
+    );
+    setTimeout(() => d.remove(), dur);
+  }
+}
+
+const WIN = ["🎉 All {n} correct — you're a math star!", "🌟 Perfect! {n} for {n}!", "🚀 Boom! Nailed all {n}!", "🏆 Champion — {n} out of {n}!"];
+const KEEP = ["{c} of {n} — so close, fix the red ones! 💪", "{c} of {n} correct — keep going! ✨", "Nice, {c}/{n}! Try the red ones again. 🔍"];
 
 function clearStatus(el: Element) {
   el.classList.remove(...GREEN, ...RED);
@@ -23,10 +53,28 @@ function clearStatus(el: Element) {
 
 export function initPacket(root: HTMLElement): { check: () => void; reveal: () => void; reset: () => void } {
   const numInputs = () => [...root.querySelectorAll<HTMLInputElement>("input.ans-num")];
-  const signInputs = () => [...root.querySelectorAll<HTMLInputElement>("input.ans-sign")];
+  const choices = () => [...root.querySelectorAll<HTMLElement>(".js-choice")];
   const clusters = () => [...root.querySelectorAll<HTMLElement>(".js-cluster")];
 
-  // Tap-to-select for find-the-sum chips (single selection per cluster).
+  const setSeg = (btn: HTMLElement, state: "sel" | "ok" | "bad" | "none") => {
+    btn.classList.remove(...SEG_SEL, ...SEG_OK, ...SEG_BAD);
+    if (state === "sel") btn.classList.add(...SEG_SEL);
+    else if (state === "ok") btn.classList.add(...SEG_OK);
+    else if (state === "bad") btn.classList.add(...SEG_BAD);
+  };
+
+  // Tap-to-pick for symbol slots (single selection per group).
+  for (const grp of choices()) {
+    grp.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("button.seg");
+      if (!btn) return;
+      for (const b of grp.querySelectorAll<HTMLElement>("button.seg")) setSeg(b, "none");
+      setSeg(btn, "sel");
+      grp.dataset.selected = btn.dataset.val;
+    });
+  }
+
+  // Tap-to-circle for find-the-sum chips (single selection per cluster).
   for (const cl of clusters()) {
     cl.addEventListener("click", (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("button.chip");
@@ -47,13 +95,15 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
     });
   }
 
-  const result = (correct: number, total: number) => {
+  const say = (msg: string, tone: "win" | "go" | "none") => {
     const el = document.getElementById("result");
-    if (el) {
-      el.textContent = total === 0 ? "" : correct === total ? `🎉 All ${total} correct!` : `${correct} of ${total} correct — keep going!`;
-      el.className = "mt-3 min-h-5 text-sm font-semibold " + (correct === total ? "text-green-700" : "text-slate-700");
-    }
+    if (!el) return;
+    el.textContent = msg;
+    el.className =
+      "mt-3 min-h-5 text-sm font-semibold " +
+      (tone === "win" ? "text-green-700" : tone === "go" ? "text-slate-700" : "text-slate-700");
   };
+  const fill = (tpl: string, c: number, n: number) => tpl.replaceAll("{c}", String(c)).replaceAll("{n}", String(n));
 
   function check() {
     let correct = 0, total = 0;
@@ -63,15 +113,20 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
       total++;
       const ok = Number(inp.value) === Number(inp.dataset.answer);
       inp.classList.add(...(ok ? GREEN : RED));
-      if (ok) correct++;
+      if (ok) correct++; else shake(inp);
     }
-    for (const inp of signInputs()) {
-      clearStatus(inp);
-      if (inp.value.trim() === "") continue;
+    for (const grp of choices()) {
+      for (const b of grp.querySelectorAll<HTMLElement>("button.seg")) setSeg(b, "none");
+      if (grp.dataset.selected === undefined) continue;
       total++;
-      const want = inp.dataset.answer ?? inp.dataset.answerOp ?? "";
-      const ok = normSign(inp.value) === normSign(want);
-      inp.classList.add(...(ok ? GREEN : RED));
+      const ok = grp.dataset.selected === grp.dataset.answer;
+      const segs = [...grp.querySelectorAll<HTMLElement>("button.seg")];
+      const chosen = segs.find((b) => b.dataset.val === grp.dataset.selected);
+      if (chosen) setSeg(chosen, ok ? "ok" : "bad");
+      if (!ok) {
+        segs.find((b) => b.dataset.val === grp.dataset.answer)?.classList.add(...SEG_OK);
+        shake(grp);
+      }
       if (ok) correct++;
     }
     for (const cl of clusters()) {
@@ -82,31 +137,48 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
       const ok = cl.dataset.selected === cl.dataset.answerIndex;
       const chosen = chips[Number(cl.dataset.selected)];
       chosen?.classList.add(...(ok ? CHIP_OK : CHIP_BAD));
-      if (!ok) chips[Number(cl.dataset.answerIndex)]?.classList.add(...CHIP_OK);
+      if (!ok) { chips[Number(cl.dataset.answerIndex)]?.classList.add(...CHIP_OK); shake(cl); }
       if (ok) correct++;
     }
-    result(correct, total);
+
+    if (total === 0) { say("Tap a number, fill the boxes, then check.", "none"); return; }
+    if (correct === total) {
+      say(fill(WIN[Math.floor(Math.random() * WIN.length)]!, correct, total), "win");
+      confetti();
+    } else {
+      say(fill(KEEP[Math.floor(Math.random() * KEEP.length)]!, correct, total), "go");
+    }
   }
 
   function reveal() {
     for (const inp of numInputs()) { inp.value = inp.dataset.answer ?? ""; clearStatus(inp); inp.classList.add(...GREEN); }
-    for (const inp of signInputs()) { inp.value = inp.dataset.answer ?? inp.dataset.answerOp ?? ""; clearStatus(inp); inp.classList.add(...GREEN); }
+    for (const grp of choices()) {
+      const segs = [...grp.querySelectorAll<HTMLElement>("button.seg")];
+      segs.forEach((b) => setSeg(b, b.dataset.val === grp.dataset.answer ? "ok" : "none"));
+      grp.dataset.selected = grp.dataset.answer;
+    }
     for (const cl of clusters()) {
       const chips = [...cl.querySelectorAll<HTMLButtonElement>("button.chip")];
       chips.forEach((c, i) => {
         c.classList.remove("!border-brand-500", "ring-brand-500", ...CHIP_BAD);
-        c.classList.toggle("!border-green-500", String(i) === cl.dataset.answerIndex);
-        c.classList.toggle("ring-2", String(i) === cl.dataset.answerIndex);
-        c.classList.toggle("ring-green-400", String(i) === cl.dataset.answerIndex);
+        const isAns = String(i) === cl.dataset.answerIndex;
+        c.classList.toggle("!border-green-500", isAns);
+        c.classList.toggle("ring-2", isAns);
+        c.classList.toggle("ring-green-400", isAns);
       });
       cl.dataset.selected = cl.dataset.answerIndex;
     }
+    say("Answers revealed.", "none");
     const el = document.getElementById("result");
-    if (el) { el.textContent = "Answers revealed."; el.className = "mt-3 min-h-5 text-sm font-semibold text-amber-700"; }
+    if (el) el.className = "mt-3 min-h-5 text-sm font-semibold text-amber-700";
   }
 
   function reset() {
-    for (const inp of [...numInputs(), ...signInputs()]) { inp.value = ""; clearStatus(inp); }
+    for (const inp of numInputs()) { inp.value = ""; clearStatus(inp); }
+    for (const grp of choices()) {
+      delete grp.dataset.selected;
+      grp.querySelectorAll<HTMLElement>("button.seg").forEach((b) => setSeg(b, "none"));
+    }
     for (const cl of clusters()) {
       delete cl.dataset.selected;
       cl.querySelectorAll<HTMLButtonElement>("button.chip").forEach((c) => {
@@ -114,7 +186,7 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
         c.classList.remove("!border-brand-500", "ring-2", "ring-brand-500", ...CHIP_OK, ...CHIP_BAD);
       });
     }
-    result(0, 0);
+    say("", "none");
   }
 
   return { check, reveal, reset };
