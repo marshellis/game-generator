@@ -1,0 +1,26 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Maze from "../../../components/Maze.astro";
+import "../../../styles/global.css";
+import "../../../styles/print.css";
+export async function getStaticPaths() {
+  const mazes = await getCollection("mazes");
+  return mazes.map((m) => ({ params: { id: m.data.id } }));
+}
+const { id } = Astro.params;
+const m = (await getEntry("mazes", id!))!.data;
+---
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><title>{m.title} — maze</title></head>
+  <body class="bg-white p-6 text-slate-900">
+    <p class="no-print mb-4 text-sm text-slate-500">
+      <a href={`/maze/${m.id}`} class="text-brand-600 no-underline hover:underline">← Back</a>
+      · Use your browser's Print → Save as PDF.
+      · <a href={`/maze/${m.id}/answer`} class="text-brand-600 no-underline hover:underline">Solution →</a>
+    </p>
+    <h1 class="text-2xl font-extrabold tracking-tight">{m.title}</h1>
+    <p class="mt-1 mb-4 text-slate-600">{m.themeBlurb}</p>
+    <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end} theme={m.theme} />
+  </body>
+</html>
