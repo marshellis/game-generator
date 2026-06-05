@@ -10,6 +10,7 @@ import type {
   SnakeItem,
   BreakApartItem,
   CoinBubbleItem,
+  StdAlgoItem,
 } from "./types";
 
 export interface ActivityGen {
@@ -570,6 +571,42 @@ const coinBubble: ActivityGen = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Standard Algorithm — vertical column arithmetic (the regrouping load lever).
+// ---------------------------------------------------------------------------
+
+const stdAlgorithm: ActivityGen = {
+  type: "stdAlgorithm",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => {
+    const items: StdAlgoItem[] = Array.from({ length: 4 }, () => {
+      const cap = [0, 0, 99, 999, 9999, 99999, 999999, 999999, 999999][g.grade]!;
+      const pool = g.ops.filter((o) => o === "+" || o === "−" || o === "×");
+      const op = pick(rng, pool.length ? pool : (["+"] as const));
+      if (op === "×") {
+        const a = randInt(rng, 12, g.grade <= 4 ? 99 : 999);
+        const b = randInt(rng, 2, g.grade <= 4 ? 9 : 99);
+        return { a, op, b, answer: a * b };
+      }
+      const lo = Math.max(10, Math.floor(cap / 10));
+      if (op === "−") {
+        const a = randInt(rng, lo, cap);
+        const b = randInt(rng, lo, a);
+        return { a, op, b, answer: a - b };
+      }
+      const a = randInt(rng, lo, cap);
+      const b = randInt(rng, lo, cap);
+      return { a, op, b, answer: a + b };
+    });
+    return {
+      type: "stdAlgorithm",
+      title: "Line It Up",
+      instructions: "Solve each one. Line up the digits and regroup when you need to.",
+      items,
+    };
+  },
+};
+
 /** All generators, in a stable display order. */
 export const ACTIVITY_GENS: ActivityGen[] = [
   findTheSum,
@@ -583,6 +620,7 @@ export const ACTIVITY_GENS: ActivityGen[] = [
   rounding,
   breakApart,
   coinBubble,
+  stdAlgorithm,
   orderOfOps,
   snake,
   fraction,

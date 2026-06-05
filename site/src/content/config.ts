@@ -135,6 +135,12 @@ const activity = z.discriminatedUnion("type", [
     instructions: z.string(),
     items: z.array(z.object({ coins: z.array(z.number()), answer: z.number() })),
   }),
+  z.object({
+    type: z.literal("stdAlgorithm"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({ a: z.number(), op: z.enum(["+", "−", "×"]), b: z.number(), answer: z.number() })),
+  }),
 ]);
 
 const packets = defineCollection({

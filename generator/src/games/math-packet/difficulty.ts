@@ -29,6 +29,7 @@ export const TIER: Record<Activity["type"], number> = {
   findTheSum: 3,
   wordProblem: 3,
   breakApart: 3,
+  stdAlgorithm: 3,
   fraction: 4,
   orderOfOps: 4,
   snake: 5,

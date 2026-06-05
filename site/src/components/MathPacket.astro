@@ -283,6 +283,20 @@ const underlineIndex = (n: number, place: string) => {
         </div>
       )}
 
+      {/* ---- Standard Algorithm (vertical) ---- */}
+      {act.type === "stdAlgorithm" && (
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {act.items.map((it) => (
+            <div class="inline-flex flex-col items-end rounded-lg bg-slate-50 px-4 py-3 font-mono text-xl font-semibold text-slate-800">
+              <span class="tabular-nums">{it.a}</span>
+              <span class="tabular-nums">{it.op} {it.b}</span>
+              <span class="my-1 h-0.5 w-full bg-slate-400"></span>
+              <input class={numCls + " w-24 text-right font-mono"} inputmode="numeric" data-answer={String(it.answer)} />
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ---- Snake (running-total chain) ---- */}
       {act.type === "snake" && (
         <div class="flex flex-col gap-4">

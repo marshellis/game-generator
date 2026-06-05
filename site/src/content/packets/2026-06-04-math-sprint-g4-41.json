@@ -13,119 +13,36 @@
       "items": [
         {
           "numbers": [
-            5,
-            30,
-            6,
             17,
-            20
-          ],
-          "answerIndex": 1,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            7,
-            32,
-            2,
-            5,
-            35
+            14,
+            11,
+            19,
+            25
           ],
           "answerIndex": 4,
-          "op": "×"
+          "op": "+"
         },
         {
           "numbers": [
-            28,
-            15,
-            20,
-            13,
-            9
+            1,
+            19,
+            12,
+            8,
+            20
           ],
-          "answerIndex": 0,
+          "answerIndex": 4,
           "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
-      "items": [
-        {
-          "text": "Eli has 4 bags with 2 stickers in each bag. How many stickers in all?",
-          "answer": 8,
-          "unit": "stickers"
         },
         {
-          "text": "Zoe shares 27 pencils equally among 3 friends. How many does each friend get?",
-          "answer": 9,
-          "unit": "pencils"
-        },
-        {
-          "text": "Ivy had 37 stickers. Ivy gave 34 to Ruby. How many are left?",
-          "answer": 3,
-          "unit": "stickers"
-        }
-      ]
-    },
-    {
-      "type": "breakApart",
-      "title": "Break Apart",
-      "instructions": "Write the missing part of each number.",
-      "items": [
-        {
-          "number": 8812,
-          "parts": [
-            8000,
-            800,
-            10,
-            2
+          "numbers": [
+            6,
+            5,
+            21,
+            19,
+            15
           ],
-          "blankIndex": 1,
-          "answer": 800
-        },
-        {
-          "number": 7322,
-          "parts": [
-            7000,
-            300,
-            20,
-            2
-          ],
-          "blankIndex": 3,
-          "answer": 2
-        },
-        {
-          "number": 5431,
-          "parts": [
-            5000,
-            400,
-            30,
-            1
-          ],
-          "blankIndex": 3,
-          "answer": 1
-        },
-        {
-          "number": 4073,
-          "parts": [
-            4000,
-            70,
-            3
-          ],
-          "blankIndex": 1,
-          "answer": 70
-        },
-        {
-          "number": 3268,
-          "parts": [
-            3000,
-            200,
-            60,
-            8
-          ],
-          "blankIndex": 0,
-          "answer": 3000
+          "answerIndex": 2,
+          "op": "+"
         }
       ]
     },
@@ -135,68 +52,127 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 7,
+          "start": 3,
           "ops": [
             {
               "op": "−",
-              "operand": 7
+              "operand": 3
             },
             {
               "op": "+",
-              "operand": 32
-            },
-            {
-              "op": "÷",
-              "operand": 2
-            },
-            {
-              "op": "+",
-              "operand": 25
+              "operand": 10
             },
             {
               "op": "×",
-              "operand": 4
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 58
+            },
+            {
+              "op": "+",
+              "operand": 33
             }
           ],
           "values": [
             0,
-            32,
-            16,
-            41,
-            164
+            10,
+            30,
+            88,
+            121
           ]
         },
         {
-          "start": 12,
+          "start": 11,
           "ops": [
             {
-              "op": "−",
-              "operand": 8
-            },
-            {
-              "op": "−",
-              "operand": 1
-            },
-            {
               "op": "×",
-              "operand": 8
+              "operand": 3
             },
             {
               "op": "+",
-              "operand": 6
+              "operand": 10
             },
             {
-              "op": "÷",
-              "operand": 3
+              "op": "+",
+              "operand": 41
+            },
+            {
+              "op": "+",
+              "operand": 2
+            },
+            {
+              "op": "×",
+              "operand": 2
             }
           ],
           "values": [
-            4,
-            3,
-            24,
-            30,
-            10
+            33,
+            43,
+            84,
+            86,
+            172
           ]
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 100",
+      "instructions": "Round each number to the nearest 100.",
+      "items": [
+        {
+          "number": 3800,
+          "nearest": 100,
+          "answer": 3800
+        },
+        {
+          "number": 4798,
+          "nearest": 100,
+          "answer": 4800
+        },
+        {
+          "number": 1975,
+          "nearest": 100,
+          "answer": 2000
+        },
+        {
+          "number": 4747,
+          "nearest": 100,
+          "answer": 4700
+        },
+        {
+          "number": 9076,
+          "nearest": 100,
+          "answer": 9100
+        },
+        {
+          "number": 9762,
+          "nearest": 100,
+          "answer": 9800
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Noah has 9 bags with 7 stickers in each bag. How many stickers in all?",
+          "answer": 63,
+          "unit": "stickers"
+        },
+        {
+          "text": "Theo has 45 shells. Ivy gives Theo 41 more. How many does Theo have now?",
+          "answer": 86,
+          "unit": "shells"
+        },
+        {
+          "text": "Eli has 37 coins. Omar gives Eli 12 more. How many does Eli have now?",
+          "answer": 49,
+          "unit": "coins"
         }
       ]
     }
@@ -204,7 +180,7 @@
   "load": {
     "maxTier": 5,
     "steps": 8,
-    "score": 46
+    "score": 47
   },
   "seed": 41,
   "createdAt": "2026-06-04T00:00:00.000Z"

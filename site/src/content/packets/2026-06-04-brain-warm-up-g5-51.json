@@ -13,36 +13,67 @@
       "items": [
         {
           "numbers": [
-            26,
-            6,
-            30,
-            5,
-            10
-          ],
-          "answerIndex": 2,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            28,
-            18,
-            32,
+            17,
             14,
-            19
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            4,
-            12,
-            9,
             11,
+            19,
             8
           ],
-          "answerIndex": 1,
+          "answerIndex": 3,
           "op": "+"
+        },
+        {
+          "numbers": [
+            22,
+            15,
+            33,
+            29,
+            18
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            21,
+            19,
+            1,
+            7,
+            3
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 35672,
+          "op": "−",
+          "b": 29797,
+          "answer": 5875
+        },
+        {
+          "a": 350,
+          "op": "×",
+          "b": 60,
+          "answer": 21000
+        },
+        {
+          "a": 65788,
+          "op": "−",
+          "b": 11468,
+          "answer": 54320
+        },
+        {
+          "a": 14,
+          "op": "×",
+          "b": 92,
+          "answer": 1288
         }
       ]
     },
@@ -52,100 +83,68 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 9,
+          "start": 1,
           "ops": [
+            {
+              "op": "+",
+              "operand": 44
+            },
             {
               "op": "÷",
               "operand": 9
             },
             {
-              "op": "+",
-              "operand": 103
+              "op": "×",
+              "operand": 9
+            },
+            {
+              "op": "×",
+              "operand": 9
             },
             {
               "op": "−",
-              "operand": 96
-            },
-            {
-              "op": "−",
-              "operand": 8
-            },
-            {
-              "op": "+",
-              "operand": 67
+              "operand": 277
             }
           ],
           "values": [
-            1,
-            104,
-            8,
-            0,
-            67
+            45,
+            5,
+            45,
+            405,
+            128
           ]
         },
         {
           "start": 10,
           "ops": [
             {
-              "op": "×",
+              "op": "−",
+              "operand": 1
+            },
+            {
+              "op": "÷",
               "operand": 9
             },
             {
               "op": "×",
-              "operand": 5
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 110
             },
             {
               "op": "−",
-              "operand": 308
-            },
-            {
-              "op": "−",
-              "operand": 68
-            },
-            {
-              "op": "×",
-              "operand": 5
+              "operand": 59
             }
           ],
           "values": [
-            90,
-            450,
-            142,
-            74,
-            370
+            9,
+            1,
+            7,
+            117,
+            58
           ]
-        }
-      ]
-    },
-    {
-      "type": "placeValue",
-      "title": "Place Value",
-      "instructions": "Write the value of the underlined place for each number.",
-      "items": [
-        {
-          "number": 67434,
-          "place": "ones",
-          "answer": 4
-        },
-        {
-          "number": 72336,
-          "place": "thousands",
-          "answer": 2000
-        },
-        {
-          "number": 74262,
-          "place": "thousands",
-          "answer": 4000
-        },
-        {
-          "number": 92284,
-          "place": "thousands",
-          "answer": 2000
-        },
-        {
-          "number": 69212,
-          "place": "thousands",
-          "answer": 9000
         }
       ]
     },
@@ -156,43 +155,43 @@
       "items": [
         {
           "sequence": [
-            5,
+            6,
+            15,
+            24,
+            33,
+            null
+          ],
+          "answer": 42
+        },
+        {
+          "sequence": [
+            6,
+            106,
+            206,
+            306,
+            null
+          ],
+          "answer": 406
+        },
+        {
+          "sequence": [
+            6,
+            31,
+            null,
+            81,
+            106
+          ],
+          "answer": 56
+        },
+        {
+          "sequence": [
             8,
-            null,
-            14,
-            17
-          ],
-          "answer": 11
-        },
-        {
-          "sequence": [
-            9,
-            34,
-            59,
-            84,
+            58,
+            108,
+            158,
             null
           ],
-          "answer": 109
-        },
-        {
-          "sequence": [
-            9,
-            59,
-            109,
-            null,
-            209
-          ],
-          "answer": 159
-        },
-        {
-          "sequence": [
-            3,
-            103,
-            203,
-            303,
-            null
-          ],
-          "answer": 403
+          "answer": 208
         }
       ]
     }
@@ -200,7 +199,7 @@
   "load": {
     "maxTier": 5,
     "steps": 8,
-    "score": 45
+    "score": 47
   },
   "seed": 51,
   "createdAt": "2026-06-04T00:00:00.000Z"

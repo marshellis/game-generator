@@ -13,11 +13,11 @@
       "items": [
         {
           "numbers": [
-            9,
-            14,
-            12,
+            15,
+            24,
             2,
-            8
+            22,
+            14
           ],
           "answerIndex": 1,
           "op": "+"
@@ -92,43 +92,6 @@
       ]
     },
     {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
-      "items": [
-        {
-          "leftText": "840",
-          "rightText": "832",
-          "answer": ">"
-        },
-        {
-          "leftText": "1 + 2",
-          "rightText": "3",
-          "answer": "="
-        },
-        {
-          "leftText": "677",
-          "rightText": "587",
-          "answer": ">"
-        },
-        {
-          "leftText": "2 + 11",
-          "rightText": "16",
-          "answer": "<"
-        },
-        {
-          "leftText": "317",
-          "rightText": "275",
-          "answer": ">"
-        },
-        {
-          "leftText": "254",
-          "rightText": "254",
-          "answer": "="
-        }
-      ]
-    },
-    {
       "type": "snake",
       "title": "Number Snake",
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
@@ -137,8 +100,44 @@
           "start": 11,
           "ops": [
             {
-              "op": "+",
-              "operand": 159
+              "op": "×",
+              "operand": 5
+            },
+            {
+              "op": "×",
+              "operand": 6
+            },
+            {
+              "op": "−",
+              "operand": 17
+            },
+            {
+              "op": "−",
+              "operand": 255
+            },
+            {
+              "op": "−",
+              "operand": 25
+            }
+          ],
+          "values": [
+            55,
+            330,
+            313,
+            58,
+            33
+          ]
+        },
+        {
+          "start": 4,
+          "ops": [
+            {
+              "op": "−",
+              "operand": 4
+            },
+            {
+              "op": "÷",
+              "operand": 9
             },
             {
               "op": "+",
@@ -146,56 +145,57 @@
             },
             {
               "op": "−",
-              "operand": 126
+              "operand": 60
             },
             {
-              "op": "−",
-              "operand": 79
-            },
-            {
-              "op": "−",
-              "operand": 29
+              "op": "÷",
+              "operand": 5
             }
           ],
           "values": [
-            170,
-            325,
-            199,
-            120,
-            91
+            0,
+            0,
+            155,
+            95,
+            19
           ]
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "304",
+          "rightText": "304",
+          "answer": "="
         },
         {
-          "start": 8,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 86
-            },
-            {
-              "op": "×",
-              "operand": 4
-            },
-            {
-              "op": "+",
-              "operand": 118
-            },
-            {
-              "op": "+",
-              "operand": 5
-            },
-            {
-              "op": "+",
-              "operand": 1
-            }
-          ],
-          "values": [
-            94,
-            376,
-            494,
-            499,
-            500
-          ]
+          "leftText": "8 × 8",
+          "rightText": "66",
+          "answer": "<"
+        },
+        {
+          "leftText": "447",
+          "rightText": "431",
+          "answer": ">"
+        },
+        {
+          "leftText": "525",
+          "rightText": "571",
+          "answer": "<"
+        },
+        {
+          "leftText": "677",
+          "rightText": "689",
+          "answer": "<"
+        },
+        {
+          "leftText": "313",
+          "rightText": "257",
+          "answer": ">"
         }
       ]
     }

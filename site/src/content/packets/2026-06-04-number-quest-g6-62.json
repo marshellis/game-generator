@@ -13,182 +13,204 @@
       "items": [
         {
           "numbers": [
-            48,
-            28,
-            44,
-            18,
-            30
+            3,
+            6,
+            5,
+            7,
+            9
           ],
-          "answerIndex": 0,
+          "answerIndex": 4,
           "op": "+"
         },
         {
           "numbers": [
-            4,
-            7,
-            27,
+            14,
+            18,
+            31,
             9,
-            36
+            22
           ],
-          "answerIndex": 4,
-          "op": "×"
+          "answerIndex": 2,
+          "op": "+"
         },
         {
           "numbers": [
+            25,
+            23,
+            18,
+            1,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            6,
+            6,
             9,
+            4
+          ],
+          "ops": [
+            "−",
+            "+",
+            "+"
+          ],
+          "target": 13
+        },
+        {
+          "operands": [
+            3,
+            8,
             4,
-            14,
-            5,
+            6
+          ],
+          "ops": [
+            "×",
+            "−",
+            "×"
+          ],
+          "target": 0
+        },
+        {
+          "operands": [
+            7,
+            3,
+            4,
+            5
+          ],
+          "ops": [
+            "+",
+            "×",
+            "−"
+          ],
+          "target": 14
+        },
+        {
+          "operands": [
+            7,
+            3,
+            7,
+            9
+          ],
+          "ops": [
+            "−",
+            "+",
+            "−"
+          ],
+          "target": 2
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 64639,
+          "parts": [
+            60000,
+            4000,
+            600,
+            30,
+            9
+          ],
+          "blankIndex": 3,
+          "answer": 30
+        },
+        {
+          "number": 77074,
+          "parts": [
+            70000,
+            7000,
+            70,
+            4
+          ],
+          "blankIndex": 0,
+          "answer": 70000
+        },
+        {
+          "number": 56820,
+          "parts": [
+            50000,
+            6000,
+            800,
             20
           ],
-          "answerIndex": 4,
-          "op": "×"
-        }
-      ]
-    },
-    {
-      "type": "rounding",
-      "title": "Round to the Nearest 1000",
-      "instructions": "Round each number to the nearest 1000.",
-      "items": [
-        {
-          "number": 90617,
-          "nearest": 1000,
-          "answer": 91000
+          "blankIndex": 1,
+          "answer": 6000
         },
         {
-          "number": 59912,
-          "nearest": 1000,
-          "answer": 60000
+          "number": 18556,
+          "parts": [
+            10000,
+            8000,
+            500,
+            50,
+            6
+          ],
+          "blankIndex": 3,
+          "answer": 50
         },
         {
-          "number": 20659,
-          "nearest": 1000,
-          "answer": 21000
-        },
-        {
-          "number": 59830,
-          "nearest": 1000,
-          "answer": 60000
-        },
-        {
-          "number": 46373,
-          "nearest": 1000,
-          "answer": 46000
-        },
-        {
-          "number": 25229,
-          "nearest": 1000,
-          "answer": 25000
-        }
-      ]
-    },
-    {
-      "type": "fraction",
-      "title": "Fraction Workout",
-      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
-      "items": [
-        {
-          "kind": "compare",
-          "aNum": 1,
-          "aDen": 5,
-          "bNum": 1,
-          "bDen": 2,
-          "answer": "<"
-        },
-        {
-          "kind": "compare",
-          "aNum": 2,
-          "aDen": 2,
-          "bNum": 2,
-          "bDen": 8,
-          "answer": ">"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 6,
-          "newDen": 24,
-          "answer": 4
-        },
-        {
-          "kind": "compare",
-          "aNum": 5,
-          "aDen": 2,
-          "bNum": 3,
-          "bDen": 3,
-          "answer": ">"
-        },
-        {
-          "kind": "compare",
-          "aNum": 4,
-          "aDen": 3,
-          "bNum": 4,
-          "bDen": 5,
-          "answer": ">"
-        }
-      ]
-    },
-    {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
-      "items": [
-        {
-          "left": 807,
-          "op": "−",
-          "right": 319,
-          "result": 488,
-          "blank": "result",
-          "answer": 488
-        },
-        {
-          "left": 8,
-          "op": "×",
-          "right": 12,
-          "result": 96,
-          "blank": "right",
-          "answer": 12
-        },
-        {
-          "left": 5,
-          "op": "×",
-          "right": 2,
-          "result": 10,
-          "blank": "left",
-          "answer": 5
-        },
-        {
-          "left": 10,
-          "op": "×",
-          "right": 10,
-          "result": 100,
-          "blank": "left",
-          "answer": 10
-        },
-        {
-          "left": 54,
-          "op": "÷",
-          "right": 9,
-          "result": 6,
-          "blank": "right",
+          "number": 73219,
+          "parts": [
+            70000,
+            3000,
+            200,
+            10,
+            9
+          ],
+          "blankIndex": 4,
           "answer": 9
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 54171,
+          "place": "hundreds",
+          "answer": 100
         },
         {
-          "left": 2,
-          "op": "×",
-          "right": 5,
-          "result": 10,
-          "blank": "result",
-          "answer": 10
+          "number": 40808,
+          "place": "thousands",
+          "answer": 0
+        },
+        {
+          "number": 61964,
+          "place": "thousands",
+          "answer": 1000
+        },
+        {
+          "number": 11349,
+          "place": "thousands",
+          "answer": 1000
+        },
+        {
+          "number": 34543,
+          "place": "ones",
+          "answer": 3
         }
       ]
     }
   ],
   "load": {
     "maxTier": 4,
-    "steps": 4,
-    "score": 42
+    "steps": 7,
+    "score": 45
   },
   "seed": 62,
   "createdAt": "2026-06-04T00:00:00.000Z"

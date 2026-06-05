@@ -13,35 +13,35 @@
       "items": [
         {
           "numbers": [
+            56,
+            4,
             39,
-            86,
-            5,
-            29,
-            47
+            17,
+            8
           ],
-          "answerIndex": 1,
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            15,
+            3,
+            28,
+            13,
+            27
+          ],
+          "answerIndex": 2,
           "op": "+"
         },
         {
           "numbers": [
             13,
-            43,
-            5,
-            17,
-            56
-          ],
-          "answerIndex": 4,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            8,
-            54,
+            12,
             14,
-            24,
-            46
+            36,
+            22
           ],
-          "answerIndex": 1,
+          "answerIndex": 3,
           "op": "+"
         }
       ]
@@ -53,65 +53,98 @@
       "items": [
         {
           "operands": [
+            9,
+            4,
             3,
-            3,
-            5,
-            2,
-            5
-          ],
-          "ops": [
-            "+",
-            "×",
-            "+",
-            "+"
-          ],
-          "target": 25
-        },
-        {
-          "operands": [
-            5,
-            8,
-            3,
-            5
-          ],
-          "ops": [
-            "+",
-            "−",
-            "+"
-          ],
-          "target": 15
-        },
-        {
-          "operands": [
-            5,
-            2,
-            2,
-            6,
-            9
-          ],
-          "ops": [
-            "+",
-            "+",
-            "×",
-            "+"
-          ],
-          "target": 28
-        },
-        {
-          "operands": [
-            5,
-            8,
-            5,
             3,
             8
           ],
           "ops": [
             "×",
+            "×",
+            "−",
+            "+"
+          ],
+          "target": 113
+        },
+        {
+          "operands": [
+            4,
+            6,
+            3,
+            9,
+            5
+          ],
+          "ops": [
             "+",
             "×",
+            "−",
+            "+"
+          ],
+          "target": 18
+        },
+        {
+          "operands": [
+            1,
+            7,
+            4,
+            5,
+            5
+          ],
+          "ops": [
+            "×",
+            "+",
+            "−",
             "−"
           ],
-          "target": 47
+          "target": 1
+        },
+        {
+          "operands": [
+            8,
+            7,
+            2,
+            9,
+            4
+          ],
+          "ops": [
+            "×",
+            "−",
+            "+",
+            "+"
+          ],
+          "target": 67
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 661877,
+          "op": "+",
+          "b": 623589,
+          "answer": 1285466
+        },
+        {
+          "a": 12,
+          "op": "×",
+          "b": 87,
+          "answer": 1044
+        },
+        {
+          "a": 813,
+          "op": "×",
+          "b": 7,
+          "answer": 5691
+        },
+        {
+          "a": 516139,
+          "op": "+",
+          "b": 141002,
+          "answer": 657141
         }
       ]
     },
@@ -121,141 +154,48 @@
       "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
-          "kind": "compare",
-          "aNum": 3,
-          "aDen": 3,
-          "bNum": 1,
-          "bDen": 3,
-          "answer": ">"
-        },
-        {
-          "kind": "compare",
-          "aNum": 3,
-          "aDen": 6,
-          "bNum": 1,
-          "bDen": 8,
-          "answer": ">"
-        },
-        {
-          "kind": "compare",
-          "aNum": 5,
-          "aDen": 2,
-          "bNum": 2,
-          "bDen": 4,
-          "answer": ">"
-        },
-        {
           "kind": "equiv",
-          "num": 3,
-          "den": 4,
-          "newDen": 8,
-          "answer": 6
-        },
-        {
-          "kind": "equiv",
-          "num": 3,
+          "num": 2,
           "den": 6,
-          "newDen": 24,
-          "answer": 12
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 4,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 2
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
-              "op": "−",
-              "operand": 5
-            },
-            {
-              "op": "×",
-              "operand": 7
-            },
-            {
-              "op": "×",
-              "operand": 6
-            },
-            {
-              "op": "−",
-              "operand": 182
-            }
-          ],
-          "values": [
-            2,
-            4,
-            12,
-            7,
-            49,
-            294,
-            112
-          ]
+          "newDen": 12,
+          "answer": 4
         },
         {
-          "start": 10,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 523
-            },
-            {
-              "op": "+",
-              "operand": 530
-            },
-            {
-              "op": "+",
-              "operand": 499
-            },
-            {
-              "op": "÷",
-              "operand": 2
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "+",
-              "operand": 213
-            },
-            {
-              "op": "−",
-              "operand": 1069
-            }
-          ],
-          "values": [
-            533,
-            1063,
-            1562,
-            781,
-            1562,
-            1775,
-            706
-          ]
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 8,
+          "bNum": 2,
+          "bDen": 5,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 3,
+          "newDen": 9,
+          "answer": 3
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 6,
+          "newDen": 12,
+          "answer": 2
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 4,
+          "newDen": 16,
+          "answer": 4
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 14,
-    "score": 56
+    "maxTier": 4,
+    "steps": 8,
+    "score": 50
   },
   "seed": 83,
   "createdAt": "2026-06-04T00:00:00.000Z"

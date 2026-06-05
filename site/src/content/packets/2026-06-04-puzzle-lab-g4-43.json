@@ -13,91 +13,36 @@
       "items": [
         {
           "numbers": [
+            25,
             8,
-            4,
-            32,
-            19,
-            27
+            17,
+            15,
+            20
           ],
-          "answerIndex": 2,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            26,
-            48,
-            8,
-            45,
-            6
-          ],
-          "answerIndex": 1,
-          "op": "×"
+          "answerIndex": 0,
+          "op": "+"
         },
         {
           "numbers": [
             1,
-            9,
-            18,
-            5,
-            13
+            12,
+            20,
+            7,
+            27
           ],
-          "answerIndex": 2,
+          "answerIndex": 4,
           "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "missingNumber",
-      "title": "Missing Number",
-      "instructions": "Find the number that makes each equation true.",
-      "items": [
-        {
-          "left": 56,
-          "op": "÷",
-          "right": 7,
-          "result": 8,
-          "blank": "right",
-          "answer": 7
         },
         {
-          "left": 218,
-          "op": "+",
-          "right": 228,
-          "result": 446,
-          "blank": "left",
-          "answer": 218
-        },
-        {
-          "left": 32,
-          "op": "÷",
-          "right": 4,
-          "result": 8,
-          "blank": "right",
-          "answer": 4
-        },
-        {
-          "left": 548,
-          "op": "+",
-          "right": 539,
-          "result": 1087,
-          "blank": "left",
-          "answer": 548
-        },
-        {
-          "left": 16,
-          "op": "÷",
-          "right": 2,
-          "result": 8,
-          "blank": "result",
-          "answer": 8
-        },
-        {
-          "left": 772,
-          "op": "−",
-          "right": 249,
-          "result": 523,
-          "blank": "result",
-          "answer": 523
+          "numbers": [
+            6,
+            24,
+            4,
+            20,
+            1
+          ],
+          "answerIndex": 1,
+          "op": "×"
         }
       ]
     },
@@ -107,79 +52,121 @@
       "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
-          "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 6,
-          "answer": 3
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 3,
+          "bNum": 2,
+          "bDen": 2,
+          "answer": "<"
         },
         {
           "kind": "compare",
-          "aNum": 5,
-          "aDen": 2,
+          "aNum": 2,
+          "aDen": 6,
           "bNum": 4,
+          "bDen": 3,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 3,
+          "bNum": 5,
           "bDen": 2,
-          "answer": ">"
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 4,
+          "bNum": 4,
+          "bDen": 3,
+          "answer": "<"
         },
         {
           "kind": "compare",
           "aNum": 1,
           "aDen": 2,
-          "bNum": 3,
-          "bDen": 4,
-          "answer": "<"
-        },
-        {
-          "kind": "equiv",
-          "num": 3,
-          "den": 4,
-          "newDen": 8,
-          "answer": 6
-        },
-        {
-          "kind": "compare",
-          "aNum": 2,
-          "aDen": 8,
           "bNum": 2,
-          "bDen": 4,
-          "answer": "<"
+          "bDen": 5,
+          "answer": ">"
         }
       ]
     },
     {
-      "type": "rounding",
-      "title": "Round to the Nearest 100",
-      "instructions": "Round each number to the nearest 100.",
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "number": 5001,
-          "nearest": 100,
-          "answer": 5000
+          "left": 9,
+          "op": "×",
+          "right": 2,
+          "result": 18,
+          "blank": "result",
+          "answer": 18
         },
         {
-          "number": 9800,
-          "nearest": 100,
-          "answer": 9800
+          "left": 863,
+          "op": "+",
+          "right": 106,
+          "result": 969,
+          "blank": "left",
+          "answer": 863
         },
         {
-          "number": 546,
-          "nearest": 100,
-          "answer": 500
+          "left": 5,
+          "op": "×",
+          "right": 5,
+          "result": 25,
+          "blank": "right",
+          "answer": 5
         },
         {
-          "number": 3879,
-          "nearest": 100,
-          "answer": 3900
+          "left": 21,
+          "op": "÷",
+          "right": 3,
+          "result": 7,
+          "blank": "left",
+          "answer": 21
         },
         {
-          "number": 6548,
-          "nearest": 100,
-          "answer": 6500
+          "left": 15,
+          "op": "÷",
+          "right": 3,
+          "result": 5,
+          "blank": "right",
+          "answer": 3
         },
         {
-          "number": 270,
-          "nearest": 100,
-          "answer": 300
+          "left": 10,
+          "op": "÷",
+          "right": 2,
+          "result": 5,
+          "blank": "right",
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Mara had 48 shells. Mara gave 26 to Eli. How many are left?",
+          "answer": 22,
+          "unit": "shells"
+        },
+        {
+          "text": "Eli has 41 cookies. Theo gives Eli 26 more. How many does Eli have now?",
+          "answer": 67,
+          "unit": "cookies"
+        },
+        {
+          "text": "Mara has 4 bags with 8 books in each bag. How many books in all?",
+          "answer": 32,
+          "unit": "books"
         }
       ]
     }
@@ -187,7 +174,7 @@
   "load": {
     "maxTier": 4,
     "steps": 4,
-    "score": 41
+    "score": 38
   },
   "seed": 43,
   "createdAt": "2026-06-04T00:00:00.000Z"

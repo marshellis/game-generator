@@ -13,11 +13,11 @@
       "items": [
         {
           "numbers": [
-            29,
+            33,
+            11,
+            20,
             13,
-            16,
-            10,
-            28
+            25
           ],
           "answerIndex": 0,
           "op": "+"
@@ -27,8 +27,8 @@
             5,
             1,
             6,
-            2,
-            3
+            3,
+            2
           ],
           "answerIndex": 2,
           "op": "×"
@@ -102,86 +102,111 @@
       ]
     },
     {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            8,
+            9,
+            2
+          ],
+          "ops": [
+            "×",
+            "×"
+          ],
+          "target": 144
+        },
+        {
+          "operands": [
+            1,
+            4,
+            7
+          ],
+          "ops": [
+            "×",
+            "+"
+          ],
+          "target": 11
+        },
+        {
+          "operands": [
+            5,
+            8,
+            6
+          ],
+          "ops": [
+            "+",
+            "−"
+          ],
+          "target": 7
+        },
+        {
+          "operands": [
+            3,
+            7,
+            1
+          ],
+          "ops": [
+            "×",
+            "×"
+          ],
+          "target": 21
+        }
+      ]
+    },
+    {
       "type": "fraction",
       "title": "Fraction Workout",
       "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
           "kind": "compare",
-          "aNum": 5,
-          "aDen": 3,
-          "bNum": 4,
+          "aNum": 4,
+          "aDen": 5,
+          "bNum": 1,
           "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 4,
+          "den": 5,
+          "newDen": 20,
+          "answer": 16
+        },
+        {
+          "kind": "compare",
+          "aNum": 2,
+          "aDen": 2,
+          "bNum": 3,
+          "bDen": 4,
           "answer": ">"
         },
         {
           "kind": "compare",
           "aNum": 4,
-          "aDen": 5,
-          "bNum": 3,
-          "bDen": 6,
+          "aDen": 4,
+          "bNum": 2,
+          "bDen": 3,
           "answer": ">"
         },
         {
-          "kind": "equiv",
-          "num": 2,
-          "den": 3,
-          "newDen": 12,
-          "answer": 8
-        },
-        {
-          "kind": "equiv",
-          "num": 2,
-          "den": 4,
-          "newDen": 12,
-          "answer": 6
-        },
-        {
-          "kind": "equiv",
-          "num": 3,
-          "den": 5,
-          "newDen": 10,
-          "answer": 6
-        }
-      ]
-    },
-    {
-      "type": "placeValue",
-      "title": "Place Value",
-      "instructions": "Write the value of the underlined place for each number.",
-      "items": [
-        {
-          "number": 6649,
-          "place": "thousands",
-          "answer": 6000
-        },
-        {
-          "number": 3462,
-          "place": "hundreds",
-          "answer": 400
-        },
-        {
-          "number": 8994,
-          "place": "hundreds",
-          "answer": 900
-        },
-        {
-          "number": 1116,
-          "place": "hundreds",
-          "answer": 100
-        },
-        {
-          "number": 3861,
-          "place": "hundreds",
-          "answer": 800
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 2,
+          "bNum": 2,
+          "bDen": 5,
+          "answer": ">"
         }
       ]
     }
   ],
   "load": {
     "maxTier": 4,
-    "steps": 4,
-    "score": 40
+    "steps": 6,
+    "score": 45
   },
   "seed": 42,
   "createdAt": "2026-06-04T00:00:00.000Z"

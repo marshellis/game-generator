@@ -13,36 +13,36 @@
       "items": [
         {
           "numbers": [
-            26,
             27,
+            15,
             4,
-            48,
-            21
+            31,
+            10
           ],
           "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
+            4,
+            26,
             6,
-            11,
-            42,
-            7,
-            20
+            22,
+            17
           ],
-          "answerIndex": 2,
-          "op": "×"
+          "answerIndex": 1,
+          "op": "+"
         },
         {
           "numbers": [
-            5,
-            8,
-            29,
-            40,
-            21
+            20,
+            6,
+            31,
+            27,
+            11
           ],
-          "answerIndex": 3,
-          "op": "×"
+          "answerIndex": 2,
+          "op": "+"
         }
       ]
     },
@@ -52,19 +52,19 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Lena had 66 books. Lena gave 11 to Mara. How many are left?",
-          "answer": 55,
-          "unit": "books"
+          "text": "Mara had 154 pencils. Mara gave 148 to Eli. How many are left?",
+          "answer": 6,
+          "unit": "pencils"
         },
         {
-          "text": "Mara had 187 cookies. Mara gave 76 to Noah. How many are left?",
-          "answer": 111,
-          "unit": "cookies"
+          "text": "Eli had 106 shells. Eli gave 77 to Omar. How many are left?",
+          "answer": 29,
+          "unit": "shells"
         },
         {
-          "text": "Omar shares 10 stickers equally among 5 friends. How many does each friend get?",
-          "answer": 2,
-          "unit": "stickers"
+          "text": "Ruby has 83 coins. Noah gives Ruby 99 more. How many does Ruby have now?",
+          "answer": 182,
+          "unit": "coins"
         }
       ]
     },
@@ -74,77 +74,77 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 8,
+          "start": 1,
           "ops": [
             {
               "op": "×",
               "operand": 3
             },
             {
-              "op": "+",
-              "operand": 158
+              "op": "÷",
+              "operand": 3
             },
             {
-              "op": "×",
-              "operand": 4
+              "op": "+",
+              "operand": 275
             },
             {
               "op": "−",
-              "operand": 213
+              "operand": 34
+            },
+            {
+              "op": "+",
+              "operand": 164
             },
             {
               "op": "÷",
+              "operand": 7
+            }
+          ],
+          "values": [
+            3,
+            1,
+            276,
+            242,
+            406,
+            58
+          ]
+        },
+        {
+          "start": 6,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 6
+            },
+            {
+              "op": "−",
+              "operand": 11
+            },
+            {
+              "op": "×",
               "operand": 5
             },
             {
               "op": "+",
               "operand": 320
-            }
-          ],
-          "values": [
-            24,
-            182,
-            728,
-            515,
-            103,
-            423
-          ]
-        },
-        {
-          "start": 12,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 3
             },
             {
               "op": "×",
-              "operand": 4
+              "operand": 2
             },
             {
               "op": "−",
-              "operand": 59
-            },
-            {
-              "op": "−",
-              "operand": 85
-            },
-            {
-              "op": "÷",
-              "operand": 7
-            },
-            {
-              "op": "+",
-              "operand": 38
+              "operand": 601
             }
           ],
           "values": [
             36,
-            144,
-            85,
-            0,
-            0,
-            38
+            25,
+            125,
+            445,
+            890,
+            289
           ]
         }
       ]
@@ -155,41 +155,41 @@
       "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 4,
+          "answer": 2
+        },
+        {
+          "kind": "equiv",
+          "num": 4,
+          "den": 5,
+          "newDen": 15,
+          "answer": 12
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 5,
+          "bNum": 1,
+          "bDen": 5,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 6,
+          "newDen": 12,
+          "answer": 6
+        },
+        {
           "kind": "compare",
           "aNum": 2,
           "aDen": 6,
           "bNum": 4,
           "bDen": 3,
           "answer": "<"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 2,
-          "newDen": 6,
-          "answer": 3
-        },
-        {
-          "kind": "equiv",
-          "num": 2,
-          "den": 3,
-          "newDen": 6,
-          "answer": 4
-        },
-        {
-          "kind": "compare",
-          "aNum": 3,
-          "aDen": 2,
-          "bNum": 5,
-          "bDen": 8,
-          "answer": ">"
-        },
-        {
-          "kind": "equiv",
-          "num": 1,
-          "den": 3,
-          "newDen": 12,
-          "answer": 4
         }
       ]
     }

@@ -13,73 +13,36 @@
       "items": [
         {
           "numbers": [
+            24,
             15,
-            18,
+            4,
             6,
-            7,
-            24
-          ],
-          "answerIndex": 4,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            48,
-            8,
-            26,
-            6,
-            19
+            12
           ],
           "answerIndex": 0,
           "op": "×"
         },
         {
           "numbers": [
-            14,
-            20,
-            23,
-            32,
-            34
+            3,
+            17,
+            43,
+            37,
+            26
           ],
-          "answerIndex": 4,
+          "answerIndex": 2,
           "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "rounding",
-      "title": "Round to the Nearest 1000",
-      "instructions": "Round each number to the nearest 1000.",
-      "items": [
-        {
-          "number": 17104,
-          "nearest": 1000,
-          "answer": 17000
         },
         {
-          "number": 32507,
-          "nearest": 1000,
-          "answer": 33000
-        },
-        {
-          "number": 73762,
-          "nearest": 1000,
-          "answer": 74000
-        },
-        {
-          "number": 3154,
-          "nearest": 1000,
-          "answer": 3000
-        },
-        {
-          "number": 16953,
-          "nearest": 1000,
-          "answer": 17000
-        },
-        {
-          "number": 98344,
-          "nearest": 1000,
-          "answer": 98000
+          "numbers": [
+            21,
+            50,
+            27,
+            29,
+            42
+          ],
+          "answerIndex": 1,
+          "op": "+"
         }
       ]
     },
@@ -88,6 +51,30 @@
       "title": "Break Apart",
       "instructions": "Write the missing part of each number.",
       "items": [
+        {
+          "number": 76822,
+          "parts": [
+            70000,
+            6000,
+            800,
+            20,
+            2
+          ],
+          "blankIndex": 0,
+          "answer": 70000
+        },
+        {
+          "number": 24651,
+          "parts": [
+            20000,
+            4000,
+            600,
+            50,
+            1
+          ],
+          "blankIndex": 4,
+          "answer": 1
+        },
         {
           "number": 69243,
           "parts": [
@@ -122,118 +109,88 @@
           ],
           "blankIndex": 1,
           "answer": 8000
-        },
-        {
-          "number": 12140,
-          "parts": [
-            10000,
-            2000,
-            100,
-            40
-          ],
-          "blankIndex": 1,
-          "answer": 2000
-        },
-        {
-          "number": 47597,
-          "parts": [
-            40000,
-            7000,
-            500,
-            90,
-            7
-          ],
-          "blankIndex": 4,
-          "answer": 7
         }
       ]
     },
     {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "start": 3,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 254
-            },
-            {
-              "op": "+",
-              "operand": 56
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "−",
-              "operand": 341
-            },
-            {
-              "op": "−",
-              "operand": 266
-            },
-            {
-              "op": "−",
-              "operand": 12
-            }
-          ],
-          "values": [
-            257,
-            313,
-            626,
-            285,
-            19,
-            7
-          ]
+          "leftText": "5 + 6",
+          "rightText": "9",
+          "answer": ">"
         },
         {
-          "start": 9,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 84
-            },
-            {
-              "op": "−",
-              "operand": 85
-            },
-            {
-              "op": "+",
-              "operand": 25
-            },
-            {
-              "op": "×",
-              "operand": 3
-            },
-            {
-              "op": "÷",
-              "operand": 3
-            },
-            {
-              "op": "÷",
-              "operand": 3
-            }
-          ],
-          "values": [
-            93,
-            8,
-            33,
-            99,
-            33,
-            11
-          ]
+          "leftText": "11 + 12",
+          "rightText": "24",
+          "answer": "<"
+        },
+        {
+          "leftText": "2 × 3",
+          "rightText": "4",
+          "answer": ">"
+        },
+        {
+          "leftText": "3 + 12",
+          "rightText": "13",
+          "answer": ">"
+        },
+        {
+          "leftText": "569",
+          "rightText": "508",
+          "answer": ">"
+        },
+        {
+          "leftText": "511",
+          "rightText": "434",
+          "answer": ">"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 61546,
+          "nearest": 1000,
+          "answer": 62000
+        },
+        {
+          "number": 72580,
+          "nearest": 1000,
+          "answer": 73000
+        },
+        {
+          "number": 67626,
+          "nearest": 1000,
+          "answer": 68000
+        },
+        {
+          "number": 91202,
+          "nearest": 1000,
+          "answer": 91000
+        },
+        {
+          "number": 74406,
+          "nearest": 1000,
+          "answer": 74000
+        },
+        {
+          "number": 25681,
+          "nearest": 1000,
+          "answer": 26000
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 9,
-    "score": 52
+    "maxTier": 3,
+    "steps": 4,
+    "score": 39
   },
   "seed": 61,
   "createdAt": "2026-06-04T00:00:00.000Z"

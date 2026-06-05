@@ -143,6 +143,13 @@ function checkActivity(act: Activity): void {
         expect(it.coins.every((c) => [1, 5, 10, 25, 50, 100].includes(c))).toBe(true);
       }
       break;
+    case "stdAlgorithm":
+      for (const it of act.items) {
+        const got = it.op === "+" ? it.a + it.b : it.op === "−" ? it.a - it.b : it.a * it.b;
+        expect(got).toBe(it.answer);
+        expect(it.answer).toBeGreaterThanOrEqual(0); // subtraction never negative
+      }
+      break;
     case "snake":
       for (const it of act.items) {
         expect(it.values.length).toBe(it.ops.length);

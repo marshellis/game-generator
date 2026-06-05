@@ -13,55 +13,88 @@
       "items": [
         {
           "numbers": [
-            12,
+            6,
+            18,
             17,
-            5,
-            8
+            12
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            8,
-            4,
+            5,
             1,
-            12
+            8,
+            9
           ],
           "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            12,
             14,
-            8,
-            20
+            21,
+            9,
+            12
           ],
-          "answerIndex": 3,
+          "answerIndex": 1,
           "op": "+"
         }
       ]
     },
     {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "text": "Eli had 17 cookies. Eli gave 10 to Ruby. How many are left?",
-          "answer": 7,
-          "unit": "cookies"
+          "left": 61,
+          "op": "−",
+          "right": 38,
+          "result": 23,
+          "blank": "result",
+          "answer": 23
         },
         {
-          "text": "Ivy had 14 coins. Ivy gave 11 to Omar. How many are left?",
-          "answer": 3,
-          "unit": "coins"
+          "left": 24,
+          "op": "−",
+          "right": 23,
+          "result": 1,
+          "blank": "result",
+          "answer": 1
         },
         {
-          "text": "Omar has 2 coins. Theo gives Omar 17 more. How many does Omar have now?",
-          "answer": 19,
-          "unit": "coins"
+          "left": 61,
+          "op": "−",
+          "right": 46,
+          "result": 15,
+          "blank": "result",
+          "answer": 15
+        },
+        {
+          "left": 21,
+          "op": "−",
+          "right": 21,
+          "result": 0,
+          "blank": "left",
+          "answer": 21
+        },
+        {
+          "left": 81,
+          "op": "+",
+          "right": 52,
+          "result": 133,
+          "blank": "right",
+          "answer": 52
+        },
+        {
+          "left": 52,
+          "op": "−",
+          "right": 3,
+          "result": 49,
+          "blank": "right",
+          "answer": 3
         }
       ]
     },
@@ -71,57 +104,57 @@
       "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "start": 7,
+          "start": 5,
           "ops": [
             {
-              "op": "+",
-              "operand": 9
+              "op": "−",
+              "operand": 1
             },
+            {
+              "op": "−",
+              "operand": 1
+            },
+            {
+              "op": "−",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 1
+            }
+          ],
+          "values": [
+            4,
+            3,
+            0,
+            1
+          ]
+        },
+        {
+          "start": 12,
+          "ops": [
             {
               "op": "+",
               "operand": 1
             },
             {
               "op": "+",
-              "operand": 6
+              "operand": 15
             },
             {
               "op": "−",
+              "operand": 6
+            },
+            {
+              "op": "+",
               "operand": 2
             }
           ],
           "values": [
-            16,
-            17,
-            23,
-            21
-          ]
-        },
-        {
-          "start": 1,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 6
-            },
-            {
-              "op": "+",
-              "operand": 13
-            },
-            {
-              "op": "−",
-              "operand": 19
-            },
-            {
-              "op": "+",
-              "operand": 1
-            }
-          ],
-          "values": [
-            7,
-            20,
-            1,
-            2
+            13,
+            28,
+            22,
+            24
           ]
         }
       ]
@@ -130,7 +163,7 @@
   "load": {
     "maxTier": 5,
     "steps": 6,
-    "score": 34
+    "score": 35
   },
   "seed": 23,
   "createdAt": "2026-06-04T00:00:00.000Z"

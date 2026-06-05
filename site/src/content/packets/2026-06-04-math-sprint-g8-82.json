@@ -13,36 +13,67 @@
       "items": [
         {
           "numbers": [
-            26,
-            7,
-            63,
-            9,
-            6
+            28,
+            16,
+            5,
+            39,
+            34
           ],
-          "answerIndex": 2,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            69,
-            46,
-            38,
-            32,
-            70
-          ],
-          "answerIndex": 4,
+          "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            58,
-            20,
-            14,
-            52,
-            44
+            72,
+            71,
+            41,
+            34,
+            38
           ],
           "answerIndex": 0,
           "op": "+"
+        },
+        {
+          "numbers": [
+            5,
+            16,
+            1,
+            8,
+            2
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 342,
+          "op": "×",
+          "b": 90,
+          "answer": 30780
+        },
+        {
+          "a": 410493,
+          "op": "+",
+          "b": 305354,
+          "answer": 715847
+        },
+        {
+          "a": 749,
+          "op": "×",
+          "b": 91,
+          "answer": 68159
+        },
+        {
+          "a": 384378,
+          "op": "+",
+          "b": 972021,
+          "answer": 1356399
         }
       ]
     },
@@ -51,14 +82,6 @@
       "title": "Fraction Workout",
       "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
-        {
-          "kind": "compare",
-          "aNum": 5,
-          "aDen": 3,
-          "bNum": 2,
-          "bDen": 8,
-          "answer": ">"
-        },
         {
           "kind": "equiv",
           "num": 4,
@@ -89,103 +112,112 @@
           "bNum": 1,
           "bDen": 8,
           "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 6,
+          "newDen": 12,
+          "answer": 4
         }
       ]
     },
     {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "operands": [
-            9,
-            2,
-            6,
-            6,
-            4
-          ],
+          "start": 4,
           "ops": [
-            "+",
-            "+",
-            "×",
-            "+"
+            {
+              "op": "+",
+              "operand": 451
+            },
+            {
+              "op": "−",
+              "operand": 81
+            },
+            {
+              "op": "+",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 136
+            },
+            {
+              "op": "+",
+              "operand": 163
+            },
+            {
+              "op": "−",
+              "operand": 493
+            },
+            {
+              "op": "−",
+              "operand": 111
+            }
           ],
-          "target": 51
+          "values": [
+            455,
+            374,
+            381,
+            517,
+            680,
+            187,
+            76
+          ]
         },
         {
-          "operands": [
-            2,
-            6,
-            6,
-            6
-          ],
+          "start": 7,
           "ops": [
-            "×",
-            "+",
-            "+"
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 222
+            },
+            {
+              "op": "×",
+              "operand": 7
+            },
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "×",
+              "operand": 8
+            },
+            {
+              "op": "−",
+              "operand": 72
+            },
+            {
+              "op": "÷",
+              "operand": 2
+            }
           ],
-          "target": 24
-        },
-        {
-          "operands": [
-            7,
-            7,
-            5,
-            2,
-            8
-          ],
-          "ops": [
-            "×",
-            "+",
-            "+",
-            "+"
-          ],
-          "target": 64
-        },
-        {
-          "operands": [
-            2,
-            9,
-            5,
-            1
-          ],
-          "ops": [
-            "+",
-            "+",
-            "−"
-          ],
-          "target": 15
-        }
-      ]
-    },
-    {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
-      "items": [
-        {
-          "text": "Mara had 8 coins. Mara gave 2 to Ruby. How many are left?",
-          "answer": 6,
-          "unit": "coins"
-        },
-        {
-          "text": "Sam shares 36 stickers equally among 9 friends. How many does each friend get?",
-          "answer": 4,
-          "unit": "stickers"
-        },
-        {
-          "text": "Ivy shares 36 pencils equally among 9 friends. How many does each friend get?",
-          "answer": 4,
-          "unit": "pencils"
+          "values": [
+            1,
+            223,
+            1561,
+            223,
+            1784,
+            1712,
+            856
+          ]
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 4,
-    "steps": 8,
-    "score": 43
+    "maxTier": 5,
+    "steps": 10,
+    "score": 55
   },
   "seed": 82,
   "createdAt": "2026-06-04T00:00:00.000Z"

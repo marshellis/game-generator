@@ -13,33 +13,33 @@
       "items": [
         {
           "numbers": [
-            5,
-            15,
-            16,
-            11,
-            12
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            8,
-            3,
-            24,
+            40,
             7,
-            14
+            56,
+            52,
+            8
           ],
           "answerIndex": 2,
           "op": "×"
         },
         {
           "numbers": [
-            20,
-            5,
+            4,
+            32,
+            8,
+            19,
+            28
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            29,
             6,
             7,
-            30
+            9,
+            42
           ],
           "answerIndex": 4,
           "op": "×"
@@ -47,71 +47,63 @@
       ]
     },
     {
-      "type": "coinBubble",
-      "title": "Count the Money",
-      "instructions": "Add up the coins and write the total in cents.",
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "coins": [
-            10,
-            25,
-            10,
+          "start": 6,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 2
+            },
+            {
+              "op": "−",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 23
+            }
+          ],
+          "values": [
+            24,
+            22,
+            19,
+            42
+          ]
+        },
+        {
+          "start": 7,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "−",
+              "operand": 58
+            },
+            {
+              "op": "×",
+              "operand": 4
+            }
+          ],
+          "values": [
+            21,
+            63,
             5,
-            50
-          ],
-          "answer": 100
-        },
-        {
-          "coins": [
-            1,
-            1,
-            50,
-            1,
-            1
-          ],
-          "answer": 54
-        },
-        {
-          "coins": [
-            25,
-            50,
-            50,
-            25,
-            25
-          ],
-          "answer": 175
-        },
-        {
-          "coins": [
-            5,
-            1,
-            1,
-            100,
-            25
-          ],
-          "answer": 132
-        }
-      ]
-    },
-    {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
-      "items": [
-        {
-          "text": "Zoe has 28 coins. Mara gives Zoe 14 more. How many does Zoe have now?",
-          "answer": 42,
-          "unit": "coins"
-        },
-        {
-          "text": "Sam has 5 apples. Noah gives Sam 9 more. How many does Sam have now?",
-          "answer": 14,
-          "unit": "apples"
-        },
-        {
-          "text": "Lena has 6 bags with 9 stickers in each bag. How many stickers in all?",
-          "answer": 54,
-          "unit": "stickers"
+            20
+          ]
         }
       ]
     },
@@ -121,42 +113,79 @@
       "instructions": "Write < , > , or = between each pair.",
       "items": [
         {
-          "leftText": "12 + 3",
-          "rightText": "12",
+          "leftText": "7 × 2",
+          "rightText": "11",
           "answer": ">"
         },
         {
-          "leftText": "440",
-          "rightText": "456",
+          "leftText": "6 × 4",
+          "rightText": "26",
           "answer": "<"
         },
         {
-          "leftText": "527",
-          "rightText": "536",
+          "leftText": "933",
+          "rightText": "1026",
           "answer": "<"
         },
         {
-          "leftText": "947",
-          "rightText": "970",
-          "answer": "<"
-        },
-        {
-          "leftText": "6 + 12",
-          "rightText": "15",
-          "answer": ">"
-        },
-        {
-          "leftText": "664",
-          "rightText": "664",
+          "leftText": "7 + 2",
+          "rightText": "9",
           "answer": "="
+        },
+        {
+          "leftText": "579",
+          "rightText": "584",
+          "answer": "<"
+        },
+        {
+          "leftText": "544",
+          "rightText": "634",
+          "answer": "<"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 672,
+          "nearest": 10,
+          "answer": 670
+        },
+        {
+          "number": 613,
+          "nearest": 10,
+          "answer": 610
+        },
+        {
+          "number": 239,
+          "nearest": 10,
+          "answer": 240
+        },
+        {
+          "number": 497,
+          "nearest": 10,
+          "answer": 500
+        },
+        {
+          "number": 963,
+          "nearest": 10,
+          "answer": 960
+        },
+        {
+          "number": 767,
+          "nearest": 10,
+          "answer": 770
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 3,
-    "steps": 4,
-    "score": 32
+    "maxTier": 5,
+    "steps": 7,
+    "score": 41
   },
   "seed": 32,
   "createdAt": "2026-06-04T00:00:00.000Z"

@@ -35,5 +35,7 @@ export function keyForActivity(act: Activity): string[] {
       return act.items.map((it) => `${it.number} = ${it.parts.join(" + ")}`);
     case "coinBubble":
       return act.items.map((it) => `${it.answer}¢`);
+    case "stdAlgorithm":
+      return act.items.map((it) => `${it.a} ${it.op} ${it.b} = ${it.answer}`);
   }
 }

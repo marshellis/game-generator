@@ -20,7 +20,8 @@ export type ActivityType =
   | "fraction"
   | "snake"
   | "breakApart"
-  | "coinBubble";
+  | "coinBubble"
+  | "stdAlgorithm";
 
 /** Find the one number in the cluster that equals two of the others combined. */
 export interface FindTheSumItem {
@@ -112,6 +113,14 @@ export interface CoinBubbleItem {
   answer: number; // total cents
 }
 
+/** Vertical column arithmetic (the standard algorithm), often with regrouping. */
+export interface StdAlgoItem {
+  a: number;
+  op: "+" | "−" | "×";
+  b: number;
+  answer: number;
+}
+
 /** Either fill an equivalent fraction or compare two fractions. */
 export type FractionItem =
   | { kind: "equiv"; num: number; den: number; newDen: number; answer: number }
@@ -136,7 +145,8 @@ export type Activity =
   | (ActivityBase & { type: "fraction"; items: FractionItem[] })
   | (ActivityBase & { type: "snake"; items: SnakeItem[] })
   | (ActivityBase & { type: "breakApart"; items: BreakApartItem[] })
-  | (ActivityBase & { type: "coinBubble"; items: CoinBubbleItem[] });
+  | (ActivityBase & { type: "coinBubble"; items: CoinBubbleItem[] })
+  | (ActivityBase & { type: "stdAlgorithm"; items: StdAlgoItem[] });
 
 /**
  * Measured difficulty of a packet (per the grade-appropriateness framework):

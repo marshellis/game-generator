@@ -13,35 +13,35 @@
       "items": [
         {
           "numbers": [
-            9,
-            11,
-            7,
-            54,
-            63
-          ],
-          "answerIndex": 4,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            11,
-            7,
             14,
-            2,
-            3
-          ],
-          "answerIndex": 2,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            3,
-            17,
-            8,
-            1,
-            14
+            29,
+            5,
+            15,
+            17
           ],
           "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            52,
+            11,
+            56,
+            8
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            12,
+            7,
+            4,
+            16,
+            9
+          ],
+          "answerIndex": 3,
           "op": "+"
         }
       ]
@@ -52,111 +52,119 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Sam has 49 apples. Noah gives Sam 10 more. How many does Sam have now?",
-          "answer": 59,
-          "unit": "apples"
+          "text": "Noah has 10 books. Theo gives Noah 43 more. How many does Noah have now?",
+          "answer": 53,
+          "unit": "books"
         },
         {
-          "text": "Omar had 36 marbles. Omar gave 2 to Ruby. How many are left?",
-          "answer": 34,
-          "unit": "marbles"
+          "text": "Ruby has 5 bags with 4 shells in each bag. How many shells in all?",
+          "answer": 20,
+          "unit": "shells"
         },
         {
-          "text": "Noah has 27 apples. Theo gives Noah 16 more. How many does Noah have now?",
-          "answer": 43,
-          "unit": "apples"
+          "text": "Mara has 2 bags with 8 books in each bag. How many books in all?",
+          "answer": 16,
+          "unit": "books"
         }
       ]
     },
     {
-      "type": "coinBubble",
-      "title": "Count the Money",
-      "instructions": "Add up the coins and write the total in cents.",
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "coins": [
-            100,
-            50,
-            10,
-            100,
-            50
+          "start": 2,
+          "ops": [
+            {
+              "op": "−",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 25
+            },
+            {
+              "op": "−",
+              "operand": 14
+            },
+            {
+              "op": "×",
+              "operand": 9
+            }
           ],
-          "answer": 310
+          "values": [
+            0,
+            25,
+            11,
+            99
+          ]
         },
         {
-          "coins": [
+          "start": 8,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "−",
+              "operand": 15
+            },
+            {
+              "op": "×",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 4
+            }
+          ],
+          "values": [
+            16,
             1,
-            10,
-            25,
-            10,
-            5
-          ],
-          "answer": 51
-        },
-        {
-          "coins": [
-            25,
-            10,
-            10,
-            100,
-            25
-          ],
-          "answer": 170
-        },
-        {
-          "coins": [
-            50,
-            100,
-            100,
-            25,
-            50
-          ],
-          "answer": 325
+            5,
+            1
+          ]
         }
       ]
     },
     {
-      "type": "rounding",
-      "title": "Round to the Nearest 10",
-      "instructions": "Round each number to the nearest 10.",
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
       "items": [
         {
-          "number": 863,
-          "nearest": 10,
-          "answer": 860
+          "a": 81,
+          "op": "×",
+          "b": 2,
+          "answer": 162
         },
         {
-          "number": 288,
-          "nearest": 10,
-          "answer": 290
+          "a": 410,
+          "op": "−",
+          "b": 337,
+          "answer": 73
         },
         {
-          "number": 853,
-          "nearest": 10,
-          "answer": 850
+          "a": 313,
+          "op": "−",
+          "b": 180,
+          "answer": 133
         },
         {
-          "number": 778,
-          "nearest": 10,
-          "answer": 780
-        },
-        {
-          "number": 898,
-          "nearest": 10,
-          "answer": 900
-        },
-        {
-          "number": 296,
-          "nearest": 10,
-          "answer": 300
+          "a": 93,
+          "op": "×",
+          "b": 8,
+          "answer": 744
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 3,
-    "steps": 4,
-    "score": 36
+    "maxTier": 5,
+    "steps": 7,
+    "score": 44
   },
   "seed": 31,
   "createdAt": "2026-06-04T00:00:00.000Z"

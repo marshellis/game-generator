@@ -13,36 +13,67 @@
       "items": [
         {
           "numbers": [
+            2,
             1,
-            6,
-            4,
-            2,
-            24
-          ],
-          "answerIndex": 4,
-          "op": "×"
-        },
-        {
-          "numbers": [
-            4,
-            5,
-            3,
-            2,
+            9,
+            12,
             6
           ],
-          "answerIndex": 4,
+          "answerIndex": 3,
           "op": "×"
         },
         {
           "numbers": [
-            16,
-            35,
-            25,
-            48,
-            51
+            26,
+            32,
+            7,
+            56,
+            8
           ],
-          "answerIndex": 4,
-          "op": "+"
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            9,
+            45,
+            26,
+            5,
+            43
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 848260,
+          "op": "+",
+          "b": 581990,
+          "answer": 1430250
+        },
+        {
+          "a": 518027,
+          "op": "−",
+          "b": 169838,
+          "answer": 348189
+        },
+        {
+          "a": 911539,
+          "op": "−",
+          "b": 379580,
+          "answer": 531959
+        },
+        {
+          "a": 583470,
+          "op": "+",
+          "b": 651877,
+          "answer": 1235347
         }
       ]
     },
@@ -52,119 +83,52 @@
       "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "left": 635,
-          "op": "−",
-          "right": 65,
-          "result": 570,
-          "blank": "result",
-          "answer": 570
+          "left": 9,
+          "op": "×",
+          "right": 9,
+          "result": 81,
+          "blank": "right",
+          "answer": 9
         },
         {
-          "left": 8,
+          "left": 28,
+          "op": "÷",
+          "right": 7,
+          "result": 4,
+          "blank": "left",
+          "answer": 28
+        },
+        {
+          "left": 10,
           "op": "×",
           "right": 7,
-          "result": 56,
-          "blank": "left",
-          "answer": 8
-        },
-        {
-          "left": 11,
-          "op": "×",
-          "right": 5,
-          "result": 55,
-          "blank": "left",
-          "answer": 11
-        },
-        {
-          "left": 8,
-          "op": "×",
-          "right": 7,
-          "result": 56,
+          "result": 70,
           "blank": "right",
           "answer": 7
         },
         {
-          "left": 8,
+          "left": 5,
           "op": "×",
-          "right": 11,
-          "result": 88,
-          "blank": "right",
-          "answer": 11
-        },
-        {
-          "left": 268,
-          "op": "−",
-          "right": 135,
-          "result": 133,
+          "right": 6,
+          "result": 30,
           "blank": "result",
-          "answer": 133
-        }
-      ]
-    },
-    {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
-      "items": [
-        {
-          "operands": [
-            6,
-            2,
-            6,
-            7
-          ],
-          "ops": [
-            "−",
-            "×",
-            "+"
-          ],
-          "target": 1
+          "answer": 30
         },
         {
-          "operands": [
-            5,
-            6,
-            1,
-            8,
-            6
-          ],
-          "ops": [
-            "×",
-            "−",
-            "−",
-            "−"
-          ],
-          "target": 15
+          "left": 42,
+          "op": "÷",
+          "right": 7,
+          "result": 6,
+          "blank": "left",
+          "answer": 42
         },
         {
-          "operands": [
-            6,
-            9,
-            8,
-            4,
-            3
-          ],
-          "ops": [
-            "×",
-            "−",
-            "−",
-            "+"
-          ],
-          "target": 45
-        },
-        {
-          "operands": [
-            4,
-            6,
-            9,
-            4
-          ],
-          "ops": [
-            "+",
-            "×",
-            "+"
-          ],
-          "target": 62
+          "left": 10,
+          "op": "×",
+          "right": 6,
+          "result": 60,
+          "blank": "result",
+          "answer": 60
         }
       ]
     },
@@ -174,27 +138,27 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Eli had 56 cookies. Eli gave 9 to Ruby. How many are left?",
-          "answer": 47,
-          "unit": "cookies"
+          "text": "Theo has 108 marbles. Mara gives Theo 56 more. How many does Theo have now?",
+          "answer": 164,
+          "unit": "marbles"
         },
         {
-          "text": "Zoe has 162 books. Theo gives Zoe 100 more. How many does Zoe have now?",
-          "answer": 262,
+          "text": "Theo shares 32 books equally among 8 friends. How many does each friend get?",
+          "answer": 4,
           "unit": "books"
         },
         {
-          "text": "Omar shares 72 pencils equally among 9 friends. How many does each friend get?",
-          "answer": 8,
-          "unit": "pencils"
+          "text": "Ivy has 114 books. Mara gives Ivy 168 more. How many does Ivy have now?",
+          "answer": 282,
+          "unit": "books"
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 4,
-    "steps": 8,
-    "score": 44
+    "maxTier": 3,
+    "steps": 4,
+    "score": 42
   },
   "seed": 73,
   "createdAt": "2026-06-04T00:00:00.000Z"

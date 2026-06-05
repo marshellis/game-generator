@@ -13,93 +13,98 @@
       "items": [
         {
           "numbers": [
-            6,
-            12,
-            17,
-            11
-          ],
-          "answerIndex": 2,
-          "op": "+"
-        },
-        {
-          "numbers": [
             11,
-            12,
-            7,
-            5
+            20,
+            9,
+            7
           ],
           "answerIndex": 1,
           "op": "+"
         },
         {
           "numbers": [
-            1,
             9,
+            1,
             10,
             5
           ],
           "answerIndex": 2,
           "op": "+"
+        },
+        {
+          "numbers": [
+            3,
+            10,
+            9,
+            1
+          ],
+          "answerIndex": 1,
+          "op": "+"
         }
       ]
     },
     {
-      "type": "numberBond",
-      "title": "Number Bonds",
-      "instructions": "Find the missing part of each bond.",
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
       "items": [
         {
-          "total": 10,
-          "known": 3,
-          "answer": 7
+          "coins": [
+            25,
+            10,
+            1,
+            10
+          ],
+          "answer": 46
         },
         {
-          "total": 6,
-          "known": 4,
-          "answer": 2
+          "coins": [
+            10,
+            25,
+            25,
+            5
+          ],
+          "answer": 65
         },
         {
-          "total": 13,
-          "known": 2,
-          "answer": 11
+          "coins": [
+            5,
+            25,
+            10,
+            5
+          ],
+          "answer": 45
         },
         {
-          "total": 3,
-          "known": 2,
-          "answer": 1
-        },
-        {
-          "total": 7,
-          "known": 1,
-          "answer": 6
-        },
-        {
-          "total": 13,
-          "known": 8,
-          "answer": 5
+          "coins": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "answer": 40
         }
       ]
     },
     {
-      "type": "tenFrame",
-      "title": "How Many?",
-      "instructions": "Write how many dots are filled in each ten-frame.",
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "dots": 9,
-          "answer": 9
+          "text": "Eli had 14 cookies. Eli gave 12 to Zoe. How many are left?",
+          "answer": 2,
+          "unit": "cookies"
         },
         {
-          "dots": 6,
-          "answer": 6
+          "text": "Eli had 19 pencils. Eli gave 3 to Sam. How many are left?",
+          "answer": 16,
+          "unit": "pencils"
         },
         {
-          "dots": 1,
-          "answer": 1
-        },
-        {
-          "dots": 8,
-          "answer": 8
+          "text": "Ivy had 17 shells. Ivy gave 17 to Theo. How many are left?",
+          "answer": 0,
+          "unit": "shells"
         }
       ]
     }
@@ -107,7 +112,7 @@
   "load": {
     "maxTier": 3,
     "steps": 3,
-    "score": 20
+    "score": 25
   },
   "seed": 22,
   "createdAt": "2026-06-04T00:00:00.000Z"

@@ -13,35 +13,35 @@
       "items": [
         {
           "numbers": [
-            22,
-            9,
+            21,
             26,
-            33,
-            35
+            35,
+            9,
+            33
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            25,
+            15,
+            57,
+            37,
+            62
           ],
           "answerIndex": 4,
           "op": "+"
         },
         {
           "numbers": [
-            65,
-            39,
+            31,
+            15,
             28,
-            37,
-            16
+            27,
+            4
           ],
           "answerIndex": 0,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            24,
-            8,
-            6,
-            19,
-            30
-          ],
-          "answerIndex": 4,
           "op": "+"
         }
       ]
@@ -52,149 +52,172 @@
       "instructions": "Find the number that makes each equation true.",
       "items": [
         {
+          "left": 427,
+          "op": "+",
+          "right": 173,
+          "result": 600,
+          "blank": "right",
+          "answer": 173
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 3,
+          "result": 24,
+          "blank": "left",
+          "answer": 8
+        },
+        {
+          "left": 123,
+          "op": "+",
+          "right": 147,
+          "result": 270,
+          "blank": "right",
+          "answer": 147
+        },
+        {
+          "left": 200,
+          "op": "+",
+          "right": 266,
+          "result": 466,
+          "blank": "right",
+          "answer": 266
+        },
+        {
+          "left": 519,
+          "op": "−",
+          "right": 62,
+          "result": 457,
+          "blank": "right",
+          "answer": 62
+        },
+        {
           "left": 56,
           "op": "÷",
           "right": 7,
           "result": 8,
           "blank": "left",
           "answer": 56
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 593229,
+          "op": "−",
+          "b": 435567,
+          "answer": 157662
         },
         {
-          "left": 8,
+          "a": 22,
           "op": "×",
-          "right": 9,
-          "result": 72,
-          "blank": "result",
-          "answer": 72
+          "b": 37,
+          "answer": 814
         },
         {
-          "left": 366,
+          "a": 371,
+          "op": "×",
+          "b": 36,
+          "answer": 13356
+        },
+        {
+          "a": 988333,
           "op": "+",
-          "right": 883,
-          "result": 1249,
-          "blank": "right",
-          "answer": 883
-        },
-        {
-          "left": 7,
-          "op": "−",
-          "right": 7,
-          "result": 0,
-          "blank": "result",
-          "answer": 0
-        },
-        {
-          "left": 607,
-          "op": "−",
-          "right": 519,
-          "result": 88,
-          "blank": "left",
-          "answer": 607
-        },
-        {
-          "left": 42,
-          "op": "÷",
-          "right": 6,
-          "result": 7,
-          "blank": "right",
-          "answer": 6
+          "b": 757065,
+          "answer": 1745398
         }
       ]
     },
     {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
       "items": [
         {
-          "operands": [
-            6,
-            2,
-            5,
-            2,
-            8
-          ],
+          "start": 6,
           "ops": [
-            "×",
-            "×",
-            "+",
-            "−"
+            {
+              "op": "−",
+              "operand": 6
+            },
+            {
+              "op": "+",
+              "operand": 152
+            },
+            {
+              "op": "−",
+              "operand": 27
+            },
+            {
+              "op": "+",
+              "operand": 49
+            },
+            {
+              "op": "−",
+              "operand": 119
+            },
+            {
+              "op": "+",
+              "operand": 286
+            }
           ],
-          "target": 54
+          "values": [
+            0,
+            152,
+            125,
+            174,
+            55,
+            341
+          ]
         },
         {
-          "operands": [
-            4,
-            4,
-            9,
-            8
-          ],
+          "start": 12,
           "ops": [
-            "+",
-            "+",
-            "+"
+            {
+              "op": "+",
+              "operand": 290
+            },
+            {
+              "op": "−",
+              "operand": 204
+            },
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 145
+            },
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 120
+            }
           ],
-          "target": 25
-        },
-        {
-          "operands": [
-            8,
-            4,
-            6,
-            7
-          ],
-          "ops": [
-            "−",
-            "−",
-            "+"
-          ],
-          "target": 5
-        },
-        {
-          "operands": [
-            6,
-            9,
-            5,
-            6,
-            6
-          ],
-          "ops": [
-            "×",
-            "−",
-            "−",
-            "−"
-          ],
-          "target": 37
-        }
-      ]
-    },
-    {
-      "type": "wordProblem",
-      "title": "Story Problems",
-      "instructions": "Read each problem and write the answer.",
-      "items": [
-        {
-          "text": "Eli has 3 bags with 9 stickers in each bag. How many stickers in all?",
-          "answer": 27,
-          "unit": "stickers"
-        },
-        {
-          "text": "Lena had 154 cookies. Lena gave 3 to Noah. How many are left?",
-          "answer": 151,
-          "unit": "cookies"
-        },
-        {
-          "text": "Zoe has 3 bags with 9 cookies in each bag. How many cookies in all?",
-          "answer": 27,
-          "unit": "cookies"
+          "values": [
+            302,
+            98,
+            49,
+            194,
+            582,
+            702
+          ]
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 4,
-    "steps": 8,
-    "score": 45
+    "maxTier": 5,
+    "steps": 9,
+    "score": 52
   },
   "seed": 72,
   "createdAt": "2026-06-04T00:00:00.000Z"

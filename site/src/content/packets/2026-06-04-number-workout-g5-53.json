@@ -13,68 +13,36 @@
       "items": [
         {
           "numbers": [
-            7,
-            27,
-            19,
-            8,
-            4
+            2,
+            10,
+            4,
+            14,
+            7
           ],
-          "answerIndex": 1,
-          "op": "+"
-        },
-        {
-          "numbers": [
-            48,
-            6,
-            8,
-            35,
-            45
-          ],
-          "answerIndex": 0,
+          "answerIndex": 3,
           "op": "×"
         },
         {
           "numbers": [
+            41,
+            39,
             22,
-            28,
-            15,
-            9,
+            19,
             37
           ],
-          "answerIndex": 4,
+          "answerIndex": 0,
           "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "placeValue",
-      "title": "Place Value",
-      "instructions": "Write the value of the underlined place for each number.",
-      "items": [
-        {
-          "number": 82256,
-          "place": "thousands",
-          "answer": 2000
         },
         {
-          "number": 31161,
-          "place": "thousands",
-          "answer": 1000
-        },
-        {
-          "number": 66430,
-          "place": "ones",
-          "answer": 0
-        },
-        {
-          "number": 92253,
-          "place": "hundreds",
-          "answer": 200
-        },
-        {
-          "number": 28251,
-          "place": "ones",
-          "answer": 1
+          "numbers": [
+            21,
+            28,
+            6,
+            22,
+            13
+          ],
+          "answerIndex": 1,
+          "op": "+"
         }
       ]
     },
@@ -84,121 +52,114 @@
       "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
-          "kind": "equiv",
-          "num": 3,
-          "den": 4,
-          "newDen": 8,
-          "answer": 6
-        },
-        {
-          "kind": "equiv",
-          "num": 2,
-          "den": 4,
-          "newDen": 12,
-          "answer": 6
-        },
-        {
-          "kind": "compare",
-          "aNum": 5,
-          "aDen": 5,
-          "bNum": 1,
-          "bDen": 5,
-          "answer": ">"
-        },
-        {
           "kind": "compare",
           "aNum": 2,
-          "aDen": 2,
+          "aDen": 6,
+          "bNum": 4,
+          "bDen": 3,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 3,
           "bNum": 1,
           "bDen": 4,
           "answer": ">"
         },
         {
           "kind": "compare",
-          "aNum": 1,
-          "aDen": 2,
-          "bNum": 3,
+          "aNum": 5,
+          "aDen": 3,
+          "bNum": 2,
           "bDen": 5,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 4,
+          "den": 5,
+          "newDen": 20,
+          "answer": 16
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 5,
+          "bNum": 4,
+          "bDen": 3,
           "answer": "<"
         }
       ]
     },
     {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
       "items": [
         {
-          "start": 10,
-          "ops": [
-            {
-              "op": "+",
-              "operand": 26
-            },
-            {
-              "op": "+",
-              "operand": 103
-            },
-            {
-              "op": "−",
-              "operand": 132
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "+",
-              "operand": 165
-            }
-          ],
-          "values": [
-            36,
-            139,
-            7,
-            14,
-            179
-          ]
+          "number": 14746,
+          "place": "ones",
+          "answer": 6
         },
         {
-          "start": 3,
-          "ops": [
-            {
-              "op": "−",
-              "operand": 1
-            },
-            {
-              "op": "+",
-              "operand": 87
-            },
-            {
-              "op": "×",
-              "operand": 4
-            },
-            {
-              "op": "÷",
-              "operand": 2
-            },
-            {
-              "op": "−",
-              "operand": 120
-            }
-          ],
-          "values": [
-            2,
-            89,
-            356,
-            178,
-            58
-          ]
+          "number": 45971,
+          "place": "hundreds",
+          "answer": 900
+        },
+        {
+          "number": 22017,
+          "place": "ones",
+          "answer": 7
+        },
+        {
+          "number": 46424,
+          "place": "hundreds",
+          "answer": 400
+        },
+        {
+          "number": 80780,
+          "place": "thousands",
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 72007,
+          "op": "−",
+          "b": 19606,
+          "answer": 52401
+        },
+        {
+          "a": 522,
+          "op": "×",
+          "b": 92,
+          "answer": 48024
+        },
+        {
+          "a": 67061,
+          "op": "−",
+          "b": 15735,
+          "answer": 51326
+        },
+        {
+          "a": 95370,
+          "op": "−",
+          "b": 17967,
+          "answer": 77403
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 8,
-    "score": 48
+    "maxTier": 4,
+    "steps": 4,
+    "score": 42
   },
   "seed": 53,
   "createdAt": "2026-06-04T00:00:00.000Z"

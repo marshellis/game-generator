@@ -13,193 +13,168 @@
       "items": [
         {
           "numbers": [
-            2,
-            14,
-            13,
+            7,
+            10,
+            17,
             4,
-            18
+            5
           ],
-          "answerIndex": 4,
+          "answerIndex": 2,
           "op": "+"
         },
         {
           "numbers": [
-            3,
-            8,
             15,
-            14,
-            24
+            8,
+            13,
+            7,
+            4
           ],
-          "answerIndex": 4,
-          "op": "×"
+          "answerIndex": 0,
+          "op": "+"
         },
         {
           "numbers": [
+            10,
             6,
-            48,
-            37,
-            8,
-            39
+            5,
+            4,
+            2
           ],
-          "answerIndex": 1,
+          "answerIndex": 0,
           "op": "×"
         }
       ]
     },
     {
-      "type": "breakApart",
-      "title": "Break Apart",
-      "instructions": "Write the missing part of each number.",
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
       "items": [
         {
-          "number": 524,
-          "parts": [
-            500,
-            20,
-            4
-          ],
-          "blankIndex": 0,
-          "answer": 500
-        },
-        {
-          "number": 839,
-          "parts": [
-            800,
-            30,
-            9
-          ],
-          "blankIndex": 1,
-          "answer": 30
-        },
-        {
-          "number": 609,
-          "parts": [
-            600,
-            9
-          ],
-          "blankIndex": 0,
-          "answer": 600
-        },
-        {
-          "number": 327,
-          "parts": [
-            300,
-            20,
-            7
-          ],
-          "blankIndex": 1,
-          "answer": 20
-        },
-        {
-          "number": 178,
-          "parts": [
+          "coins": [
             100,
-            70,
-            8
-          ],
-          "blankIndex": 1,
-          "answer": 70
-        }
-      ]
-    },
-    {
-      "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
-      "items": [
-        {
-          "start": 7,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 4
-            },
-            {
-              "op": "+",
-              "operand": 22
-            },
-            {
-              "op": "−",
-              "operand": 37
-            },
-            {
-              "op": "−",
-              "operand": 11
-            }
-          ],
-          "values": [
-            28,
-            50,
-            13,
-            2
-          ]
-        },
-        {
-          "start": 1,
-          "ops": [
-            {
-              "op": "×",
-              "operand": 8
-            },
-            {
-              "op": "×",
-              "operand": 2
-            },
-            {
-              "op": "−",
-              "operand": 6
-            },
-            {
-              "op": "×",
-              "operand": 5
-            }
-          ],
-          "values": [
-            8,
-            16,
-            10,
+            25,
+            1,
+            5,
             50
-          ]
+          ],
+          "answer": 181
+        },
+        {
+          "coins": [
+            100,
+            10,
+            50,
+            1,
+            5
+          ],
+          "answer": 166
+        },
+        {
+          "coins": [
+            100,
+            50,
+            25,
+            10,
+            1
+          ],
+          "answer": 186
+        },
+        {
+          "coins": [
+            5,
+            5,
+            10,
+            1,
+            25
+          ],
+          "answer": 46
         }
       ]
     },
     {
-      "type": "placeValue",
-      "title": "Place Value",
-      "instructions": "Write the value of the underlined place for each number.",
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "number": 808,
-          "place": "tens",
-          "answer": 0
+          "left": 79,
+          "op": "−",
+          "right": 52,
+          "result": 27,
+          "blank": "result",
+          "answer": 27
         },
         {
-          "number": 791,
-          "place": "ones",
-          "answer": 1
+          "left": 25,
+          "op": "+",
+          "right": 67,
+          "result": 92,
+          "blank": "left",
+          "answer": 25
         },
         {
-          "number": 323,
-          "place": "hundreds",
-          "answer": 300
+          "left": 3,
+          "op": "×",
+          "right": 5,
+          "result": 15,
+          "blank": "right",
+          "answer": 5
         },
         {
-          "number": 338,
-          "place": "hundreds",
-          "answer": 300
+          "left": 4,
+          "op": "−",
+          "right": 1,
+          "result": 3,
+          "blank": "result",
+          "answer": 3
         },
         {
-          "number": 218,
-          "place": "tens",
-          "answer": 10
+          "left": 3,
+          "op": "×",
+          "right": 6,
+          "result": 18,
+          "blank": "right",
+          "answer": 6
+        },
+        {
+          "left": 4,
+          "op": "×",
+          "right": 8,
+          "result": 32,
+          "blank": "result",
+          "answer": 32
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Mara had 5 cookies. Mara gave 5 to Noah. How many are left?",
+          "answer": 0,
+          "unit": "cookies"
+        },
+        {
+          "text": "Ivy had 32 coins. Ivy gave 20 to Omar. How many are left?",
+          "answer": 12,
+          "unit": "coins"
+        },
+        {
+          "text": "Mara has 2 stickers. Ivy gives Mara 18 more. How many does Mara have now?",
+          "answer": 20,
+          "unit": "stickers"
         }
       ]
     }
   ],
   "load": {
-    "maxTier": 5,
-    "steps": 7,
-    "score": 43
+    "maxTier": 3,
+    "steps": 4,
+    "score": 35
   },
   "seed": 33,
   "createdAt": "2026-06-04T00:00:00.000Z"
