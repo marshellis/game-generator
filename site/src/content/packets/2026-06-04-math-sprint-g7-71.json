@@ -1,0 +1,204 @@
+{
+  "id": "2026-06-04-math-sprint-g7-71",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            26,
+            27,
+            4,
+            48,
+            21
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            11,
+            42,
+            7,
+            20
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            5,
+            8,
+            29,
+            40,
+            21
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Lena had 66 books. Lena gave 11 to Mara. How many are left?",
+          "answer": 55,
+          "unit": "books"
+        },
+        {
+          "text": "Mara had 187 cookies. Mara gave 76 to Noah. How many are left?",
+          "answer": 111,
+          "unit": "cookies"
+        },
+        {
+          "text": "Omar shares 10 stickers equally among 5 friends. How many does each friend get?",
+          "answer": 2,
+          "unit": "stickers"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 8,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 158
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 213
+            },
+            {
+              "op": "÷",
+              "operand": 5
+            },
+            {
+              "op": "+",
+              "operand": 320
+            }
+          ],
+          "values": [
+            24,
+            182,
+            728,
+            515,
+            103,
+            423
+          ]
+        },
+        {
+          "start": 12,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 59
+            },
+            {
+              "op": "−",
+              "operand": 85
+            },
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 38
+            }
+          ],
+          "values": [
+            36,
+            144,
+            85,
+            0,
+            0,
+            38
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 2,
+          "aDen": 6,
+          "bNum": 4,
+          "bDen": 3,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 3,
+          "newDen": 6,
+          "answer": 4
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 2,
+          "bNum": 5,
+          "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 3,
+          "newDen": 12,
+          "answer": 4
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 9,
+    "score": 49
+  },
+  "seed": 71,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

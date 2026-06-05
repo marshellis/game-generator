@@ -1,0 +1,177 @@
+{
+  "id": "2026-06-04-puzzle-power-g3-32",
+  "title": "Puzzle Power",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            10,
+            8,
+            18,
+            12,
+            6
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            11,
+            2,
+            4,
+            3,
+            13
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            10,
+            5,
+            2,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 40,
+          "op": "−",
+          "right": 19,
+          "result": 21,
+          "blank": "right",
+          "answer": 19
+        },
+        {
+          "left": 31,
+          "op": "−",
+          "right": 25,
+          "result": 6,
+          "blank": "left",
+          "answer": 31
+        },
+        {
+          "left": 71,
+          "op": "+",
+          "right": 14,
+          "result": 85,
+          "blank": "left",
+          "answer": 71
+        },
+        {
+          "left": 69,
+          "op": "−",
+          "right": 47,
+          "result": 22,
+          "blank": "right",
+          "answer": 47
+        },
+        {
+          "left": 32,
+          "op": "−",
+          "right": 5,
+          "result": 27,
+          "blank": "left",
+          "answer": 32
+        },
+        {
+          "left": 7,
+          "op": "×",
+          "right": 8,
+          "result": 56,
+          "blank": "left",
+          "answer": 7
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Omar has 18 cookies. Theo gives Omar 27 more. How many does Omar have now?",
+          "answer": 45,
+          "unit": "cookies"
+        },
+        {
+          "text": "Theo had 18 stickers. Theo gave 3 to Mara. How many are left?",
+          "answer": 15,
+          "unit": "stickers"
+        },
+        {
+          "text": "Eli has 49 coins. Noah gives Eli 11 more. How many does Eli have now?",
+          "answer": 60,
+          "unit": "coins"
+        }
+      ]
+    },
+    {
+      "type": "makeTen",
+      "title": "Make 100",
+      "instructions": "Fill in the number that makes 100.",
+      "items": [
+        {
+          "known": 50,
+          "target": 100,
+          "op": "+",
+          "answer": 50
+        },
+        {
+          "known": 13,
+          "target": 100,
+          "op": "+",
+          "answer": 87
+        },
+        {
+          "known": 56,
+          "target": 100,
+          "op": "+",
+          "answer": 44
+        },
+        {
+          "known": 44,
+          "target": 100,
+          "op": "+",
+          "answer": 56
+        },
+        {
+          "known": 98,
+          "target": 100,
+          "op": "+",
+          "answer": 2
+        },
+        {
+          "known": 58,
+          "target": 100,
+          "op": "+",
+          "answer": 42
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 35
+  },
+  "seed": 32,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

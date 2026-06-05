@@ -113,6 +113,16 @@ const activity = z.discriminatedUnion("type", [
       z.object({ kind: z.literal("compare"), aNum: z.number(), aDen: z.number(), bNum: z.number(), bDen: z.number(), answer: sign }),
     ])),
   }),
+  z.object({
+    type: z.literal("snake"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({
+      start: z.number(),
+      ops: z.array(z.object({ op: z.enum(["+", "−", "×", "÷"]), operand: z.number() })),
+      values: z.array(z.number()),
+    })),
+  }),
 ]);
 
 const packets = defineCollection({
@@ -125,6 +135,7 @@ const packets = defineCollection({
     gradeLabel: z.string(),
     difficulty: z.string(),
     activities: z.array(activity),
+    load: z.object({ maxTier: z.number(), steps: z.number(), score: z.number() }),
     seed: z.number(),
     createdAt: z.string(),
   }),

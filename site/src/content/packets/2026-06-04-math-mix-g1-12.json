@@ -1,0 +1,114 @@
+{
+  "id": "2026-06-04-math-mix-g1-12",
+  "title": "Math Mix",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            4,
+            7,
+            1,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            5,
+            12,
+            6
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            3,
+            4,
+            9,
+            5
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 4,
+          "answer": 4
+        },
+        {
+          "dots": 9,
+          "answer": 9
+        },
+        {
+          "dots": 8,
+          "answer": 8
+        },
+        {
+          "dots": 8,
+          "answer": 8
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "16",
+          "rightText": "18",
+          "answer": "<"
+        },
+        {
+          "leftText": "3",
+          "rightText": "3",
+          "answer": "="
+        },
+        {
+          "leftText": "8",
+          "rightText": "8",
+          "answer": "="
+        },
+        {
+          "leftText": "16",
+          "rightText": "17",
+          "answer": "<"
+        },
+        {
+          "leftText": "20",
+          "rightText": "20",
+          "answer": "="
+        },
+        {
+          "leftText": "3",
+          "rightText": "3",
+          "answer": "="
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 19
+  },
+  "seed": 12,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

@@ -1,0 +1,201 @@
+{
+  "id": "2026-06-04-brain-warm-up-g7-72",
+  "title": "Brain Warm-Up",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            22,
+            9,
+            26,
+            33,
+            35
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            65,
+            39,
+            28,
+            37,
+            16
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            24,
+            8,
+            6,
+            19,
+            30
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 56,
+          "op": "÷",
+          "right": 7,
+          "result": 8,
+          "blank": "left",
+          "answer": 56
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 9,
+          "result": 72,
+          "blank": "result",
+          "answer": 72
+        },
+        {
+          "left": 366,
+          "op": "+",
+          "right": 883,
+          "result": 1249,
+          "blank": "right",
+          "answer": 883
+        },
+        {
+          "left": 7,
+          "op": "−",
+          "right": 7,
+          "result": 0,
+          "blank": "result",
+          "answer": 0
+        },
+        {
+          "left": 607,
+          "op": "−",
+          "right": 519,
+          "result": 88,
+          "blank": "left",
+          "answer": 607
+        },
+        {
+          "left": 42,
+          "op": "÷",
+          "right": 6,
+          "result": 7,
+          "blank": "right",
+          "answer": 6
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            6,
+            2,
+            5,
+            2,
+            8
+          ],
+          "ops": [
+            "×",
+            "×",
+            "+",
+            "−"
+          ],
+          "target": 54
+        },
+        {
+          "operands": [
+            4,
+            4,
+            9,
+            8
+          ],
+          "ops": [
+            "+",
+            "+",
+            "+"
+          ],
+          "target": 25
+        },
+        {
+          "operands": [
+            8,
+            4,
+            6,
+            7
+          ],
+          "ops": [
+            "−",
+            "−",
+            "+"
+          ],
+          "target": 5
+        },
+        {
+          "operands": [
+            6,
+            9,
+            5,
+            6,
+            6
+          ],
+          "ops": [
+            "×",
+            "−",
+            "−",
+            "−"
+          ],
+          "target": 37
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Eli has 3 bags with 9 stickers in each bag. How many stickers in all?",
+          "answer": 27,
+          "unit": "stickers"
+        },
+        {
+          "text": "Lena had 154 cookies. Lena gave 3 to Noah. How many are left?",
+          "answer": 151,
+          "unit": "cookies"
+        },
+        {
+          "text": "Zoe has 3 bags with 9 cookies in each bag. How many cookies in all?",
+          "answer": 27,
+          "unit": "cookies"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 8,
+    "score": 45
+  },
+  "seed": 72,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

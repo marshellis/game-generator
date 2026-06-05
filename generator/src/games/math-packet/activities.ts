@@ -7,6 +7,7 @@ import type {
   ActivityType,
   FindTheSumItem,
   OrderOfOpsItem,
+  SnakeItem,
 } from "./types";
 
 export interface ActivityGen {
@@ -447,6 +448,72 @@ const fraction: ActivityGen = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Snake — a running-total chain. Start at the first number, apply each step in
+// order, write the result. Multi-step: difficulty scales with chain length,
+// operation mix, and number range. Always integer, bounded, non-negative, with
+// a single forward-computed answer.
+// ---------------------------------------------------------------------------
+
+const SNAKE_LEN = [0, 3, 4, 4, 5, 5, 6, 6, 7];
+const SNAKE_CAP = [0, 30, 50, 99, 200, 500, 999, 999, 2000];
+
+function makeSnake(g: GradeConfig, rng: Rng): SnakeItem {
+  const length = SNAKE_LEN[g.grade]!;
+  const cap = SNAKE_CAP[g.grade]!;
+  for (let attempt = 0; attempt < 300; attempt++) {
+    const start = randInt(rng, 1, Math.min(12, cap));
+    let value = start;
+    const chain: SnakeItem["ops"] = [];
+    const values: number[] = [];
+    let ok = true;
+    for (let i = 0; i < length; i++) {
+      let applied = false;
+      for (const op of shuffle([...g.ops], rng)) {
+        if (op === "+") {
+          const room = cap - value;
+          if (room < 1) continue;
+          const operand = randInt(rng, 1, Math.min(room, Math.max(2, Math.floor(cap / 3))));
+          value += operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        } else if (op === "−") {
+          if (value < 2) continue;
+          const operand = randInt(rng, 1, value);
+          value -= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        } else if (op === "×") {
+          const maxFactor = Math.floor(cap / Math.max(value, 1));
+          if (value < 1 || maxFactor < 2) continue;
+          const operand = randInt(rng, 2, Math.min(maxFactor, 9));
+          value *= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        } else {
+          const divs: number[] = [];
+          for (let d = 2; d <= 9; d++) if (value % d === 0) divs.push(d);
+          if (!divs.length) continue;
+          const operand = pick(rng, divs);
+          value /= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
+        }
+      }
+      if (!applied) {
+        if (value < cap) { value += 1; chain.push({ op: "+", operand: 1 }); values.push(value); }
+        else if (value > 1) { value -= 1; chain.push({ op: "−", operand: 1 }); values.push(value); }
+        else { ok = false; break; }
+      }
+    }
+    if (ok && chain.length === length) return { start, ops: chain, values };
+  }
+  throw new Error("snake: could not build a valid chain");
+}
+
+const snake: ActivityGen = {
+  type: "snake",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => ({
+    type: "snake",
+    title: "Number Snake",
+    instructions: "Start at the first number. Do each step in order and write the result in each box.",
+    items: [makeSnake(g, rng), makeSnake(g, rng)],
+  }),
+};
+
 /** All generators, in a stable display order. */
 export const ACTIVITY_GENS: ActivityGen[] = [
   findTheSum,
@@ -459,6 +526,7 @@ export const ACTIVITY_GENS: ActivityGen[] = [
   placeValue,
   rounding,
   orderOfOps,
+  snake,
   fraction,
   wordProblem,
 ];

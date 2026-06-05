@@ -1,0 +1,197 @@
+{
+  "id": "2026-06-04-number-quest-g6-62",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            30,
+            44,
+            26,
+            14,
+            25
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            20,
+            4,
+            11,
+            18,
+            9
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            11,
+            19,
+            29,
+            28,
+            40
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "915",
+          "rightText": "855",
+          "answer": ">"
+        },
+        {
+          "leftText": "463",
+          "rightText": "463",
+          "answer": "="
+        },
+        {
+          "leftText": "190",
+          "rightText": "114",
+          "answer": ">"
+        },
+        {
+          "leftText": "8 × 3",
+          "rightText": "22",
+          "answer": ">"
+        },
+        {
+          "leftText": "246",
+          "rightText": "174",
+          "answer": ">"
+        },
+        {
+          "leftText": "563",
+          "rightText": "464",
+          "answer": ">"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 7,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "×",
+              "operand": 8
+            },
+            {
+              "op": "+",
+              "operand": 192
+            },
+            {
+              "op": "+",
+              "operand": 96
+            },
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "−",
+              "operand": 799
+            }
+          ],
+          "values": [
+            1,
+            8,
+            200,
+            296,
+            888,
+            89
+          ]
+        },
+        {
+          "start": 7,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 24
+            },
+            {
+              "op": "+",
+              "operand": 202
+            },
+            {
+              "op": "−",
+              "operand": 91
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "+",
+              "operand": 250
+            }
+          ],
+          "values": [
+            28,
+            4,
+            206,
+            115,
+            460,
+            710
+          ]
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Zoe shares 21 pencils equally among 3 friends. How many does each friend get?",
+          "answer": 7,
+          "unit": "pencils"
+        },
+        {
+          "text": "Omar has 6 bags with 6 marbles in each bag. How many marbles in all?",
+          "answer": 36,
+          "unit": "marbles"
+        },
+        {
+          "text": "Eli had 23 cookies. Eli gave 15 to Theo. How many are left?",
+          "answer": 8,
+          "unit": "cookies"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 9,
+    "score": 43
+  },
+  "seed": 62,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

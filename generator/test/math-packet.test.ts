@@ -3,6 +3,7 @@ import { generatePacket } from "../src/games/math-packet/generate";
 import { resolveGrade, GRADES } from "../src/games/math-packet/grades";
 import { eligibleGens, evalOps } from "../src/games/math-packet/activities";
 import { assembleActivities } from "../src/games/math-packet/assemble";
+import { inBand } from "../src/games/math-packet/difficulty";
 import { makeRng } from "../src/core/rng";
 import type { Activity } from "../src/games/math-packet/types";
 
@@ -129,6 +130,21 @@ function checkActivity(act: Activity): void {
         }
       }
       break;
+    case "snake":
+      for (const it of act.items) {
+        expect(it.values.length).toBe(it.ops.length);
+        let v = it.start;
+        it.ops.forEach((step, k) => {
+          v = step.op === "+" ? v + step.operand
+            : step.op === "−" ? v - step.operand
+            : step.op === "×" ? v * step.operand
+            : v / step.operand;
+          expect(Number.isInteger(v)).toBe(true); // chain stays integer
+          expect(v).toBeGreaterThanOrEqual(0); // never goes negative
+          expect(it.values[k]).toBe(v); // stored answer matches the running total
+        });
+      }
+      break;
   }
 }
 
@@ -171,11 +187,52 @@ describe("math-packet generator", () => {
     }
   });
 
+  it("snake chains appear from g2 up and never below g1", () => {
+    expect(eligibleGens(resolveGrade("g1")).some((a) => a.type === "snake")).toBe(false);
+    expect(eligibleGens(resolveGrade("g4")).some((a) => a.type === "snake")).toBe(true);
+  });
+
   it("assembleActivities never repeats a type within a packet", () => {
     for (const grade of grades) {
       const g = resolveGrade(grade);
       const acts = assembleActivities(g, makeRng(99));
       expect(new Set(acts.map((a) => a.type)).size).toBe(acts.length);
     }
+  });
+});
+
+describe("difficulty calibration (grade-appropriateness framework §3)", () => {
+  const grades = Object.keys(GRADES);
+  // Measure once: per-grade median score, % in band, and max tier observed.
+  const STATS = grades.map((g) => {
+    const scores: number[] = [];
+    let inCount = 0, maxTier = 0;
+    const N = 60;
+    for (let s = 1; s <= N; s++) {
+      const p = generatePacket({ difficulty: g, seed: s, date: "2026-06-04" });
+      scores.push(p.load.score);
+      if (inBand(g, p.load)) inCount++;
+      maxTier = Math.max(maxTier, p.load.maxTier);
+    }
+    scores.sort((a, b) => a - b);
+    return { g, median: scores[Math.floor(scores.length / 2)]!, inFrac: inCount / N, maxTier };
+  });
+
+  it("band-targeting lands ≥90% of packets in their grade band", () => {
+    for (const s of STATS) expect(s.inFrac).toBeGreaterThanOrEqual(0.9);
+  });
+
+  it("median difficulty score increases monotonically with grade", () => {
+    let prev = -Infinity;
+    for (const s of STATS) { expect(s.median).toBeGreaterThanOrEqual(prev); prev = s.median; }
+  });
+
+  it("max reasoning tier is non-decreasing with grade", () => {
+    let prev = 0;
+    for (const s of STATS) { expect(s.maxTier).toBeGreaterThanOrEqual(prev); prev = s.maxTier; }
+  });
+
+  it("each grade's median score lands inside its own band", () => {
+    for (const s of STATS) expect(inBand(s.g, { maxTier: 0, steps: 0, score: s.median })).toBe(true);
   });
 });

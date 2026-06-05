@@ -13,128 +13,36 @@
       "items": [
         {
           "numbers": [
-            8,
-            13,
-            17,
+            7,
             10,
-            23
+            5,
+            2,
+            9
           ],
-          "answerIndex": 4,
-          "op": "+"
+          "answerIndex": 1,
+          "op": "×"
         },
         {
           "numbers": [
-            12,
-            13,
-            25,
-            7,
-            22
+            4,
+            5,
+            8,
+            2,
+            1
           ],
           "answerIndex": 2,
-          "op": "+"
+          "op": "×"
         },
         {
           "numbers": [
-            28,
-            15,
             23,
-            24,
-            13
+            21,
+            3,
+            12,
+            11
           ],
           "answerIndex": 0,
           "op": "+"
-        }
-      ]
-    },
-    {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
-      "items": [
-        {
-          "leftText": "9",
-          "rightText": "0",
-          "answer": ">"
-        },
-        {
-          "leftText": "11 + 12",
-          "rightText": "25",
-          "answer": "<"
-        },
-        {
-          "leftText": "386",
-          "rightText": "386",
-          "answer": "="
-        },
-        {
-          "leftText": "725",
-          "rightText": "788",
-          "answer": "<"
-        },
-        {
-          "leftText": "10 + 5",
-          "rightText": "17",
-          "answer": "<"
-        },
-        {
-          "leftText": "473",
-          "rightText": "546",
-          "answer": "<"
-        }
-      ]
-    },
-    {
-      "type": "orderOfOps",
-      "title": "Hit the Target",
-      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
-      "items": [
-        {
-          "operands": [
-            3,
-            7,
-            4
-          ],
-          "ops": [
-            "×",
-            "+"
-          ],
-          "target": 25
-        },
-        {
-          "operands": [
-            5,
-            5,
-            5
-          ],
-          "ops": [
-            "+",
-            "+"
-          ],
-          "target": 15
-        },
-        {
-          "operands": [
-            8,
-            6,
-            2
-          ],
-          "ops": [
-            "+",
-            "+"
-          ],
-          "target": 16
-        },
-        {
-          "operands": [
-            9,
-            4,
-            1
-          ],
-          "ops": [
-            "+",
-            "−"
-          ],
-          "target": 12
         }
       ]
     },
@@ -145,47 +53,111 @@
       "items": [
         {
           "sequence": [
-            1,
-            null,
-            11,
+            18,
             16,
-            21
-          ],
-          "answer": 6
-        },
-        {
-          "sequence": [
-            6,
-            16,
+            14,
             null,
-            36,
-            46
-          ],
-          "answer": 26
-        },
-        {
-          "sequence": [
-            6,
-            9,
-            null,
-            15,
-            18
+            10
           ],
           "answer": 12
         },
         {
           "sequence": [
-            7,
+            38,
             null,
-            13,
-            16,
-            19
+            34,
+            32,
+            30
           ],
-          "answer": 10
+          "answer": 36
+        },
+        {
+          "sequence": [
+            3,
+            28,
+            53,
+            null,
+            103
+          ],
+          "answer": 78
+        },
+        {
+          "sequence": [
+            56,
+            null,
+            36,
+            26,
+            16
+          ],
+          "answer": 46
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 125,
+          "nearest": 10,
+          "answer": 130
+        },
+        {
+          "number": 247,
+          "nearest": 10,
+          "answer": 250
+        },
+        {
+          "number": 536,
+          "nearest": 10,
+          "answer": 540
+        },
+        {
+          "number": 315,
+          "nearest": 10,
+          "answer": 320
+        },
+        {
+          "number": 845,
+          "nearest": 10,
+          "answer": 850
+        },
+        {
+          "number": 811,
+          "nearest": 10,
+          "answer": 810
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Lena has 22 shells. Zoe gives Lena 30 more. How many does Lena have now?",
+          "answer": 52,
+          "unit": "shells"
+        },
+        {
+          "text": "Lena had 23 cookies. Lena gave 22 to Ivy. How many are left?",
+          "answer": 1,
+          "unit": "cookies"
+        },
+        {
+          "text": "Ruby has 7 bags with 7 coins in each bag. How many coins in all?",
+          "answer": 49,
+          "unit": "coins"
         }
       ]
     }
   ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 36
+  },
   "seed": 31,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

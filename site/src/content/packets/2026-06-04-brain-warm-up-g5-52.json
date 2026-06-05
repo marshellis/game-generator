@@ -1,0 +1,212 @@
+{
+  "id": "2026-06-04-brain-warm-up-g5-52",
+  "title": "Brain Warm-Up",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            2,
+            17,
+            12,
+            25,
+            29
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            5,
+            24,
+            6,
+            19
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            6,
+            8,
+            2,
+            5,
+            10
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 7,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 8
+            },
+            {
+              "op": "×",
+              "operand": 9
+            },
+            {
+              "op": "×",
+              "operand": 6
+            },
+            {
+              "op": "÷",
+              "operand": 6
+            }
+          ],
+          "values": [
+            1,
+            9,
+            81,
+            486,
+            81
+          ]
+        },
+        {
+          "start": 7,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 92
+            },
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 113
+            },
+            {
+              "op": "+",
+              "operand": 15
+            },
+            {
+              "op": "+",
+              "operand": 142
+            }
+          ],
+          "values": [
+            99,
+            198,
+            311,
+            326,
+            468
+          ]
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            3,
+            9,
+            15,
+            21,
+            null
+          ],
+          "answer": 27
+        },
+        {
+          "sequence": [
+            51,
+            45,
+            null,
+            33,
+            27
+          ],
+          "answer": 39
+        },
+        {
+          "sequence": [
+            10,
+            60,
+            null,
+            160,
+            210
+          ],
+          "answer": 110
+        },
+        {
+          "sequence": [
+            10,
+            19,
+            28,
+            null,
+            46
+          ],
+          "answer": 37
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "5 × 5",
+          "rightText": "28",
+          "answer": "<"
+        },
+        {
+          "leftText": "394",
+          "rightText": "354",
+          "answer": ">"
+        },
+        {
+          "leftText": "3 + 8",
+          "rightText": "11",
+          "answer": "="
+        },
+        {
+          "leftText": "518",
+          "rightText": "519",
+          "answer": "<"
+        },
+        {
+          "leftText": "8 + 7",
+          "rightText": "17",
+          "answer": "<"
+        },
+        {
+          "leftText": "677",
+          "rightText": "689",
+          "answer": "<"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 8,
+    "score": 41
+  },
+  "seed": 52,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

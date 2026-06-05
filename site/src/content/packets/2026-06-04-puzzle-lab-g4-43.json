@@ -1,0 +1,197 @@
+{
+  "id": "2026-06-04-puzzle-lab-g4-43",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            12,
+            2,
+            11,
+            14,
+            5
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            7,
+            11,
+            9,
+            12
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            9,
+            18,
+            3,
+            6
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 9938,
+          "place": "hundreds",
+          "answer": 900
+        },
+        {
+          "number": 7877,
+          "place": "hundreds",
+          "answer": 800
+        },
+        {
+          "number": 1134,
+          "place": "ones",
+          "answer": 4
+        },
+        {
+          "number": 3047,
+          "place": "ones",
+          "answer": 7
+        },
+        {
+          "number": 9218,
+          "place": "tens",
+          "answer": 10
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 10,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 22
+            },
+            {
+              "op": "−",
+              "operand": 8
+            },
+            {
+              "op": "+",
+              "operand": 5
+            }
+          ],
+          "values": [
+            2,
+            0,
+            22,
+            14,
+            19
+          ]
+        },
+        {
+          "start": 9,
+          "ops": [
+            {
+              "op": "−",
+              "operand": 1
+            },
+            {
+              "op": "÷",
+              "operand": 4
+            },
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "−",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 2
+            }
+          ],
+          "values": [
+            8,
+            2,
+            6,
+            2,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "9 × 11",
+          "rightText": "102",
+          "answer": "<"
+        },
+        {
+          "leftText": "754",
+          "rightText": "688",
+          "answer": ">"
+        },
+        {
+          "leftText": "201",
+          "rightText": "202",
+          "answer": "<"
+        },
+        {
+          "leftText": "9 + 5",
+          "rightText": "13",
+          "answer": ">"
+        },
+        {
+          "leftText": "882",
+          "rightText": "790",
+          "answer": ">"
+        },
+        {
+          "leftText": "3 × 10",
+          "rightText": "27",
+          "answer": ">"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 8,
+    "score": 41
+  },
+  "seed": 43,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

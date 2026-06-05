@@ -1,5 +1,5 @@
 {
-  "id": "2026-06-04-number-workout-g2-22",
+  "id": "2026-06-04-number-workout-g2-23",
   "title": "Number Workout",
   "blurb": "A 3-puzzle mix for Grade 2.",
   "gameType": "math-packet",
@@ -13,32 +13,32 @@
       "items": [
         {
           "numbers": [
-            1,
-            2,
-            6,
-            7
+            12,
+            8,
+            13,
+            5
           ],
-          "answerIndex": 3,
+          "answerIndex": 2,
           "op": "+"
         },
         {
           "numbers": [
             8,
-            17,
-            9,
-            11
+            6,
+            1,
+            9
           ],
-          "answerIndex": 1,
+          "answerIndex": 3,
           "op": "+"
         },
         {
           "numbers": [
-            1,
-            4,
-            2,
-            5
+            10,
+            7,
+            17,
+            4
           ],
-          "answerIndex": 3,
+          "answerIndex": 2,
           "op": "+"
         }
       ]
@@ -49,52 +49,52 @@
       "instructions": "Find the number that makes each equation true.",
       "items": [
         {
-          "left": 72,
+          "left": 76,
+          "op": "−",
+          "right": 72,
+          "result": 4,
+          "blank": "result",
+          "answer": 4
+        },
+        {
+          "left": 98,
+          "op": "+",
+          "right": 10,
+          "result": 108,
+          "blank": "left",
+          "answer": 98
+        },
+        {
+          "left": 53,
           "op": "−",
           "right": 34,
-          "result": 38,
+          "result": 19,
           "blank": "right",
           "answer": 34
         },
         {
-          "left": 43,
-          "op": "+",
-          "right": 49,
-          "result": 92,
-          "blank": "result",
-          "answer": 92
-        },
-        {
-          "left": 34,
+          "left": 7,
           "op": "−",
-          "right": 22,
-          "result": 12,
+          "right": 5,
+          "result": 2,
           "blank": "right",
-          "answer": 22
+          "answer": 5
         },
         {
-          "left": 72,
-          "op": "−",
-          "right": 59,
+          "left": 6,
+          "op": "+",
+          "right": 7,
           "result": 13,
-          "blank": "result",
-          "answer": 13
-        },
-        {
-          "left": 75,
-          "op": "+",
-          "right": 29,
-          "result": 104,
-          "blank": "right",
-          "answer": 29
-        },
-        {
-          "left": 92,
-          "op": "+",
-          "right": 12,
-          "result": 104,
           "blank": "left",
-          "answer": 92
+          "answer": 6
+        },
+        {
+          "left": 68,
+          "op": "+",
+          "right": 80,
+          "result": 148,
+          "blank": "left",
+          "answer": 68
         }
       ]
     },
@@ -104,24 +104,29 @@
       "instructions": "Write how many dots are filled in each ten-frame.",
       "items": [
         {
-          "dots": 9,
-          "answer": 9
-        },
-        {
-          "dots": 4,
-          "answer": 4
-        },
-        {
           "dots": 10,
           "answer": 10
         },
         {
-          "dots": 7,
-          "answer": 7
+          "dots": 6,
+          "answer": 6
+        },
+        {
+          "dots": 1,
+          "answer": 1
+        },
+        {
+          "dots": 8,
+          "answer": 8
         }
       ]
     }
   ],
-  "seed": 22,
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 24
+  },
+  "seed": 23,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

@@ -1,0 +1,170 @@
+{
+  "id": "2026-06-04-puzzle-power-g2-21",
+  "title": "Puzzle Power",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            1,
+            9,
+            13,
+            12
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            4,
+            15,
+            7
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            3,
+            10,
+            11
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 10,
+          "ops": [
+            {
+              "op": "−",
+              "operand": 6
+            },
+            {
+              "op": "+",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 6
+            },
+            {
+              "op": "−",
+              "operand": 2
+            }
+          ],
+          "values": [
+            4,
+            9,
+            3,
+            1
+          ]
+        },
+        {
+          "start": 6,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 1
+            },
+            {
+              "op": "−",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 10
+            },
+            {
+              "op": "+",
+              "operand": 8
+            }
+          ],
+          "values": [
+            7,
+            0,
+            10,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 27,
+          "op": "+",
+          "right": 61,
+          "result": 88,
+          "blank": "left",
+          "answer": 27
+        },
+        {
+          "left": 82,
+          "op": "−",
+          "right": 76,
+          "result": 6,
+          "blank": "left",
+          "answer": 82
+        },
+        {
+          "left": 10,
+          "op": "+",
+          "right": 80,
+          "result": 90,
+          "blank": "right",
+          "answer": 80
+        },
+        {
+          "left": 24,
+          "op": "−",
+          "right": 8,
+          "result": 16,
+          "blank": "left",
+          "answer": 24
+        },
+        {
+          "left": 42,
+          "op": "−",
+          "right": 23,
+          "result": 19,
+          "blank": "result",
+          "answer": 19
+        },
+        {
+          "left": 39,
+          "op": "+",
+          "right": 33,
+          "result": 72,
+          "blank": "left",
+          "answer": 39
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 6,
+    "score": 34
+  },
+  "seed": 21,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

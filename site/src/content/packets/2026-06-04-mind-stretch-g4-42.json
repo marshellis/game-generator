@@ -13,83 +13,36 @@
       "items": [
         {
           "numbers": [
-            28,
-            24,
-            18,
-            10,
-            7
+            6,
+            31,
+            42,
+            7,
+            25
           ],
-          "answerIndex": 0,
-          "op": "+"
+          "answerIndex": 2,
+          "op": "×"
         },
         {
           "numbers": [
             1,
-            7,
-            11,
-            14,
-            13
+            2,
+            4,
+            8,
+            6
           ],
           "answerIndex": 3,
-          "op": "+"
+          "op": "×"
         },
         {
           "numbers": [
-            1,
-            24,
-            8,
-            13,
-            3
-          ],
-          "answerIndex": 1,
-          "op": "×"
-        }
-      ]
-    },
-    {
-      "type": "pattern",
-      "title": "What Comes Next?",
-      "instructions": "Find the rule and fill in the missing number.",
-      "items": [
-        {
-          "sequence": [
-            0,
-            null,
-            12,
-            18,
-            24
-          ],
-          "answer": 6
-        },
-        {
-          "sequence": [
+            9,
+            11,
             2,
-            27,
-            52,
-            null,
-            102
+            14,
+            18
           ],
-          "answer": 77
-        },
-        {
-          "sequence": [
-            47,
-            41,
-            35,
-            29,
-            null
-          ],
-          "answer": 23
-        },
-        {
-          "sequence": [
-            109,
-            84,
-            null,
-            34,
-            9
-          ],
-          "answer": 59
+          "answerIndex": 4,
+          "op": "×"
         }
       ]
     },
@@ -99,60 +52,127 @@
       "instructions": "Read each problem and write the answer.",
       "items": [
         {
-          "text": "Mara has 9 bags with 2 pencils in each bag. How many pencils in all?",
-          "answer": 18,
-          "unit": "pencils"
-        },
-        {
-          "text": "Omar has 6 coins. Lena gives Omar 1 more. How many does Omar have now?",
-          "answer": 7,
+          "text": "Ivy has 19 coins. Omar gives Ivy 39 more. How many does Ivy have now?",
+          "answer": 58,
           "unit": "coins"
         },
         {
-          "text": "Sam shares 14 cookies equally among 2 friends. How many does each friend get?",
-          "answer": 7,
-          "unit": "cookies"
+          "text": "Theo has 3 bags with 8 pencils in each bag. How many pencils in all?",
+          "answer": 24,
+          "unit": "pencils"
+        },
+        {
+          "text": "Zoe has 39 pencils. Eli gives Zoe 43 more. How many does Zoe have now?",
+          "answer": 82,
+          "unit": "pencils"
         }
       ]
     },
     {
-      "type": "comparison",
-      "title": "Greater, Less, or Equal",
-      "instructions": "Write < , > , or = between each pair.",
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
       "items": [
         {
-          "leftText": "279",
-          "rightText": "215",
+          "kind": "equiv",
+          "num": 5,
+          "den": 6,
+          "newDen": 12,
+          "answer": 10
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 6,
+          "bNum": 4,
+          "bDen": 5,
           "answer": ">"
         },
         {
-          "leftText": "822",
-          "rightText": "822",
-          "answer": "="
+          "kind": "equiv",
+          "num": 1,
+          "den": 6,
+          "newDen": 18,
+          "answer": 3
         },
         {
-          "leftText": "563",
-          "rightText": "550",
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 3,
+          "bNum": 3,
+          "bDen": 5,
           "answer": ">"
         },
         {
-          "leftText": "337",
-          "rightText": "301",
-          "answer": ">"
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 628,
+          "op": "+",
+          "right": 999,
+          "result": 1627,
+          "blank": "left",
+          "answer": 628
         },
         {
-          "leftText": "296",
-          "rightText": "365",
-          "answer": "<"
+          "left": 9,
+          "op": "×",
+          "right": 7,
+          "result": 63,
+          "blank": "left",
+          "answer": 9
         },
         {
-          "leftText": "995",
-          "rightText": "981",
-          "answer": ">"
+          "left": 4,
+          "op": "×",
+          "right": 7,
+          "result": 28,
+          "blank": "left",
+          "answer": 4
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 8,
+          "result": 64,
+          "blank": "result",
+          "answer": 64
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 8,
+          "result": 16,
+          "blank": "right",
+          "answer": 8
+        },
+        {
+          "left": 64,
+          "op": "÷",
+          "right": 8,
+          "result": 8,
+          "blank": "result",
+          "answer": 8
         }
       ]
     }
   ],
+  "load": {
+    "maxTier": 4,
+    "steps": 4,
+    "score": 40
+  },
   "seed": 42,
   "createdAt": "2026-06-04T00:00:00.000Z"
 }

@@ -1,0 +1,201 @@
+{
+  "id": "2026-06-04-number-quest-g7-73",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            1,
+            6,
+            4,
+            2,
+            24
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            4,
+            5,
+            3,
+            2,
+            6
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            16,
+            35,
+            25,
+            48,
+            51
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 635,
+          "op": "−",
+          "right": 65,
+          "result": 570,
+          "blank": "result",
+          "answer": 570
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 7,
+          "result": 56,
+          "blank": "left",
+          "answer": 8
+        },
+        {
+          "left": 11,
+          "op": "×",
+          "right": 5,
+          "result": 55,
+          "blank": "left",
+          "answer": 11
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 7,
+          "result": 56,
+          "blank": "right",
+          "answer": 7
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 11,
+          "result": 88,
+          "blank": "right",
+          "answer": 11
+        },
+        {
+          "left": 268,
+          "op": "−",
+          "right": 135,
+          "result": 133,
+          "blank": "result",
+          "answer": 133
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            6,
+            2,
+            6,
+            7
+          ],
+          "ops": [
+            "−",
+            "×",
+            "+"
+          ],
+          "target": 1
+        },
+        {
+          "operands": [
+            5,
+            6,
+            1,
+            8,
+            6
+          ],
+          "ops": [
+            "×",
+            "−",
+            "−",
+            "−"
+          ],
+          "target": 15
+        },
+        {
+          "operands": [
+            6,
+            9,
+            8,
+            4,
+            3
+          ],
+          "ops": [
+            "×",
+            "−",
+            "−",
+            "+"
+          ],
+          "target": 45
+        },
+        {
+          "operands": [
+            4,
+            6,
+            9,
+            4
+          ],
+          "ops": [
+            "+",
+            "×",
+            "+"
+          ],
+          "target": 62
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Eli had 56 cookies. Eli gave 9 to Ruby. How many are left?",
+          "answer": 47,
+          "unit": "cookies"
+        },
+        {
+          "text": "Zoe has 162 books. Theo gives Zoe 100 more. How many does Zoe have now?",
+          "answer": 262,
+          "unit": "books"
+        },
+        {
+          "text": "Omar shares 72 pencils equally among 9 friends. How many does each friend get?",
+          "answer": 8,
+          "unit": "pencils"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 8,
+    "score": 44
+  },
+  "seed": 73,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

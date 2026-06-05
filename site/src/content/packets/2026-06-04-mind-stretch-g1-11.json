@@ -1,0 +1,128 @@
+{
+  "id": "2026-06-04-mind-stretch-g1-11",
+  "title": "Mind Stretch",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            10,
+            11,
+            5,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            9,
+            13,
+            4,
+            2
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            2,
+            6,
+            1
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "1",
+          "rightText": "3",
+          "answer": "<"
+        },
+        {
+          "leftText": "12",
+          "rightText": "11",
+          "answer": ">"
+        },
+        {
+          "leftText": "11",
+          "rightText": "10",
+          "answer": ">"
+        },
+        {
+          "leftText": "15",
+          "rightText": "15",
+          "answer": "="
+        },
+        {
+          "leftText": "1",
+          "rightText": "0",
+          "answer": ">"
+        },
+        {
+          "leftText": "10",
+          "rightText": "9",
+          "answer": ">"
+        }
+      ]
+    },
+    {
+      "type": "numberBond",
+      "title": "Number Bonds",
+      "instructions": "Find the missing part of each bond.",
+      "items": [
+        {
+          "total": 9,
+          "known": 5,
+          "answer": 4
+        },
+        {
+          "total": 5,
+          "known": 4,
+          "answer": 1
+        },
+        {
+          "total": 10,
+          "known": 3,
+          "answer": 7
+        },
+        {
+          "total": 9,
+          "known": 8,
+          "answer": 1
+        },
+        {
+          "total": 9,
+          "known": 4,
+          "answer": 5
+        },
+        {
+          "total": 10,
+          "known": 3,
+          "answer": 7
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 22
+  },
+  "seed": 11,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

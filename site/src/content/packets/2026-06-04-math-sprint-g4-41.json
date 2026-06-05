@@ -1,0 +1,205 @@
+{
+  "id": "2026-06-04-math-sprint-g4-41",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            5,
+            30,
+            6,
+            17,
+            20
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            7,
+            32,
+            2,
+            5,
+            35
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            28,
+            15,
+            20,
+            13,
+            9
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            7,
+            3,
+            3
+          ],
+          "ops": [
+            "×",
+            "+"
+          ],
+          "target": 24
+        },
+        {
+          "operands": [
+            1,
+            8,
+            3
+          ],
+          "ops": [
+            "×",
+            "×"
+          ],
+          "target": 24
+        },
+        {
+          "operands": [
+            5,
+            7,
+            9
+          ],
+          "ops": [
+            "×",
+            "−"
+          ],
+          "target": 26
+        },
+        {
+          "operands": [
+            7,
+            8,
+            5
+          ],
+          "ops": [
+            "×",
+            "−"
+          ],
+          "target": 51
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Snake",
+      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "items": [
+        {
+          "start": 6,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 8
+            },
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 41
+            },
+            {
+              "op": "−",
+              "operand": 83
+            },
+            {
+              "op": "+",
+              "operand": 32
+            }
+          ],
+          "values": [
+            48,
+            144,
+            185,
+            102,
+            134
+          ]
+        },
+        {
+          "start": 3,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 34
+            },
+            {
+              "op": "−",
+              "operand": 37
+            },
+            {
+              "op": "÷",
+              "operand": 8
+            },
+            {
+              "op": "÷",
+              "operand": 8
+            },
+            {
+              "op": "+",
+              "operand": 48
+            }
+          ],
+          "values": [
+            37,
+            0,
+            0,
+            0,
+            48
+          ]
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Ivy shares 8 books equally among 2 friends. How many does each friend get?",
+          "answer": 4,
+          "unit": "books"
+        },
+        {
+          "text": "Lena has 3 bags with 7 shells in each bag. How many shells in all?",
+          "answer": 21,
+          "unit": "shells"
+        },
+        {
+          "text": "Sam had 44 pencils. Sam gave 30 to Noah. How many are left?",
+          "answer": 14,
+          "unit": "pencils"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 10,
+    "score": 49
+  },
+  "seed": 41,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

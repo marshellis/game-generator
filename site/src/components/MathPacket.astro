@@ -248,6 +248,22 @@ const underlineIndex = (n: number, place: string) => {
           ))}
         </div>
       )}
+      {/* ---- Snake (running-total chain) ---- */}
+      {act.type === "snake" && (
+        <div class="flex flex-col gap-4">
+          {act.items.map((it) => (
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="grid h-11 min-w-11 place-items-center rounded-lg bg-brand-50 px-2 text-lg font-bold text-brand-700">{it.start}</span>
+              {it.ops.map((step, k) => (
+                <>
+                  <span class="grid h-9 min-w-9 place-items-center rounded-md bg-slate-100 px-2 text-base font-semibold text-slate-600">{step.op}{step.operand}</span>
+                  <input class={numCls + " w-16"} inputmode="numeric" data-answer={String(it.values[k])} />
+                </>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   ))}
 </div>

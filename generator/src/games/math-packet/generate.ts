@@ -2,8 +2,9 @@ import { makeRng } from "../../core/rng";
 import { pick } from "./util";
 import { resolveGrade } from "./grades";
 import { assembleActivities } from "./assemble";
+import { scorePacket, inBand, distanceToBand } from "./difficulty";
 import { slugify, makePuzzleId } from "../logic-grid/serialize";
-import type { Packet } from "./types";
+import type { Activity, Packet } from "./types";
 
 export interface GeneratePacketOptions {
   difficulty: string; // "g1".."g8"
@@ -25,9 +26,21 @@ const TITLES = [
 
 export function generatePacket(opts: GeneratePacketOptions): Packet {
   const g = resolveGrade(opts.difficulty);
-  const rng = makeRng(opts.seed);
-  const activities = assembleActivities(g, rng);
-  const title = opts.title ?? pick(rng, TITLES);
+  const title = opts.title ?? pick(makeRng(opts.seed), TITLES);
+
+  // Target the grade's difficulty band (framework §3): try deterministically
+  // salted compositions and take the first one that lands in band; if none do
+  // within the budget, keep the closest. Score is reported on the packet.
+  let activities: Activity[] = [];
+  let bestDelta = Infinity;
+  for (let k = 0; k < 24; k++) {
+    const cand = assembleActivities(g, makeRng(opts.seed * 101 + k * 9973));
+    const load = scorePacket(cand);
+    if (inBand(g.id, load)) { activities = cand; break; }
+    const delta = distanceToBand(g.id, load);
+    if (delta < bestDelta) { bestDelta = delta; activities = cand; }
+  }
+
   const gradeLabel = `Grade ${g.grade}`;
   const slug = slugify(`${title}-${g.id}`);
   return {
@@ -38,6 +51,7 @@ export function generatePacket(opts: GeneratePacketOptions): Packet {
     gradeLabel,
     difficulty: g.id,
     activities,
+    load: scorePacket(activities),
     seed: opts.seed,
     createdAt: `${opts.date}T00:00:00.000Z`,
   };

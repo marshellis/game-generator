@@ -1,0 +1,185 @@
+{
+  "id": "2026-06-04-number-workout-g5-53",
+  "title": "Number Workout",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            15,
+            3,
+            13,
+            21,
+            8
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            4,
+            18,
+            15,
+            13
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            13,
+            9,
+            54,
+            6,
+            46
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            9,
+            null,
+            27,
+            36,
+            45
+          ],
+          "answer": 18
+        },
+        {
+          "sequence": [
+            2,
+            52,
+            102,
+            152,
+            null
+          ],
+          "answer": 202
+        },
+        {
+          "sequence": [
+            106,
+            81,
+            null,
+            31,
+            6
+          ],
+          "answer": 56
+        },
+        {
+          "sequence": [
+            3,
+            28,
+            null,
+            78,
+            103
+          ],
+          "answer": 53
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 59497,
+          "nearest": 1000,
+          "answer": 59000
+        },
+        {
+          "number": 37440,
+          "nearest": 1000,
+          "answer": 37000
+        },
+        {
+          "number": 62635,
+          "nearest": 1000,
+          "answer": 63000
+        },
+        {
+          "number": 98016,
+          "nearest": 1000,
+          "answer": 98000
+        },
+        {
+          "number": 89766,
+          "nearest": 1000,
+          "answer": 90000
+        },
+        {
+          "number": 63166,
+          "nearest": 1000,
+          "answer": 63000
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 4,
+          "newDen": 8,
+          "answer": 6
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 5,
+          "bNum": 4,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 8,
+          "bNum": 4,
+          "bDen": 5,
+          "answer": "<"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 4,
+    "score": 39
+  },
+  "seed": 53,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

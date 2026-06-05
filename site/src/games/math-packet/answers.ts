@@ -29,5 +29,7 @@ export function keyForActivity(act: Activity): string[] {
       return act.items.map((it) =>
         it.kind === "equiv" ? `${it.num}/${it.den} = ${it.answer}/${it.newDen}` : `${it.aNum}/${it.aDen} ${it.answer} ${it.bNum}/${it.bDen}`,
       );
+    case "snake":
+      return act.items.map((it) => [String(it.start), ...it.values.map(String)].join(" → "));
   }
 }

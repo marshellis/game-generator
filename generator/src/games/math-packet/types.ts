@@ -17,7 +17,8 @@ export type ActivityType =
   | "pattern"
   | "tenFrame"
   | "wordProblem"
-  | "fraction";
+  | "fraction"
+  | "snake";
 
 /** Find the one number in the cluster that equals two of the others combined. */
 export interface FindTheSumItem {
@@ -85,6 +86,16 @@ export interface WordProblemItem {
   answer: number;
   unit?: string;
 }
+/**
+ * A running-total chain (Snake): start value, then a sequence of operations.
+ * The player fills each result box in order. values[i] = result after ops[i].
+ */
+export interface SnakeItem {
+  start: number;
+  ops: { op: "+" | "−" | "×" | "÷"; operand: number }[];
+  values: number[]; // length === ops.length; values[i] is the answer after step i
+}
+
 /** Either fill an equivalent fraction or compare two fractions. */
 export type FractionItem =
   | { kind: "equiv"; num: number; den: number; newDen: number; answer: number }
@@ -106,7 +117,19 @@ export type Activity =
   | (ActivityBase & { type: "pattern"; items: PatternItem[] })
   | (ActivityBase & { type: "tenFrame"; items: TenFrameItem[] })
   | (ActivityBase & { type: "wordProblem"; items: WordProblemItem[] })
-  | (ActivityBase & { type: "fraction"; items: FractionItem[] });
+  | (ActivityBase & { type: "fraction"; items: FractionItem[] })
+  | (ActivityBase & { type: "snake"; items: SnakeItem[] });
+
+/**
+ * Measured difficulty of a packet (per the grade-appropriateness framework):
+ * highest reasoning tier required, total sequential steps, and a composite
+ * score. Lets "is this grade-appropriate?" be a number, not a vibe.
+ */
+export interface Load {
+  maxTier: number;
+  steps: number;
+  score: number;
+}
 
 export interface Packet {
   id: string;
@@ -116,6 +139,8 @@ export interface Packet {
   gradeLabel: string;
   difficulty: string; // "g1".."g8"
   activities: Activity[];
+  /** Measured difficulty (grade-appropriateness framework §3). */
+  load: Load;
   seed: number;
   createdAt: string;
 }

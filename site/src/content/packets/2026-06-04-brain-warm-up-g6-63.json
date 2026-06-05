@@ -1,0 +1,194 @@
+{
+  "id": "2026-06-04-brain-warm-up-g6-63",
+  "title": "Brain Warm-Up",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            2,
+            3,
+            4,
+            6,
+            1
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            3,
+            23,
+            9,
+            22,
+            1
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            28,
+            11,
+            4,
+            12
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 3,
+          "bNum": 3,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 8,
+          "bNum": 5,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 8,
+          "answer": 4
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 4,
+          "bNum": 4,
+          "bDen": 2,
+          "answer": "<"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 8507,
+          "nearest": 1000,
+          "answer": 9000
+        },
+        {
+          "number": 85838,
+          "nearest": 1000,
+          "answer": 86000
+        },
+        {
+          "number": 5008,
+          "nearest": 1000,
+          "answer": 5000
+        },
+        {
+          "number": 88301,
+          "nearest": 1000,
+          "answer": 88000
+        },
+        {
+          "number": 4501,
+          "nearest": 1000,
+          "answer": 5000
+        },
+        {
+          "number": 85033,
+          "nearest": 1000,
+          "answer": 85000
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 63,
+          "op": "÷",
+          "right": 7,
+          "result": 9,
+          "blank": "right",
+          "answer": 7
+        },
+        {
+          "left": 49,
+          "op": "÷",
+          "right": 7,
+          "result": 7,
+          "blank": "left",
+          "answer": 49
+        },
+        {
+          "left": 903,
+          "op": "−",
+          "right": 88,
+          "result": 815,
+          "blank": "right",
+          "answer": 88
+        },
+        {
+          "left": 27,
+          "op": "÷",
+          "right": 3,
+          "result": 9,
+          "blank": "right",
+          "answer": 3
+        },
+        {
+          "left": 6,
+          "op": "×",
+          "right": 3,
+          "result": 18,
+          "blank": "result",
+          "answer": 18
+        },
+        {
+          "left": 30,
+          "op": "÷",
+          "right": 6,
+          "result": 5,
+          "blank": "result",
+          "answer": 5
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 4,
+    "score": 41
+  },
+  "seed": 63,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}
