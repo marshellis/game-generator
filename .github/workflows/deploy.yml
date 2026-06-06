@@ -3,6 +3,8 @@ name: Deploy
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -30,6 +32,9 @@ jobs:
 
   deploy:
     needs: test
+    # Only deploy on a real push to main. On pull_request the test job still runs
+    # (a green check that gates auto-merge), but we never deploy a PR branch.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     defaults:
       run:
