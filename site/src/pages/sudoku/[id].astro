@@ -1,0 +1,36 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import GameHeader from "../../components/GameHeader.astro";
+import Sudoku from "../../components/Sudoku.astro";
+export async function getStaticPaths() {
+  const items = await getCollection("sudokus");
+  return items.map((s) => ({ params: { id: s.data.id } }));
+}
+const { id } = Astro.params;
+const s = (await getEntry("sudokus", id!))!.data;
+---
+<Base title={`${s.title} ${s.size}×${s.size} — Marshellis Games`}>
+  <GameHeader
+    crumbs={[
+      { label: "All games", href: "/" },
+      { label: "Sudoku", href: "/sudoku" },
+      { label: s.gradeLabel, href: `/sudoku/grade/${s.difficulty}` },
+    ]}
+    title={`Sudoku ${s.size}×${s.size}`}
+    blurb={`Fill the grid so every row, column, and box has 1–${s.size}.`}
+    printHref={`/sudoku/${s.id}/print`}
+    answerHref={`/sudoku/${s.id}/answer`}
+    showCheck={true}
+    showClear={true}
+    revealNoun="solution"
+  />
+  <div class="mt-6">
+    <Sudoku size={s.size} boxW={s.boxW} boxH={s.boxH} givens={s.givens} solution={s.solution} interactive={true} />
+  </div>
+  <script type="application/json" id="sudoku-data" set:html={JSON.stringify({ id: s.id, size: s.size, boxW: s.boxW, boxH: s.boxH, givens: s.givens, solution: s.solution })} />
+  <script>
+    import { initSudoku } from "../../games/sudoku/player.ts";
+    initSudoku(JSON.parse(document.getElementById("sudoku-data")!.textContent!));
+  </script>
+</Base>

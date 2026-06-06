@@ -205,4 +205,24 @@ const mazes = defineCollection({
   }),
 });
 
-export const collections = { puzzles, packets, mazes };
+const sudokus = defineCollection({
+  type: "data",
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    gameType: z.literal("sudoku"),
+    gradeLabel: z.string(),
+    difficulty: z.string(),
+    size: z.number(),
+    boxW: z.number(),
+    boxH: z.number(),
+    givens: z.array(z.array(z.number())),
+    solution: z.array(z.array(z.number())),
+    maxTier: z.number(),
+    difficultyRating: z.number(),
+    seed: z.number(),
+    createdAt: z.string(),
+  }),
+});
+
+export const collections = { puzzles, packets, mazes, sudokus };
