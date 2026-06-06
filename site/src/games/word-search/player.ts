@@ -1,5 +1,6 @@
 // site/src/games/word-search/player.ts
 import { eq, lineBetween, matchEndpoints, wordCells, type PlacedWord, type Pos } from "./grid";
+import { celebrate } from "../shared/win";
 
 interface WordSearchData { id: string; words: PlacedWord[]; }
 const storageKey = (id: string) => `word-search:${id}`;
@@ -37,7 +38,12 @@ export function initWordSearch(data: WordSearchData): void {
     el?.classList.add("line-through", "text-slate-400");
   };
 
-  const clearRings = () => { for (const el of cellEls) el.classList.remove("ring-2", "ring-brand-400", "ring-brand-500"); };
+  // `ring` is a box-shadow; without lifting the cell, neighbouring grid cells paint
+  // over it and the outline loses edges. `relative z-10` floats a ringed cell above
+  // its neighbours so all four sides show.
+  const RING_PREVIEW = ["ring-2", "ring-brand-400", "relative", "z-10"];
+  const RING_SELECT = ["ring-2", "ring-brand-500", "relative", "z-10"];
+  const clearRings = () => { for (const el of cellEls) el.classList.remove("ring-2", "ring-brand-400", "ring-brand-500", "relative", "z-10"); };
   const clearSelection = () => { first = null; clearRings(); };
 
   const status = () => {
@@ -54,8 +60,10 @@ export function initWordSearch(data: WordSearchData): void {
 
   const tryComplete = (a: Pos, b: Pos) => {
     const i = lineBetween(a, b) ? matchEndpoints(a, b, words) : -1;
-    if (i >= 0 && !found.has(i)) { found.add(i); paintWord(i); save(); status(); }
-    else if (result && i < 0) { result.textContent = "Not a word — try again."; }
+    if (i >= 0 && !found.has(i)) {
+      found.add(i); paintWord(i); save(); status();
+      if (found.size === total) celebrate("🎉 You found them all!");
+    } else if (result && i < 0) { result.textContent = "Not a word — try again."; }
   };
 
   const cellOf = (target: EventTarget | null): Pos | null => {
@@ -66,7 +74,7 @@ export function initWordSearch(data: WordSearchData): void {
     clearRings();
     const line = lineBetween(a, b);
     if (!line) return;
-    for (const p of line) at(p).classList.add("ring-2", "ring-brand-400");
+    for (const p of line) at(p).classList.add(...RING_PREVIEW);
   };
 
   // Unified input: a tap (down+up on the same cell, no drag) uses the two-tap
@@ -92,7 +100,7 @@ export function initWordSearch(data: WordSearchData): void {
     if (revealed) { dragged = false; return; }
     const up = cellOf(document.elementFromPoint(e.clientX, e.clientY)) ?? dn;
     if (!dragged && eq(up, dn)) {
-      if (!first) { clearRings(); first = dn; at(dn).classList.add("ring-2", "ring-brand-500"); }
+      if (!first) { clearRings(); first = dn; at(dn).classList.add(...RING_SELECT); }
       else { const a = first; clearSelection(); tryComplete(a, up); }
     } else {
       clearSelection();
