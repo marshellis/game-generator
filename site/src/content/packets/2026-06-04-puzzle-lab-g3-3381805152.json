@@ -1,0 +1,164 @@
+{
+  "id": "2026-06-04-puzzle-lab-g3-3381805152",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            25,
+            12,
+            16,
+            13,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            14,
+            2,
+            13,
+            12
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            6,
+            16,
+            3,
+            10
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "748",
+          "rightText": "702",
+          "answer": ">"
+        },
+        {
+          "leftText": "12 + 4",
+          "rightText": "15",
+          "answer": ">"
+        },
+        {
+          "leftText": "167",
+          "rightText": "76",
+          "answer": ">"
+        },
+        {
+          "leftText": "5 × 5",
+          "rightText": "28",
+          "answer": "<"
+        },
+        {
+          "leftText": "5 × 6",
+          "rightText": "31",
+          "answer": "<"
+        },
+        {
+          "leftText": "992",
+          "rightText": "994",
+          "answer": "<"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Eli has 8 bags with 6 stickers in each bag. How many stickers in all?",
+          "answer": 48,
+          "unit": "stickers"
+        },
+        {
+          "text": "Zoe has 5 bags with 2 pencils in each bag. How many pencils in all?",
+          "answer": 10,
+          "unit": "pencils"
+        },
+        {
+          "text": "Ruby had 38 coins. Ruby gave 32 to Theo. How many are left?",
+          "answer": 6,
+          "unit": "coins"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            5,
+            null,
+            9,
+            11,
+            13
+          ],
+          "answer": 7
+        },
+        {
+          "sequence": [
+            8,
+            33,
+            58,
+            null,
+            108
+          ],
+          "answer": 83
+        },
+        {
+          "sequence": [
+            39,
+            34,
+            29,
+            24,
+            null
+          ],
+          "answer": 19
+        },
+        {
+          "sequence": [
+            4,
+            null,
+            8,
+            10,
+            12
+          ],
+          "answer": 6
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 32,
+    "stars": 3
+  },
+  "seed": 3381805152,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

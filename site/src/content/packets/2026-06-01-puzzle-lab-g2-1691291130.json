@@ -1,0 +1,157 @@
+{
+  "id": "2026-06-01-puzzle-lab-g2-1691291130",
+  "title": "Puzzle Lab",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            7,
+            2,
+            13
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            12,
+            1,
+            5,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            18,
+            12,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 2
+          },
+          "options": [
+            4,
+            1,
+            2
+          ],
+          "answer": 2
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 7
+          },
+          "options": [
+            6,
+            8,
+            7
+          ],
+          "answer": 7
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 5
+          },
+          "options": [
+            7,
+            3,
+            5
+          ],
+          "answer": 5
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 4
+          },
+          "options": [
+            4,
+            2,
+            3
+          ],
+          "answer": 4
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  − ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−"
+      ],
+      "items": [
+        {
+          "left": 12,
+          "right": 4,
+          "result": 8,
+          "answer": "−"
+        },
+        {
+          "left": 3,
+          "right": 1,
+          "result": 2,
+          "answer": "−"
+        },
+        {
+          "left": 10,
+          "right": 1,
+          "result": 9,
+          "answer": "−"
+        },
+        {
+          "left": 10,
+          "right": 7,
+          "result": 3,
+          "answer": "−"
+        },
+        {
+          "left": 20,
+          "right": 3,
+          "result": 23,
+          "answer": "+"
+        },
+        {
+          "left": 19,
+          "right": 15,
+          "result": 4,
+          "answer": "−"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 24,
+    "stars": 2
+  },
+  "seed": 1691291130,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

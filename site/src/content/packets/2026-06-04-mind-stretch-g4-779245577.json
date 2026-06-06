@@ -1,0 +1,158 @@
+{
+  "id": "2026-06-04-mind-stretch-g4-779245577",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            20,
+            14,
+            2,
+            6,
+            13
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            29,
+            18,
+            35,
+            15,
+            17
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            18,
+            9,
+            27,
+            3,
+            17
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Ruby shares 12 books equally among 2 friends. How many does each friend get?",
+          "answer": 6,
+          "unit": "books"
+        },
+        {
+          "text": "Eli had 5 books. Eli gave 5 to Lena. How many are left?",
+          "answer": 0,
+          "unit": "books"
+        },
+        {
+          "text": "Theo has 48 stickers. Zoe gives Theo 10 more. How many does Theo have now?",
+          "answer": 58,
+          "unit": "stickers"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 4706,
+          "op": "+",
+          "b": 6229,
+          "answer": 10935
+        },
+        {
+          "a": 9535,
+          "op": "+",
+          "b": 1366,
+          "answer": 10901
+        },
+        {
+          "a": 96,
+          "op": "×",
+          "b": 2,
+          "answer": 192
+        },
+        {
+          "a": 7666,
+          "op": "−",
+          "b": 1095,
+          "answer": 6571
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            50,
+            10,
+            10,
+            100,
+            10
+          ],
+          "answer": 180
+        },
+        {
+          "coins": [
+            100,
+            10,
+            1,
+            100,
+            100
+          ],
+          "answer": 311
+        },
+        {
+          "coins": [
+            100,
+            1,
+            50,
+            1,
+            100
+          ],
+          "answer": 252
+        },
+        {
+          "coins": [
+            100,
+            5,
+            5,
+            25,
+            50
+          ],
+          "answer": 185
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 38,
+    "stars": 3
+  },
+  "seed": 779245577,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

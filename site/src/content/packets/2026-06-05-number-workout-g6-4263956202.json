@@ -1,0 +1,255 @@
+{
+  "id": "2026-06-05-number-workout-g6-4263956202",
+  "title": "Number Workout",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            18,
+            7,
+            21,
+            3,
+            6
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            41,
+            11,
+            25,
+            24,
+            30
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            16,
+            2,
+            1,
+            5,
+            8
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                4,
+                17,
+                16,
+                20
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                12,
+                14,
+                11,
+                3
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                2,
+                34,
+                13,
+                21
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              20,
+              14,
+              34
+            ],
+            "answerIndex": 2
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                4,
+                16,
+                20,
+                19
+              ],
+              "answerIndex": 2
+            },
+            {
+              "numbers": [
+                1,
+                13,
+                17,
+                12
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                33,
+                29,
+                4,
+                35
+              ],
+              "answerIndex": 0
+            }
+          ],
+          "final": {
+            "numbers": [
+              33,
+              20,
+              13
+            ],
+            "answerIndex": 0
+          }
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 186,
+          "op": "+",
+          "right": 851,
+          "result": 1037,
+          "blank": "right",
+          "answer": 851
+        },
+        {
+          "left": 260,
+          "op": "−",
+          "right": 36,
+          "result": 224,
+          "blank": "left",
+          "answer": 260
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 8,
+          "result": 64,
+          "blank": "left",
+          "answer": 8
+        },
+        {
+          "left": 7,
+          "op": "×",
+          "right": 4,
+          "result": 28,
+          "blank": "result",
+          "answer": 28
+        },
+        {
+          "left": 54,
+          "op": "+",
+          "right": 264,
+          "result": 318,
+          "blank": "result",
+          "answer": 318
+        },
+        {
+          "left": 28,
+          "op": "÷",
+          "right": 4,
+          "result": 7,
+          "blank": "left",
+          "answer": 28
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              48,
+              54,
+              null
+            ],
+            [
+              18,
+              null,
+              66
+            ],
+            [
+              null,
+              30,
+              36
+            ]
+          ],
+          "answers": [
+            24,
+            42,
+            60
+          ],
+          "magic": 126
+        },
+        {
+          "grid": [
+            [
+              29,
+              32,
+              null
+            ],
+            [
+              null,
+              26,
+              38
+            ],
+            [
+              35,
+              null,
+              23
+            ]
+          ],
+          "answers": [
+            17,
+            14,
+            20
+          ],
+          "magic": 78
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 8,
+    "score": 49,
+    "stars": 4
+  },
+  "seed": 4263956202,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

@@ -1,0 +1,186 @@
+{
+  "id": "2026-06-02-math-sprint-g4-4194864867",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            39,
+            6,
+            31,
+            42,
+            7
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            8,
+            9,
+            7,
+            21,
+            72
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            19,
+            11,
+            10,
+            9,
+            5
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Ivy has 14 pencils. Omar gives Ivy 30 more. How many does Ivy have now?",
+          "answer": 44,
+          "unit": "pencils"
+        },
+        {
+          "text": "Sam has 45 stickers. Ruby gives Sam 29 more. How many does Sam have now?",
+          "answer": 74,
+          "unit": "stickers"
+        },
+        {
+          "text": "Sam has 2 bags with 4 shells in each bag. How many shells in all?",
+          "answer": 8,
+          "unit": "shells"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              6000,
+              500,
+              50,
+              3
+            ]
+          },
+          "options": [
+            6870,
+            6553,
+            7193
+          ],
+          "answer": 6553
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              5000,
+              900,
+              10,
+              5
+            ]
+          },
+          "options": [
+            7100,
+            4731,
+            5915
+          ],
+          "answer": 5915
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              5000,
+              100,
+              7
+            ]
+          },
+          "options": [
+            6295,
+            4911,
+            5107
+          ],
+          "answer": 5107
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              900,
+              40,
+              7
+            ]
+          },
+          "options": [
+            6940,
+            6307,
+            7947
+          ],
+          "answer": 7947
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 6274,
+          "place": "ones",
+          "answer": 4
+        },
+        {
+          "number": 7772,
+          "place": "ones",
+          "answer": 2
+        },
+        {
+          "number": 8176,
+          "place": "ones",
+          "answer": 6
+        },
+        {
+          "number": 4383,
+          "place": "ones",
+          "answer": 3
+        },
+        {
+          "number": 9784,
+          "place": "ones",
+          "answer": 4
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 36,
+    "stars": 3
+  },
+  "seed": 4194864867,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

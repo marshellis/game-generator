@@ -1,0 +1,212 @@
+{
+  "id": "2026-06-05-math-mix-g5-990036411",
+  "title": "Math Mix",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            37,
+            24,
+            19,
+            14,
+            43
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            18,
+            20,
+            38,
+            29,
+            32
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            9,
+            24,
+            21,
+            3,
+            2
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              36,
+              31,
+              null
+            ],
+            [
+              61,
+              null,
+              21
+            ],
+            [
+              null,
+              51,
+              46
+            ]
+          ],
+          "answers": [
+            56,
+            41,
+            26
+          ],
+          "magic": 123
+        },
+        {
+          "grid": [
+            [
+              27,
+              42,
+              null
+            ],
+            [
+              24,
+              null,
+              36
+            ],
+            [
+              null,
+              18,
+              33
+            ]
+          ],
+          "answers": [
+            21,
+            30,
+            39
+          ],
+          "magic": 90
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 56542,
+          "place": "tens",
+          "answer": 40
+        },
+        {
+          "number": 52380,
+          "place": "hundreds",
+          "answer": 300
+        },
+        {
+          "number": 70745,
+          "place": "tens",
+          "answer": 40
+        },
+        {
+          "number": 81651,
+          "place": "ones",
+          "answer": 1
+        },
+        {
+          "number": 12657,
+          "place": "tens",
+          "answer": 50
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 45391,
+          "parts": [
+            40000,
+            5000,
+            300,
+            90,
+            1
+          ],
+          "blankIndex": 4,
+          "answer": 1
+        },
+        {
+          "number": 63068,
+          "parts": [
+            60000,
+            3000,
+            60,
+            8
+          ],
+          "blankIndex": 0,
+          "answer": 60000
+        },
+        {
+          "number": 53517,
+          "parts": [
+            50000,
+            3000,
+            500,
+            10,
+            7
+          ],
+          "blankIndex": 3,
+          "answer": 10
+        },
+        {
+          "number": 18355,
+          "parts": [
+            10000,
+            8000,
+            300,
+            50,
+            5
+          ],
+          "blankIndex": 0,
+          "answer": 10000
+        },
+        {
+          "number": 13250,
+          "parts": [
+            10000,
+            3000,
+            200,
+            50
+          ],
+          "blankIndex": 2,
+          "answer": 200
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 44,
+    "stars": 4
+  },
+  "seed": 990036411,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

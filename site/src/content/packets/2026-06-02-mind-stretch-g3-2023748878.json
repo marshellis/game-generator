@@ -1,0 +1,208 @@
+{
+  "id": "2026-06-02-mind-stretch-g3-2023748878",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            16,
+            18,
+            9,
+            6,
+            12
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            2,
+            5,
+            1,
+            8
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            6,
+            10,
+            12,
+            8,
+            2
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🔺",
+            "⭐"
+          ],
+          "values": [
+            9,
+            3
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 18
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 12
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "❤️",
+            "🟣"
+          ],
+          "values": [
+            2,
+            1
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 4
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 99
+            },
+            {
+              "kind": "digitSum",
+              "s": 8
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "gt",
+              "n": 51
+            },
+            {
+              "kind": "lt",
+              "n": 77
+            }
+          ],
+          "answer": 62
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 99
+            },
+            {
+              "kind": "digitSum",
+              "s": 5
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "gt",
+              "n": 21
+            },
+            {
+              "kind": "onesDigit",
+              "d": 2
+            }
+          ],
+          "answer": 32
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 193,
+          "place": "hundreds",
+          "answer": 100
+        },
+        {
+          "number": 382,
+          "place": "hundreds",
+          "answer": 300
+        },
+        {
+          "number": 900,
+          "place": "hundreds",
+          "answer": 900
+        },
+        {
+          "number": 438,
+          "place": "hundreds",
+          "answer": 400
+        },
+        {
+          "number": 860,
+          "place": "ones",
+          "answer": 0
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 7,
+    "score": 42,
+    "stars": 4
+  },
+  "seed": 2023748878,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

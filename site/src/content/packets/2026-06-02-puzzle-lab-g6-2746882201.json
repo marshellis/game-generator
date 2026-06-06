@@ -1,0 +1,255 @@
+{
+  "id": "2026-06-02-puzzle-lab-g6-2746882201",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            1,
+            8,
+            16,
+            5,
+            2
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            3,
+            26,
+            6,
+            16,
+            20
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            23,
+            5,
+            8,
+            24,
+            3
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              34,
+              31,
+              null
+            ],
+            [
+              null,
+              37,
+              25
+            ],
+            [
+              28,
+              null,
+              40
+            ]
+          ],
+          "answers": [
+            46,
+            49,
+            43
+          ],
+          "magic": 111
+        },
+        {
+          "grid": [
+            [
+              null,
+              39,
+              29
+            ],
+            [
+              27,
+              35,
+              null
+            ],
+            [
+              41,
+              null,
+              33
+            ]
+          ],
+          "answers": [
+            37,
+            43,
+            31
+          ],
+          "magic": 105
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            8,
+            6,
+            4,
+            5
+          ],
+          "ops": [
+            "+",
+            "+",
+            "×"
+          ],
+          "target": 34
+        },
+        {
+          "operands": [
+            1,
+            5,
+            8,
+            4
+          ],
+          "ops": [
+            "−",
+            "+",
+            "+"
+          ],
+          "target": 8
+        },
+        {
+          "operands": [
+            8,
+            3,
+            5,
+            6
+          ],
+          "ops": [
+            "+",
+            "×",
+            "−"
+          ],
+          "target": 17
+        },
+        {
+          "operands": [
+            3,
+            9,
+            2,
+            2
+          ],
+          "ops": [
+            "+",
+            "×",
+            "×"
+          ],
+          "target": 39
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🟦",
+            "🟣",
+            "🟢"
+          ],
+          "values": [
+            10,
+            10,
+            1
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 20
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 20
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 11
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "❤️",
+            "🟧",
+            "🟣"
+          ],
+          "values": [
+            6,
+            3,
+            1
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 12
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 9
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 10,
+    "score": 49,
+    "stars": 4
+  },
+  "seed": 2746882201,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

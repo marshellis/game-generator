@@ -1,0 +1,163 @@
+{
+  "id": "2026-06-01-word-search-g1-139785021",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "size": 8,
+  "theme": "Nature",
+  "grid": [
+    [
+      "I",
+      "C",
+      "E",
+      "F",
+      "K",
+      "K",
+      "T",
+      "A"
+    ],
+    [
+      "V",
+      "H",
+      "G",
+      "P",
+      "K",
+      "R",
+      "P",
+      "J"
+    ],
+    [
+      "Y",
+      "I",
+      "E",
+      "L",
+      "U",
+      "N",
+      "B",
+      "C"
+    ],
+    [
+      "Q",
+      "L",
+      "M",
+      "A",
+      "L",
+      "G",
+      "O",
+      "A"
+    ],
+    [
+      "B",
+      "L",
+      "U",
+      "N",
+      "V",
+      "D",
+      "U",
+      "N"
+    ],
+    [
+      "J",
+      "C",
+      "D",
+      "T",
+      "Z",
+      "U",
+      "O",
+      "Y"
+    ],
+    [
+      "M",
+      "E",
+      "A",
+      "D",
+      "O",
+      "W",
+      "X",
+      "O"
+    ],
+    [
+      "L",
+      "R",
+      "D",
+      "Q",
+      "L",
+      "U",
+      "V",
+      "N"
+    ]
+  ],
+  "words": [
+    {
+      "word": "PLANT",
+      "start": {
+        "r": 1,
+        "c": 3
+      },
+      "end": {
+        "r": 5,
+        "c": 3
+      }
+    },
+    {
+      "word": "ICE",
+      "start": {
+        "r": 0,
+        "c": 0
+      },
+      "end": {
+        "r": 0,
+        "c": 2
+      }
+    },
+    {
+      "word": "MUD",
+      "start": {
+        "r": 3,
+        "c": 2
+      },
+      "end": {
+        "r": 5,
+        "c": 2
+      }
+    },
+    {
+      "word": "CANYON",
+      "start": {
+        "r": 2,
+        "c": 7
+      },
+      "end": {
+        "r": 7,
+        "c": 7
+      }
+    },
+    {
+      "word": "HILL",
+      "start": {
+        "r": 1,
+        "c": 1
+      },
+      "end": {
+        "r": 4,
+        "c": 1
+      }
+    },
+    {
+      "word": "MEADOW",
+      "start": {
+        "r": 6,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 5
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 139785021,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

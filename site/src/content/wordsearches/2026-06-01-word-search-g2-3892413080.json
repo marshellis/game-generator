@@ -1,0 +1,174 @@
+{
+  "id": "2026-06-01-word-search-g2-3892413080",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "size": 8,
+  "theme": "Space",
+  "grid": [
+    [
+      "J",
+      "S",
+      "S",
+      "Q",
+      "S",
+      "P",
+      "O",
+      "T"
+    ],
+    [
+      "U",
+      "G",
+      "P",
+      "D",
+      "O",
+      "L",
+      "U",
+      "F"
+    ],
+    [
+      "R",
+      "A",
+      "R",
+      "U",
+      "L",
+      "U",
+      "Z",
+      "U"
+    ],
+    [
+      "A",
+      "L",
+      "Q",
+      "S",
+      "A",
+      "T",
+      "B",
+      "F"
+    ],
+    [
+      "N",
+      "A",
+      "I",
+      "T",
+      "R",
+      "O",
+      "C",
+      "W"
+    ],
+    [
+      "U",
+      "X",
+      "C",
+      "O",
+      "S",
+      "M",
+      "O",
+      "S"
+    ],
+    [
+      "S",
+      "Y",
+      "A",
+      "E",
+      "G",
+      "E",
+      "A",
+      "C"
+    ],
+    [
+      "N",
+      "E",
+      "P",
+      "T",
+      "U",
+      "N",
+      "E",
+      "S"
+    ]
+  ],
+  "words": [
+    {
+      "word": "DUST",
+      "start": {
+        "r": 1,
+        "c": 3
+      },
+      "end": {
+        "r": 4,
+        "c": 3
+      }
+    },
+    {
+      "word": "COSMOS",
+      "start": {
+        "r": 5,
+        "c": 2
+      },
+      "end": {
+        "r": 5,
+        "c": 7
+      }
+    },
+    {
+      "word": "URANUS",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 0
+      }
+    },
+    {
+      "word": "SOLAR",
+      "start": {
+        "r": 0,
+        "c": 4
+      },
+      "end": {
+        "r": 4,
+        "c": 4
+      }
+    },
+    {
+      "word": "PLUTO",
+      "start": {
+        "r": 0,
+        "c": 5
+      },
+      "end": {
+        "r": 4,
+        "c": 5
+      }
+    },
+    {
+      "word": "GALAXY",
+      "start": {
+        "r": 1,
+        "c": 1
+      },
+      "end": {
+        "r": 6,
+        "c": 1
+      }
+    },
+    {
+      "word": "NEPTUNE",
+      "start": {
+        "r": 7,
+        "c": 0
+      },
+      "end": {
+        "r": 7,
+        "c": 6
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 3892413080,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

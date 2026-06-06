@@ -1,0 +1,145 @@
+{
+  "id": "2026-06-01-the-great-pet-mix-up-3400113826",
+  "title": "The Great Pet Mix-Up",
+  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "categories": [
+    {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora"
+      ]
+    },
+    {
+      "name": "Pet",
+      "items": [
+        "Cat",
+        "Dog",
+        "Frog"
+      ]
+    },
+    {
+      "name": "Color",
+      "items": [
+        "Red",
+        "Blue",
+        "Green"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      1,
+      2,
+      0
+    ],
+    [
+      0,
+      2,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Ben's pet is not Dog."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Cora's pet is not Frog."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Cora's color is Blue."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The kid whose pet is Dog has Red for their color."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Cora's pet is Cat."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "The kid whose pet is Frog has Green for their color."
+    }
+  ],
+  "seed": 3400113826,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

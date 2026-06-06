@@ -1,0 +1,166 @@
+{
+  "id": "2026-06-01-food-truck-festival-mix-up-2993967017",
+  "title": "Food Truck Festival Mix-Up",
+  "themeBlurb": "Six food trucks parked in the wrong spots and the festival map is useless. Figure out whose truck is whose before the lunch rush hits.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 3",
+  "difficulty": "g3",
+  "categories": [
+    {
+      "name": "Owner",
+      "items": [
+        "Tony",
+        "Bea",
+        "Nan",
+        "Wes"
+      ]
+    },
+    {
+      "name": "Dish",
+      "items": [
+        "Tacos",
+        "Burgers",
+        "Noodles",
+        "Waffles"
+      ]
+    },
+    {
+      "name": "Sauce",
+      "items": [
+        "Spicy Red",
+        "Garlic",
+        "Sweet Chili",
+        "Cheese"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      3,
+      2,
+      1,
+      0
+    ],
+    [
+      0,
+      3,
+      1,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Bea's dish is Noodles."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Nan's sauce is Garlic."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Wes's sauce is Sweet Chili."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The owner whose dish is Tacos does not have Garlic for their sauce."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Waffles has Spicy Red for their sauce."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Wes's dish is Tacos."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Tony's sauce is Spicy Red."
+    }
+  ],
+  "seed": 2993967017,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

@@ -1,0 +1,229 @@
+{
+  "id": "2026-06-04-mind-stretch-g6-79693011",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            15,
+            10,
+            14,
+            29,
+            22
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            17,
+            21,
+            3,
+            7,
+            1
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            14,
+            18,
+            12,
+            4,
+            13
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🔺",
+            "🟧",
+            "🟢"
+          ],
+          "values": [
+            12,
+            3,
+            12
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 24
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 15
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 15
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "🔷",
+            "🟦",
+            "🟢"
+          ],
+          "values": [
+            12,
+            5,
+            5
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 24
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 17
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              33,
+              13,
+              null
+            ],
+            [
+              5,
+              null,
+              37
+            ],
+            [
+              null,
+              29,
+              9
+            ]
+          ],
+          "answers": [
+            17,
+            21,
+            25
+          ],
+          "magic": 63
+        },
+        {
+          "grid": [
+            [
+              75,
+              45,
+              null
+            ],
+            [
+              null,
+              57,
+              81
+            ],
+            [
+              63,
+              null,
+              39
+            ]
+          ],
+          "answers": [
+            51,
+            33,
+            69
+          ],
+          "magic": 171
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "11 + 7",
+          "rightText": "18",
+          "answer": "="
+        },
+        {
+          "leftText": "204",
+          "rightText": "196",
+          "answer": ">"
+        },
+        {
+          "leftText": "1 × 7",
+          "rightText": "5",
+          "answer": ">"
+        },
+        {
+          "leftText": "3 + 2",
+          "rightText": "2",
+          "answer": ">"
+        },
+        {
+          "leftText": "5 × 5",
+          "rightText": "25",
+          "answer": "="
+        },
+        {
+          "leftText": "513",
+          "rightText": "613",
+          "answer": "<"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 7,
+    "score": 41,
+    "stars": 4
+  },
+  "seed": 79693011,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

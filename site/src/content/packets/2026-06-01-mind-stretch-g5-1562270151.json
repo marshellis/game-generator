@@ -1,0 +1,273 @@
+{
+  "id": "2026-06-01-mind-stretch-g5-1562270151",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            8,
+            40,
+            48,
+            29,
+            6
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            8,
+            1,
+            6,
+            4,
+            2
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            37,
+            8,
+            7,
+            56,
+            18
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                5,
+                6,
+                1,
+                8
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                14,
+                12,
+                7,
+                2
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                20,
+                24,
+                6,
+                14
+              ],
+              "answerIndex": 0
+            }
+          ],
+          "final": {
+            "numbers": [
+              20,
+              6,
+              14
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                11,
+                19,
+                8,
+                12
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                2,
+                7,
+                5,
+                8
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                26,
+                24,
+                5,
+                21
+              ],
+              "answerIndex": 0
+            }
+          ],
+          "final": {
+            "numbers": [
+              7,
+              26,
+              19
+            ],
+            "answerIndex": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              37,
+              40
+            ],
+            [
+              31,
+              43,
+              null
+            ],
+            [
+              46,
+              null,
+              34
+            ]
+          ],
+          "answers": [
+            52,
+            55,
+            49
+          ],
+          "magic": 129
+        },
+        {
+          "grid": [
+            [
+              49,
+              null,
+              69
+            ],
+            [
+              74,
+              54,
+              null
+            ],
+            [
+              null,
+              64,
+              59
+            ]
+          ],
+          "answers": [
+            44,
+            34,
+            39
+          ],
+          "magic": 162
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              3000,
+              10,
+              4
+            ]
+          },
+          "options": [
+            3579,
+            3014,
+            3603
+          ],
+          "answer": 3014
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              5000,
+              90,
+              8
+            ]
+          },
+          "options": [
+            5098,
+            5467,
+            6306
+          ],
+          "answer": 5098
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              300,
+              40,
+              9
+            ]
+          },
+          "options": [
+            5751,
+            7349,
+            8279
+          ],
+          "answer": 7349
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              1000,
+              100,
+              70,
+              3
+            ]
+          },
+          "options": [
+            1432,
+            1228,
+            1173
+          ],
+          "answer": 1173
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 8,
+    "score": 47,
+    "stars": 4
+  },
+  "seed": 1562270151,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

@@ -1,0 +1,218 @@
+{
+  "id": "2026-06-01-mind-stretch-g8-2716847060",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            2,
+            3,
+            4,
+            7,
+            8
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            17,
+            45,
+            12,
+            42,
+            3
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            2,
+            7,
+            14,
+            1,
+            9
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "multipleOf",
+              "m": 3
+            },
+            {
+              "kind": "digitSum",
+              "s": 15
+            },
+            {
+              "kind": "onesDigit",
+              "d": 5
+            },
+            {
+              "kind": "tensDigit",
+              "d": 7
+            }
+          ],
+          "answer": 375
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "tensDigit",
+              "d": 7
+            },
+            {
+              "kind": "onesDigit",
+              "d": 4
+            },
+            {
+              "kind": "digitSum",
+              "s": 13
+            }
+          ],
+          "answer": 274
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "lt",
+              "n": 184
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "tensDigit",
+              "d": 6
+            },
+            {
+              "kind": "onesDigit",
+              "d": 5
+            },
+            {
+              "kind": "gt",
+              "n": 152
+            }
+          ],
+          "answer": 165
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Sam had 180 apples. Sam gave 151 to Zoe. How many are left?",
+          "answer": 29,
+          "unit": "apples"
+        },
+        {
+          "text": "Ruby had 75 cookies. Ruby gave 28 to Lena. How many are left?",
+          "answer": 47,
+          "unit": "cookies"
+        },
+        {
+          "text": "Noah has 9 bags with 6 coins in each bag. How many coins in all?",
+          "answer": 54,
+          "unit": "coins"
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  ×  ÷ ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×",
+        "÷"
+      ],
+      "items": [
+        {
+          "left": 36,
+          "right": 4,
+          "result": 9,
+          "answer": "÷"
+        },
+        {
+          "left": 2,
+          "right": 8,
+          "result": 16,
+          "answer": "×"
+        },
+        {
+          "left": 57,
+          "right": 70,
+          "result": 127,
+          "answer": "+"
+        },
+        {
+          "left": 8,
+          "right": 7,
+          "result": 56,
+          "answer": "×"
+        },
+        {
+          "left": 110,
+          "right": 11,
+          "result": 10,
+          "answer": "÷"
+        },
+        {
+          "left": 86,
+          "right": 39,
+          "result": 125,
+          "answer": "+"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 42,
+    "stars": 4
+  },
+  "seed": 2716847060,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

@@ -1,0 +1,337 @@
+{
+  "id": "2026-06-02-trouble-on-space-station-zip-2855441700",
+  "title": "Trouble on Space Station Zip",
+  "themeBlurb": "Five astronauts, five jobs, and somebody reprogrammed the snack dispenser. Sort it out.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 7",
+  "difficulty": "g7",
+  "categories": [
+    {
+      "name": "Astronaut",
+      "items": [
+        "Nova",
+        "Pip",
+        "Quill",
+        "Rho",
+        "Sol"
+      ]
+    },
+    {
+      "name": "Deck",
+      "ordered": true,
+      "items": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
+    },
+    {
+      "name": "Job",
+      "items": [
+        "Pilot",
+        "Cook",
+        "Medic",
+        "Engineer",
+        "Botanist"
+      ]
+    },
+    {
+      "name": "Module",
+      "items": [
+        "Red Bay",
+        "Blue Bay",
+        "Lab",
+        "Dome",
+        "Galley"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    [
+      0,
+      1,
+      2,
+      4,
+      3
+    ],
+    [
+      3,
+      4,
+      0,
+      1,
+      2
+    ],
+    [
+      2,
+      0,
+      3,
+      4,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 4
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Pip's job is either Botanist or Engineer."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 0
+          },
+          {
+            "cat": 0,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The astronaut whose deck is 1 is either Nova or Sol."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The astronaut whose job is Medic has either 4 or 2 for their deck."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The astronaut whose module is Blue Bay has either 4 or 5 for their deck."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The astronaut whose job is Engineer has either Lab or Galley for their module."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The astronaut whose deck is 2 is either Pip or Rho."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 0
+          },
+          {
+            "cat": 3,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Pip's module is either Red Bay or Blue Bay."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The astronaut whose module is Dome has either 3 or 2 for their deck."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 3
+          },
+          {
+            "cat": 0,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The astronaut whose module is Galley is either Rho or Nova."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 3
+        },
+        "orderedCat": 1
+      },
+      "text": "The astronaut whose module is Blue Bay is on a higher deck than the astronaut whose job is Engineer."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 4
+        },
+        "orderedCat": 1
+      },
+      "text": "The astronaut whose module is Galley is on a higher deck than Sol."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "Sol is on a higher deck than the astronaut whose job is Pilot."
+    },
+    {
+      "id": "c13",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "The astronaut whose job is Medic has Blue Bay for their module."
+    }
+  ],
+  "seed": 2855441700,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

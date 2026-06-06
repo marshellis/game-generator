@@ -1,0 +1,301 @@
+{
+  "id": "2026-06-05-trouble-on-the-soggy-biscuit-2770584152",
+  "title": "Trouble on the Soggy Biscuit",
+  "themeBlurb": "The crew of the Soggy Biscuit split the loot in the dark, and now it's pure chaos. Match each pirate to their stuff before the captain wakes up.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 8",
+  "difficulty": "g8",
+  "categories": [
+    {
+      "name": "Pirate",
+      "items": [
+        "Bones",
+        "Patch",
+        "Scarlet",
+        "Skip",
+        "Barnacle"
+      ]
+    },
+    {
+      "name": "Years at Sea",
+      "ordered": true,
+      "items": [
+        "1",
+        "3",
+        "5",
+        "7",
+        "9"
+      ]
+    },
+    {
+      "name": "Treasure",
+      "items": [
+        "Gold Tooth",
+        "Ruby",
+        "Old Map",
+        "Cursed Coin",
+        "Pearl"
+      ]
+    },
+    {
+      "name": "Job",
+      "items": [
+        "Captain",
+        "Cook",
+        "Lookout",
+        "Swabbie",
+        "Navigator"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    [
+      2,
+      0,
+      1,
+      3,
+      4
+    ],
+    [
+      0,
+      3,
+      2,
+      4,
+      1
+    ],
+    [
+      2,
+      3,
+      1,
+      4,
+      0
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The pirate whose treasure is Gold Tooth has either Lookout or Navigator for their job."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The pirate whose job is Swabbie has either 1 or 3 for their years at sea."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 3
+          },
+          {
+            "cat": 2,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Patch's treasure is either Cursed Coin or Ruby."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 1
+          },
+          {
+            "cat": 3,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The pirate whose years at sea is 3 has either Cook or Navigator for their job."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 4
+          },
+          {
+            "cat": 0,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The pirate whose treasure is Ruby is either Barnacle or Bones."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 3
+          },
+          {
+            "cat": 3,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The pirate whose treasure is Cursed Coin has either Swabbie or Lookout for their job."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 4
+          },
+          {
+            "cat": 3,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The pirate whose treasure is Pearl has either Navigator or Lookout for their job."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 4
+          },
+          {
+            "cat": 1,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The pirate whose treasure is Ruby has either 9 or 1 for their years at sea."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "The pirate whose treasure is Pearl is saltier than Bones."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "The pirate whose job is Navigator is saltier than the pirate whose job is Lookout."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "Bones is saltier than Scarlet."
+    }
+  ],
+  "seed": 2770584152,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

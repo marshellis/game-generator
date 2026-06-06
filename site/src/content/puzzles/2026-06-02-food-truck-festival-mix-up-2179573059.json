@@ -1,0 +1,266 @@
+{
+  "id": "2026-06-02-food-truck-festival-mix-up-2179573059",
+  "title": "Food Truck Festival Mix-Up",
+  "themeBlurb": "Six food trucks parked in the wrong spots and the festival map is useless. Figure out whose truck is whose before the lunch rush hits.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 6",
+  "difficulty": "g6",
+  "categories": [
+    {
+      "name": "Owner",
+      "items": [
+        "Tony",
+        "Bea",
+        "Nan",
+        "Wes"
+      ]
+    },
+    {
+      "name": "Years Here",
+      "ordered": true,
+      "items": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "name": "Dish",
+      "items": [
+        "Tacos",
+        "Burgers",
+        "Noodles",
+        "Waffles"
+      ]
+    },
+    {
+      "name": "Sauce",
+      "items": [
+        "Spicy Red",
+        "Garlic",
+        "Sweet Chili",
+        "Cheese"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      1,
+      3,
+      2,
+      0
+    ],
+    [
+      1,
+      2,
+      0,
+      3
+    ],
+    [
+      0,
+      3,
+      2,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 0
+          },
+          {
+            "cat": 3,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The owner whose dish is Burgers has either Spicy Red or Cheese for their sauce."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 0
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The owner whose sauce is Spicy Red is either Tony or Bea."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 0
+          }
+        ]
+      },
+      "text": "Nan's sauce is either Sweet Chili or Spicy Red."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The owner whose dish is Noodles has either 4 or 1 for their years here."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Nan's years here is either 3 or 4."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 1
+          },
+          {
+            "cat": 3,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The owner whose dish is Waffles has either Garlic or Spicy Red for their sauce."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "Bea is more of a regular than Nan."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "Bea is more of a regular than the owner whose sauce is Spicy Red."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 3
+        },
+        "orderedCat": 1
+      },
+      "text": "The owner whose sauce is Spicy Red is more of a regular than the owner whose dish is Waffles."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "The owner whose years here is 4 has Noodles for their dish."
+    }
+  ],
+  "seed": 2179573059,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

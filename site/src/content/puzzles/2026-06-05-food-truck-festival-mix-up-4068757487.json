@@ -1,0 +1,190 @@
+{
+  "id": "2026-06-05-food-truck-festival-mix-up-4068757487",
+  "title": "Food Truck Festival Mix-Up",
+  "themeBlurb": "Six food trucks parked in the wrong spots and the festival map is useless. Figure out whose truck is whose before the lunch rush hits.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "categories": [
+    {
+      "name": "Owner",
+      "items": [
+        "Tony",
+        "Bea",
+        "Nan"
+      ]
+    },
+    {
+      "name": "Dish",
+      "items": [
+        "Tacos",
+        "Burgers",
+        "Noodles"
+      ]
+    },
+    {
+      "name": "Sauce",
+      "items": [
+        "Spicy Red",
+        "Garlic",
+        "Sweet Chili"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      1,
+      0,
+      2
+    ],
+    [
+      2,
+      1,
+      0
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Tony's dish is not Noodles."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Bea's dish is not Noodles."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Bea's sauce is not Sweet Chili."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Tacos does not have Spicy Red for their sauce."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "The owner whose dish is Tacos does not have Sweet Chili for their sauce."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Burgers does not have Spicy Red for their sauce."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The owner whose dish is Noodles has Spicy Red for their sauce."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Bea's sauce is Garlic."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The owner whose dish is Tacos has Garlic for their sauce."
+    }
+  ],
+  "seed": 4068757487,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

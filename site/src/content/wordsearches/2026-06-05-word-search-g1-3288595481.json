@@ -1,0 +1,163 @@
+{
+  "id": "2026-06-05-word-search-g1-3288595481",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "size": 8,
+  "theme": "Nature",
+  "grid": [
+    [
+      "Y",
+      "G",
+      "I",
+      "X",
+      "S",
+      "U",
+      "N",
+      "R"
+    ],
+    [
+      "R",
+      "A",
+      "I",
+      "N",
+      "B",
+      "O",
+      "W",
+      "K"
+    ],
+    [
+      "S",
+      "T",
+      "X",
+      "C",
+      "M",
+      "D",
+      "V",
+      "C"
+    ],
+    [
+      "T",
+      "R",
+      "F",
+      "I",
+      "E",
+      "L",
+      "D",
+      "Z"
+    ],
+    [
+      "O",
+      "E",
+      "F",
+      "Z",
+      "X",
+      "B",
+      "Z",
+      "O"
+    ],
+    [
+      "N",
+      "E",
+      "L",
+      "S",
+      "A",
+      "O",
+      "W",
+      "L"
+    ],
+    [
+      "E",
+      "G",
+      "W",
+      "U",
+      "B",
+      "Q",
+      "W",
+      "F"
+    ],
+    [
+      "H",
+      "T",
+      "P",
+      "G",
+      "R",
+      "A",
+      "S",
+      "S"
+    ]
+  ],
+  "words": [
+    {
+      "word": "TREE",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 5,
+        "c": 1
+      }
+    },
+    {
+      "word": "RAINBOW",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 1,
+        "c": 6
+      }
+    },
+    {
+      "word": "FIELD",
+      "start": {
+        "r": 3,
+        "c": 2
+      },
+      "end": {
+        "r": 3,
+        "c": 6
+      }
+    },
+    {
+      "word": "GRASS",
+      "start": {
+        "r": 7,
+        "c": 3
+      },
+      "end": {
+        "r": 7,
+        "c": 7
+      }
+    },
+    {
+      "word": "STONE",
+      "start": {
+        "r": 2,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 0
+      }
+    },
+    {
+      "word": "SUN",
+      "start": {
+        "r": 0,
+        "c": 4
+      },
+      "end": {
+        "r": 0,
+        "c": 6
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 3288595481,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

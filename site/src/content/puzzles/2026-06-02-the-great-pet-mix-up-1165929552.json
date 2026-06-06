@@ -1,0 +1,196 @@
+{
+  "id": "2026-06-02-the-great-pet-mix-up-1165929552",
+  "title": "The Great Pet Mix-Up",
+  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 3",
+  "difficulty": "g3",
+  "categories": [
+    {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev"
+      ]
+    },
+    {
+      "name": "Pet",
+      "items": [
+        "Cat",
+        "Dog",
+        "Frog",
+        "Hamster"
+      ]
+    },
+    {
+      "name": "Color",
+      "items": [
+        "Red",
+        "Blue",
+        "Green",
+        "Pink"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      0,
+      2,
+      3,
+      1
+    ],
+    [
+      3,
+      2,
+      0,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Ava's pet is Cat."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 3
+        }
+      },
+      "text": "Ben's pet is not Hamster."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Dev's pet is not Frog."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 1,
+          "item": 3
+        }
+      },
+      "text": "Dev's pet is not Hamster."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 3
+        }
+      },
+      "text": "Ava's color is Pink."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Cora's color is not Green."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The kid whose pet is Dog has Blue for their color."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Dev's color is Blue."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Ben's color is Green."
+    }
+  ],
+  "seed": 1165929552,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

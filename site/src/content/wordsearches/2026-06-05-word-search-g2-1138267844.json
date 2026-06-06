@@ -1,0 +1,174 @@
+{
+  "id": "2026-06-05-word-search-g2-1138267844",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "size": 8,
+  "theme": "Nature",
+  "grid": [
+    [
+      "E",
+      "F",
+      "W",
+      "I",
+      "N",
+      "D",
+      "I",
+      "U"
+    ],
+    [
+      "B",
+      "E",
+      "A",
+      "C",
+      "H",
+      "F",
+      "S",
+      "W"
+    ],
+    [
+      "I",
+      "S",
+      "N",
+      "O",
+      "W",
+      "X",
+      "L",
+      "Q"
+    ],
+    [
+      "Q",
+      "D",
+      "B",
+      "L",
+      "X",
+      "X",
+      "A",
+      "C"
+    ],
+    [
+      "I",
+      "M",
+      "T",
+      "A",
+      "H",
+      "F",
+      "N",
+      "U"
+    ],
+    [
+      "T",
+      "U",
+      "L",
+      "K",
+      "J",
+      "I",
+      "D",
+      "A"
+    ],
+    [
+      "Q",
+      "D",
+      "X",
+      "E",
+      "Y",
+      "S",
+      "P",
+      "K"
+    ],
+    [
+      "P",
+      "W",
+      "H",
+      "I",
+      "L",
+      "L",
+      "B",
+      "K"
+    ]
+  ],
+  "words": [
+    {
+      "word": "HILL",
+      "start": {
+        "r": 7,
+        "c": 2
+      },
+      "end": {
+        "r": 7,
+        "c": 5
+      }
+    },
+    {
+      "word": "BEACH",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 1,
+        "c": 4
+      }
+    },
+    {
+      "word": "LAKE",
+      "start": {
+        "r": 3,
+        "c": 3
+      },
+      "end": {
+        "r": 6,
+        "c": 3
+      }
+    },
+    {
+      "word": "MUD",
+      "start": {
+        "r": 4,
+        "c": 1
+      },
+      "end": {
+        "r": 6,
+        "c": 1
+      }
+    },
+    {
+      "word": "WIND",
+      "start": {
+        "r": 0,
+        "c": 2
+      },
+      "end": {
+        "r": 0,
+        "c": 5
+      }
+    },
+    {
+      "word": "ISLAND",
+      "start": {
+        "r": 0,
+        "c": 6
+      },
+      "end": {
+        "r": 5,
+        "c": 6
+      }
+    },
+    {
+      "word": "SNOW",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 2,
+        "c": 4
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 1138267844,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

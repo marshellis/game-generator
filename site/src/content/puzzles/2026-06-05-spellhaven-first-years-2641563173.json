@@ -1,0 +1,226 @@
+{
+  "id": "2026-06-05-spellhaven-first-years-2641563173",
+  "title": "Spellhaven First-Years",
+  "themeBlurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 3",
+  "difficulty": "g3",
+  "categories": [
+    {
+      "name": "Wizard",
+      "items": [
+        "Pip",
+        "Hazel",
+        "Dorian",
+        "Maple"
+      ]
+    },
+    {
+      "name": "Familiar",
+      "items": [
+        "Cat",
+        "Owl",
+        "Toad",
+        "Raven"
+      ]
+    },
+    {
+      "name": "Potion",
+      "items": [
+        "Fizzy",
+        "Glow",
+        "Sneeze",
+        "Shrink"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      2,
+      1,
+      3,
+      0
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Pip's familiar is Toad."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Maple's familiar is Cat."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Dorian's potion is not Fizzy."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 3
+        }
+      },
+      "text": "Dorian's potion is not Shrink."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The wizard whose familiar is Cat does not have Fizzy for their potion."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 3
+        }
+      },
+      "text": "The wizard whose familiar is Cat does not have Shrink for their potion."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The wizard whose familiar is Toad does not have Fizzy for their potion."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The wizard whose familiar is Raven does not have Fizzy for their potion."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The wizard whose familiar is Raven does not have Glow for their potion."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "The wizard whose familiar is Raven has Sneeze for their potion."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The wizard whose familiar is Cat has Glow for their potion."
+    }
+  ],
+  "seed": 2641563173,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

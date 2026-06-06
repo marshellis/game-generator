@@ -1,0 +1,249 @@
+{
+  "id": "2026-06-05-mind-stretch-g7-3837021041",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            42,
+            40,
+            6,
+            29
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            37,
+            10,
+            30,
+            1,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            19,
+            8,
+            32,
+            44,
+            36
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "onesDigit",
+              "d": 3
+            },
+            {
+              "kind": "lt",
+              "n": 389
+            },
+            {
+              "kind": "digitSum",
+              "s": 14
+            },
+            {
+              "kind": "tensDigit",
+              "d": 8
+            }
+          ],
+          "answer": 383
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "onesDigit",
+              "d": 0
+            },
+            {
+              "kind": "multipleOf",
+              "m": 5
+            },
+            {
+              "kind": "digitSum",
+              "s": 5
+            },
+            {
+              "kind": "multipleOf",
+              "m": 4
+            },
+            {
+              "kind": "tensDigit",
+              "d": 2
+            }
+          ],
+          "answer": 320
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "lt",
+              "n": 148
+            },
+            {
+              "kind": "gt",
+              "n": 118
+            },
+            {
+              "kind": "onesDigit",
+              "d": 7
+            },
+            {
+              "kind": "digitSum",
+              "s": 11
+            }
+          ],
+          "answer": 137
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 493441,
+          "op": "+",
+          "b": 721016,
+          "answer": 1214457
+        },
+        {
+          "a": 570042,
+          "op": "+",
+          "b": 105895,
+          "answer": 675937
+        },
+        {
+          "a": 812429,
+          "op": "+",
+          "b": 119287,
+          "answer": 931716
+        },
+        {
+          "a": 845999,
+          "op": "−",
+          "b": 325136,
+          "answer": 520863
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            4,
+            9,
+            6,
+            7
+          ],
+          "ops": [
+            "−",
+            "+",
+            "+"
+          ],
+          "target": 8
+        },
+        {
+          "operands": [
+            2,
+            7,
+            3,
+            6
+          ],
+          "ops": [
+            "×",
+            "+",
+            "×"
+          ],
+          "target": 32
+        },
+        {
+          "operands": [
+            5,
+            3,
+            6,
+            7,
+            6
+          ],
+          "ops": [
+            "+",
+            "×",
+            "+",
+            "+"
+          ],
+          "target": 36
+        },
+        {
+          "operands": [
+            2,
+            5,
+            5,
+            2,
+            9
+          ],
+          "ops": [
+            "×",
+            "+",
+            "−",
+            "−"
+          ],
+          "target": 4
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 10,
+    "score": 52,
+    "stars": 5
+  },
+  "seed": 3837021041,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

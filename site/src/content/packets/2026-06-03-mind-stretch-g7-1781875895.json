@@ -1,0 +1,210 @@
+{
+  "id": "2026-06-03-mind-stretch-g7-1781875895",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            14,
+            4,
+            1,
+            32,
+            8
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            18,
+            29,
+            11,
+            9,
+            26
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            27,
+            19,
+            9,
+            3,
+            8
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🔺",
+            "🔷",
+            "⭐"
+          ],
+          "values": [
+            1,
+            5,
+            12
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 2
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 6
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 17
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "⭐",
+            "🟢",
+            "🔺"
+          ],
+          "values": [
+            3,
+            1,
+            9
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 6
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 4
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 5,
+          "newDen": 20,
+          "answer": 12
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 3,
+          "newDen": 9,
+          "answer": 6
+        },
+        {
+          "kind": "compare",
+          "aNum": 2,
+          "aDen": 8,
+          "bNum": 3,
+          "bDen": 5,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 3,
+          "newDen": 6,
+          "answer": 2
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 3,
+          "bNum": 4,
+          "bDen": 6,
+          "answer": ">"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 469399,
+          "op": "+",
+          "b": 160478,
+          "answer": 629877
+        },
+        {
+          "a": 571,
+          "op": "×",
+          "b": 31,
+          "answer": 17701
+        },
+        {
+          "a": 127267,
+          "op": "−",
+          "b": 121091,
+          "answer": 6176
+        },
+        {
+          "a": 765430,
+          "op": "−",
+          "b": 419631,
+          "answer": 345799
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 46,
+    "stars": 4
+  },
+  "seed": 1781875895,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

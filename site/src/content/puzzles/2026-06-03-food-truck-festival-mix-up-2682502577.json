@@ -1,0 +1,190 @@
+{
+  "id": "2026-06-03-food-truck-festival-mix-up-2682502577",
+  "title": "Food Truck Festival Mix-Up",
+  "themeBlurb": "Six food trucks parked in the wrong spots and the festival map is useless. Figure out whose truck is whose before the lunch rush hits.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "categories": [
+    {
+      "name": "Owner",
+      "items": [
+        "Tony",
+        "Bea",
+        "Nan"
+      ]
+    },
+    {
+      "name": "Dish",
+      "items": [
+        "Tacos",
+        "Burgers",
+        "Noodles"
+      ]
+    },
+    {
+      "name": "Sauce",
+      "items": [
+        "Spicy Red",
+        "Garlic",
+        "Sweet Chili"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Tony's dish is not Tacos."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Tony's dish is not Burgers."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Bea's dish is not Tacos."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Bea's sauce is not Garlic."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Nan's sauce is not Spicy Red."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Nan's sauce is not Garlic."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Tony's dish is Noodles."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Bea's dish is Burgers."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The owner whose dish is Noodles has Garlic for their sauce."
+    }
+  ],
+  "seed": 2682502577,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

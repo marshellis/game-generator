@@ -1,0 +1,199 @@
+{
+  "id": "2026-06-05-puzzle-lab-g4-1129021244",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            19,
+            20,
+            18,
+            3,
+            22
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            5,
+            4,
+            6,
+            2
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            13,
+            15,
+            5,
+            10,
+            3
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 3,
+          "op": "×",
+          "right": 8,
+          "result": 24,
+          "blank": "result",
+          "answer": 24
+        },
+        {
+          "left": 8,
+          "op": "÷",
+          "right": 2,
+          "result": 4,
+          "blank": "left",
+          "answer": 8
+        },
+        {
+          "left": 420,
+          "op": "−",
+          "right": 134,
+          "result": 286,
+          "blank": "right",
+          "answer": 134
+        },
+        {
+          "left": 544,
+          "op": "+",
+          "right": 368,
+          "result": 912,
+          "blank": "right",
+          "answer": 368
+        },
+        {
+          "left": 30,
+          "op": "+",
+          "right": 371,
+          "result": 401,
+          "blank": "left",
+          "answer": 30
+        },
+        {
+          "left": 433,
+          "op": "+",
+          "right": 806,
+          "result": 1239,
+          "blank": "left",
+          "answer": 433
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  ×  ÷ ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×",
+        "÷"
+      ],
+      "items": [
+        {
+          "left": 29,
+          "right": 3,
+          "result": 26,
+          "answer": "−"
+        },
+        {
+          "left": 24,
+          "right": 13,
+          "result": 11,
+          "answer": "−"
+        },
+        {
+          "left": 9,
+          "right": 8,
+          "result": 72,
+          "answer": "×"
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "result": 16,
+          "answer": "×"
+        },
+        {
+          "left": 59,
+          "right": 76,
+          "result": 135,
+          "answer": "+"
+        },
+        {
+          "left": 40,
+          "right": 5,
+          "result": 8,
+          "answer": "÷"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 100",
+      "instructions": "Round each number to the nearest 100.",
+      "items": [
+        {
+          "number": 3886,
+          "nearest": 100,
+          "answer": 3900
+        },
+        {
+          "number": 9437,
+          "nearest": 100,
+          "answer": 9400
+        },
+        {
+          "number": 5872,
+          "nearest": 100,
+          "answer": 5900
+        },
+        {
+          "number": 7408,
+          "nearest": 100,
+          "answer": 7400
+        },
+        {
+          "number": 2622,
+          "nearest": 100,
+          "answer": 2600
+        },
+        {
+          "number": 4535,
+          "nearest": 100,
+          "answer": 4500
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 41,
+    "stars": 4
+  },
+  "seed": 1129021244,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

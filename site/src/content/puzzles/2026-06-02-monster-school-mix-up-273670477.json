@@ -1,0 +1,281 @@
+{
+  "id": "2026-06-02-monster-school-mix-up-273670477",
+  "title": "Monster School Mix-Up",
+  "themeBlurb": "Ms. Gorgon's class lined up for picture day, and now nobody remembers who's who. Sort out the little monsters before the slime dries.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 8",
+  "difficulty": "g8",
+  "categories": [
+    {
+      "name": "Monster",
+      "items": [
+        "Glob",
+        "Fang",
+        "Murk",
+        "Snot",
+        "Wart"
+      ]
+    },
+    {
+      "name": "Grade",
+      "ordered": true,
+      "items": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Eyeballs",
+        "Swamp Juice",
+        "Bug Pizza",
+        "Toe Jam",
+        "Mud Pie"
+      ]
+    },
+    {
+      "name": "Power",
+      "items": [
+        "Invisible",
+        "Stinky Breath",
+        "Extra Arms",
+        "Fire Burps",
+        "Wall Crawl"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    [
+      1,
+      2,
+      3,
+      4,
+      0
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      4
+    ],
+    [
+      2,
+      0,
+      1,
+      3,
+      4
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 0
+          },
+          {
+            "cat": 0,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The monster whose power is Extra Arms is either Glob or Wart."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The monster whose snack is Swamp Juice is either Fang or Glob."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The monster whose power is Stinky Breath is either Murk or Fang."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 2
+          },
+          {
+            "cat": 2,
+            "item": 4
+          }
+        ]
+      },
+      "text": "Glob's snack is either Bug Pizza or Mud Pie."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 4
+        },
+        "orderedCat": 1
+      },
+      "text": "Glob is in a higher grade than the monster whose power is Wall Crawl."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "Fang is in a higher grade than the monster whose snack is Bug Pizza."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 1
+        },
+        "orderedCat": 1
+      },
+      "text": "The monster whose power is Fire Burps is in a higher grade than the monster whose power is Stinky Breath."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 4
+        },
+        "orderedCat": 1
+      },
+      "text": "The monster whose snack is Bug Pizza is in a higher grade than Wart."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 4
+        },
+        "orderedCat": 1
+      },
+      "text": "The monster whose snack is Eyeballs is in a higher grade than Wart."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "The monster whose snack is Toe Jam is in a higher grade than the monster whose snack is Eyeballs."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 1
+        },
+        "orderedCat": 1
+      },
+      "text": "The monster whose power is Stinky Breath is in a higher grade than the monster whose snack is Swamp Juice."
+    }
+  ],
+  "seed": 273670477,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

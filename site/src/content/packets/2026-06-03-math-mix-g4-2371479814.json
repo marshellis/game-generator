@@ -1,0 +1,231 @@
+{
+  "id": "2026-06-03-math-mix-g4-2371479814",
+  "title": "Math Mix",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            59,
+            63,
+            7,
+            9,
+            43
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            17,
+            6,
+            23,
+            2,
+            1
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            5,
+            10,
+            3,
+            6,
+            4
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 3,
+          "newDen": 12,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 4,
+          "bNum": 5,
+          "bDen": 8,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 8,
+          "bNum": 4,
+          "bDen": 3,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 2,
+          "bNum": 4,
+          "bDen": 3,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 3,
+          "newDen": 9,
+          "answer": 3
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              44,
+              30
+            ],
+            [
+              32,
+              null,
+              40
+            ],
+            [
+              42,
+              28,
+              null
+            ]
+          ],
+          "answers": [
+            34,
+            36,
+            38
+          ],
+          "magic": 108
+        },
+        {
+          "grid": [
+            [
+              17,
+              32,
+              null
+            ],
+            [
+              38,
+              null,
+              14
+            ],
+            [
+              null,
+              20,
+              35
+            ]
+          ],
+          "answers": [
+            29,
+            26,
+            23
+          ],
+          "magic": 78
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              600,
+              90,
+              4
+            ]
+          },
+          "options": [
+            2798,
+            2694,
+            3300
+          ],
+          "answer": 2694
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              3000,
+              40,
+              9
+            ]
+          },
+          "options": [
+            2795,
+            2833,
+            3049
+          ],
+          "answer": 3049
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              9000,
+              20
+            ]
+          },
+          "options": [
+            9622,
+            9020,
+            7398
+          ],
+          "answer": 9020
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              500,
+              6
+            ]
+          },
+          "options": [
+            2269,
+            2506,
+            2172
+          ],
+          "answer": 2506
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 42,
+    "stars": 4
+  },
+  "seed": 2371479814,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

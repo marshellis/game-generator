@@ -1,0 +1,223 @@
+{
+  "id": "2026-06-03-brain-warm-up-g8-3366283538",
+  "title": "Brain Warm-Up",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            8,
+            18,
+            20,
+            3,
+            24
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            34,
+            64,
+            31,
+            42,
+            33
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            34,
+            48,
+            61,
+            46,
+            94
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              54,
+              33
+            ],
+            [
+              36,
+              42,
+              null
+            ],
+            [
+              51,
+              null,
+              45
+            ]
+          ],
+          "answers": [
+            39,
+            48,
+            30
+          ],
+          "magic": 126
+        },
+        {
+          "grid": [
+            [
+              38,
+              10,
+              null
+            ],
+            [
+              18,
+              null,
+              34
+            ],
+            [
+              null,
+              42,
+              14
+            ]
+          ],
+          "answers": [
+            30,
+            26,
+            22
+          ],
+          "magic": 78
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🔺",
+            "🔷",
+            "🟧"
+          ],
+          "values": [
+            9,
+            6,
+            9
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 18
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 15
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 15
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "❤️",
+            "🟢",
+            "🟧"
+          ],
+          "values": [
+            12,
+            1,
+            12
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 24
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 13
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 349687,
+          "op": "+",
+          "b": 270648,
+          "answer": 620335
+        },
+        {
+          "a": 482593,
+          "op": "−",
+          "b": 237064,
+          "answer": 245529
+        },
+        {
+          "a": 456,
+          "op": "×",
+          "b": 2,
+          "answer": 912
+        },
+        {
+          "a": 230256,
+          "op": "+",
+          "b": 796816,
+          "answer": 1027072
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 7,
+    "score": 49,
+    "stars": 4
+  },
+  "seed": 3366283538,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

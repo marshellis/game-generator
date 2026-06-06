@@ -1,0 +1,207 @@
+{
+  "id": "2026-06-03-mind-stretch-g6-1939089224",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            5,
+            8,
+            4,
+            2,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            4,
+            7,
+            5,
+            35,
+            25
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            7,
+            40,
+            18,
+            8,
+            56
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              4000,
+              600,
+              80,
+              6
+            ]
+          },
+          "options": [
+            4686,
+            5338,
+            4128
+          ],
+          "answer": 4686
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              4000,
+              400,
+              40,
+              3
+            ]
+          },
+          "options": [
+            4443,
+            4911,
+            4402
+          ],
+          "answer": 4443
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              5000,
+              60,
+              9
+            ]
+          },
+          "options": [
+            5069,
+            6282,
+            5295
+          ],
+          "answer": 5069
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              4000,
+              300,
+              60,
+              7
+            ]
+          },
+          "options": [
+            3784,
+            4813,
+            4367
+          ],
+          "answer": 4367
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 3,
+          "bNum": 3,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 4,
+          "answer": 2
+        },
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 6,
+          "newDen": 24,
+          "answer": 12
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 6,
+          "newDen": 24,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 5,
+          "bNum": 1,
+          "bDen": 4,
+          "answer": "<"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 534284,
+          "op": "−",
+          "b": 141875,
+          "answer": 392409
+        },
+        {
+          "a": 617,
+          "op": "×",
+          "b": 51,
+          "answer": 31467
+        },
+        {
+          "a": 488,
+          "op": "×",
+          "b": 61,
+          "answer": 29768
+        },
+        {
+          "a": 358,
+          "op": "×",
+          "b": 11,
+          "answer": 3938
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 4,
+    "score": 42,
+    "stars": 4
+  },
+  "seed": 1939089224,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

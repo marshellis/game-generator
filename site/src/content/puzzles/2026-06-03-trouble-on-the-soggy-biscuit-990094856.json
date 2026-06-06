@@ -1,0 +1,235 @@
+{
+  "id": "2026-06-03-trouble-on-the-soggy-biscuit-990094856",
+  "title": "Trouble on the Soggy Biscuit",
+  "themeBlurb": "The crew of the Soggy Biscuit split the loot in the dark, and now it's pure chaos. Match each pirate to their stuff before the captain wakes up.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 6",
+  "difficulty": "g6",
+  "categories": [
+    {
+      "name": "Pirate",
+      "items": [
+        "Bones",
+        "Patch",
+        "Scarlet",
+        "Skip"
+      ]
+    },
+    {
+      "name": "Years at Sea",
+      "ordered": true,
+      "items": [
+        "1",
+        "3",
+        "5",
+        "7"
+      ]
+    },
+    {
+      "name": "Treasure",
+      "items": [
+        "Gold Tooth",
+        "Ruby",
+        "Old Map",
+        "Cursed Coin"
+      ]
+    },
+    {
+      "name": "Job",
+      "items": [
+        "Captain",
+        "Cook",
+        "Lookout",
+        "Swabbie"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      2,
+      0,
+      1,
+      3
+    ],
+    [
+      1,
+      3,
+      2,
+      0
+    ],
+    [
+      0,
+      2,
+      3,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The pirate whose job is Lookout has either 1 or 7 for their years at sea."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 0
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The pirate whose job is Captain is either Bones or Skip."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The pirate whose job is Captain has either 5 or 1 for their years at sea."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 1
+        },
+        "orderedCat": 1
+      },
+      "text": "The pirate whose treasure is Old Map is saltier than Patch."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 1
+        },
+        "orderedCat": 1
+      },
+      "text": "Skip is saltier than the pirate whose treasure is Ruby."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "The pirate whose treasure is Gold Tooth is saltier than the pirate whose job is Lookout."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "The pirate whose treasure is Gold Tooth is saltier than Bones."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 3
+        },
+        "orderedCat": 1
+      },
+      "text": "The pirate whose treasure is Ruby is saltier than the pirate whose job is Swabbie."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Scarlet's years at sea is 3."
+    }
+  ],
+  "seed": 990094856,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}
