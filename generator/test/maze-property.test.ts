@@ -49,6 +49,19 @@ describe("property: decoy starts are sealed and the main maze is intact", () => 
         // main region = grid minus the reserved decoy cells (entrance + depth corridor each)
         const decoyCells = p.decoys * (p.decoyDepth + 1);
         expect(fromStart.size).toBe(m.rows * m.cols - decoyCells);
+
+        // ...and (for perfect-maze grades) it's a spanning TREE, so the start→end solution
+        // is unique: a connected region of K cells with exactly K-1 edges has no cycles.
+        // Count open edges among reachable cells (each wall is symmetric, so halve the bit
+        // total). Braided grades (g1–g2) intentionally add loops, so skip them.
+        if (p.braid === 0) {
+          let openBits = 0;
+          for (const k of fromStart) {
+            const [r, c] = k.split(",").map(Number) as [number, number];
+            openBits += [1, 2, 4, 8].filter((b) => m.open[r]![c]! & b).length;
+          }
+          expect(openBits / 2).toBe(fromStart.size - 1);
+        }
       });
     }
   }

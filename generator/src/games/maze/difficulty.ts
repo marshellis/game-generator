@@ -14,6 +14,9 @@ export interface Difficulty {
 // Size is the dominant lever (docs/grade-appropriateness.md). Braid only g1–g2.
 // decoys/decoyDepth derived from src/grades.ts GRADE_BANDS: disjunction (tier 3) unlocks at g3,
 // count climbs with workingMemory, depth climbs with maxReasoningTier.
+// INVARIANT: braid and decoys are mutually exclusive per grade (braid>0 only g1–g2,
+// decoys>0 only g3+). braid() is decoy-unaware and could puncture a sealed pocket, so do
+// NOT set both >0 on the same preset without first making braid() skip reserved cells.
 export const PRESETS: Record<string, Difficulty> = {
   g1: { id: "g1", cols: 6,  rows: 6,  braid: 0.5, decoys: 0, decoyDepth: 0, readingLevel: "grade 1" },
   g2: { id: "g2", cols: 8,  rows: 8,  braid: 0.3, decoys: 0, decoyDepth: 0, readingLevel: "grade 2" },
