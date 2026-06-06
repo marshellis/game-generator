@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Cat has either Pink or Green for their color."
+      "text": "Would you believe it? The kid whose pet is Cat is totally rocking either Pink or Green as their color!"
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "Ben's snack is either Pretzels or Popcorn."
+      "text": "Ben can't make up his mind — his snack is either Pretzels or Popcorn, and that's final!"
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Popcorn has either Cat or Hamster for their pet."
+      "text": "The kid who's munching Popcorn has a very fluffy or very slimy companion — their pet is either a Cat or a Hamster!"
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster has either Grapes or Pretzels for their snack."
+      "text": "The kid whose pet is Hamster only eats the good stuff — their snack is either Grapes or Pretzels!"
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Popcorn is either Dev or Ben."
+      "text": "The Popcorn-lover on the street is causing a ruckus — and it's either Dev or Ben!"
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster is either Ava or Dev."
+      "text": "The kid whose pet is Hamster has been found — and it's either Ava or Dev (the hamster refused to say which)!"
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Pink has either Popcorn or Cookies for their snack."
+      "text": "The kid whose color is Pink is snacking in style — it's either Popcorn or Cookies for them!"
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "Ben's pet is either Frog or Dog."
+      "text": "Ben's pet has been causing neighborhood chaos — and it's either a Frog or a Dog!"
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red has either Cookies or Popcorn for their snack."
+      "text": "The kid whose color is Red is snacking like a champ — their snack is either Cookies or Popcorn!"
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue has either Frog or Cat for their pet."
+      "text": "The kid whose color is Blue has a pet that hops or purrs — it's either a Frog or a Cat!"
     },
     {
       "id": "c11",
@@ -293,7 +293,7 @@
           "item": 3
         }
       },
-      "text": "The kid whose color is Pink has Popcorn for their snack."
+      "text": "Oh wow, the kid whose color is Pink is going totally wild — they eat Popcorn and nothing else!"
     }
   ],
   "seed": 3271092847,

@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Sneeze has either Toad or Raven for their familiar."
+      "text": "By my wand — the wizard whose potion is Sneeze keeps either a Toad or a Raven as their familiar."
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The wizard whose year is 1 has either Owl or Toad for their familiar."
+      "text": "Every first-year knows this: the wizard in Year 1 keeps either an Owl or a Toad as their familiar."
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "The wizard whose year is 2 has either Fizzy or Sneeze for their potion."
+      "text": "The spellbook archives confirm: the wizard in Year 2 brews either Fizzy or Sneeze potion."
     },
     {
       "id": "c4",
@@ -153,7 +153,7 @@
           }
         ]
       },
-      "text": "Pip's potion is either Shrink or Glow."
+      "text": "Pip's cauldron bubbles with either Shrink or Glow potion — nothing else."
     },
     {
       "id": "c5",
@@ -169,7 +169,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose potion is Sneeze is in a higher year than the wizard whose familiar is Raven."
+      "text": "Owls would gossip about this: the wizard who brews Sneeze potion is in a higher year than the wizard whose familiar is Raven."
     },
     {
       "id": "c6",
@@ -185,7 +185,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Pip is in a higher year than the wizard whose familiar is Owl."
+      "text": "Pip has been at Spellhaven longer than the wizard whose familiar is Owl — Pip's year number is higher."
     },
     {
       "id": "c7",
@@ -201,7 +201,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose potion is Fizzy is in a higher year than Maple."
+      "text": "The Fizzy potion fizzes with seniority — the wizard who brews it is in a higher year than Maple."
     },
     {
       "id": "c8",
@@ -217,7 +217,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Dorian is in a higher year than the wizard whose familiar is Raven."
+      "text": "Dorian has studied more years at Spellhaven than the wizard whose familiar is Raven."
     },
     {
       "id": "c9",
@@ -233,7 +233,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose familiar is Cat is in a higher year than the wizard whose familiar is Toad."
+      "text": "The wizard whose familiar is Cat has clocked more years in the halls of Spellhaven than the wizard whose familiar is Toad."
     },
     {
       "id": "c10",
@@ -249,7 +249,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose potion is Sneeze is in a higher year than the wizard whose potion is Glow."
+      "text": "According to the Potions Hall scoreboard, the wizard who brews Sneeze potion is in a higher year than the wizard who brews Glow potion."
     },
     {
       "id": "c11",
@@ -264,7 +264,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Raven has Fizzy for their potion."
+      "text": "Every owl on campus has heard this: the wizard whose familiar is Raven brews Fizzy potion."
     }
   ],
   "seed": 2270833694,

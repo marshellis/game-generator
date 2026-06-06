@@ -19,6 +19,7 @@ const s = (await getEntry("sudokus", id!))!.data;
     ]}
     title={`Sudoku ${s.size}×${s.size}`}
     blurb={`Fill the grid so every row, column, and box has 1–${s.size}.`}
+    date={s.createdAt}
     printHref={`/sudoku/${s.id}/print`}
     answerHref={`/sudoku/${s.id}/answer`}
     showCheck={true}

@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "Tony's sauce is either Spicy Red or Mystery."
+      "text": "Word on the street: Tony's truck is drizzling either Spicy Red or Mystery sauce — nobody can decide which."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "The owner whose years here is 3 is either Tony or Pat."
+      "text": "The festival veteran with 3 years of service under their apron is either Tony or Pat — a real lunch-rush legend in the making."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "Tony's dish is either Burgers or Tacos."
+      "text": "Sizzling intel from the festival floor: Tony's truck is rolling out either Burgers or Tacos."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "The owner whose sauce is Garlic has either Noodles or Pizza for their dish."
+      "text": "Chef's kiss to the Garlic truck: their main dish is either Noodles or Pizza — both equally crowd-pleasing."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The owner whose sauce is Mystery has either 1 or 4 for their years here."
+      "text": "The truck peddling that tantalizing Mystery sauce has been at the festival either 1 or 4 years — still keeping everyone guessing."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "The owner whose years here is 2 has either Pizza or Burgers for their dish."
+      "text": "Only 2 years on the festival circuit, but that truck is already slinging either Pizza or Burgers like a seasoned pro."
     },
     {
       "id": "c7",
@@ -224,7 +224,7 @@
           }
         ]
       },
-      "text": "The owner whose years here is 4 has either Waffles or Pizza for their dish."
+      "text": "Four years deep into the festival grind, that truck is serving either Waffles or Pizza to the hungry crowd."
     },
     {
       "id": "c8",
@@ -245,7 +245,7 @@
           }
         ]
       },
-      "text": "Bea's dish is either Waffles or Tacos."
+      "text": "Bea's truck has the lunch-rush crowd buzzing: the dish is either Waffles or Tacos."
     },
     {
       "id": "c9",
@@ -266,7 +266,7 @@
           }
         ]
       },
-      "text": "The owner whose sauce is Sweet Chili is either Nan or Tony."
+      "text": "The truck rocking that Sweet Chili sauce belongs to either Nan or Tony — a foodie favorite at the festival."
     },
     {
       "id": "c10",
@@ -287,7 +287,7 @@
           }
         ]
       },
-      "text": "The owner whose sauce is Mystery is either Pat or Wes."
+      "text": "Nobody can crack the recipe: the owner bottling that Mystery sauce is either Pat or Wes."
     },
     {
       "id": "c11",
@@ -308,7 +308,7 @@
           }
         ]
       },
-      "text": "The owner whose dish is Tacos is either Pat or Bea."
+      "text": "The line for the Tacos truck snakes halfway around the festival grounds — and the owner is either Pat or Bea."
     },
     {
       "id": "c12",
@@ -324,7 +324,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The owner whose dish is Burgers is more of a regular than Pat."
+      "text": "The Burgers truck has clocked more years at this festival than Pat — a true sizzling institution."
     },
     {
       "id": "c13",
@@ -340,7 +340,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The owner whose sauce is Garlic is more of a regular than the owner whose dish is Burgers."
+      "text": "The Garlic sauce truck has been a fixture at this festival longer than the Burgers truck — a certified lunch-rush legend."
     }
   ],
   "seed": 978115788,

@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "The wizard whose year is 1 has either Toad or Raven for their familiar."
+      "text": "Every first-year knows the rumor: the wizard in Year 1 keeps either a Toad or a Raven as their familiar."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Bat has either Sneeze or Shrink for their potion."
+      "text": "The wizard whose familiar is Bat has a cauldron fizzing with either Sneeze or Shrink potion — the bat swooped in and knocked the lid off."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The wizard whose year is 5 has either Cat or Bat for their familiar."
+      "text": "By Year 5 you have earned a dramatic familiar: the wizard in Year 5 keeps either a Cat or a Bat."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Raven is either Dorian or Maple."
+      "text": "The wizard whose familiar is Raven is either Dorian or Maple — the raven has perched on one of their dormitory windows."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Bounce is either Hazel or Maple."
+      "text": "The Bounce potion belongs to either Hazel or Maple — someone has been bouncing off the ceiling of the potions lab."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "The wizard whose year is 2 has either Fizzy or Bounce for their potion."
+      "text": "The spellbook registry shows that the wizard in Year 2 brews either Fizzy or Bounce potion."
     },
     {
       "id": "c7",
@@ -224,7 +224,7 @@
           }
         ]
       },
-      "text": "Maple's year is either 1 or 4."
+      "text": "Maple is enrolled in either Year 1 or Year 4 — Maple's transcript is smudged and hard to read."
     },
     {
       "id": "c8",
@@ -245,7 +245,7 @@
           }
         ]
       },
-      "text": "Hazel's year is either 4 or 5."
+      "text": "Hazel is a seasoned Spellhaven student — enrolled in either Year 4 or Year 5."
     },
     {
       "id": "c9",
@@ -261,7 +261,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose potion is Glow is in a higher year than Hazel."
+      "text": "The wizard whose potion is Glow has studied at Spellhaven longer — that wizard's year number is higher than Hazel's."
     },
     {
       "id": "c10",
@@ -277,7 +277,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Wren is in a higher year than the wizard whose potion is Shrink."
+      "text": "Wren has logged more years in the Spellhaven towers than the wizard whose potion is Shrink — Wren's year is higher."
     },
     {
       "id": "c11",
@@ -293,7 +293,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose familiar is Raven is in a higher year than the wizard whose familiar is Toad."
+      "text": "Ravens outrank toads in Spellhaven lore: the wizard whose familiar is Raven is in a higher year than the wizard whose familiar is Toad."
     },
     {
       "id": "c12",
@@ -309,7 +309,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Pip is in a higher year than the wizard whose potion is Bounce."
+      "text": "Pip has been at Spellhaven longer — Pip's year is higher than the year of the wizard whose potion is Bounce."
     },
     {
       "id": "c13",
@@ -325,7 +325,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The wizard whose potion is Bounce is in a higher year than the wizard whose familiar is Toad."
+      "text": "The Bounce potion proves seniority: the wizard who brews it is in a higher year than the wizard whose familiar is Toad."
     },
     {
       "id": "c14",
@@ -340,7 +340,7 @@
           "item": 4
         }
       },
-      "text": "Hazel's potion is Bounce."
+      "text": "Hazel's potion is Bounce — that explains all the ceiling dents in Hazel's dorm room."
     }
   ],
   "seed": 832881527,

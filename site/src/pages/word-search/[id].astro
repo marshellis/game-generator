@@ -19,6 +19,7 @@ const s = (await getEntry("wordsearches", id!))!.data;
     ]}
     title={`Word Search ${s.size}×${s.size}`}
     blurb={`Find every ${s.theme.toLowerCase()} word. Tap the first and last letter of a word to mark it.`}
+    date={s.createdAt}
     printHref={`/word-search/${s.id}/print`}
     answerHref={`/word-search/${s.id}/answer`}
     showCheck={true}

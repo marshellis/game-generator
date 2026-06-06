@@ -83,7 +83,7 @@
           "item": 3
         }
       },
-      "text": "Murk's snack is Toe Jam."
+      "text": "Eww — everyone in monster class knows Murk's snack is Toe Jam."
     },
     {
       "id": "c2",
@@ -98,7 +98,7 @@
           "item": 1
         }
       },
-      "text": "Snot's snack is not Swamp Juice."
+      "text": "Snot does NOT slurp Swamp Juice for snack. Weird, right?"
     },
     {
       "id": "c3",
@@ -113,7 +113,7 @@
           "item": 3
         }
       },
-      "text": "Glob's power is not Fire Burps."
+      "text": "Glob does NOT shoot Fire Burps. Lucky for the classroom."
     },
     {
       "id": "c4",
@@ -128,7 +128,7 @@
           "item": 3
         }
       },
-      "text": "Murk's power is not Fire Burps."
+      "text": "Murk's power is definitely NOT Fire Burps. Ms. Gorgon would not allow it."
     },
     {
       "id": "c5",
@@ -143,7 +143,7 @@
           "item": 3
         }
       },
-      "text": "Snot's power is not Fire Burps."
+      "text": "Snot's power is NOT Fire Burps. One fire-burper per class is enough!"
     },
     {
       "id": "c6",
@@ -158,7 +158,7 @@
           "item": 3
         }
       },
-      "text": "Glob's slime is Blue."
+      "text": "Glob oozes gooey Blue slime. It drips EVERYWHERE."
     },
     {
       "id": "c7",
@@ -173,7 +173,7 @@
           "item": 0
         }
       },
-      "text": "The monster whose snack is Bug Pizza has Invisible for their power."
+      "text": "The monster whose snack is Bug Pizza sneaks around using Invisible as their power."
     },
     {
       "id": "c8",
@@ -188,7 +188,7 @@
           "item": 1
         }
       },
-      "text": "The monster whose snack is Swamp Juice does not have Purple for their slime."
+      "text": "The monster whose snack is Swamp Juice does NOT ooze Purple slime."
     },
     {
       "id": "c9",
@@ -203,7 +203,7 @@
           "item": 2
         }
       },
-      "text": "The monster whose power is Extra Arms has Orange for their slime."
+      "text": "The monster whose power is Extra Arms leaves a trail of slimy Orange goo."
     },
     {
       "id": "c10",
@@ -218,7 +218,7 @@
           "item": 0
         }
       },
-      "text": "The monster whose power is Fire Burps does not have Green for their slime."
+      "text": "The monster whose power is Fire Burps does NOT drip Green slime. Pick a different color, pal!"
     },
     {
       "id": "c11",
@@ -233,7 +233,7 @@
           "item": 3
         }
       },
-      "text": "Fang's power is Fire Burps."
+      "text": "Fang's power is Fire Burps. Watch out at lunch!"
     },
     {
       "id": "c12",
@@ -248,7 +248,7 @@
           "item": 1
         }
       },
-      "text": "Glob's power is Stinky Breath."
+      "text": "Glob's power is Stinky Breath. P.U.!"
     }
   ],
   "seed": 1538525799,

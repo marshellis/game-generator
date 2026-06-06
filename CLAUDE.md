@@ -57,3 +57,12 @@ framework, and ship web play + a printable + an answer key.
   in `generator/src/grades.ts`, game-specific knobs in each module's `difficultyFor()`.
 - Logic in code, flavor in content: generators emit correct template text; fun/themed
   wording is authored in-session (no API key).
+- **Logic-grid clues are ALWAYS flavored before shipping — never ship plain template
+  wording.** Generation happens in a session like this one: after `generate`/`generate:all`
+  produces the structured puzzles, rewrite every clue's `text` in the theme's voice
+  (pirate/wizard/monster/etc.), in character and funny, keeping the `structured` logic and
+  person-anchoring untouched (text is display-only). There is no "plain" output mode in
+  practice — flavoring is part of generating logic-grid puzzles.
+- Every game shows the **day of the week** it's for (derived from `createdAt` via
+  `site/src/lib/day.ts`): a long badge on the play page (GameHeader `date` prop) and a short
+  weekday tag on grade-list cards.

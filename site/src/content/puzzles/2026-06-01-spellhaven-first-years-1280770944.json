@@ -83,7 +83,7 @@
           "item": 3
         }
       },
-      "text": "Dorian's familiar is Raven."
+      "text": "Dorian's familiar is a Raven — spotted perching on Dorian's spellbook."
     },
     {
       "id": "c2",
@@ -98,7 +98,7 @@
           "item": 0
         }
       },
-      "text": "Maple's familiar is not Cat."
+      "text": "Maple did not bring a Cat to Spellhaven — that is NOT Maple's familiar."
     },
     {
       "id": "c3",
@@ -113,7 +113,7 @@
           "item": 1
         }
       },
-      "text": "Maple's potion is Glow."
+      "text": "Maple's cauldron glows — the potion bubbling away in it is Glow."
     },
     {
       "id": "c4",
@@ -128,7 +128,7 @@
           "item": 3
         }
       },
-      "text": "Hazel's hat is not Purple."
+      "text": "Hazel's pointy hat is many things, but Purple it is not."
     },
     {
       "id": "c5",
@@ -143,7 +143,7 @@
           "item": 3
         }
       },
-      "text": "The wizard whose familiar is Toad does not have Shrink for their potion."
+      "text": "The wizard whose familiar is Toad is definitely NOT brewing Shrink potion."
     },
     {
       "id": "c6",
@@ -158,7 +158,7 @@
           "item": 1
         }
       },
-      "text": "The wizard whose familiar is Toad does not have Blue for their hat."
+      "text": "The wizard whose familiar is Toad does not wear a Blue hat — the toad would croak in protest."
     },
     {
       "id": "c7",
@@ -173,7 +173,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Raven has Red for their hat."
+      "text": "The wizard whose familiar is Raven proudly wears a Red hat in the Spellhaven corridors."
     },
     {
       "id": "c8",
@@ -188,7 +188,7 @@
           "item": 3
         }
       },
-      "text": "The wizard whose potion is Sneeze has Purple for their hat."
+      "text": "The wizard whose cauldron fizzes with Sneeze potion wears a Purple hat — achoo!"
     },
     {
       "id": "c9",
@@ -203,7 +203,7 @@
           "item": 2
         }
       },
-      "text": "The wizard whose potion is Shrink has Green for their hat."
+      "text": "The wizard whose potion is Shrink wears a Green hat — perhaps to match their tiny, shrinking experiments."
     },
     {
       "id": "c10",
@@ -218,7 +218,7 @@
           "item": 0
         }
       },
-      "text": "Dorian's potion is Fizzy."
+      "text": "Dorian's cauldron is overflowing with Fizzy potion — classic Dorian."
     },
     {
       "id": "c11",
@@ -233,7 +233,7 @@
           "item": 0
         }
       },
-      "text": "Dorian's hat is Red."
+      "text": "Dorian's spellcasting hat is Red — you can spot it across the entire Spellhaven courtyard."
     }
   ],
   "seed": 1280770944,

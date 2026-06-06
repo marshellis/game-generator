@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "The monster whose power is Extra Arms is either Glob or Wart."
+      "text": "Everyone in monster class knows the slimy creature with Extra Arms is either Glob or Wart."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "The monster whose snack is Swamp Juice is either Fang or Glob."
+      "text": "The monster who slurps down murky Swamp Juice is either Fang or Glob — both equally suspect."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The monster whose power is Stinky Breath is either Murk or Fang."
+      "text": "The monster with truly catastrophic Stinky Breath is either Murk or Fang. P.U. — stay back!"
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "Glob's snack is either Bug Pizza or Mud Pie."
+      "text": "Glob's snack is either creepy-crawly Bug Pizza or squelchy Mud Pie. Bon appétit, Glob."
     },
     {
       "id": "c5",
@@ -177,7 +177,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Glob is in a higher grade than the monster whose power is Wall Crawl."
+      "text": "Glob, that magnificent blob, is in a higher grade than the ceiling-scuttling monster whose power is Wall Crawl."
     },
     {
       "id": "c6",
@@ -193,7 +193,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Fang is in a higher grade than the monster whose snack is Bug Pizza."
+      "text": "Fang — pointy-toothed and proud of it — is in a higher grade than the monster whose snack is Bug Pizza."
     },
     {
       "id": "c7",
@@ -209,7 +209,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose power is Fire Burps is in a higher grade than the monster whose power is Stinky Breath."
+      "text": "The belching monster whose power is Fire Burps is in a higher grade than the rank monster whose power is Stinky Breath. One bad smell outranks another!"
     },
     {
       "id": "c8",
@@ -225,7 +225,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose snack is Bug Pizza is in a higher grade than Wart."
+      "text": "The monster whose snack is gooey Bug Pizza is in a higher grade than Wart — bugs and all."
     },
     {
       "id": "c9",
@@ -241,7 +241,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose snack is Eyeballs is in a higher grade than Wart."
+      "text": "The monster whose snack is crunchy Eyeballs is in a higher grade than Wart. Eww!"
     },
     {
       "id": "c10",
@@ -257,7 +257,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose snack is Toe Jam is in a higher grade than the monster whose snack is Eyeballs."
+      "text": "The monster whose snack is toe-squishingly rank Toe Jam is in a higher grade than the monster whose snack is Eyeballs."
     },
     {
       "id": "c11",
@@ -273,7 +273,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose power is Stinky Breath is in a higher grade than the monster whose snack is Swamp Juice."
+      "text": "The monster whose power is Stinky Breath — whose mere exhalation clears the hallway — is in a higher grade than the monster whose snack is Swamp Juice."
     }
   ],
   "seed": 273670477,

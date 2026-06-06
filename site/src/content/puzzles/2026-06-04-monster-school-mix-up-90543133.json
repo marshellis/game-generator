@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The monster whose snack is Toe Jam has either 1 or 3 for their grade."
+      "text": "The monster whose snack is toe-squishingly gross Toe Jam is in either grade 1 or grade 3."
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The monster whose grade is 2 has either Extra Arms or Invisible for their power."
+      "text": "Everyone in monster class knows the grade 2 monster has either Extra Arms or goes Invisible as their power."
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "The monster whose grade is 4 is either Snot or Glob."
+      "text": "The gooiest monster in grade 4 is either Snot or Glob."
     },
     {
       "id": "c4",
@@ -153,7 +153,7 @@
           }
         ]
       },
-      "text": "The monster whose power is Extra Arms is either Glob or Snot."
+      "text": "The slimy monster with Extra Arms is either Glob or Snot — so many arms, so much drool."
     },
     {
       "id": "c5",
@@ -174,7 +174,7 @@
           }
         ]
       },
-      "text": "Murk's snack is either Toe Jam or Eyeballs."
+      "text": "Murk munches either squishy Toe Jam or crunchy Eyeballs — both equally revolting."
     },
     {
       "id": "c6",
@@ -195,7 +195,7 @@
           }
         ]
       },
-      "text": "The monster whose snack is Bug Pizza has either Stinky Breath or Fire Burps for their power."
+      "text": "The monster whose snack is Bug Pizza blasts classmates with either Stinky Breath or Fire Burps — eww, either way!"
     },
     {
       "id": "c7",
@@ -211,7 +211,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose power is Stinky Breath is in a higher grade than Glob."
+      "text": "The pungent monster whose power is Stinky Breath is in a higher grade than Glob. P.U.!"
     },
     {
       "id": "c8",
@@ -227,7 +227,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose power is Fire Burps is in a higher grade than the monster whose snack is Swamp Juice."
+      "text": "The monster whose power is Fire Burps belches its way into a higher grade than the monster whose snack is Swamp Juice."
     },
     {
       "id": "c9",
@@ -243,7 +243,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The monster whose snack is Eyeballs is in a higher grade than the monster whose power is Stinky Breath."
+      "text": "The monster whose snack is crunchy Eyeballs is in a higher grade than the stinky monster whose power is Stinky Breath."
     },
     {
       "id": "c10",
@@ -258,7 +258,7 @@
           "item": 1
         }
       },
-      "text": "Glob's grade is 2."
+      "text": "Glob, that gooey blob of a monster, is in grade 2."
     }
   ],
   "seed": 90543133,

@@ -62,7 +62,7 @@
           "item": 2
         }
       },
-      "text": "Tony's dish is not Noodles."
+      "text": "Tony's truck is not a Noodles truck."
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 2
         }
       },
-      "text": "Bea's dish is not Noodles."
+      "text": "Bea's truck is not a Noodles truck."
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 2
         }
       },
-      "text": "Bea's sauce is not Sweet Chili."
+      "text": "Bea's truck does not use Sweet Chili sauce."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Tacos does not have Spicy Red for their sauce."
+      "text": "The Tacos truck does not use Spicy Red sauce."
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 2
         }
       },
-      "text": "The owner whose dish is Tacos does not have Sweet Chili for their sauce."
+      "text": "The Tacos truck does not use Sweet Chili sauce."
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Burgers does not have Spicy Red for their sauce."
+      "text": "The Burgers truck does not use Spicy Red sauce."
     },
     {
       "id": "c7",
@@ -152,7 +152,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Noodles has Spicy Red for their sauce."
+      "text": "The Noodles truck uses Spicy Red sauce."
     },
     {
       "id": "c8",
@@ -167,7 +167,7 @@
           "item": 1
         }
       },
-      "text": "Bea's sauce is Garlic."
+      "text": "Bea's truck uses Garlic sauce."
     },
     {
       "id": "c9",
@@ -182,7 +182,7 @@
           "item": 1
         }
       },
-      "text": "The owner whose dish is Tacos has Garlic for their sauce."
+      "text": "The Tacos truck uses Garlic sauce."
     }
   ],
   "seed": 4068757487,

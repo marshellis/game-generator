@@ -68,7 +68,7 @@
           "item": 2
         }
       },
-      "text": "Pip's familiar is Toad."
+      "text": "Pip's familiar is a Toad — it hopped right into Pip's bag on the first day."
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 0
         }
       },
-      "text": "Maple's familiar is Cat."
+      "text": "Maple's familiar is a Cat — it sleeps on Maple's spellbook every single night."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 0
         }
       },
-      "text": "Dorian's potion is not Fizzy."
+      "text": "Dorian is NOT brewing Fizzy potion — those bubbles belong to someone else."
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 3
         }
       },
-      "text": "Dorian's potion is not Shrink."
+      "text": "Dorian has NOT touched the Shrink potion — that one shrank someone's hat last time."
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Cat does not have Fizzy for their potion."
+      "text": "The wizard whose familiar is Cat is NOT brewing Fizzy potion — the cat sat on the Fizzy flask and crushed it."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 3
         }
       },
-      "text": "The wizard whose familiar is Cat does not have Shrink for their potion."
+      "text": "The wizard whose familiar is Cat does NOT brew Shrink potion — no one is shrinking that cat."
     },
     {
       "id": "c7",
@@ -158,7 +158,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Toad does not have Fizzy for their potion."
+      "text": "The wizard whose familiar is Toad does NOT brew Fizzy potion — the toad already fizzes enough on its own."
     },
     {
       "id": "c8",
@@ -173,7 +173,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Raven does not have Fizzy for their potion."
+      "text": "The wizard whose familiar is Raven does NOT brew Fizzy potion — the raven cawed in disapproval."
     },
     {
       "id": "c9",
@@ -188,7 +188,7 @@
           "item": 1
         }
       },
-      "text": "The wizard whose familiar is Raven does not have Glow for their potion."
+      "text": "The wizard whose familiar is Raven does NOT brew Glow potion either — ravens prefer the dark."
     },
     {
       "id": "c10",
@@ -203,7 +203,7 @@
           "item": 2
         }
       },
-      "text": "The wizard whose familiar is Raven has Sneeze for their potion."
+      "text": "The wizard whose familiar is Raven brews Sneeze potion — the raven sneezes every time the cauldron bubbles."
     },
     {
       "id": "c11",
@@ -218,7 +218,7 @@
           "item": 1
         }
       },
-      "text": "The wizard whose familiar is Cat has Glow for their potion."
+      "text": "The wizard whose familiar is Cat brews Glow potion — the cat glows faintly at night because of it."
     }
   ],
   "seed": 2641563173,

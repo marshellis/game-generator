@@ -83,7 +83,7 @@
           "item": 1
         }
       },
-      "text": "Ava's pet is not Dog."
+      "text": "Ava's pet is NOT a Dog. The Dog looked at her and kept walking."
     },
     {
       "id": "c2",
@@ -98,7 +98,7 @@
           "item": 1
         }
       },
-      "text": "Ben's pet is not Dog."
+      "text": "Ben's pet is NOT a Dog. Nope! The Dog is not impressed with Ben."
     },
     {
       "id": "c3",
@@ -113,7 +113,7 @@
           "item": 2
         }
       },
-      "text": "Dev's pet is Frog."
+      "text": "Dev's pet is a Frog — it leaped out of his backpack at school and caused a full evacuation!"
     },
     {
       "id": "c4",
@@ -128,7 +128,7 @@
           "item": 2
         }
       },
-      "text": "Ava's snack is not Cookies."
+      "text": "Ava's snack is NOT Cookies. She tried one and gave the rest to her pet."
     },
     {
       "id": "c5",
@@ -143,7 +143,7 @@
           "item": 0
         }
       },
-      "text": "Ben's snack is not Pretzels."
+      "text": "Ben's snack is NOT Pretzels. He lost a snack bet and Pretzels are off limits for now!"
     },
     {
       "id": "c6",
@@ -158,7 +158,7 @@
           "item": 2
         }
       },
-      "text": "Ben's snack is not Cookies."
+      "text": "Ben's snack is NOT Cookies. He already tried sneaking them and got caught."
     },
     {
       "id": "c7",
@@ -173,7 +173,7 @@
           "item": 2
         }
       },
-      "text": "Dev's snack is not Cookies."
+      "text": "Dev's snack is NOT Cookies. His pet ate the whole bag before he could."
     },
     {
       "id": "c8",
@@ -188,7 +188,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Dog does not have Blue for their color."
+      "text": "The kid whose pet is Dog does NOT like Blue. That Dog keeps chewing up their Blue things!"
     },
     {
       "id": "c9",
@@ -203,7 +203,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose pet is Frog does not have Red for their color."
+      "text": "The kid whose pet is Frog does NOT have Red as their color. The Frog turned Red once and it scared everyone."
     },
     {
       "id": "c10",
@@ -218,7 +218,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose pet is Frog does not have Pretzels for their snack."
+      "text": "The kid whose pet is Frog does NOT eat Pretzels — the Frog kept stealing them, so they switched snacks!"
     },
     {
       "id": "c11",
@@ -233,7 +233,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose pet is Hamster does not have Pretzels for their snack."
+      "text": "The kid whose pet is Hamster does NOT eat Pretzels. Pretzels make the Hamster go absolutely bonkers on the wheel."
     },
     {
       "id": "c12",
@@ -248,7 +248,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose color is Red does not have Cookies for their snack."
+      "text": "The kid whose color is Red does NOT eat Cookies. Red is a bold color and Cookies are too ordinary!"
     },
     {
       "id": "c13",
@@ -263,7 +263,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose color is Blue does not have Pretzels for their snack."
+      "text": "The kid whose color is Blue does NOT eat Pretzels. Blue and Pretzels just don't vibe, apparently."
     },
     {
       "id": "c14",
@@ -278,7 +278,7 @@
           "item": 3
         }
       },
-      "text": "The kid whose color is Blue does not have Popcorn for their snack."
+      "text": "The kid whose color is Blue does NOT eat Popcorn. They said it gets stuck in their Blue braces."
     },
     {
       "id": "c15",
@@ -293,7 +293,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose color is Pink does not have Cookies for their snack."
+      "text": "The kid whose color is Pink does NOT eat Cookies. Pink is fancy, and Cookies are for chaos goblins!"
     },
     {
       "id": "c16",
@@ -308,7 +308,7 @@
           "item": 3
         }
       },
-      "text": "The kid whose color is Pink does not have Popcorn for their snack."
+      "text": "The kid whose color is Pink does NOT eat Popcorn. Too loud. Too crunchy. Too much."
     },
     {
       "id": "c17",
@@ -323,7 +323,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose color is Green has Cookies for their snack."
+      "text": "The kid whose color is Green eats Cookies — green and cookies go together like frogs and ponds!"
     },
     {
       "id": "c18",
@@ -338,7 +338,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Frog has Blue for their color."
+      "text": "The kid whose pet is Frog has Blue as their color — even the Frog is wearing Blue right now!"
     }
   ],
   "seed": 1620515668,

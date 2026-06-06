@@ -83,7 +83,7 @@
           "item": 0
         }
       },
-      "text": "Ben's pet is not Cat."
+      "text": "Ben's pet is NOT a Cat — the cat wanted nothing to do with him anyway!"
     },
     {
       "id": "c2",
@@ -98,7 +98,7 @@
           "item": 2
         }
       },
-      "text": "Cora's pet is not Frog."
+      "text": "Cora's pet is NOT a Frog. (She's relieved, actually.)"
     },
     {
       "id": "c3",
@@ -113,7 +113,7 @@
           "item": 3
         }
       },
-      "text": "Ben's color is Pink."
+      "text": "Ben's color is Pink — he picked it himself and he's very proud of it!"
     },
     {
       "id": "c4",
@@ -128,7 +128,7 @@
           "item": 3
         }
       },
-      "text": "Ava's snack is Popcorn."
+      "text": "Ava's snack is Popcorn — she pops it so loud her pet hides every time!"
     },
     {
       "id": "c5",
@@ -143,7 +143,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose pet is Cat does not have Green for their color."
+      "text": "The kid whose pet is Cat does NOT have Green as their color. The cat refuses to match."
     },
     {
       "id": "c6",
@@ -158,7 +158,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Dog does not have Blue for their color."
+      "text": "The kid whose pet is Dog does NOT like Blue. The dog chewed their Blue stuff anyway."
     },
     {
       "id": "c7",
@@ -173,7 +173,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Hamster does not have Blue for their color."
+      "text": "The kid whose pet is Hamster does NOT have Blue as their color. The hamster prefers other shades!"
     },
     {
       "id": "c8",
@@ -188,7 +188,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Cat does not have Grapes for their snack."
+      "text": "The kid whose pet is Cat does NOT eat Grapes. That cat would knock the whole bowl off the table."
     },
     {
       "id": "c9",
@@ -203,7 +203,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose pet is Dog does not have Cookies for their snack."
+      "text": "The kid whose pet is Dog does NOT eat Cookies. The dog ate theirs already — every last one!"
     },
     {
       "id": "c10",
@@ -218,7 +218,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose color is Blue has Grapes for their snack."
+      "text": "The kid whose color is Blue snacks on Grapes. They're very fancy about it."
     },
     {
       "id": "c11",
@@ -233,7 +233,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose color is Green has Pretzels for their snack."
+      "text": "The kid whose color is Green munches Pretzels — crunch, crunch, crunch all day long!"
     },
     {
       "id": "c12",
@@ -248,7 +248,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose pet is Cat has Red for their color."
+      "text": "The kid whose pet is Cat has Red as their color. That cat's collar is Red too — obviously!"
     },
     {
       "id": "c13",
@@ -263,7 +263,7 @@
           "item": 0
         }
       },
-      "text": "Ava's pet is Cat."
+      "text": "Ava's pet is a Cat. It has already claimed her entire beanbag chair."
     }
   ],
   "seed": 1422485446,

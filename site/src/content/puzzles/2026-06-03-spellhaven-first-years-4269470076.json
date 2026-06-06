@@ -62,7 +62,7 @@
           "item": 1
         }
       },
-      "text": "Pip's potion is Glow."
+      "text": "Pip's potion is Glow — it lights up the whole dorm!"
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 2
         }
       },
-      "text": "Hazel's potion is not Sneeze."
+      "text": "Hazel is NOT brewing Sneeze potion — no achoos for Hazel!"
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 0
         }
       },
-      "text": "The wizard whose familiar is Owl has Fizzy for their potion."
+      "text": "The wizard whose familiar is Owl brews Fizzy potion — the owl loves the bubbles."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 1
         }
       },
-      "text": "The wizard whose familiar is Toad has Glow for their potion."
+      "text": "The wizard whose familiar is Toad brews Glow potion — the toad glows too!"
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 0
         }
       },
-      "text": "Dorian's familiar is Cat."
+      "text": "Dorian's familiar is a Cat — it sits on Dorian's spellbook all day."
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 2
         }
       },
-      "text": "Dorian's potion is Sneeze."
+      "text": "Dorian's potion is Sneeze — the whole potions classroom sneezed when Dorian stirred it."
     }
   ],
   "seed": 4269470076,

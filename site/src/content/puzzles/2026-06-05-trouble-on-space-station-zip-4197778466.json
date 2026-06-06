@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Red Bay has either 3 or 2 for their deck."
+      "text": "The astronaut whose module is Red Bay is berthed on either deck 3 or deck 2 — check the airlock assignment log."
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Dome is either Rho or Quill."
+      "text": "The astronaut whose module is the Dome is either Rho or Quill — beep-boop, identity confirmed."
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "The astronaut whose job is Engineer has either Blue Bay or Red Bay for their module."
+      "text": "The astronaut whose job is Engineer has staked a claim in either Blue Bay or Red Bay."
     },
     {
       "id": "c4",
@@ -153,7 +153,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Dome has either 4 or 2 for their deck."
+      "text": "The astronaut whose module is the Dome is floating on either deck 4 or deck 2."
     },
     {
       "id": "c5",
@@ -174,7 +174,7 @@
           }
         ]
       },
-      "text": "The astronaut whose job is Pilot has either Red Bay or Lab for their module."
+      "text": "By the rings of Saturn, the astronaut whose job is Pilot has either Red Bay or the Lab for their module."
     },
     {
       "id": "c6",
@@ -190,7 +190,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Red Bay is on a higher deck than Quill."
+      "text": "The astronaut in Red Bay is on a higher deck than Quill — the altitude sensors logged it."
     },
     {
       "id": "c7",
@@ -206,7 +206,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Blue Bay is on a higher deck than Pip."
+      "text": "The astronaut in Blue Bay has drifted to a higher deck than Pip."
     },
     {
       "id": "c8",
@@ -238,7 +238,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose job is Engineer is on a higher deck than the astronaut whose job is Medic."
+      "text": "The astronaut whose job is Engineer is on a higher deck than the astronaut whose job is Medic — recorded in the station logbook."
     },
     {
       "id": "c10",
