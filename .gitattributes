@@ -1,0 +1,11 @@
+# Append-only docs: auto-resolve concurrent additions by keeping both sides.
+CHANGELOG.md merge=union
+
+# Generated content (one file per puzzle/packet/maze) — independent files, so
+# they don't conflict; mark as generated so diffs/reviews stay focused on source.
+site/src/content/puzzles/** linguist-generated=true
+site/src/content/packets/** linguist-generated=true
+site/src/content/mazes/**   linguist-generated=true
+
+# Lockfiles: large, regenerate-able; keep diffs collapsed.
+package-lock.json linguist-generated=true
