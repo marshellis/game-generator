@@ -48,71 +48,71 @@
     },
     {
       "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
       "items": [
         {
           "start": 1,
           "ops": [
             {
               "op": "+",
-              "operand": 159
+              "operand": 18
             },
             {
               "op": "+",
-              "operand": 38
+              "operand": 5
             },
             {
               "op": "×",
-              "operand": 2
+              "operand": 3
             },
             {
               "op": "+",
-              "operand": 58
+              "operand": 5
             },
             {
               "op": "−",
-              "operand": 133
+              "operand": 6
             }
           ],
           "values": [
-            160,
-            198,
-            396,
-            454,
-            321
+            19,
+            24,
+            72,
+            77,
+            71
           ]
         },
         {
-          "start": 9,
+          "start": 7,
           "ops": [
+            {
+              "op": "−",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 17
+            },
             {
               "op": "−",
               "operand": 9
             },
             {
               "op": "+",
-              "operand": 155
-            },
-            {
-              "op": "−",
-              "operand": 81
+              "operand": 9
             },
             {
               "op": "+",
-              "operand": 81
-            },
-            {
-              "op": "+",
-              "operand": 13
+              "operand": 2
             }
           ],
           "values": [
             0,
-            155,
-            74,
-            155,
-            168
+            17,
+            8,
+            17,
+            19
           ]
         }
       ]
@@ -189,7 +189,7 @@
   "load": {
     "maxTier": 5,
     "steps": 8,
-    "score": 45,
+    "score": 44,
     "stars": 4
   },
   "seed": 54,
