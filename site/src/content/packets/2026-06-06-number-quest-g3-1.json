@@ -1,0 +1,190 @@
+{
+  "id": "2026-06-06-number-quest-g3-1",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            2,
+            3,
+            10,
+            5
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            8,
+            17,
+            5,
+            40,
+            30
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            12,
+            8,
+            6,
+            2,
+            1
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  × ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×"
+      ],
+      "items": [
+        {
+          "left": 76,
+          "right": 17,
+          "result": 59,
+          "answer": "−"
+        },
+        {
+          "left": 94,
+          "right": 14,
+          "result": 80,
+          "answer": "−"
+        },
+        {
+          "left": 61,
+          "right": 95,
+          "result": 156,
+          "answer": "+"
+        },
+        {
+          "left": 38,
+          "right": 29,
+          "result": 9,
+          "answer": "−"
+        },
+        {
+          "left": 84,
+          "right": 63,
+          "result": 147,
+          "answer": "+"
+        },
+        {
+          "left": 46,
+          "right": 40,
+          "result": 6,
+          "answer": "−"
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            10,
+            5,
+            1,
+            10,
+            25
+          ],
+          "answer": 51
+        },
+        {
+          "coins": [
+            25,
+            1,
+            1,
+            50,
+            1
+          ],
+          "answer": 78
+        },
+        {
+          "coins": [
+            50,
+            25,
+            25,
+            5,
+            25
+          ],
+          "answer": 130
+        },
+        {
+          "coins": [
+            50,
+            50,
+            50,
+            5,
+            100
+          ],
+          "answer": 255
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 827,
+          "nearest": 10,
+          "answer": 830
+        },
+        {
+          "number": 628,
+          "nearest": 10,
+          "answer": 630
+        },
+        {
+          "number": 617,
+          "nearest": 10,
+          "answer": 620
+        },
+        {
+          "number": 556,
+          "nearest": 10,
+          "answer": 560
+        },
+        {
+          "number": 201,
+          "nearest": 10,
+          "answer": 200
+        },
+        {
+          "number": 353,
+          "nearest": 10,
+          "answer": 350
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 37,
+    "stars": 3
+  },
+  "seed": 1,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

@@ -1,0 +1,109 @@
+{
+  "id": "2026-06-06-number-quest-g2-5",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            8,
+            11,
+            3,
+            1
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            9,
+            13,
+            6
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            11,
+            2,
+            12,
+            23
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 18,
+          "place": "tens",
+          "answer": 10
+        },
+        {
+          "number": 34,
+          "place": "ones",
+          "answer": 4
+        },
+        {
+          "number": 42,
+          "place": "tens",
+          "answer": 40
+        },
+        {
+          "number": 42,
+          "place": "ones",
+          "answer": 2
+        },
+        {
+          "number": 78,
+          "place": "tens",
+          "answer": 70
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Ivy has 20 coins. Mara gives Ivy 15 more. How many does Ivy have now?",
+          "answer": 35,
+          "unit": "coins"
+        },
+        {
+          "text": "Sam had 12 books. Sam gave 12 to Theo. How many are left?",
+          "answer": 0,
+          "unit": "books"
+        },
+        {
+          "text": "Lena has 15 coins. Sam gives Lena 6 more. How many does Lena have now?",
+          "answer": 21,
+          "unit": "coins"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 25,
+    "stars": 2
+  },
+  "seed": 5,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

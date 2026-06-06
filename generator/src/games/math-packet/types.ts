@@ -23,7 +23,11 @@ export type ActivityType =
   | "coinBubble"
   | "stdAlgorithm"
   | "match"
-  | "sumChain";
+  | "sumChain"
+  | "makeTrue"
+  | "mysteryNumber"
+  | "shapeSums"
+  | "magicSquare";
 
 /** Find the one number in the cluster that equals two of the others combined. */
 export interface FindTheSumItem {
@@ -148,6 +152,60 @@ export interface NestedSumItem {
   final: SumCluster; // final.numbers are the sub-clusters' answers
 }
 
+/**
+ * Make It True: a ○ b = c where the operation sign is blank. Exactly one sign
+ * (from the activity's offered `signs`) makes the equation true — fill it in.
+ */
+export interface MakeTrueItem {
+  left: number;
+  right: number;
+  result: number;
+  answer: "+" | "−" | "×" | "÷"; // the unique sign that works
+}
+
+/** A single structured clue about the mystery number (display text is derived). */
+export type MysteryClue =
+  | { kind: "between"; lo: number; hi: number }
+  | { kind: "parity"; even: boolean }
+  | { kind: "gt"; n: number }
+  | { kind: "lt"; n: number }
+  | { kind: "digitSum"; s: number }
+  | { kind: "tensDigit"; d: number }
+  | { kind: "onesDigit"; d: number }
+  | { kind: "multipleOf"; m: number };
+
+/**
+ * Mystery Number: a list of clues that exactly one number in the stated range
+ * satisfies. The first clue is always a `between` framing the search range.
+ */
+export interface MysteryNumberItem {
+  clues: MysteryClue[];
+  answer: number;
+}
+
+/**
+ * Shape Sums: each shape stands for a hidden number. A few addition equations
+ * pin every shape down uniquely; the player reports each shape's value.
+ * `equations[i].terms` are indices into `shapes`; they sum to `equations[i].sum`.
+ */
+export interface ShapeSumsItem {
+  shapes: string[]; // emoji, one per unknown
+  values: number[]; // the value of each shape (the answers), aligned to `shapes`
+  equations: { terms: number[]; sum: number }[];
+}
+
+/**
+ * Number Square (magic square): a 3×3 grid where every row and column adds to
+ * `magic`. Some cells are blank (`null`); `answers` lists the missing values in
+ * row-major order. Exactly one blank per row and per column guarantees a unique
+ * solution by the row sums alone.
+ */
+export interface MagicSquareItem {
+  grid: (number | null)[][];
+  answers: number[];
+  magic: number;
+}
+
 /** Either fill an equivalent fraction or compare two fractions. */
 export type FractionItem =
   | { kind: "equiv"; num: number; den: number; newDen: number; answer: number }
@@ -175,7 +233,11 @@ export type Activity =
   | (ActivityBase & { type: "coinBubble"; items: CoinBubbleItem[] })
   | (ActivityBase & { type: "stdAlgorithm"; items: StdAlgoItem[] })
   | (ActivityBase & { type: "match"; items: MatchItem[] })
-  | (ActivityBase & { type: "sumChain"; items: NestedSumItem[] });
+  | (ActivityBase & { type: "sumChain"; items: NestedSumItem[] })
+  | (ActivityBase & { type: "makeTrue"; signs: ("+" | "−" | "×" | "÷")[]; items: MakeTrueItem[] })
+  | (ActivityBase & { type: "mysteryNumber"; items: MysteryNumberItem[] })
+  | (ActivityBase & { type: "shapeSums"; items: ShapeSumsItem[] })
+  | (ActivityBase & { type: "magicSquare"; items: MagicSquareItem[] });
 
 /**
  * Measured difficulty of a packet (per the grade-appropriateness framework):

@@ -1,0 +1,117 @@
+{
+  "id": "2026-06-06-number-quest-g1-1",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            1,
+            3,
+            5
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            8,
+            5,
+            12
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            6,
+            11,
+            14
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 7,
+          "answer": 7
+        },
+        {
+          "dots": 5,
+          "answer": 5
+        },
+        {
+          "dots": 6,
+          "answer": 6
+        },
+        {
+          "dots": 7,
+          "answer": 7
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            25,
+            10,
+            5
+          ],
+          "answer": 40
+        },
+        {
+          "coins": [
+            5,
+            10,
+            1
+          ],
+          "answer": 16
+        },
+        {
+          "coins": [
+            1,
+            5,
+            5
+          ],
+          "answer": 11
+        },
+        {
+          "coins": [
+            1,
+            25,
+            10
+          ],
+          "answer": 36
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 20,
+    "stars": 1
+  },
+  "seed": 1,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

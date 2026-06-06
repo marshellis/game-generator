@@ -14,6 +14,11 @@ import type {
   MatchItem,
   NestedSumItem,
   SumCluster,
+  MakeTrueItem,
+  MysteryClue,
+  MysteryNumberItem,
+  ShapeSumsItem,
+  MagicSquareItem,
 } from "./types";
 
 export interface ActivityGen {
@@ -714,6 +719,208 @@ const sumChain: ActivityGen = {
   }),
 };
 
+// ---------------------------------------------------------------------------
+// Make It True — fill the sign that makes a ○ b = c true (unique among signs).
+// ---------------------------------------------------------------------------
+
+type Op = "+" | "−" | "×" | "÷";
+
+/** Apply an operation; returns null when ÷ would not be a whole number. */
+function applyOp(a: number, op: Op, b: number): number | null {
+  if (op === "+") return a + b;
+  if (op === "−") return a - b;
+  if (op === "×") return a * b;
+  return b !== 0 && a % b === 0 ? a / b : null;
+}
+
+function makeMakeTrue(g: GradeConfig, rng: Rng, signs: Op[]): MakeTrueItem {
+  const cap = Math.min(g.maxNumber, g.grade <= 2 ? 20 : 100);
+  const factorMax = g.grade <= 4 ? 9 : 12;
+  for (let attempt = 0; attempt < 800; attempt++) {
+    const op = pick(rng, signs);
+    let left: number, right: number, result: number;
+    if (op === "÷") {
+      right = randInt(rng, 2, factorMax);
+      result = randInt(rng, 2, factorMax);
+      left = right * result;
+    } else if (op === "×") {
+      left = randInt(rng, 2, factorMax);
+      right = randInt(rng, 2, factorMax);
+      result = left * right;
+    } else if (op === "−") {
+      left = randInt(rng, 2, cap);
+      right = randInt(rng, 1, left - 1);
+      result = left - right;
+    } else {
+      left = randInt(rng, 1, cap);
+      right = randInt(rng, 1, cap);
+      result = left + right;
+    }
+    const winners = signs.filter((s) => applyOp(left, s, right) === result);
+    if (winners.length === 1 && winners[0] === op) return { left, right, result, answer: op };
+  }
+  throw new Error("makeTrue: could not build a single-sign item");
+}
+
+const makeTrue: ActivityGen = {
+  type: "makeTrue",
+  eligible: () => true,
+  generate: (g, rng) => {
+    const signs = [...g.ops] as Op[];
+    return {
+      type: "makeTrue",
+      title: "Make It True",
+      instructions: `Write the sign ( ${signs.join("  ")} ) that makes each equation true.`,
+      signs,
+      items: Array.from({ length: 6 }, () => makeMakeTrue(g, rng, signs)),
+    };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Mystery Number — deduce the one number in a range that fits every clue.
+// ---------------------------------------------------------------------------
+
+const digitSum = (n: number): number => String(Math.abs(n)).split("").reduce((a, d) => a + Number(d), 0);
+
+/** Whether a structured clue is true of n. Shared by the generator and tests. */
+export function mysteryHolds(c: MysteryClue, n: number): boolean {
+  switch (c.kind) {
+    case "between": return n >= c.lo && n <= c.hi;
+    case "parity": return (n % 2 === 0) === c.even;
+    case "gt": return n > c.n;
+    case "lt": return n < c.n;
+    case "digitSum": return digitSum(n) === c.s;
+    case "tensDigit": return Math.floor(n / 10) % 10 === c.d;
+    case "onesDigit": return n % 10 === c.d;
+    case "multipleOf": return n % c.m === 0;
+  }
+}
+
+/** Count (capped at 2) how many numbers in [lo,hi] satisfy every clue. */
+function countFits(clues: MysteryClue[], lo: number, hi: number): { count: number; last: number } {
+  let count = 0, last = -1;
+  for (let n = lo; n <= hi; n++) {
+    if (clues.every((c) => mysteryHolds(c, n))) { count++; last = n; if (count > 1) break; }
+  }
+  return { count, last };
+}
+
+function makeMystery(g: GradeConfig, rng: Rng): MysteryNumberItem {
+  const lo = 10; // two digits up, so tens/ones-digit clues always make sense
+  const hi = g.grade <= 2 ? 50 : g.grade <= 3 ? 99 : g.grade <= 5 ? 200 : 500;
+  for (let attempt = 0; attempt < 600; attempt++) {
+    const secret = randInt(rng, lo, hi);
+    const pool: MysteryClue[] = [
+      { kind: "parity", even: secret % 2 === 0 },
+      { kind: "gt", n: Math.max(lo - 1, secret - randInt(rng, 6, 20)) },
+      { kind: "lt", n: Math.min(hi + 1, secret + randInt(rng, 6, 20)) },
+      { kind: "onesDigit", d: secret % 10 },
+      { kind: "tensDigit", d: Math.floor(secret / 10) % 10 },
+    ];
+    if (g.grade >= 3) {
+      pool.push({ kind: "digitSum", s: digitSum(secret) });
+      for (const m of [3, 4, 5]) if (secret % m === 0) pool.push({ kind: "multipleOf", m });
+    }
+    const clues: MysteryClue[] = [{ kind: "between", lo, hi }];
+    for (const cl of shuffle(pool, rng)) {
+      clues.push(cl);
+      if (countFits(clues, lo, hi).count === 1) break;
+      if (clues.length >= 6) break;
+    }
+    const { count, last } = countFits(clues, lo, hi);
+    if (count === 1 && last === secret) return { clues, answer: secret };
+  }
+  throw new Error("mysteryNumber: could not isolate a unique number");
+}
+
+const mysteryNumber: ActivityGen = {
+  type: "mysteryNumber",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => ({
+    type: "mysteryNumber",
+    title: "Mystery Number",
+    instructions: "Use all the clues together to find the one number that fits.",
+    items: Array.from({ length: g.grade <= 3 ? 2 : 3 }, () => makeMystery(g, rng)),
+  }),
+};
+
+// ---------------------------------------------------------------------------
+// Shape Sums — each shape is a hidden number; chained sums pin every one down.
+// ---------------------------------------------------------------------------
+
+const SHAPE_POOL = ["🔺", "🟦", "🟢", "🟧", "⭐", "🔷", "❤️", "🟣"];
+
+function makeShapeSums(g: GradeConfig, rng: Rng): ShapeSumsItem {
+  const nShapes = g.grade <= 3 ? 2 : 3;
+  const hi = g.grade <= 3 ? 9 : 12;
+  const values = Array.from({ length: nShapes }, () => randInt(rng, 1, hi));
+  const shapes = shuffle([...SHAPE_POOL], rng).slice(0, nShapes);
+  // eq0 doubles shape 0 (solves it); each later eq adds exactly one new unknown.
+  const equations: { terms: number[]; sum: number }[] = [
+    { terms: [0, 0], sum: values[0]! * 2 },
+  ];
+  for (let k = 1; k < nShapes; k++) {
+    equations.push({ terms: [k - 1, k], sum: values[k - 1]! + values[k]! });
+  }
+  return { shapes, values, equations };
+}
+
+const shapeSums: ActivityGen = {
+  type: "shapeSums",
+  eligible: (g) => g.grade >= 2,
+  generate: (g, rng) => ({
+    type: "shapeSums",
+    title: "Shape Sums",
+    instructions: "Each shape stands for a number. Use the clues to find what every shape is worth.",
+    items: Array.from({ length: 2 }, () => makeShapeSums(g, rng)),
+  }),
+};
+
+// ---------------------------------------------------------------------------
+// Number Square — a 3×3 magic square with one blank per row and per column.
+// ---------------------------------------------------------------------------
+
+const LO_SHU = [[2, 7, 6], [9, 5, 1], [4, 3, 8]];
+
+/** Rotate a square 90° clockwise. */
+function rotate(s: number[][]): number[][] {
+  return s[0]!.map((_, c) => s.map((row) => row[c]!).reverse());
+}
+
+function makeMagicSquare(g: GradeConfig, rng: Rng): MagicSquareItem {
+  let base = LO_SHU.map((r) => [...r]);
+  const turns = randInt(rng, 0, 3);
+  for (let i = 0; i < turns; i++) base = rotate(base);
+  if (rng() < 0.5) base = base.map((r) => [...r].reverse());
+
+  const scale = g.grade <= 3 ? 1 : g.grade <= 4 ? randInt(rng, 1, 3) : randInt(rng, 2, 6);
+  const shift = g.grade <= 3 ? randInt(rng, 0, 5) : randInt(rng, 0, 30);
+  const full = base.map((r) => r.map((v) => v * scale + shift));
+  const magic = 15 * scale + 3 * shift;
+
+  // Blank a permutation of columns (one per row → also one per column): the
+  // grid stays uniquely solvable from row sums alone.
+  const perm = shuffle([0, 1, 2], rng);
+  const grid: (number | null)[][] = full.map((r) => [...r]);
+  for (let r = 0; r < 3; r++) grid[r]![perm[r]!] = null;
+
+  const answers: number[] = [];
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) if (grid[r]![c] === null) answers.push(full[r]![c]!);
+  return { grid, answers, magic };
+}
+
+const magicSquare: ActivityGen = {
+  type: "magicSquare",
+  eligible: (g) => g.grade >= 3,
+  generate: (g, rng) => ({
+    type: "magicSquare",
+    title: "Number Square",
+    instructions: "Fill the empty squares so every row and every column adds up to the number shown.",
+    items: Array.from({ length: 2 }, () => makeMagicSquare(g, rng)),
+  }),
+};
+
 /** All generators, in a stable display order. */
 export const ACTIVITY_GENS: ActivityGen[] = [
   findTheSum,
@@ -729,7 +936,11 @@ export const ACTIVITY_GENS: ActivityGen[] = [
   coinBubble,
   stdAlgorithm,
   match,
+  makeTrue,
   orderOfOps,
+  mysteryNumber,
+  shapeSums,
+  magicSquare,
   snake,
   sumChain,
   fraction,

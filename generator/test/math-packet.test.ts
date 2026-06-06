@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generatePacket } from "../src/games/math-packet/generate";
 import { resolveGrade, GRADES } from "../src/games/math-packet/grades";
-import { eligibleGens, evalOps } from "../src/games/math-packet/activities";
+import { eligibleGens, evalOps, mysteryHolds } from "../src/games/math-packet/activities";
 import { assembleActivities } from "../src/games/math-packet/assemble";
 import { inBand } from "../src/games/math-packet/difficulty";
 import { makeRng } from "../src/core/rng";
@@ -190,6 +190,69 @@ function checkActivity(act: Activity): void {
         });
       }
       break;
+    case "makeTrue": {
+      const apply = (a: number, op: string, b: number): number | null =>
+        op === "+" ? a + b : op === "−" ? a - b : op === "×" ? a * b : b !== 0 && a % b === 0 ? a / b : null;
+      for (const it of act.items) {
+        // the stored sign is one of the offered signs and actually works
+        expect(act.signs).toContain(it.answer);
+        expect(apply(it.left, it.answer, it.right)).toBe(it.result);
+        // and it is the ONLY offered sign that hits the result (single answer)
+        const winners = act.signs.filter((op) => apply(it.left, op, it.right) === it.result);
+        expect(winners).toEqual([it.answer]);
+      }
+      break;
+    }
+    case "mysteryNumber":
+      for (const it of act.items) {
+        const between = it.clues.find((c) => c.kind === "between");
+        expect(between).toBeDefined();
+        const { lo, hi } = between as { lo: number; hi: number };
+        const sols: number[] = [];
+        for (let n = lo; n <= hi; n++) if (it.clues.every((c) => mysteryHolds(c, n))) sols.push(n);
+        expect(sols).toEqual([it.answer]); // exactly one number fits every clue
+        expect(it.clues.length).toBeGreaterThanOrEqual(2);
+      }
+      break;
+    case "shapeSums":
+      for (const it of act.items) {
+        expect(it.values.length).toBe(it.shapes.length);
+        expect(it.values.every((v) => Number.isInteger(v) && v >= 0)).toBe(true);
+        // every shape participates in at least one equation
+        for (let s = 0; s < it.shapes.length; s++)
+          expect(it.equations.some((e) => e.terms.includes(s))).toBe(true);
+        // declared values satisfy every equation
+        for (const e of it.equations)
+          expect(e.terms.reduce((sum, t) => sum + it.values[t]!, 0)).toBe(e.sum);
+        // brute-force: exactly one positive-integer assignment satisfies the system
+        const M = Math.max(...it.values, ...it.equations.map((e) => e.sum));
+        let count = 0;
+        const assign: number[] = new Array(it.shapes.length).fill(0);
+        const rec = (i: number): void => {
+          if (i === it.shapes.length) {
+            if (it.equations.every((e) => e.terms.reduce((s, t) => s + assign[t]!, 0) === e.sum)) count++;
+            return;
+          }
+          for (let v = 0; v <= M; v++) { assign[i] = v; rec(i + 1); }
+        };
+        rec(0);
+        expect(count).toBe(1); // unique solution
+      }
+      break;
+    case "magicSquare":
+      for (const it of act.items) {
+        const grid = it.grid.map((row) => [...row]);
+        // exactly one blank per row and per column → uniquely solvable by row sums
+        for (let r = 0; r < 3; r++) expect(grid[r]!.filter((c) => c === null).length).toBe(1);
+        for (let c = 0; c < 3; c++) expect(grid.filter((row) => row[c] === null).length).toBe(1);
+        // fill the blanks in row-major order from answers, then check magic sums
+        let k = 0;
+        for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) if (grid[r]![c] === null) grid[r]![c] = it.answers[k++]!;
+        expect(k).toBe(it.answers.length);
+        for (let r = 0; r < 3; r++) expect(grid[r]!.reduce((a: number, b) => a + (b as number), 0)).toBe(it.magic);
+        for (let c = 0; c < 3; c++) expect(grid.reduce((a: number, row) => a + (row[c] as number), 0)).toBe(it.magic);
+      }
+      break;
   }
 }
 
@@ -278,6 +341,6 @@ describe("difficulty calibration (grade-appropriateness framework §3)", () => {
   });
 
   it("each grade's median score lands inside its own band", () => {
-    for (const s of STATS) expect(inBand(s.g, { maxTier: 0, steps: 0, score: s.median })).toBe(true);
+    for (const s of STATS) expect(inBand(s.g, { maxTier: 0, steps: 0, score: s.median, stars: 0 })).toBe(true);
   });
 });

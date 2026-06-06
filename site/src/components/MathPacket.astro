@@ -27,6 +27,30 @@ const underlineIndex = (n: number, place: string) => {
   const mag = { ones: 0, tens: 1, hundreds: 2, thousands: 3 }[place] ?? 0;
   return s.length - 1 - mag;
 };
+
+// mystery-number: render one structured clue as a kid-friendly sentence
+type MysteryClue = Extract<(typeof acts)[number], { type: "mysteryNumber" }>["items"][number]["clues"][number];
+const mysteryClueText = (c: MysteryClue): string => {
+  switch (c.kind) {
+    case "between": return `I am between ${c.lo} and ${c.hi}.`;
+    case "parity": return c.even ? "I am even." : "I am odd.";
+    case "gt": return `I am greater than ${c.n}.`;
+    case "lt": return `I am less than ${c.n}.`;
+    case "digitSum": return `My digits add up to ${c.s}.`;
+    case "tensDigit": return `My tens digit is ${c.d}.`;
+    case "onesDigit": return `My ones digit is ${c.d}.`;
+    case "multipleOf": return `I am a multiple of ${c.m}.`;
+  }
+};
+
+// magic-square: the row-major ordinal of a blank cell, to index into answers[]
+const blankOrdinal = (grid: (number | null)[][], r: number, c: number): number => {
+  let k = 0;
+  for (let rr = 0; rr <= r; rr++)
+    for (let cc = 0; cc < (rr < r ? grid[rr]!.length : c); cc++)
+      if (grid[rr]![cc] === null) k++;
+  return k;
+};
 ---
 
 <div class="packet flex flex-col gap-5">
@@ -367,6 +391,89 @@ const underlineIndex = (n: number, place: string) => {
                   ))}
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Make It True (fill the sign) ---- */}
+      {act.type === "makeTrue" && (
+        <div class="grid gap-3 text-xl font-semibold text-slate-800 sm:grid-cols-2 lg:grid-cols-3">
+          {act.items.map((it) => (
+            <div class="flex items-center justify-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              <span class="tabular-nums">{it.left}</span>
+              <SignChoice options={act.signs} answer={it.answer} mode={mode} />
+              <span class="tabular-nums">{it.right}</span>
+              <span>=</span>
+              <span class="tabular-nums text-brand-700">{it.result}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Mystery Number (deduce from clues) ---- */}
+      {act.type === "mysteryNumber" && (
+        <div class="grid gap-4 sm:grid-cols-2">
+          {act.items.map((it) => (
+            <div class="rounded-xl bg-slate-50 p-3">
+              <ul class="mb-3 list-disc pl-5 text-sm text-slate-700">
+                {it.clues.map((c) => (<li>{mysteryClueText(c)}</li>))}
+              </ul>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-slate-500">I am</span>
+                <input class={numCls + " w-20"} inputmode="numeric" data-answer={String(it.answer)} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Shape Sums (each shape = a number) ---- */}
+      {act.type === "shapeSums" && (
+        <div class="grid gap-4 sm:grid-cols-2">
+          {act.items.map((it) => (
+            <div class="rounded-xl bg-slate-50 p-3">
+              <div class="mb-3 flex flex-col gap-1.5 text-xl">
+                {it.equations.map((e) => (
+                  <div class="flex items-center gap-2">
+                    {e.terms.map((t, ti) => (
+                      <>
+                        {ti > 0 && <span class="text-slate-400">+</span>}
+                        <span>{it.shapes[t]}</span>
+                      </>
+                    ))}
+                    <span class="text-slate-400">=</span>
+                    <span class="font-semibold text-slate-800">{e.sum}</span>
+                  </div>
+                ))}
+              </div>
+              <div class="flex flex-wrap gap-4">
+                {it.shapes.map((s, si) => (
+                  <div class="flex items-center gap-1.5 text-xl">
+                    <span>{s}</span><span class="text-slate-400">=</span>
+                    <input class={numCls + " w-14"} inputmode="numeric" data-answer={String(it.values[si])} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---- Number Square (magic square) ---- */}
+      {act.type === "magicSquare" && (
+        <div class="flex flex-wrap gap-6">
+          {act.items.map((it) => (
+            <div class="rounded-xl bg-slate-50 p-3">
+              <div class="inline-grid grid-cols-3 gap-1">
+                {it.grid.map((row, r) => row.map((cell, c) => (
+                  cell === null
+                    ? <input class={numCls + " !h-14 !w-14 text-center"} inputmode="numeric"
+                             data-answer={String(it.answers[blankOrdinal(it.grid, r, c)])} />
+                    : <span class="grid h-14 w-14 place-items-center rounded-md border-2 border-slate-300 bg-white text-lg font-bold tabular-nums text-slate-800">{cell}</span>
+                )))}
+              </div>
+              <p class="mt-2 text-center text-sm font-semibold text-slate-500">Rows &amp; columns add to {it.magic}</p>
             </div>
           ))}
         </div>

@@ -1,0 +1,227 @@
+{
+  "id": "2026-06-06-number-quest-g4-2",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            22,
+            17,
+            30,
+            35,
+            18
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            57,
+            8,
+            45,
+            9,
+            72
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            37,
+            30,
+            18,
+            6,
+            19
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  ×  ÷ ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×",
+        "÷"
+      ],
+      "items": [
+        {
+          "left": 9,
+          "right": 9,
+          "result": 81,
+          "answer": "×"
+        },
+        {
+          "left": 24,
+          "right": 6,
+          "result": 4,
+          "answer": "÷"
+        },
+        {
+          "left": 82,
+          "right": 36,
+          "result": 46,
+          "answer": "−"
+        },
+        {
+          "left": 45,
+          "right": 5,
+          "result": 9,
+          "answer": "÷"
+        },
+        {
+          "left": 8,
+          "right": 8,
+          "result": 64,
+          "answer": "×"
+        },
+        {
+          "left": 8,
+          "right": 7,
+          "result": 56,
+          "answer": "×"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              20,
+              6
+            ]
+          },
+          "options": [
+            7026,
+            7039,
+            5626
+          ],
+          "answer": 7026
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              5000,
+              300,
+              8
+            ]
+          },
+          "options": [
+            5308,
+            6628,
+            4726
+          ],
+          "answer": 5308
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              700,
+              80,
+              2
+            ]
+          },
+          "options": [
+            6868,
+            8567,
+            7782
+          ],
+          "answer": 7782
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              900,
+              70,
+              8
+            ]
+          },
+          "options": [
+            2978,
+            2849,
+            2473
+          ],
+          "answer": 2978
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            5,
+            25,
+            10,
+            10,
+            1
+          ],
+          "answer": 51
+        },
+        {
+          "coins": [
+            5,
+            25,
+            50,
+            10,
+            50
+          ],
+          "answer": 140
+        },
+        {
+          "coins": [
+            10,
+            25,
+            5,
+            25,
+            5
+          ],
+          "answer": 70
+        },
+        {
+          "coins": [
+            10,
+            25,
+            10,
+            1,
+            100
+          ],
+          "answer": 146
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 35,
+    "stars": 3
+  },
+  "seed": 2,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

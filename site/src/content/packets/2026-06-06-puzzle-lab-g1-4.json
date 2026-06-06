@@ -1,0 +1,149 @@
+{
+  "id": "2026-06-06-puzzle-lab-g1-4",
+  "title": "Puzzle Lab",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            8,
+            7,
+            5,
+            12
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            3,
+            6,
+            9,
+            4
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            3,
+            8,
+            11
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 9
+          },
+          "options": [
+            10,
+            9,
+            8
+          ],
+          "answer": 9
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 8
+          },
+          "options": [
+            9,
+            8,
+            10
+          ],
+          "answer": 8
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 5
+          },
+          "options": [
+            5,
+            6,
+            7
+          ],
+          "answer": 5
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 1
+          },
+          "options": [
+            1,
+            0,
+            3
+          ],
+          "answer": 1
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            25,
+            25,
+            25
+          ],
+          "answer": 75
+        },
+        {
+          "coins": [
+            10,
+            10,
+            1
+          ],
+          "answer": 21
+        },
+        {
+          "coins": [
+            1,
+            5,
+            25
+          ],
+          "answer": 31
+        },
+        {
+          "coins": [
+            5,
+            1,
+            10
+          ],
+          "answer": 16
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 23,
+    "stars": 2
+  },
+  "seed": 4,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

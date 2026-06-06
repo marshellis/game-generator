@@ -1,0 +1,262 @@
+{
+  "id": "2026-06-06-number-quest-g8-5",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            45,
+            8,
+            10,
+            48,
+            6
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            3,
+            11,
+            8,
+            7,
+            21
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            42,
+            13,
+            38,
+            4,
+            37
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
+      "items": [
+        {
+          "start": 9,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "÷",
+              "operand": 3
+            },
+            {
+              "op": "−",
+              "operand": 1
+            },
+            {
+              "op": "+",
+              "operand": 22
+            },
+            {
+              "op": "÷",
+              "operand": 9
+            },
+            {
+              "op": "÷",
+              "operand": 3
+            },
+            {
+              "op": "×",
+              "operand": 3
+            }
+          ],
+          "values": [
+            18,
+            6,
+            5,
+            27,
+            3,
+            1,
+            3
+          ]
+        },
+        {
+          "start": 4,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "−",
+              "operand": 1
+            },
+            {
+              "op": "×",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 30
+            },
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "−",
+              "operand": 19
+            }
+          ],
+          "values": [
+            2,
+            1,
+            5,
+            2,
+            32,
+            64,
+            45
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 4,
+          "bNum": 1,
+          "bDen": 4,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 1,
+          "aDen": 6,
+          "bNum": 4,
+          "bDen": 6,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 3,
+          "newDen": 12,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 4,
+          "bNum": 2,
+          "bDen": 6,
+          "answer": ">"
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 4,
+          "bNum": 4,
+          "bDen": 6,
+          "answer": ">"
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            9,
+            9,
+            8,
+            5,
+            7
+          ],
+          "ops": [
+            "−",
+            "+",
+            "+",
+            "×"
+          ],
+          "target": 43
+        },
+        {
+          "operands": [
+            3,
+            4,
+            5,
+            4,
+            6
+          ],
+          "ops": [
+            "×",
+            "−",
+            "−",
+            "+"
+          ],
+          "target": 9
+        },
+        {
+          "operands": [
+            5,
+            9,
+            3,
+            5
+          ],
+          "ops": [
+            "+",
+            "+",
+            "−"
+          ],
+          "target": 12
+        },
+        {
+          "operands": [
+            3,
+            9,
+            5,
+            2
+          ],
+          "ops": [
+            "×",
+            "−",
+            "×"
+          ],
+          "target": 17
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 14,
+    "score": 54,
+    "stars": 5
+  },
+  "seed": 5,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

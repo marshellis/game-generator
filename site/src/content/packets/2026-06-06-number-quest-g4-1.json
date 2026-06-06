@@ -1,0 +1,275 @@
+{
+  "id": "2026-06-06-number-quest-g4-1",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 4.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 4",
+  "difficulty": "g4",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            9,
+            27,
+            24,
+            18,
+            20
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            5,
+            16,
+            17,
+            23
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            10,
+            5,
+            28,
+            18
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "multipleOf",
+              "m": 3
+            },
+            {
+              "kind": "multipleOf",
+              "m": 5
+            },
+            {
+              "kind": "lt",
+              "n": 37
+            }
+          ],
+          "answer": 30
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "tensDigit",
+              "d": 6
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "gt",
+              "n": 161
+            },
+            {
+              "kind": "lt",
+              "n": 188
+            },
+            {
+              "kind": "onesDigit",
+              "d": 9
+            }
+          ],
+          "answer": 169
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "digitSum",
+              "s": 11
+            },
+            {
+              "kind": "tensDigit",
+              "d": 3
+            },
+            {
+              "kind": "parity",
+              "even": false
+            }
+          ],
+          "answer": 137
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            1,
+            100,
+            25,
+            50,
+            10
+          ],
+          "answer": 186
+        },
+        {
+          "coins": [
+            10,
+            25,
+            5,
+            25,
+            1
+          ],
+          "answer": 66
+        },
+        {
+          "coins": [
+            10,
+            50,
+            10,
+            25,
+            25
+          ],
+          "answer": 120
+        },
+        {
+          "coins": [
+            10,
+            5,
+            5,
+            10,
+            1
+          ],
+          "answer": 31
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                1,
+                11,
+                7,
+                8
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                18,
+                7,
+                5,
+                13
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                25,
+                22,
+                1,
+                26
+              ],
+              "answerIndex": 3
+            }
+          ],
+          "final": {
+            "numbers": [
+              8,
+              26,
+              18
+            ],
+            "answerIndex": 1
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                13,
+                1,
+                9,
+                4
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                9,
+                12,
+                1,
+                10
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                16,
+                19,
+                7,
+                23
+              ],
+              "answerIndex": 3
+            }
+          ],
+          "final": {
+            "numbers": [
+              23,
+              13,
+              10
+            ],
+            "answerIndex": 0
+          }
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 9,
+    "score": 47,
+    "stars": 4
+  },
+  "seed": 1,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

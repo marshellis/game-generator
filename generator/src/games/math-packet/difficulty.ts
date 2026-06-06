@@ -31,8 +31,12 @@ export const TIER: Record<Activity["type"], number> = {
   wordProblem: 3,
   breakApart: 3,
   stdAlgorithm: 3,
+  makeTrue: 3,
   fraction: 4,
   orderOfOps: 4,
+  mysteryNumber: 4,
+  shapeSums: 4,
+  magicSquare: 4,
   snake: 5,
   sumChain: 5,
 };
@@ -60,6 +64,12 @@ function stepsFor(act: Activity): number {
       return Math.max(...act.items.map((i) => i.ops.length)) + 1;
     case "sumChain":
       return Math.max(...act.items.map((i) => i.subClusters.length + 1));
+    case "shapeSums":
+      return Math.max(...act.items.map((i) => i.shapes.length));
+    case "mysteryNumber":
+      return Math.max(...act.items.map((i) => Math.min(i.clues.length, 3)));
+    case "magicSquare":
+      return 2;
     default:
       return 1;
   }

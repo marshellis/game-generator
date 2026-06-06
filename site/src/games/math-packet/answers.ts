@@ -44,5 +44,13 @@ export function keyForActivity(act: Activity): string[] {
         const subs = it.subClusters.map((c) => c.numbers[c.answerIndex]).join(", ");
         return `${subs} → ${it.final.numbers[it.final.answerIndex]}`;
       });
+    case "makeTrue":
+      return act.items.map((it) => `${it.left} ${it.answer} ${it.right} = ${it.result}`);
+    case "mysteryNumber":
+      return act.items.map((it) => String(it.answer));
+    case "shapeSums":
+      return act.items.map((it) => it.shapes.map((s, i) => `${s} = ${it.values[i]}`).join(",  "));
+    case "magicSquare":
+      return act.items.map((it) => it.answers.join(", "));
   }
 }

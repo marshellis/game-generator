@@ -1,0 +1,221 @@
+{
+  "id": "2026-06-06-number-quest-g6-3",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            1,
+            10,
+            8,
+            18,
+            17
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            9,
+            16,
+            26,
+            63
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            9,
+            3,
+            27,
+            22,
+            13
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 435814,
+          "op": "−",
+          "b": 314163,
+          "answer": 121651
+        },
+        {
+          "a": 596,
+          "op": "×",
+          "b": 64,
+          "answer": 38144
+        },
+        {
+          "a": 590,
+          "op": "×",
+          "b": 91,
+          "answer": 53690
+        },
+        {
+          "a": 161,
+          "op": "×",
+          "b": 64,
+          "answer": 10304
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 24,
+          "op": "÷",
+          "right": 6,
+          "result": 4,
+          "blank": "result",
+          "answer": 4
+        },
+        {
+          "left": 759,
+          "op": "−",
+          "right": 514,
+          "result": 245,
+          "blank": "result",
+          "answer": 245
+        },
+        {
+          "left": 961,
+          "op": "+",
+          "right": 551,
+          "result": 1512,
+          "blank": "left",
+          "answer": 961
+        },
+        {
+          "left": 186,
+          "op": "−",
+          "right": 112,
+          "result": 74,
+          "blank": "left",
+          "answer": 186
+        },
+        {
+          "left": 45,
+          "op": "÷",
+          "right": 9,
+          "result": 5,
+          "blank": "right",
+          "answer": 9
+        },
+        {
+          "left": 4,
+          "op": "×",
+          "right": 10,
+          "result": 40,
+          "blank": "result",
+          "answer": 40
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🔷",
+            "🟣",
+            "🔺"
+          ],
+          "values": [
+            12,
+            6,
+            1
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 24
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 18
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 7
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "🟣",
+            "🔺",
+            "🔷"
+          ],
+          "values": [
+            3,
+            1,
+            4
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 6
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 4
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 46,
+    "stars": 4
+  },
+  "seed": 3,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

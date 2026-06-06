@@ -1,0 +1,247 @@
+{
+  "id": "2026-06-06-number-quest-g7-3",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            23,
+            47,
+            27,
+            20,
+            11
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            20,
+            16,
+            46,
+            43,
+            30
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            2,
+            6,
+            12,
+            9
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "❤️",
+            "🟢",
+            "🔷"
+          ],
+          "values": [
+            6,
+            12,
+            11
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 12
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 18
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 23
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "🔺",
+            "🟣",
+            "🟦"
+          ],
+          "values": [
+            10,
+            12,
+            2
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 20
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 22
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              22,
+              28
+            ],
+            [
+              10,
+              34,
+              null
+            ],
+            [
+              40,
+              null,
+              16
+            ]
+          ],
+          "answers": [
+            52,
+            58,
+            46
+          ],
+          "magic": 102
+        },
+        {
+          "grid": [
+            [
+              null,
+              25,
+              50
+            ],
+            [
+              55,
+              null,
+              15
+            ],
+            [
+              20,
+              45,
+              null
+            ]
+          ],
+          "answers": [
+            30,
+            35,
+            40
+          ],
+          "magic": 105
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 18,
+          "op": "÷",
+          "right": 2,
+          "result": 9,
+          "blank": "right",
+          "answer": 2
+        },
+        {
+          "left": 331,
+          "op": "+",
+          "right": 185,
+          "result": 516,
+          "blank": "right",
+          "answer": 185
+        },
+        {
+          "left": 763,
+          "op": "+",
+          "right": 949,
+          "result": 1712,
+          "blank": "right",
+          "answer": 949
+        },
+        {
+          "left": 748,
+          "op": "−",
+          "right": 200,
+          "result": 548,
+          "blank": "result",
+          "answer": 548
+        },
+        {
+          "left": 45,
+          "op": "÷",
+          "right": 9,
+          "result": 5,
+          "blank": "left",
+          "answer": 45
+        },
+        {
+          "left": 987,
+          "op": "+",
+          "right": 516,
+          "result": 1503,
+          "blank": "result",
+          "answer": 1503
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 7,
+    "score": 46,
+    "stars": 4
+  },
+  "seed": 3,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

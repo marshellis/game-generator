@@ -1,0 +1,279 @@
+{
+  "id": "2026-06-06-number-quest-g8-1",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            7,
+            15,
+            42,
+            14
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            20,
+            3,
+            27,
+            24,
+            9
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            23,
+            6,
+            54,
+            9,
+            52
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🟣",
+            "🟦",
+            "⭐"
+          ],
+          "values": [
+            10,
+            8,
+            4
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 20
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 18
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 12
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "🟧",
+            "🔷",
+            "🟦"
+          ],
+          "values": [
+            5,
+            6,
+            7
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 10
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 11
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            8,
+            4,
+            9,
+            8
+          ],
+          "ops": [
+            "+",
+            "+",
+            "+"
+          ],
+          "target": 29
+        },
+        {
+          "operands": [
+            6,
+            8,
+            6,
+            8,
+            7
+          ],
+          "ops": [
+            "+",
+            "−",
+            "+",
+            "−"
+          ],
+          "target": 9
+        },
+        {
+          "operands": [
+            5,
+            6,
+            2,
+            6
+          ],
+          "ops": [
+            "×",
+            "+",
+            "+"
+          ],
+          "target": 38
+        },
+        {
+          "operands": [
+            1,
+            7,
+            4,
+            4,
+            2
+          ],
+          "ops": [
+            "+",
+            "+",
+            "+",
+            "−"
+          ],
+          "target": 14
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "digitSum",
+              "s": 13
+            },
+            {
+              "kind": "lt",
+              "n": 424
+            },
+            {
+              "kind": "gt",
+              "n": 400
+            },
+            {
+              "kind": "parity",
+              "even": true
+            }
+          ],
+          "answer": 418
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "lt",
+              "n": 279
+            },
+            {
+              "kind": "onesDigit",
+              "d": 3
+            },
+            {
+              "kind": "gt",
+              "n": 266
+            }
+          ],
+          "answer": 273
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "tensDigit",
+              "d": 4
+            },
+            {
+              "kind": "digitSum",
+              "s": 6
+            },
+            {
+              "kind": "lt",
+              "n": 59
+            }
+          ],
+          "answer": 42
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 12,
+    "score": 51,
+    "stars": 5
+  },
+  "seed": 1,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

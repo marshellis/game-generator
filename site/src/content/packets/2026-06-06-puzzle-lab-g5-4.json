@@ -1,0 +1,268 @@
+{
+  "id": "2026-06-06-puzzle-lab-g5-4",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            17,
+            23,
+            14,
+            12,
+            31
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            42,
+            23,
+            5,
+            34,
+            19
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            19,
+            17,
+            5,
+            22,
+            10
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 48878,
+          "parts": [
+            40000,
+            8000,
+            800,
+            70,
+            8
+          ],
+          "blankIndex": 2,
+          "answer": 800
+        },
+        {
+          "number": 91995,
+          "parts": [
+            90000,
+            1000,
+            900,
+            90,
+            5
+          ],
+          "blankIndex": 2,
+          "answer": 900
+        },
+        {
+          "number": 35992,
+          "parts": [
+            30000,
+            5000,
+            900,
+            90,
+            2
+          ],
+          "blankIndex": 1,
+          "answer": 5000
+        },
+        {
+          "number": 91804,
+          "parts": [
+            90000,
+            1000,
+            800,
+            4
+          ],
+          "blankIndex": 3,
+          "answer": 4
+        },
+        {
+          "number": 81258,
+          "parts": [
+            80000,
+            1000,
+            200,
+            50,
+            8
+          ],
+          "blankIndex": 3,
+          "answer": 50
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "lt",
+              "n": 145
+            },
+            {
+              "kind": "digitSum",
+              "s": 11
+            },
+            {
+              "kind": "tensDigit",
+              "d": 3
+            },
+            {
+              "kind": "onesDigit",
+              "d": 7
+            }
+          ],
+          "answer": 137
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "tensDigit",
+              "d": 3
+            },
+            {
+              "kind": "lt",
+              "n": 146
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "digitSum",
+              "s": 13
+            }
+          ],
+          "answer": 139
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "digitSum",
+              "s": 16
+            },
+            {
+              "kind": "gt",
+              "n": 183
+            },
+            {
+              "kind": "multipleOf",
+              "m": 4
+            }
+          ],
+          "answer": 196
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            9,
+            7,
+            7,
+            2
+          ],
+          "ops": [
+            "+",
+            "+",
+            "+"
+          ],
+          "target": 25
+        },
+        {
+          "operands": [
+            4,
+            1,
+            6,
+            2
+          ],
+          "ops": [
+            "−",
+            "+",
+            "+"
+          ],
+          "target": 11
+        },
+        {
+          "operands": [
+            9,
+            9,
+            7,
+            4
+          ],
+          "ops": [
+            "×",
+            "−",
+            "×"
+          ],
+          "target": 53
+        },
+        {
+          "operands": [
+            4,
+            3,
+            6,
+            8
+          ],
+          "ops": [
+            "×",
+            "×",
+            "+"
+          ],
+          "target": 80
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 9,
+    "score": 49,
+    "stars": 4
+  },
+  "seed": 4,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}
