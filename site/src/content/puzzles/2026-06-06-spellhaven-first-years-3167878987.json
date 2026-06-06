@@ -1,0 +1,230 @@
+{
+  "id": "2026-06-06-spellhaven-first-years-3167878987",
+  "title": "Spellhaven First-Years",
+  "themeBlurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 6",
+  "difficulty": "g6",
+  "categories": [
+    {
+      "name": "Wizard",
+      "items": [
+        "Pip",
+        "Hazel",
+        "Dorian",
+        "Maple"
+      ]
+    },
+    {
+      "name": "Year",
+      "ordered": true,
+      "items": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "name": "Familiar",
+      "items": [
+        "Cat",
+        "Owl",
+        "Toad",
+        "Raven"
+      ]
+    },
+    {
+      "name": "Potion",
+      "items": [
+        "Fizzy",
+        "Glow",
+        "Sneeze",
+        "Shrink"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      3,
+      1,
+      2,
+      0
+    ],
+    [
+      2,
+      1,
+      0,
+      3
+    ],
+    [
+      3,
+      2,
+      1,
+      0
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The wizard whose potion is Glow is either Dorian or Hazel."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 0
+          },
+          {
+            "cat": 2,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Dorian's familiar is either Cat or Owl."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 3
+        },
+        "orderedCat": 1
+      },
+      "text": "Hazel is in a higher year than the wizard whose familiar is Raven."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "Pip is in a higher year than the wizard whose potion is Sneeze."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "Dorian is in a higher year than the wizard whose potion is Sneeze."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 1
+        },
+        "orderedCat": 1
+      },
+      "text": "Dorian is in a higher year than the wizard whose familiar is Owl."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "The wizard whose familiar is Owl is in a higher year than the wizard whose potion is Fizzy."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 2
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 0
+        },
+        "orderedCat": 1
+      },
+      "text": "The wizard whose familiar is Toad is in a higher year than the wizard whose familiar is Cat."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Hazel's familiar is Owl."
+    }
+  ],
+  "seed": 3167878987,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

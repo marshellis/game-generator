@@ -7,6 +7,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "generate": "tsx src/cli.ts",
+    "generate:all": "tsx src/cli.ts --all",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

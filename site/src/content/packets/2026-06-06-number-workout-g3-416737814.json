@@ -1,0 +1,167 @@
+{
+  "id": "2026-06-06-number-workout-g3-416737814",
+  "title": "Number Workout",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            25,
+            4,
+            7,
+            28
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            5,
+            4,
+            6,
+            14,
+            20
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            9,
+            48,
+            6,
+            23
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Zoe has 7 bags with 9 coins in each bag. How many coins in all?",
+          "answer": 63,
+          "unit": "coins"
+        },
+        {
+          "text": "Mara has 37 marbles. Omar gives Mara 38 more. How many does Mara have now?",
+          "answer": 75,
+          "unit": "marbles"
+        },
+        {
+          "text": "Omar has 7 bags with 3 books in each bag. How many books in all?",
+          "answer": 21,
+          "unit": "books"
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 301,
+          "parts": [
+            300,
+            1
+          ],
+          "blankIndex": 1,
+          "answer": 1
+        },
+        {
+          "number": 577,
+          "parts": [
+            500,
+            70,
+            7
+          ],
+          "blankIndex": 1,
+          "answer": 70
+        },
+        {
+          "number": 476,
+          "parts": [
+            400,
+            70,
+            6
+          ],
+          "blankIndex": 2,
+          "answer": 6
+        },
+        {
+          "number": 738,
+          "parts": [
+            700,
+            30,
+            8
+          ],
+          "blankIndex": 2,
+          "answer": 8
+        },
+        {
+          "number": 795,
+          "parts": [
+            700,
+            90,
+            5
+          ],
+          "blankIndex": 1,
+          "answer": 90
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 803,
+          "op": "−",
+          "b": 613,
+          "answer": 190
+        },
+        {
+          "a": 865,
+          "op": "+",
+          "b": 477,
+          "answer": 1342
+        },
+        {
+          "a": 35,
+          "op": "×",
+          "b": 5,
+          "answer": 175
+        },
+        {
+          "a": 882,
+          "op": "−",
+          "b": 616,
+          "answer": 266
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 39,
+    "stars": 3
+  },
+  "seed": 416737814,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}
