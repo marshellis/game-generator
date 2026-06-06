@@ -35,3 +35,7 @@ these norms so concurrent merges stay clean.
 All games calibrate against `docs/grade-appropriateness.md` and report the same
 `{maxTier, steps, score}` shape with a stored 1–5 rating. See that doc before
 changing per-grade tuning.
+
+## If a merge is rejected
+`main` requires the queue + squash. If `gh pr merge` is rejected, use:
+`gh pr merge --auto --squash` (adds the PR to the queue; it merges once `test` is green).
