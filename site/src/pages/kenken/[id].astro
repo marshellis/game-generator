@@ -19,6 +19,7 @@ const k = (await getEntry("kenkens", id!))!.data;
     ]}
     title={`KenKen ${k.size}×${k.size}`}
     blurb={`Fill 1–${k.size} so each row and column has no repeats, and every cage hits its target.`}
+    date={k.createdAt}
     printHref={`/kenken/${k.id}/print`}
     answerHref={`/kenken/${k.id}/answer`}
     showCheck={true} showClear={true} revealNoun="solution"

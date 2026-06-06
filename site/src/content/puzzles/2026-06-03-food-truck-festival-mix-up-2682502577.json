@@ -62,7 +62,7 @@
           "item": 0
         }
       },
-      "text": "Tony's dish is not Tacos."
+      "text": "Tony's truck is not a Tacos truck."
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 1
         }
       },
-      "text": "Tony's dish is not Burgers."
+      "text": "Tony's truck is not a Burgers truck."
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 0
         }
       },
-      "text": "Bea's dish is not Tacos."
+      "text": "Bea's truck is not a Tacos truck."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 1
         }
       },
-      "text": "Bea's sauce is not Garlic."
+      "text": "Bea's truck does not use Garlic sauce."
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 0
         }
       },
-      "text": "Nan's sauce is not Spicy Red."
+      "text": "Nan's truck does not use Spicy Red sauce."
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 1
         }
       },
-      "text": "Nan's sauce is not Garlic."
+      "text": "Nan's truck does not use Garlic sauce."
     },
     {
       "id": "c7",
@@ -152,7 +152,7 @@
           "item": 2
         }
       },
-      "text": "Tony's dish is Noodles."
+      "text": "Tony's truck serves Noodles."
     },
     {
       "id": "c8",
@@ -167,7 +167,7 @@
           "item": 1
         }
       },
-      "text": "Bea's dish is Burgers."
+      "text": "Bea's truck serves Burgers."
     },
     {
       "id": "c9",
@@ -182,7 +182,7 @@
           "item": 1
         }
       },
-      "text": "The owner whose dish is Noodles has Garlic for their sauce."
+      "text": "The Noodles truck uses Garlic sauce."
     }
   ],
   "seed": 2682502577,

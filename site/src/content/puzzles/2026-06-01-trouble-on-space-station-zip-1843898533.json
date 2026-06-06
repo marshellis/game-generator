@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "The astronaut whose job is Cook has either 2 or 3 for their deck."
+      "text": "By the rings of Saturn, the astronaut whose job is Cook is berthed on either deck 2 or deck 3."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "Nova's module is either Galley or Red Bay."
+      "text": "The logbook confirms that Nova's module is either the Galley or Red Bay."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The astronaut whose deck is 4 has either Pilot or Medic for their job."
+      "text": "Beep-boop! The astronaut on deck 4 holds either the Pilot or Medic post."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "Pip's job is either Medic or Botanist."
+      "text": "Mission Control, this is Pip — reporting that their job is either Medic or Botanist."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The astronaut whose deck is 5 has either Galley or Red Bay for their module."
+      "text": "The astronaut drifting up on deck 5 is stationed in either the Galley or Red Bay module."
     },
     {
       "id": "c6",
@@ -198,7 +198,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Pip is on a higher deck than the astronaut whose module is Lab."
+      "text": "Pip floats on a higher deck than the astronaut whose module is the Lab."
     },
     {
       "id": "c7",
@@ -214,7 +214,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Lab is on a higher deck than Rho."
+      "text": "The astronaut whose module is the Lab is bunked on a higher deck than Rho — logged in the station's official registry."
     },
     {
       "id": "c8",
@@ -230,7 +230,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Red Bay is on a higher deck than the astronaut whose job is Botanist."
+      "text": "Zero-g alert: the astronaut in Red Bay is on a higher deck than the astronaut whose job is Botanist."
     },
     {
       "id": "c9",
@@ -246,7 +246,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Nova is on a higher deck than the astronaut whose module is Red Bay."
+      "text": "Nova has ascended to a higher deck than the astronaut whose module is Red Bay."
     },
     {
       "id": "c10",
@@ -262,7 +262,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose job is Medic is on a higher deck than Quill."
+      "text": "The astronaut whose job is Medic is sealed in a higher deck than Quill — double-checked through the airlock intercom."
     },
     {
       "id": "c11",
@@ -278,7 +278,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Dome is on a higher deck than Pip."
+      "text": "The astronaut whose module is the Dome is orbiting on a higher deck than Pip."
     },
     {
       "id": "c12",
@@ -293,7 +293,7 @@
           "item": 0
         }
       },
-      "text": "The astronaut whose deck is 3 has Red Bay for their module."
+      "text": "The station logbook records that the astronaut on deck 3 is stationed in Red Bay."
     }
   ],
   "seed": 1843898533,

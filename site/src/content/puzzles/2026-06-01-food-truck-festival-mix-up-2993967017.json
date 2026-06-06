@@ -68,7 +68,7 @@
           "item": 2
         }
       },
-      "text": "Bea's dish is Noodles."
+      "text": "Word on the street: Bea's truck is all about the Noodles."
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 1
         }
       },
-      "text": "Nan's sauce is Garlic."
+      "text": "Chef's kiss — Nan's secret weapon is Garlic sauce."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 2
         }
       },
-      "text": "Wes's sauce is Sweet Chili."
+      "text": "The hungry crowd confirms: Wes is drizzling Sweet Chili on everything."
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 1
         }
       },
-      "text": "The owner whose dish is Tacos does not have Garlic for their sauce."
+      "text": "Sizzling tip: the truck slinging Tacos is NOT rocking Garlic sauce."
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 0
         }
       },
-      "text": "The owner whose dish is Waffles has Spicy Red for their sauce."
+      "text": "The lunch rush is wild for it: the truck serving Waffles brings the heat with Spicy Red sauce."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 0
         }
       },
-      "text": "Wes's dish is Tacos."
+      "text": "Festival-goers won't stop talking: Wes's truck is the Tacos spot."
     },
     {
       "id": "c7",
@@ -158,7 +158,7 @@
           "item": 0
         }
       },
-      "text": "Tony's sauce is Spicy Red."
+      "text": "Ask anyone at the festival: Tony's truck is famous for that Spicy Red sauce."
     }
   ],
   "seed": 2993967017,

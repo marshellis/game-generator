@@ -1,6 +1,7 @@
 ---
 import Base from "../../../layouts/Base.astro";
 import { getCollection } from "astro:content";
+import { weekdayShort } from "../../../lib/day";
 
 export async function getStaticPaths() {
   const packets = await getCollection("packets");
@@ -38,6 +39,7 @@ const { packets, label } = Astro.props;
             {p.data.activities.map((a) => (
               <span class="rounded-full bg-slate-100 px-2 py-0.5">{a.title}</span>
             ))}
+            <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500">{weekdayShort(p.data.createdAt)}</span>
           </span>
         </a>
       </li>

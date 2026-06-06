@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "Pip's job is either Botanist or Engineer."
+      "text": "Pip's job is either Botanist or Engineer — it's right there in the crew manifest."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "The astronaut whose deck is 1 is either Nova or Sol."
+      "text": "The astronaut berthed on deck 1 is either Nova or Sol — confirmed through the airlock badge reader."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The astronaut whose job is Medic has either 4 or 2 for their deck."
+      "text": "By the rings of Saturn, the astronaut whose job is Medic is assigned to either deck 4 or deck 2."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Blue Bay has either 4 or 5 for their deck."
+      "text": "The astronaut whose module is Blue Bay is berthed on either deck 4 or deck 5 — beep-boop, cross-referencing now."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The astronaut whose job is Engineer has either Lab or Galley for their module."
+      "text": "The astronaut whose job is Engineer has claimed either the Lab or the Galley as their module."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "The astronaut whose deck is 2 is either Pip or Rho."
+      "text": "Zero-g scan of deck 2 shows either Pip or Rho floating there."
     },
     {
       "id": "c7",
@@ -224,7 +224,7 @@
           }
         ]
       },
-      "text": "Pip's module is either Red Bay or Blue Bay."
+      "text": "The logbook shows Pip's module is either Red Bay or Blue Bay."
     },
     {
       "id": "c8",
@@ -245,7 +245,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Dome has either 3 or 2 for their deck."
+      "text": "The astronaut whose module is the Dome is sealed into either deck 3 or deck 2."
     },
     {
       "id": "c9",
@@ -266,7 +266,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Galley is either Rho or Nova."
+      "text": "The astronaut whose module is the Galley is either Rho or Nova — so says the crew roster."
     },
     {
       "id": "c10",
@@ -282,7 +282,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Blue Bay is on a higher deck than the astronaut whose job is Engineer."
+      "text": "The astronaut in Blue Bay is drifting on a higher deck than the astronaut whose job is Engineer."
     },
     {
       "id": "c11",
@@ -298,7 +298,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Galley is on a higher deck than Sol."
+      "text": "The astronaut whose module is the Galley is on a higher deck than Sol — confirmed by the station's altitude sensors."
     },
     {
       "id": "c12",
@@ -314,7 +314,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Sol is on a higher deck than the astronaut whose job is Pilot."
+      "text": "Sol has floated up to a higher deck than the astronaut whose job is Pilot."
     },
     {
       "id": "c13",
@@ -329,7 +329,7 @@
           "item": 1
         }
       },
-      "text": "The astronaut whose job is Medic has Blue Bay for their module."
+      "text": "The airlock manifest is clear: the astronaut whose job is Medic is stationed in Blue Bay."
     }
   ],
   "seed": 2855441700,

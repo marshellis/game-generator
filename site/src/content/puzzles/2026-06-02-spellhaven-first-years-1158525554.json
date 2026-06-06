@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Glow has either Cat or Owl for their familiar."
+      "text": "Spellhaven gossip has it that the wizard whose potion is Glow keeps either a Cat or an Owl as their familiar."
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "The wizard whose potion is Fizzy is either Hazel or Maple."
+      "text": "The fizzing cauldron belongs to either Hazel or Maple — one of them brews Fizzy potion."
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "Pip's potion is either Shrink or Fizzy."
+      "text": "By my wand, Pip's potion is either Shrink or Fizzy — one of those two, mark my spellbook."
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "The wizard whose hat is Purple has either Raven or Owl for their familiar."
+      "text": "The wizard rocking the Purple hat keeps either a Raven or an Owl as their familiar."
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Cat is either Maple or Dorian."
+      "text": "The wizard whose familiar is Cat is either Maple or Dorian — the cat has chosen."
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "The wizard whose hat is Blue has either Toad or Raven for their familiar."
+      "text": "The wizard in the Blue hat keeps either a Toad or a Raven as their familiar."
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Dorian's familiar is either Toad or Raven."
+      "text": "Dorian's familiar is either a Toad or a Raven — both somewhat dramatic choices."
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "The wizard whose familiar is Raven has either Fizzy or Shrink for their potion."
+      "text": "The wizard whose familiar is Raven brews either Fizzy or Shrink potion — the raven refuses to say which."
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "The wizard whose hat is Green has either Cat or Raven for their familiar."
+      "text": "The wizard in the Green hat keeps either a Cat or a Raven as their familiar."
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "Hazel's familiar is either Raven or Toad."
+      "text": "Hazel's familiar is either a Raven or a Toad — Hazel's spellbook is suspiciously quiet on the matter."
     },
     {
       "id": "c11",
@@ -299,7 +299,7 @@
           }
         ]
       },
-      "text": "The wizard whose hat is Purple is either Hazel or Dorian."
+      "text": "The wizard wearing the Purple hat is either Hazel or Dorian — one of those two claimed it from the hat rack."
     },
     {
       "id": "c12",
@@ -314,7 +314,7 @@
           "item": 2
         }
       },
-      "text": "Dorian's familiar is Toad."
+      "text": "Dorian's familiar is a Toad — it escaped the potions lab and hasn't left since."
     }
   ],
   "seed": 1158525554,

@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Red is either Ava or Ben."
+      "text": "The kid rocking the color Red is causing absolute chaos — and it's either Ava or Ben!"
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Frog has either Cookies or Pretzels for their snack."
+      "text": "The kid whose pet is Frog is very particular about snacks — it's either Cookies or Pretzels for them!"
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Cat is either Dev or Ben."
+      "text": "The kid whose pet is Cat has been narrowed down — it's either Dev or Ben (the cat is still deciding)!"
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue has either Popcorn or Cookies for their snack."
+      "text": "The kid whose color is Blue has strong snack opinions — it's either Popcorn or Cookies, no compromise!"
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Grapes is either Cora or Dev."
+      "text": "The Grapes-muncher on the block has been spotted — it's either Cora or Dev!"
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "Ben's snack is either Pretzels or Grapes."
+      "text": "Ben is on a very limited snack menu — it's either Pretzels or Grapes for him, and he's grumpy about it!"
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Ben's color is either Pink or Blue."
+      "text": "Ben's color situation is unresolved — it's either Pink or Blue, and he keeps changing his mind!"
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Pink has either Hamster or Frog for their pet."
+      "text": "The kid whose color is Pink has the wiggliest pet imaginable — it's either a Hamster or a Frog!"
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Frog is either Ava or Dev."
+      "text": "The kid whose pet is Frog has been id'd — it's either Ava or Dev (the Frog just hopped between their houses)!"
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Popcorn is either Dev or Ava."
+      "text": "The Popcorn lover is making everyone jealous — and it's either Dev or Ava popping away!"
     },
     {
       "id": "c11",
@@ -293,7 +293,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose color is Pink has Pretzels for their snack."
+      "text": "The kid whose color is Pink is the Pretzel champion of Maple Street — Pretzels every single day!"
     }
   ],
   "seed": 1532434093,

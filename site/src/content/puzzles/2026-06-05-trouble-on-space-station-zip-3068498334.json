@@ -62,7 +62,7 @@
           "item": 0
         }
       },
-      "text": "Nova's job is Pilot."
+      "text": "Nova is the Pilot."
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 2
         }
       },
-      "text": "Quill's job is not Medic."
+      "text": "Quill is not the Medic."
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 2
         }
       },
-      "text": "Quill's module is not Lab."
+      "text": "Quill does not live in the Lab."
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 1
         }
       },
-      "text": "The astronaut whose job is Medic does not have Blue Bay for their module."
+      "text": "The Medic does not live in Blue Bay."
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 2
         }
       },
-      "text": "The astronaut whose job is Medic does not have Lab for their module."
+      "text": "The Medic does not work in the Lab."
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 1
         }
       },
-      "text": "Quill's module is Blue Bay."
+      "text": "Quill lives in Blue Bay."
     },
     {
       "id": "c7",
@@ -152,7 +152,7 @@
           "item": 2
         }
       },
-      "text": "Pip's job is Medic."
+      "text": "Pip is the Medic."
     }
   ],
   "seed": 3068498334,

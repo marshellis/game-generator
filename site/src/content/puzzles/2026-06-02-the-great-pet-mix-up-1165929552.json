@@ -68,7 +68,7 @@
           "item": 0
         }
       },
-      "text": "Ava's pet is Cat."
+      "text": "Ava's pet is a Cat. It stares at her homework and judges her."
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 3
         }
       },
-      "text": "Ben's pet is not Hamster."
+      "text": "Ben does NOT have a Hamster. The hamster agreed — they're just not a match."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 2
         }
       },
-      "text": "Dev's pet is not Frog."
+      "text": "Dev does NOT have a Frog. (The Frog said no way.)"
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 3
         }
       },
-      "text": "Dev's pet is not Hamster."
+      "text": "Dev does NOT have a Hamster. He's very sure about this."
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 3
         }
       },
-      "text": "Ava's color is Pink."
+      "text": "Ava's color is Pink! She painted her whole room that color too."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 2
         }
       },
-      "text": "Cora's color is not Green."
+      "text": "Cora's color is NOT Green. She says green is too \"mossy\" — whatever that means!"
     },
     {
       "id": "c7",
@@ -158,7 +158,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Dog has Blue for their color."
+      "text": "The kid whose pet is Dog is totally into Blue. The dog likes Blue too, apparently."
     },
     {
       "id": "c8",
@@ -173,7 +173,7 @@
           "item": 1
         }
       },
-      "text": "Dev's color is Blue."
+      "text": "Dev's color is Blue. He even has Blue shoelaces."
     },
     {
       "id": "c9",
@@ -188,7 +188,7 @@
           "item": 2
         }
       },
-      "text": "Ben's color is Green."
+      "text": "Ben's color is Green. His frog-green backpack is a dead giveaway!"
     }
   ],
   "seed": 1165929552,

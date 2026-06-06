@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The owner whose dish is Burgers has either Spicy Red or Cheese for their sauce."
+      "text": "Word on the street: the Burgers truck is drizzling either Spicy Red or Cheese sauce — the crowd can't get enough either way."
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The owner whose sauce is Spicy Red is either Tony or Bea."
+      "text": "The truck bottling that sizzling Spicy Red sauce belongs to either Tony or Bea — a festival flavor legend."
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "Nan's sauce is either Sweet Chili or Spicy Red."
+      "text": "Nan's truck is keeping foodies on their toes with either Sweet Chili or Spicy Red sauce — chef's kiss to both options."
     },
     {
       "id": "c4",
@@ -153,7 +153,7 @@
           }
         ]
       },
-      "text": "The owner whose dish is Noodles has either 4 or 1 for their years here."
+      "text": "The Noodles truck has been slurping up festival success for either 4 or 1 year — either a hungry newcomer or a seasoned regular."
     },
     {
       "id": "c5",
@@ -174,7 +174,7 @@
           }
         ]
       },
-      "text": "Nan's years here is either 3 or 4."
+      "text": "Nan's been serving the lunch-rush crowd here for either 3 or 4 years — a true festival fixture."
     },
     {
       "id": "c6",
@@ -195,7 +195,7 @@
           }
         ]
       },
-      "text": "The owner whose dish is Waffles has either Garlic or Spicy Red for their sauce."
+      "text": "Hot off the griddle: the Waffles truck is pairing their signature dish with either Garlic or Spicy Red sauce."
     },
     {
       "id": "c7",
@@ -211,7 +211,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Bea is more of a regular than Nan."
+      "text": "Bea has been a festival mainstay longer than Nan — more years behind the serving window, more devoted fans."
     },
     {
       "id": "c8",
@@ -227,7 +227,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Bea is more of a regular than the owner whose sauce is Spicy Red."
+      "text": "Bea has been grilling at this festival longer than the Spicy Red sauce truck — a true lunch-rush veteran."
     },
     {
       "id": "c9",
@@ -243,7 +243,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The owner whose sauce is Spicy Red is more of a regular than the owner whose dish is Waffles."
+      "text": "The Spicy Red sauce truck has clocked more festival years than the Waffles truck — seniority earns you that heat."
     },
     {
       "id": "c10",
@@ -258,7 +258,7 @@
           "item": 2
         }
       },
-      "text": "The owner whose years here is 4 has Noodles for their dish."
+      "text": "Four years of feeding hungry festival-goers, and that truck is still all about the Noodles — no notes."
     }
   ],
   "seed": 2179573059,

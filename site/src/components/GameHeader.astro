@@ -6,11 +6,13 @@
  *   #check  #clear  #reveal  #result
  * Buttons are opt-in via props so a game only shows what it supports.
  */
+import { dayLabel } from "../lib/day";
 interface Crumb { label: string; href?: string }
 interface Props {
   crumbs: Crumb[];
   title: string;
   blurb?: string;
+  date?: string;
   printHref?: string;
   answerHref?: string;
   showCheck?: boolean;
@@ -19,7 +21,7 @@ interface Props {
   revealNoun?: string;
 }
 const {
-  crumbs, title, blurb, printHref, answerHref,
+  crumbs, title, blurb, date, printHref, answerHref,
   showCheck = true, showClear = true, revealNoun,
 } = Astro.props;
 ---
@@ -36,6 +38,7 @@ const {
   </nav>
 
   <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h1>
+  {date && <p class="mt-1 text-sm font-semibold text-brand-600">📅 {dayLabel(date)}</p>}
   {blurb && <p class="mt-1 max-w-2xl text-slate-500">{blurb}</p>}
 
   <div class="mt-5 flex flex-wrap items-center gap-3">

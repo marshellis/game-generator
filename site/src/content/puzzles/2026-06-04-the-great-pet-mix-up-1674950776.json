@@ -89,7 +89,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue has either Pretzels or Popcorn for their snack."
+      "text": "The kid whose color is Blue has extremely crunchy snack taste — it's either Pretzels or Popcorn for them!"
     },
     {
       "id": "c2",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Hamster has either Cookies or Pretzels for their snack."
+      "text": "The kid whose pet is Hamster only eats crunchy things — their snack is either Cookies or Pretzels!"
     },
     {
       "id": "c3",
@@ -131,7 +131,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog is either Ben or Ava."
+      "text": "The kid whose pet is Dog has been sniffed out — it's either Ben or Ava!"
     },
     {
       "id": "c4",
@@ -152,7 +152,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Popcorn is either Ava or Dev."
+      "text": "The Popcorn lover is either Ava or Dev — one of them is popping up a storm right now!"
     },
     {
       "id": "c5",
@@ -173,7 +173,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue has either Cat or Dog for their pet."
+      "text": "The kid whose color is Blue has a pet that meows or barks — it's either a Cat or a Dog!"
     },
     {
       "id": "c6",
@@ -194,7 +194,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Blue is either Cora or Dev."
+      "text": "The kid whose color is Blue has been spotted on the street — it's either Cora or Dev!"
     },
     {
       "id": "c7",
@@ -215,7 +215,7 @@
           }
         ]
       },
-      "text": "Ava's snack is either Popcorn or Grapes."
+      "text": "Ava's snack is a total mystery — it's either Popcorn or Grapes, and she won't say which!"
     },
     {
       "id": "c8",
@@ -236,7 +236,7 @@
           }
         ]
       },
-      "text": "The kid whose pet is Dog is either Ben or Dev."
+      "text": "The kid whose pet is Dog belongs to either Ben or Dev — that dog ran between their yards all afternoon!"
     },
     {
       "id": "c9",
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "text": "The kid whose snack is Cookies has either Pink or Green for their color."
+      "text": "The Cookie-munching kid has a very colorful personality — their color is either Pink or Green!"
     },
     {
       "id": "c10",
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "text": "The kid whose color is Green is either Ava or Cora."
+      "text": "The kid whose color is Green is either Ava or Cora — one of them won't stop painting things Green!"
     },
     {
       "id": "c11",
@@ -299,7 +299,7 @@
           }
         ]
       },
-      "text": "Dev's color is either Pink or Red."
+      "text": "Dev's color is either Pink or Red — he couldn't decide and honestly neither can we!"
     },
     {
       "id": "c12",
@@ -314,7 +314,7 @@
           "item": 2
         }
       },
-      "text": "Ava's pet is Frog."
+      "text": "Ava's pet is a Frog — it escaped once and the whole street went looking for it!"
     }
   ],
   "seed": 1674950776,

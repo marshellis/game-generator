@@ -98,7 +98,7 @@
           }
         ]
       },
-      "text": "Rho's job is either Medic or Pilot."
+      "text": "The crew manifest, stamped with a big zero-g seal, shows Rho's job is either Medic or Pilot."
     },
     {
       "id": "c2",
@@ -119,7 +119,7 @@
           }
         ]
       },
-      "text": "The astronaut whose deck is 5 has either Pilot or Botanist for their job."
+      "text": "The astronaut on deck 5 — the topmost spot on the whole station — holds either the Pilot or Botanist post."
     },
     {
       "id": "c3",
@@ -140,7 +140,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Blue Bay has either Botanist or Engineer for their job."
+      "text": "By the rings of Saturn, the astronaut whose module is Blue Bay is assigned either Botanist or Engineer duty."
     },
     {
       "id": "c4",
@@ -161,7 +161,7 @@
           }
         ]
       },
-      "text": "The astronaut whose module is Red Bay is either Nova or Quill."
+      "text": "The logbook entry for Red Bay names either Nova or Quill as the module's occupant."
     },
     {
       "id": "c5",
@@ -182,7 +182,7 @@
           }
         ]
       },
-      "text": "The astronaut whose job is Engineer has either Dome or Lab for their module."
+      "text": "Beep-boop — the astronaut whose job is Engineer is parked in either the Dome or the Lab module."
     },
     {
       "id": "c6",
@@ -203,7 +203,7 @@
           }
         ]
       },
-      "text": "Quill's job is either Botanist or Medic."
+      "text": "Quill's job is either Botanist or Medic — filed under Q in the station's personnel database."
     },
     {
       "id": "c7",
@@ -224,7 +224,7 @@
           }
         ]
       },
-      "text": "The astronaut whose deck is 4 has either Blue Bay or Galley for their module."
+      "text": "The astronaut drifting on deck 4 has claimed either Blue Bay or the Galley as their module."
     },
     {
       "id": "c8",
@@ -240,7 +240,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Pip is on a higher deck than the astronaut whose module is Galley."
+      "text": "Pip is berthed on a higher deck than the astronaut whose module is the Galley."
     },
     {
       "id": "c9",
@@ -256,7 +256,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The astronaut whose module is Lab is on a higher deck than the astronaut whose module is Blue Bay."
+      "text": "The astronaut in the Lab is on a higher deck than the astronaut whose module is Blue Bay — checked through the inter-deck comm system."
     },
     {
       "id": "c10",
@@ -272,7 +272,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Sol is on a higher deck than the astronaut whose module is Blue Bay."
+      "text": "Sol has floated up past the airlock to a higher deck than the astronaut whose module is Blue Bay."
     },
     {
       "id": "c11",
@@ -288,7 +288,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Nova is on a higher deck than Pip."
+      "text": "Nova is on a higher deck than Pip — the altitude sensors do not lie."
     }
   ],
   "seed": 2417289170,

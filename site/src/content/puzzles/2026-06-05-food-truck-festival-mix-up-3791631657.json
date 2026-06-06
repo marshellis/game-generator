@@ -92,7 +92,7 @@
           "item": 3
         }
       },
-      "text": "The owner whose dish is Pizza has Cheese for their sauce."
+      "text": "Word on the street: the Pizza truck is going full foodie and loading up with Cheese sauce — chef's kiss."
     },
     {
       "id": "c2",
@@ -113,7 +113,7 @@
           }
         ]
       },
-      "text": "The owner whose years here is 1 is either Wes or Bea."
+      "text": "The fresh newcomer with just 1 year at the festival is either Wes or Bea — wide-eyed and hungry to impress."
     },
     {
       "id": "c3",
@@ -134,7 +134,7 @@
           }
         ]
       },
-      "text": "The owner whose dish is Noodles is either Nan or Wes."
+      "text": "The Noodles truck — a slurp-worthy festival staple — is run by either Nan or Wes."
     },
     {
       "id": "c4",
@@ -155,7 +155,7 @@
           }
         ]
       },
-      "text": "The owner whose years here is 5 is either Bea or Tony."
+      "text": "Five whole years feeding the lunch-rush masses — that seasoned festival veteran is either Bea or Tony."
     },
     {
       "id": "c5",
@@ -176,7 +176,7 @@
           }
         ]
       },
-      "text": "The owner whose sauce is Sweet Chili is either Tony or Pat."
+      "text": "The truck famous for that Sweet Chili sauce belongs to either Tony or Pat — a festival crowd favorite."
     },
     {
       "id": "c6",
@@ -197,7 +197,7 @@
           }
         ]
       },
-      "text": "The owner whose dish is Noodles has either 4 or 5 for their years here."
+      "text": "The Noodles truck has been a sizzling festival institution for either 4 or 5 years — practically a landmark."
     },
     {
       "id": "c7",
@@ -213,7 +213,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The owner whose sauce is Spicy Red is more of a regular than Nan."
+      "text": "The Spicy Red sauce truck has served more years at this festival than Nan — hotter and more experienced."
     },
     {
       "id": "c8",
@@ -229,7 +229,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The owner whose sauce is Garlic is more of a regular than Tony."
+      "text": "The Garlic sauce truck has been gracing the festival longer than Tony — more years, more loyal fans."
     },
     {
       "id": "c9",
@@ -245,7 +245,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The owner whose dish is Burgers is more of a regular than the owner whose dish is Tacos."
+      "text": "The Burgers truck has been at this festival longer than the Tacos truck — one more year of sizzling experience."
     },
     {
       "id": "c10",
@@ -261,7 +261,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Pat is more of a regular than the owner whose dish is Burgers."
+      "text": "Pat has been a fixture at this festival longer than the Burgers truck owner — a true lunch-rush legend."
     },
     {
       "id": "c11",
@@ -276,7 +276,7 @@
           "item": 4
         }
       },
-      "text": "The owner whose dish is Tacos has Mystery for their sauce."
+      "text": "The Tacos truck keeps the hungry crowd guessing with Mystery sauce — nobody knows the recipe and that's the point."
     }
   ],
   "seed": 3791631657,

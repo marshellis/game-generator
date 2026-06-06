@@ -62,7 +62,7 @@
           "item": 1
         }
       },
-      "text": "Ben's pet is not Dog."
+      "text": "Ben does NOT have a Dog. Nope, no way!"
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 2
         }
       },
-      "text": "Cora's pet is not Frog."
+      "text": "Cora's pet is not a Frog. She checked twice!"
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 1
         }
       },
-      "text": "Cora's color is Blue."
+      "text": "Cora's favorite color is Blue. She loves it!"
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 0
         }
       },
-      "text": "The kid whose pet is Dog has Red for their color."
+      "text": "The kid whose pet is Dog likes Red. Woof!"
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 0
         }
       },
-      "text": "Cora's pet is Cat."
+      "text": "Cora has a Cat. It knocked stuff off her shelf already!"
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose pet is Frog has Green for their color."
+      "text": "The kid whose pet is Frog likes Green. Ribbit!"
     }
   ],
   "seed": 3400113826,

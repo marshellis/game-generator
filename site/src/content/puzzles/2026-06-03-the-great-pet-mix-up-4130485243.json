@@ -68,7 +68,7 @@
           "item": 1
         }
       },
-      "text": "Ben's color is not Blue."
+      "text": "Ben's color is NOT Blue. He's very clear about this — he checked his closet."
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 2
         }
       },
-      "text": "Ben's color is not Green."
+      "text": "Ben's color is NOT Green either. He just can't do it."
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 1
         }
       },
-      "text": "Cora's color is not Blue."
+      "text": "Cora's color is NOT Blue. She wrinkled her nose at the suggestion."
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 1
         }
       },
-      "text": "Dev's color is not Blue."
+      "text": "Dev's color is NOT Blue. He's heard enough about Blue today already!"
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 2
         }
       },
-      "text": "Dev's color is not Green."
+      "text": "Dev's color is NOT Green — he once painted something Green and it looked terrible."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 3
         }
       },
-      "text": "Dev's color is not Pink."
+      "text": "Dev's color is NOT Pink. Three colors down, one mystery to go!"
     },
     {
       "id": "c7",
@@ -158,7 +158,7 @@
           "item": 2
         }
       },
-      "text": "The kid whose pet is Cat has Green for their color."
+      "text": "The kid whose pet is Cat has Green as their color. That cat is very on-brand."
     },
     {
       "id": "c8",
@@ -173,7 +173,7 @@
           "item": 1
         }
       },
-      "text": "The kid whose pet is Dog has Blue for their color."
+      "text": "The kid whose pet is Dog has Blue as their color. The Dog keeps trying to eat their Blue stuff."
     },
     {
       "id": "c9",
@@ -188,7 +188,7 @@
           "item": 3
         }
       },
-      "text": "The kid whose pet is Frog does not have Pink for their color."
+      "text": "The kid whose pet is Frog does NOT have Pink as their color. The Frog absolutely refused."
     },
     {
       "id": "c10",
@@ -203,7 +203,7 @@
           "item": 3
         }
       },
-      "text": "Ben's pet is Hamster."
+      "text": "Ben's pet is a Hamster — it's been running on its wheel all morning and nobody can sleep!"
     },
     {
       "id": "c11",
@@ -218,7 +218,7 @@
           "item": 2
         }
       },
-      "text": "Dev's pet is Frog."
+      "text": "Dev's pet is a Frog — and it just jumped onto the neighbor's porch again!"
     }
   ],
   "seed": 4130485243,

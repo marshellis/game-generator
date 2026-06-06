@@ -62,7 +62,7 @@
           "item": 0
         }
       },
-      "text": "Bones's treasure is Gold Tooth."
+      "text": "Arrr, Bones grabbed the Gold Tooth!"
     },
     {
       "id": "c2",
@@ -77,7 +77,7 @@
           "item": 0
         }
       },
-      "text": "Bones's job is Captain."
+      "text": "Bones be the Captain, matey!"
     },
     {
       "id": "c3",
@@ -92,7 +92,7 @@
           "item": 1
         }
       },
-      "text": "Scarlet's job is not Cook."
+      "text": "Shiver me timbers, Scarlet ain't the Cook!"
     },
     {
       "id": "c4",
@@ -107,7 +107,7 @@
           "item": 1
         }
       },
-      "text": "The pirate whose treasure is Old Map does not have Cook for their job."
+      "text": "The pirate whose treasure is Old Map ain't the Cook, arrr."
     },
     {
       "id": "c5",
@@ -122,7 +122,7 @@
           "item": 1
         }
       },
-      "text": "Patch's treasure is Ruby."
+      "text": "Patch grabbed the Ruby, ye scallywag!"
     },
     {
       "id": "c6",
@@ -137,7 +137,7 @@
           "item": 2
         }
       },
-      "text": "The pirate whose treasure is Old Map has Lookout for their job."
+      "text": "The pirate whose treasure is Old Map be the Lookout, arrr!"
     }
   ],
   "seed": 1029504575,

@@ -90,7 +90,7 @@
           }
         ]
       },
-      "text": "The pirate whose job is Lookout has either 1 or 7 for their years at sea."
+      "text": "By Davy Jones, the pirate whose job is Lookout has been at sea either 1 or 7 years!"
     },
     {
       "id": "c2",
@@ -111,7 +111,7 @@
           }
         ]
       },
-      "text": "The pirate whose job is Captain is either Bones or Skip."
+      "text": "Arrr, the pirate whose job is Captain be either Bones or Skip, matey!"
     },
     {
       "id": "c3",
@@ -132,7 +132,7 @@
           }
         ]
       },
-      "text": "The pirate whose job is Captain has either 5 or 1 for their years at sea."
+      "text": "Shiver me timbers, the pirate whose job is Captain has sailed for either 5 or 1 years!"
     },
     {
       "id": "c4",
@@ -148,7 +148,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Old Map is saltier than Patch."
+      "text": "Arrr, the pirate whose treasure is Old Map is saltier than Patch, by Davy Jones!"
     },
     {
       "id": "c5",
@@ -164,7 +164,7 @@
         },
         "orderedCat": 1
       },
-      "text": "Skip is saltier than the pirate whose treasure is Ruby."
+      "text": "Ye scallywag, Skip is saltier than the pirate whose treasure is Ruby!"
     },
     {
       "id": "c6",
@@ -180,7 +180,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Gold Tooth is saltier than the pirate whose job is Lookout."
+      "text": "Shiver me timbers, the pirate whose treasure is Gold Tooth is saltier than the pirate whose job is Lookout!"
     },
     {
       "id": "c7",
@@ -196,7 +196,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Gold Tooth is saltier than Bones."
+      "text": "Arrr, the pirate whose treasure is Gold Tooth is saltier than Bones, matey!"
     },
     {
       "id": "c8",
@@ -212,7 +212,7 @@
         },
         "orderedCat": 1
       },
-      "text": "The pirate whose treasure is Ruby is saltier than the pirate whose job is Swabbie."
+      "text": "By Davy Jones, the pirate whose treasure is Ruby is saltier than the pirate whose job is Swabbie!"
     },
     {
       "id": "c9",
@@ -227,7 +227,7 @@
           "item": 1
         }
       },
-      "text": "Scarlet's years at sea is 3."
+      "text": "Arrr, Scarlet has been plunderin' the seas for 3 years!"
     }
   ],
   "seed": 990094856,

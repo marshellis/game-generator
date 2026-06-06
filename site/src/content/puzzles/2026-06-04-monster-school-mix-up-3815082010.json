@@ -68,7 +68,7 @@
           "item": 1
         }
       },
-      "text": "Glob's snack is Swamp Juice."
+      "text": "Glob's favorite snack is gloopy Swamp Juice. Eww!"
     },
     {
       "id": "c2",
@@ -83,7 +83,7 @@
           "item": 2
         }
       },
-      "text": "Murk's snack is not Bug Pizza."
+      "text": "Murk does NOT snack on Bug Pizza. Gross, but true!"
     },
     {
       "id": "c3",
@@ -98,7 +98,7 @@
           "item": 2
         }
       },
-      "text": "Glob's power is not Extra Arms."
+      "text": "Glob does NOT have Extra Arms. Just the regular number of arms!"
     },
     {
       "id": "c4",
@@ -113,7 +113,7 @@
           "item": 0
         }
       },
-      "text": "Fang's power is Invisible."
+      "text": "Fang's power is going Invisible. Now you see them, now you don't!"
     },
     {
       "id": "c5",
@@ -128,7 +128,7 @@
           "item": 0
         }
       },
-      "text": "The monster whose snack is Eyeballs does not have Invisible for their power."
+      "text": "The monster whose snack is Eyeballs cannot go Invisible."
     },
     {
       "id": "c6",
@@ -143,7 +143,7 @@
           "item": 3
         }
       },
-      "text": "The monster whose snack is Bug Pizza has Fire Burps for their power."
+      "text": "The monster whose snack is Bug Pizza lets out Fire Burps. Gross and dangerous!"
     },
     {
       "id": "c7",
@@ -158,7 +158,7 @@
           "item": 3
         }
       },
-      "text": "Fang's snack is Toe Jam."
+      "text": "Fang chomps on Toe Jam for snack. Slimy and delicious!"
     },
     {
       "id": "c8",
@@ -173,7 +173,7 @@
           "item": 2
         }
       },
-      "text": "Murk's power is Extra Arms."
+      "text": "Everyone in monster class knows Murk has Extra Arms for their power."
     }
   ],
   "seed": 3815082010,
