@@ -95,6 +95,18 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
     });
   }
 
+  // Laptop: Enter jumps to the next answer box (so you can type, Enter, type…).
+  root.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const inputs = numInputs();
+    const idx = inputs.indexOf(e.target as HTMLInputElement);
+    if (idx === -1) return;
+    e.preventDefault();
+    const next = inputs[idx + 1];
+    if (next) { next.focus(); next.select(); }
+    else (e.target as HTMLInputElement).blur();
+  });
+
   let revealed = false;
   // The player's own work, captured before a reveal so Hide can restore it.
   type Snap = { nums: string[]; choices: string[]; clusters: string[] };

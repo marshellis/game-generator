@@ -1,5 +1,5 @@
 // site/src/games/word-search/player.ts
-import { lineBetween, matchEndpoints, wordCells, type PlacedWord, type Pos } from "./grid";
+import { eq, lineBetween, matchEndpoints, wordCells, type PlacedWord, type Pos } from "./grid";
 
 interface WordSearchData { id: string; words: PlacedWord[]; }
 const storageKey = (id: string) => `word-search:${id}`;
@@ -37,10 +37,8 @@ export function initWordSearch(data: WordSearchData): void {
     el?.classList.add("line-through", "text-slate-400");
   };
 
-  const clearSelection = () => {
-    first = null;
-    for (const el of cellEls) el.classList.remove("ring-2", "ring-brand-500");
-  };
+  const clearRings = () => { for (const el of cellEls) el.classList.remove("ring-2", "ring-brand-400", "ring-brand-500"); };
+  const clearSelection = () => { first = null; clearRings(); };
 
   const status = () => {
     if (result) result.textContent = found.size === total ? "🎉 You found them all!" : `${found.size} of ${total} found.`;
@@ -54,23 +52,56 @@ export function initWordSearch(data: WordSearchData): void {
   };
   const save = () => localStorage.setItem(storageKey(data.id), JSON.stringify([...found]));
 
-  cellEls.forEach((el) => el.addEventListener("click", () => {
+  const tryComplete = (a: Pos, b: Pos) => {
+    const i = lineBetween(a, b) ? matchEndpoints(a, b, words) : -1;
+    if (i >= 0 && !found.has(i)) { found.add(i); paintWord(i); save(); status(); }
+    else if (result && i < 0) { result.textContent = "Not a word — try again."; }
+  };
+
+  const cellOf = (target: EventTarget | null): Pos | null => {
+    const el = (target as HTMLElement | null)?.closest?.<HTMLElement>(".ws-cell");
+    return el ? { r: +el.dataset.r!, c: +el.dataset.c! } : null;
+  };
+  const showPreview = (a: Pos, b: Pos) => {
+    clearRings();
+    const line = lineBetween(a, b);
+    if (!line) return;
+    for (const p of line) at(p).classList.add("ring-2", "ring-brand-400");
+  };
+
+  // Unified input: a tap (down+up on the same cell, no drag) uses the two-tap
+  // model — first tap selects, second completes. A drag selects from the press
+  // cell to the release cell. Both touch and mouse go through pointer events.
+  let down: Pos | null = null;
+  let dragged = false;
+
+  root.addEventListener("pointerdown", (e) => {
     if (revealed) return;
-    const p: Pos = { r: +el.dataset.r!, c: +el.dataset.c! };
-    if (!first) { first = p; el.classList.add("ring-2", "ring-brand-500"); return; }
-    // Second tap: validate the straight line, then match endpoints.
-    const line = lineBetween(first, p);
-    const i = line ? matchEndpoints(first, p, words) : -1;
-    if (i >= 0 && !found.has(i)) {
-      found.add(i);
-      paintWord(i);
-      save();
-      status();
-    } else if (result && i < 0) {
-      result.textContent = "Not a word — try again.";
+    const p = cellOf(e.target);
+    if (!p) return;
+    down = p; dragged = false;
+  });
+  root.addEventListener("pointermove", (e) => {
+    if (revealed || !down) return;
+    const p = cellOf(document.elementFromPoint(e.clientX, e.clientY));
+    if (p && !eq(p, down)) { dragged = true; showPreview(down, p); }
+  });
+  const finish = (e: PointerEvent) => {
+    if (!down) return;
+    const dn = down; down = null;
+    if (revealed) { dragged = false; return; }
+    const up = cellOf(document.elementFromPoint(e.clientX, e.clientY)) ?? dn;
+    if (!dragged && eq(up, dn)) {
+      if (!first) { clearRings(); first = dn; at(dn).classList.add("ring-2", "ring-brand-500"); }
+      else { const a = first; clearSelection(); tryComplete(a, up); }
+    } else {
+      clearSelection();
+      tryComplete(dn, up);
     }
-    clearSelection();
-  }));
+    dragged = false;
+  };
+  root.addEventListener("pointerup", finish);
+  root.addEventListener("pointercancel", () => { clearRings(); down = null; dragged = false; });
 
   checkBtn?.addEventListener("click", status);
 

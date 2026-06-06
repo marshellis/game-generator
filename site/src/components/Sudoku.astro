@@ -30,11 +30,14 @@ const cellBorder = (r: number, c: number) => {
   </div>
 
   {interactive && (
-    <div class="pad mx-auto mt-4 flex max-w-md flex-wrap justify-center gap-2">
-      {Array.from({ length: size }, (_, i) => i + 1).map((n) => (
-        <button data-n={n} class="num h-10 w-10 rounded-lg border border-slate-300 bg-white text-lg font-bold text-slate-700 transition hover:bg-slate-50">{n}</button>
-      ))}
-      <button data-n="0" class="num h-10 w-14 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-500 transition hover:bg-slate-50">Erase</button>
+    <div class="mt-4">
+      <div class="pad mx-auto flex max-w-md flex-wrap justify-center gap-2">
+        {Array.from({ length: size }, (_, i) => i + 1).map((n) => (
+          <button data-n={n} class="num h-12 w-12 rounded-lg border border-slate-300 bg-white text-xl font-bold text-slate-700 transition hover:bg-slate-50 active:scale-95 disabled:opacity-30">{n}</button>
+        ))}
+        <button data-n="0" class="num h-12 w-16 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-500 transition hover:bg-slate-50 active:scale-95">Erase</button>
+      </div>
+      <p class="mt-2 text-center text-xs text-slate-400">Tap a cell, then a number — or use a keyboard: arrow keys to move, type to fill, Backspace to erase.</p>
     </div>
   )}
 </div>

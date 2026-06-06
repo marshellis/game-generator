@@ -78,6 +78,23 @@ export function initMaze(data: MazeData): void {
     const c = cellAt(ev as unknown as PointerEvent); if (c) extendTo(c);
   });
 
+  // Laptop: arrow keys step the trail head (extendTo handles walls, backtrack, win).
+  document.addEventListener("keydown", (e) => {
+    if (revealed) return;
+    const t = e.target as HTMLElement | null;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+    const head = trail[trail.length - 1]!;
+    let next: Cell | null = null;
+    if (e.key === "ArrowUp") next = { r: head.r - 1, c: head.c };
+    else if (e.key === "ArrowDown") next = { r: head.r + 1, c: head.c };
+    else if (e.key === "ArrowLeft") next = { r: head.r, c: head.c - 1 };
+    else if (e.key === "ArrowRight") next = { r: head.r, c: head.c + 1 };
+    else return;
+    e.preventDefault();
+    if (next.r < 0 || next.r >= data.rows || next.c < 0 || next.c >= data.cols) return;
+    extendTo(next);
+  });
+
   clearBtn?.addEventListener("click", () => {
     if (revealed) { if (result) result.textContent = "Hide the solution first."; return; }
     trail = [data.start]; render(); localStorage.removeItem(storageKey(data.id));

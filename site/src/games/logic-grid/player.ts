@@ -54,6 +54,19 @@ export function initPlayer(puzzleId: string, solution: number[][]): void {
       setMark(c, CYCLE[(c.dataset.mark as Mark) || ""]);
       saveProgress();
     });
+    // Laptop: Tab to a cell, then press X / O / space (cycle) / Backspace (clear).
+    c.tabIndex = 0;
+    c.addEventListener("keydown", (e) => {
+      if (revealed) return;
+      const k = e.key.toLowerCase();
+      if (k === "x") setMark(c, "x");
+      else if (k === "o") setMark(c, "o");
+      else if (k === "backspace" || k === "delete") setMark(c, "");
+      else if (k === " " || k === "enter") setMark(c, CYCLE[(c.dataset.mark as Mark) || ""]);
+      else return;
+      e.preventDefault();
+      saveProgress();
+    });
   }
 
   checkBtn?.addEventListener("click", () => {
