@@ -28,25 +28,32 @@ gating check but no deploy happens. Live at games.marshellis.com. Manual fallbac
 ## Layout
 
 - `generator/` — TypeScript puzzle generators (Vitest). One module per game under
-  `generator/src/games/<game>/`; shared RNG in `generator/src/core/`. `cli.ts` dispatches by
-  `--game`. Generators write JSON into `site/src/content/<collection>/`.
+  `generator/src/games/<game>/`, each implementing the shared `GameModule` contract in
+  `generator/src/games/framework.ts` and registered in `generator/src/registry.ts`.
+  `generator/src/grades.ts` defines the game-agnostic meaning of g1–g8 (each module's
+  `difficultyFor()` maps a grade to its own knobs). Shared RNG in `generator/src/core/`.
+  `cli.ts` dispatches by `--game`; `catalog.ts` + `--all` drive every registered module.
+  Generators write JSON into `site/src/content/<collection>/`.
 - `site/` — Astro + Tailwind v4 static app. Per-game render components in
   `site/src/components/`, client islands in `site/src/games/<game>/`, routes in
   `site/src/pages/<game>/`. Shared `GameHeader.astro`; play/print/answer route split.
 - `docs/grade-appropriateness.md` — cited grade-level framework ALL games calibrate
   difficulty against. `docs/research/` — raw research. `docs/superpowers/` — specs + plans.
 
-Games so far: logic-grid, math-packet, maze. New games follow the same per-game module +
-content-collection + route pattern, calibrated to the grade framework, with web play + a
-printable + an answer key.
+Games so far: logic-grid (Logic Grid), math-packet (Math Worksheets), maze (Mazes),
+sudoku (Sudoku). New games add a module under `generator/src/games/`, register it in
+`registry.ts`, add a content collection + render component + route, calibrate to the grade
+framework, and ship web play + a printable + an answer key.
 
 ## Commands
 
 - Generator: `cd generator && npm test` · `npm run generate -- --game <game> --difficulty g3 --seed 1`
+  · `npm run generate:all` (every registered game) · `npm run typecheck`
 - Site: `cd site && npm run build` · `npm test` · `npm run dev`
 
 ## Conventions
 
-- Difficulty presets cover grades 1–8 (platform default).
+- Difficulty presets cover grades 1–8 (platform default); the grade→difficulty meaning lives
+  in `generator/src/grades.ts`, game-specific knobs in each module's `difficultyFor()`.
 - Logic in code, flavor in content: generators emit correct template text; fun/themed
   wording is authored in-session (no API key).
