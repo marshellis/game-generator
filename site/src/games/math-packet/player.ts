@@ -13,6 +13,8 @@ const SEG_SEL = ["bg-brand-600", "text-white"];
 const SEG_OK = ["bg-green-500", "text-white"];
 const SEG_BAD = ["bg-red-400", "text-white"];
 
+import { celebrate } from "../shared/win";
+
 const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
 function shake(el: Element) {
@@ -187,6 +189,9 @@ export function initPacket(root: HTMLElement): { check: () => void; reveal: () =
     if (correct === total) {
       say(fill(WIN[Math.floor(Math.random() * WIN.length)]!, correct, total), "win");
       confetti();
+      // Full completion = every question on the packet answered AND correct.
+      const totalPossible = numInputs().length + choices().length + clusters().length;
+      if (correct === totalPossible) celebrate("🎉 Whole packet done!");
     } else {
       say(fill(KEEP[Math.floor(Math.random() * KEEP.length)]!, correct, total), "go");
     }

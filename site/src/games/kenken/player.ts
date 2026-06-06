@@ -1,5 +1,6 @@
 // site/src/games/kenken/player.ts
 import { conflicts, cageSatisfied, type Cage } from "./grid";
+import { celebrate } from "../shared/win";
 
 interface KenKenData { id: string; size: number; cages: Cage[]; solution: number[][]; }
 const storageKey = (id: string) => `kenken:${id}`;
@@ -34,8 +35,11 @@ export function initKenKen(data: KenKenData): void {
       valSpan(el).textContent = v === 0 ? "" : String(v);
       el.classList.toggle("bg-red-100", bad.has(`${r},${c}`));
       el.classList.toggle("text-red-600", bad.has(`${r},${c}`));
-      el.classList.toggle("ring-2", !revealed && selected?.r === r && selected?.c === c);
-      el.classList.toggle("ring-brand-500", !revealed && selected?.r === r && selected?.c === c);
+      const isSel = !revealed && selected?.r === r && selected?.c === c;
+      el.classList.toggle("ring-2", isSel);
+      el.classList.toggle("ring-inset", isSel);
+      el.classList.toggle("ring-brand-500", isSel);
+      el.style.backgroundColor = isSel ? "#e0e7ff" : "";
     }
     // Dim number-pad keys already placed `size` times — nothing left to enter.
     const counts = new Array(size + 1).fill(0);
@@ -48,11 +52,17 @@ export function initKenKen(data: KenKenData): void {
     }
   };
 
+  const isSolved = () => {
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (values[r]![c]! === 0) return false;
+    return conflicts(values, size).size === 0 && cages.every((cage) => cageSatisfied(cage, values));
+  };
+
   // Set the selected cell (n = 0 erases).
   const setValue = (n: number) => {
     if (revealed || !selected) return;
     values[selected.r]![selected.c] = n;
     save(); if (result) result.textContent = ""; render();
+    if (isSolved()) { if (result) result.textContent = "🎉 Solved!"; celebrate("🎉 Solved!"); }
   };
   // Move the selection with arrow keys, clamped to the grid.
   const move = (dr: number, dc: number) => {

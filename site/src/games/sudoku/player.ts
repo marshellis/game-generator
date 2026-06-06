@@ -1,5 +1,6 @@
 // site/src/games/sudoku/player.ts
 import { conflicts } from "./grid";
+import { celebrate } from "../shared/win";
 
 interface SudokuData { id: string; size: number; boxW: number; boxH: number; givens: number[][]; solution: number[][]; }
 const storageKey = (id: string) => `sudoku:${id}`;
@@ -39,8 +40,14 @@ export function initSudoku(data: SudokuData): void {
       el.textContent = v === 0 ? "" : String(v);
       el.classList.toggle("bg-red-100", bad.has(`${r},${c}`));
       el.classList.toggle("text-red-600", bad.has(`${r},${c}`));
-      el.classList.toggle("ring-2", !revealed && selected?.r === r && selected?.c === c);
-      el.classList.toggle("ring-brand-500", !revealed && selected?.r === r && selected?.c === c);
+      // Selected cell: bold inset ring + a clear fill so "click a cell, then type"
+      // is obvious. Inline background beats the bg-* utilities reliably; inset ring
+      // can't be clipped by neighbouring cells.
+      const isSel = !revealed && selected?.r === r && selected?.c === c;
+      el.classList.toggle("ring-2", isSel);
+      el.classList.toggle("ring-inset", isSel);
+      el.classList.toggle("ring-brand-500", isSel);
+      el.style.backgroundColor = isSel ? "#e0e7ff" : "";
       if (!given && !revealed) el.classList.add("cursor-pointer");
     }
     // Dim number-pad keys already placed `size` times — nothing left to enter.
@@ -54,6 +61,11 @@ export function initSudoku(data: SudokuData): void {
     }
   };
 
+  const isSolved = () => {
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (values[r]![c]! === 0) return false;
+    return conflicts(values, size, boxW, boxH).size === 0;
+  };
+
   // Set the selected cell (n = 0 erases). Givens are immutable.
   const setValue = (n: number) => {
     if (revealed || !selected) return;
@@ -62,6 +74,7 @@ export function initSudoku(data: SudokuData): void {
     save();
     if (result) result.textContent = "";
     render();
+    if (isSolved()) { if (result) result.textContent = "🎉 Solved!"; celebrate("🎉 Solved!"); }
   };
   // Move the selection with arrow keys, clamped to the grid.
   const move = (dr: number, dc: number) => {

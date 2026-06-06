@@ -1,5 +1,6 @@
 // site/src/games/maze/player.ts
 import { type Cell, isValidStep, isEntryPoint } from "./grid";
+import { celebrate } from "../shared/win";
 
 interface MazeData {
   id: string; cols: number; rows: number; open: number[][];
@@ -53,7 +54,7 @@ export function initMaze(data: MazeData): void {
     if (prev && same(cell, prev)) { trail.pop(); render(); save(); return; } // backtrack
     if (isValidStep(data.open, head, cell)) {
       trail.push(cell); render(); save();
-      if (same(cell, data.end) && result) result.textContent = "🎉 You made it!";
+      if (same(cell, data.end)) { if (result) result.textContent = "🎉 You made it!"; celebrate("🎉 You made it!"); }
     }
   };
 

@@ -1,3 +1,5 @@
+import { celebrate } from "../shared/win";
+
 type Mark = "" | "x" | "o";
 const CYCLE: Record<Mark, Mark> = { "": "x", x: "o", o: "" };
 const glyph = (m: Mark): string => (m === "x" ? "✗" : m === "o" ? "○" : "");
@@ -48,11 +50,21 @@ export function initPlayer(puzzleId: string, solution: number[][]): void {
 
   renderFromSaved();
 
+  // Won when every cell carries its correct mark (solutionMark is never blank).
+  const won = () => cells.every((c) => ((c.dataset.mark as Mark) || "") === solutionMark(c));
+  const afterMark = () => {
+    saveProgress();
+    if (won()) {
+      if (result) result.textContent = "You solved it! 🎉";
+      celebrate("You solved it!");
+    }
+  };
+
   for (const c of cells) {
     c.addEventListener("click", () => {
       if (revealed) return; // don't edit the revealed overlay
       setMark(c, CYCLE[(c.dataset.mark as Mark) || ""]);
-      saveProgress();
+      afterMark();
     });
     // Laptop: Tab to a cell, then press X / O / space (cycle) / Backspace (clear).
     c.tabIndex = 0;
@@ -65,7 +77,7 @@ export function initPlayer(puzzleId: string, solution: number[][]): void {
       else if (k === " " || k === "enter") setMark(c, CYCLE[(c.dataset.mark as Mark) || ""]);
       else return;
       e.preventDefault();
-      saveProgress();
+      afterMark();
     });
   }
 
