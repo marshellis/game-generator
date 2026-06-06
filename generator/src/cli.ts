@@ -5,6 +5,7 @@ import { generatePuzzle } from "./games/logic-grid/generate";
 import type { Difficulty } from "./games/logic-grid/difficulty";
 import { generatePacket } from "./games/math-packet/generate";
 import { generateMaze } from "./games/maze/generate";
+import { generateCatalog } from "./catalog";
 
 export interface CliArgs {
   game: "logic-grid" | "math-packet" | "maze";
@@ -13,6 +14,9 @@ export interface CliArgs {
   date: string;
   gradeLabel?: string;
   overrides?: Partial<Difficulty>;
+  all: boolean;
+  perGrade: number;
+  seedBase?: number;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -34,6 +38,9 @@ export function parseArgs(argv: string[]): CliArgs {
     date: get("--date") ?? new Date().toISOString().slice(0, 10),
     gradeLabel: get("--grade"),
     overrides: Object.keys(overrides).length ? overrides : undefined,
+    all: argv.includes("--all"),
+    perGrade: Number(get("--per-grade") ?? "1"),
+    seedBase: get("--seed-base") !== undefined ? Number(get("--seed-base")) : undefined,
   };
 }
 
@@ -58,6 +65,18 @@ function main(): void {
   const here = dirname(fileURLToPath(import.meta.url)); // generator/src
   const generatorRoot = resolve(here, ".."); // generator/
   const args = parseArgs(process.argv.slice(2));
+
+  if (args.all) {
+    const seedBase = args.seedBase ?? Date.now();
+    const { written } = generateCatalog({
+      perGrade: args.perGrade,
+      date: args.date,
+      seedBase,
+      outputRoot: generatorRoot,
+    });
+    console.log(`Catalog: wrote ${written.length} items across ${args.perGrade} per grade (seedBase ${seedBase}).`);
+    return;
+  }
 
   if (args.game === "maze") {
     const maze = generateMaze(args);
