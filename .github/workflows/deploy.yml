@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  merge_group: # run the test gate against the merge-queue's combined commit
   workflow_dispatch:
 
 concurrency:
