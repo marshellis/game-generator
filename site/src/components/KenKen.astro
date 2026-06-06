@@ -1,0 +1,45 @@
+---
+interface Cell { r: number; c: number; }
+interface Cage { cells: Cell[]; op: string; target: number; }
+interface Props { size: number; cages: Cage[]; solution: number[][]; interactive?: boolean; showSolution?: boolean; }
+const { size, cages, solution, interactive = false, showSolution = false } = Astro.props;
+
+const cellCage: number[][] = Array.from({ length: size }, () => new Array(size).fill(-1));
+cages.forEach((cage, i) => cage.cells.forEach(({ r, c }) => { cellCage[r]![c] = i; }));
+const idx = (r: number, c: number) => r * size + c;
+const anchor = cages.map((cage) => cage.cells.reduce((b, cur) => (idx(cur.r, cur.c) < idx(b.r, b.c) ? cur : b)));
+const OPSYM: Record<string, string> = { "+": "+", "-": "−", "*": "×", "/": "÷", "=": "" };
+const labelAt = (r: number, c: number): string | null => {
+  const ci = cellCage[r]![c]!;
+  const a = anchor[ci]!;
+  if (a.r !== r || a.c !== c) return null;
+  return `${cages[ci]!.target}${OPSYM[cages[ci]!.op]}`;
+};
+const THICK = "3px solid #1e293b", THIN = "1px solid #cbd5e1";
+const border = (r: number, c: number): string => {
+  const ci = cellCage[r]![c]!;
+  const diff = (nr: number, nc: number) => nr < 0 || nr >= size || nc < 0 || nc >= size || cellCage[nr]![nc] !== ci;
+  return `border-top:${diff(r-1,c)?THICK:THIN};border-bottom:${diff(r+1,c)?THICK:THIN};` +
+         `border-left:${diff(r,c-1)?THICK:THIN};border-right:${diff(r,c+1)?THICK:THIN};`;
+};
+---
+<div class="kenken" data-size={size}>
+  <div class="mx-auto w-full max-w-md select-none" style={`display:grid;grid-template-columns:repeat(${size},1fr)`}>
+    {Array.from({ length: size }, (_, r) => Array.from({ length: size }, (_, c) => (
+      <div data-r={r} data-c={c}
+        class="kenken-cell relative flex aspect-square items-center justify-center bg-white text-xl font-semibold text-brand-700"
+        style={border(r, c)}>
+        {labelAt(r, c) && <span class="pointer-events-none absolute left-1 top-0.5 text-[0.7rem] font-bold text-slate-500">{labelAt(r, c)}</span>}
+        <span class="val">{showSolution ? solution[r]![c] : ""}</span>
+      </div>
+    )))}
+  </div>
+  {interactive && (
+    <div class="pad mx-auto mt-4 flex max-w-md flex-wrap justify-center gap-2">
+      {Array.from({ length: size }, (_, i) => i + 1).map((n) => (
+        <button data-n={n} class="num h-10 w-10 rounded-lg border border-slate-300 bg-white text-lg font-bold text-slate-700 transition hover:bg-slate-50">{n}</button>
+      ))}
+      <button data-n="0" class="num h-10 w-14 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-500 transition hover:bg-slate-50">Erase</button>
+    </div>
+  )}
+</div>
