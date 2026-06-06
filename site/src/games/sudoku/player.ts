@@ -43,6 +43,31 @@ export function initSudoku(data: SudokuData): void {
       el.classList.toggle("ring-brand-500", !revealed && selected?.r === r && selected?.c === c);
       if (!given && !revealed) el.classList.add("cursor-pointer");
     }
+    // Dim number-pad keys already placed `size` times — nothing left to enter.
+    const counts = new Array(size + 1).fill(0);
+    for (const row of values) for (const v of row) counts[v]!++;
+    for (const btn of numEls) {
+      const n = +btn.dataset.n!;
+      if (n === 0) continue; // Erase is always available
+      btn.disabled = !revealed && counts[n]! >= size;
+      btn.classList.toggle("opacity-30", btn.disabled);
+    }
+  };
+
+  // Set the selected cell (n = 0 erases). Givens are immutable.
+  const setValue = (n: number) => {
+    if (revealed || !selected) return;
+    if (givens[selected.r]![selected.c]! !== 0) return;
+    values[selected.r]![selected.c] = n;
+    save();
+    if (result) result.textContent = "";
+    render();
+  };
+  // Move the selection with arrow keys, clamped to the grid.
+  const move = (dr: number, dc: number) => {
+    const r = selected ? selected.r : 0, c = selected ? selected.c : 0;
+    selected = { r: Math.max(0, Math.min(size - 1, r + dr)), c: Math.max(0, Math.min(size - 1, c + dc)) };
+    render();
   };
 
   cellEls.forEach((el) => el.addEventListener("click", () => {
@@ -51,15 +76,23 @@ export function initSudoku(data: SudokuData): void {
     render();
   }));
 
-  numEls.forEach((btn) => btn.addEventListener("click", () => {
-    if (revealed || !selected) return;
-    const n = +btn.dataset.n!;
-    if (givens[selected.r]![selected.c]! !== 0) return;
-    values[selected.r]![selected.c] = n;
-    save();
-    if (result) result.textContent = "";
-    render();
-  }));
+  numEls.forEach((btn) => btn.addEventListener("click", () => setValue(+btn.dataset.n!)));
+
+  // Laptop: type a digit to fill, Backspace/Delete/0 to erase, arrows to move.
+  document.addEventListener("keydown", (e) => {
+    if (revealed) return;
+    const t = e.target as HTMLElement | null;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+    const k = e.key;
+    if (k === "ArrowUp") move(-1, 0);
+    else if (k === "ArrowDown") move(1, 0);
+    else if (k === "ArrowLeft") move(0, -1);
+    else if (k === "ArrowRight") move(0, 1);
+    else if (k === "Backspace" || k === "Delete" || k === "0") setValue(0);
+    else if (/^[1-9]$/.test(k) && +k <= size) setValue(+k);
+    else return;
+    e.preventDefault();
+  });
 
   checkBtn?.addEventListener("click", () => {
     if (revealed) return;
