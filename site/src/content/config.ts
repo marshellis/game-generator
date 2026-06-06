@@ -197,6 +197,7 @@ const mazes = defineCollection({
     open: z.array(z.array(z.number())),
     start: cell,
     end: cell,
+    decoyStarts: z.array(cell).default([]),
     theme: z.object({ startIcon: z.string(), endIcon: z.string() }),
     solution: z.array(cell),
     difficultyRating: z.number(),
