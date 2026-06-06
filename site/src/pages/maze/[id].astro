@@ -1,0 +1,44 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import GameHeader from "../../components/GameHeader.astro";
+import Maze from "../../components/Maze.astro";
+
+export async function getStaticPaths() {
+  const mazes = await getCollection("mazes");
+  return mazes.map((m) => ({ params: { id: m.data.id } }));
+}
+const { id } = Astro.params;
+const entry = await getEntry("mazes", id!);
+const m = entry!.data;
+---
+<Base title={`${m.title} — Marshellis Games`}>
+  <GameHeader
+    crumbs={[
+      { label: "All games", href: "/" },
+      { label: "Mazes", href: "/maze" },
+      { label: m.gradeLabel, href: `/maze/grade/${m.difficulty}` },
+    ]}
+    title={m.title}
+    blurb={m.themeBlurb}
+    printHref={`/maze/${m.id}/print`}
+    answerHref={`/maze/${m.id}/answer`}
+    showCheck={false}
+    showClear={true}
+    revealNoun="solution"
+  />
+
+  <div class="mt-6">
+    <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end}
+          theme={m.theme} solution={m.solution} interactive={true} />
+  </div>
+
+  <p class="mt-4 text-xs text-slate-400">Tip: drag from {m.theme.startIcon} to {m.theme.endIcon}. Drag back to undo.</p>
+
+  <script type="application/json" id="maze-data" set:html={JSON.stringify({ id: m.id, cols: m.cols, rows: m.rows, open: m.open, start: m.start, end: m.end, solution: m.solution })} />
+  <script>
+    import { initMaze } from "../../games/maze/player.ts";
+    const el = document.getElementById("maze-data");
+    initMaze(JSON.parse(el!.textContent!));
+  </script>
+</Base>

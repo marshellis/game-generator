@@ -1,0 +1,37 @@
+---
+import { N, E, S, W, type Cell } from "../games/maze/grid";
+interface Props {
+  cols: number; rows: number; open: number[][];
+  start: Cell; end: Cell;
+  theme: { startIcon: string; endIcon: string };
+  interactive?: boolean;
+  showSolution?: boolean;
+  solution?: Cell[];
+}
+const { cols, rows, open, start, end, theme, interactive = false, showSolution = false, solution = [] } = Astro.props;
+const CS = 28;            // cell size in SVG units
+const w = cols * CS, h = rows * CS;
+const mid = (i: number) => i * CS + CS / 2;
+const solPts = solution.map((c) => `${mid(c.c)},${mid(c.r)}`).join(" ");
+// interior walls drawn once: right edge if !openE, bottom edge if !openS
+const vlines: { x: number; y1: number; y2: number }[] = [];
+const hlines: { x1: number; x2: number; y: number }[] = [];
+for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+  if (c < cols - 1 && !(open[r]![c]! & E)) vlines.push({ x: (c + 1) * CS, y1: r * CS, y2: (r + 1) * CS });
+  if (r < rows - 1 && !(open[r]![c]! & S)) hlines.push({ x1: c * CS, x2: (c + 1) * CS, y: (r + 1) * CS });
+}
+---
+<div class="maze" data-interactive={interactive ? "1" : "0"}>
+  <svg class="maze-svg" viewBox={`0 0 ${w} ${h}`} role="img" aria-label="maze"
+       style="width:100%;max-width:560px;height:auto;touch-action:none;user-select:none">
+    <rect x="0" y="0" width={w} height={h} fill="#fff" stroke="#1e293b" stroke-width="2" />
+    {vlines.map((l) => <line x1={l.x} y1={l.y1} x2={l.x} y2={l.y2} stroke="#1e293b" stroke-width="2" stroke-linecap="round" />)}
+    {hlines.map((l) => <line x1={l.x1} y1={l.y} x2={l.x2} y2={l.y} stroke="#1e293b" stroke-width="2" stroke-linecap="round" />)}
+    <polyline id="solution" points={solPts} fill="none" stroke="#16a34a" stroke-width={CS * 0.28}
+              stroke-linecap="round" stroke-linejoin="round" style={showSolution ? "" : "display:none"} />
+    <polyline id="trail" points="" fill="none" stroke="#4f46e5" stroke-width={CS * 0.34}
+              stroke-linecap="round" stroke-linejoin="round" />
+    <text x={mid(start.c)} y={mid(start.r)} font-size={CS * 0.7} text-anchor="middle" dominant-baseline="central">{theme.startIcon}</text>
+    <text x={mid(end.c)} y={mid(end.r)} font-size={CS * 0.7} text-anchor="middle" dominant-baseline="central">{theme.endIcon}</text>
+  </svg>
+</div>
