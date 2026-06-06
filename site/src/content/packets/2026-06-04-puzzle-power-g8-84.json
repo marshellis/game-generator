@@ -70,11 +70,11 @@
     },
     {
       "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
       "items": [
         {
-          "start": 3,
+          "start": 2,
           "ops": [
             {
               "op": "−",
@@ -82,37 +82,37 @@
             },
             {
               "op": "+",
-              "operand": 49
+              "operand": 3
             },
             {
               "op": "−",
-              "operand": 5
-            },
-            {
-              "op": "×",
-              "operand": 8
+              "operand": 1
             },
             {
               "op": "×",
               "operand": 5
             },
             {
+              "op": "×",
+              "operand": 5
+            },
+            {
               "op": "−",
-              "operand": 1535
+              "operand": 26
             },
             {
               "op": "÷",
-              "operand": 5
+              "operand": 7
             }
           ],
           "values": [
-            2,
-            51,
-            46,
-            368,
-            1840,
-            305,
-            61
+            1,
+            4,
+            3,
+            15,
+            75,
+            49,
+            7
           ]
         },
         {
@@ -120,19 +120,19 @@
           "ops": [
             {
               "op": "+",
-              "operand": 657
+              "operand": 30
             },
             {
               "op": "+",
-              "operand": 589
+              "operand": 27
             },
             {
-              "op": "−",
-              "operand": 289
+              "op": "×",
+              "operand": 2
             },
             {
               "op": "÷",
-              "operand": 2
+              "operand": 4
             },
             {
               "op": "×",
@@ -144,17 +144,17 @@
             },
             {
               "op": "+",
-              "operand": 303
+              "operand": 14
             }
           ],
           "values": [
-            658,
-            1247,
-            958,
-            479,
-            1437,
-            479,
-            782
+            31,
+            58,
+            116,
+            29,
+            87,
+            29,
+            43
           ]
         }
       ]
@@ -232,7 +232,7 @@
   "load": {
     "maxTier": 5,
     "steps": 14,
-    "score": 56,
+    "score": 55,
     "stars": 5
   },
   "seed": 84,

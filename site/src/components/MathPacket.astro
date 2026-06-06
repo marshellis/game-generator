@@ -306,7 +306,9 @@ const underlineIndex = (n: number, place: string) => {
               {it.ops.map((step, k) => (
                 <>
                   <span class="grid h-9 min-w-9 place-items-center rounded-md bg-slate-100 px-2 text-base font-semibold text-slate-600">{step.op}{step.operand}</span>
-                  <input class={numCls + " w-16"} inputmode="numeric" data-answer={String(it.values[k])} />
+                  {k === it.ops.length - 1
+                    ? <span class="grid h-11 min-w-11 place-items-center rounded-lg bg-brand-50 px-2 text-lg font-bold text-brand-700">{it.values[k]}</span>
+                    : <input class={numCls + " w-16"} inputmode="numeric" data-answer={String(it.values[k])} />}
                 </>
               ))}
             </div>

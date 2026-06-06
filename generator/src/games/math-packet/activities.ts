@@ -455,20 +455,26 @@ const fraction: ActivityGen = {
 };
 
 // ---------------------------------------------------------------------------
-// Snake — a running-total chain. Start at the first number, apply each step in
-// order, write the result. Multi-step: difficulty scales with chain length,
-// operation mix, and number range. Always integer, bounded, non-negative, with
-// a single forward-computed answer.
+// Number Path — a running-total chain. Start at the first number, apply each
+// step in order, write the result. The final number is shown (a checkpoint to
+// land on). Numbers stay small/age-appropriate: caps and per-step jumps are
+// tight so the whole chain is mental-math friendly. Always integer,
+// non-negative, single forward-computed answer.
 // ---------------------------------------------------------------------------
 
 const SNAKE_LEN = [0, 3, 4, 4, 5, 5, 6, 6, 7];
-const SNAKE_CAP = [0, 30, 50, 99, 200, 500, 999, 999, 2000];
+// Largest value allowed anywhere on the path (kept small so it's doable in head).
+const SNAKE_CAP = [0, 20, 20, 36, 50, 80, 100, 120, 144];
+// Largest +/− jump per step.
+const SNAKE_ADD = [0, 9, 9, 12, 15, 18, 20, 24, 30];
 
 function makeSnake(g: GradeConfig, rng: Rng): SnakeItem {
   const length = SNAKE_LEN[g.grade]!;
   const cap = SNAKE_CAP[g.grade]!;
+  const addMax = SNAKE_ADD[g.grade]!;
+  const factorMax = g.grade <= 4 ? 4 : 5;
   for (let attempt = 0; attempt < 300; attempt++) {
-    const start = randInt(rng, 1, Math.min(12, cap));
+    const start = randInt(rng, 1, Math.min(9, cap));
     let value = start;
     const chain: SnakeItem["ops"] = [];
     const values: number[] = [];
@@ -479,16 +485,16 @@ function makeSnake(g: GradeConfig, rng: Rng): SnakeItem {
         if (op === "+") {
           const room = cap - value;
           if (room < 1) continue;
-          const operand = randInt(rng, 1, Math.min(room, Math.max(2, Math.floor(cap / 3))));
+          const operand = randInt(rng, 1, Math.min(room, addMax));
           value += operand; chain.push({ op, operand }); values.push(value); applied = true; break;
         } else if (op === "−") {
           if (value < 2) continue;
-          const operand = randInt(rng, 1, value);
+          const operand = randInt(rng, 1, Math.min(value, addMax));
           value -= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
         } else if (op === "×") {
           const maxFactor = Math.floor(cap / Math.max(value, 1));
           if (value < 1 || maxFactor < 2) continue;
-          const operand = randInt(rng, 2, Math.min(maxFactor, 9));
+          const operand = randInt(rng, 2, Math.min(maxFactor, factorMax));
           value *= operand; chain.push({ op, operand }); values.push(value); applied = true; break;
         } else {
           const divs: number[] = [];
@@ -506,7 +512,7 @@ function makeSnake(g: GradeConfig, rng: Rng): SnakeItem {
     }
     if (ok && chain.length === length) return { start, ops: chain, values };
   }
-  throw new Error("snake: could not build a valid chain");
+  throw new Error("number-path: could not build a valid chain");
 }
 
 const snake: ActivityGen = {
@@ -514,8 +520,8 @@ const snake: ActivityGen = {
   eligible: (g) => g.grade >= 2,
   generate: (g, rng) => ({
     type: "snake",
-    title: "Number Snake",
-    instructions: "Start at the first number. Do each step in order and write the result in each box.",
+    title: "Number Path",
+    instructions: "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
     items: [makeSnake(g, rng), makeSnake(g, rng)],
   }),
 };

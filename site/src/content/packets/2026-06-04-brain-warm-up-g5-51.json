@@ -92,39 +92,39 @@
     },
     {
       "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
       "items": [
         {
-          "start": 12,
+          "start": 9,
           "ops": [
             {
               "op": "+",
-              "operand": 133
+              "operand": 15
             },
             {
               "op": "−",
-              "operand": 40
+              "operand": 5
             },
             {
               "op": "−",
-              "operand": 51
+              "operand": 9
             },
             {
               "op": "−",
-              "operand": 52
+              "operand": 10
             },
             {
               "op": "÷",
-              "operand": 2
+              "operand": 8
             }
           ],
           "values": [
-            145,
-            105,
-            54,
-            2,
-            1
+            24,
+            19,
+            10,
+            0,
+            0
           ]
         },
         {
@@ -136,7 +136,7 @@
             },
             {
               "op": "×",
-              "operand": 8
+              "operand": 5
             },
             {
               "op": "−",
@@ -144,18 +144,18 @@
             },
             {
               "op": "−",
-              "operand": 3
+              "operand": 2
             },
             {
               "op": "÷",
-              "operand": 4
+              "operand": 2
             }
           ],
           "values": [
             1,
-            8,
-            7,
+            5,
             4,
+            2,
             1
           ]
         }
@@ -197,7 +197,7 @@
   "load": {
     "maxTier": 5,
     "steps": 8,
-    "score": 48,
+    "score": 47,
     "stars": 4
   },
   "seed": 51,

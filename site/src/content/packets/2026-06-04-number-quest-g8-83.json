@@ -139,11 +139,11 @@
     },
     {
       "type": "snake",
-      "title": "Number Snake",
-      "instructions": "Start at the first number. Do each step in order and write the result in each box.",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
       "items": [
         {
-          "start": 3,
+          "start": 2,
           "ops": [
             {
               "op": "+",
@@ -151,37 +151,37 @@
             },
             {
               "op": "+",
-              "operand": 41
+              "operand": 2
             },
             {
               "op": "×",
-              "operand": 5
+              "operand": 3
             },
             {
               "op": "−",
-              "operand": 220
+              "operand": 15
+            },
+            {
+              "op": "+",
+              "operand": 19
             },
             {
               "op": "−",
-              "operand": 4
+              "operand": 8
             },
             {
-              "op": "×",
-              "operand": 5
-            },
-            {
-              "op": "÷",
+              "op": "+",
               "operand": 5
             }
           ],
           "values": [
-            4,
-            45,
-            225,
+            3,
             5,
-            1,
-            5,
-            1
+            15,
+            0,
+            19,
+            11,
+            16
           ]
         },
         {
@@ -189,41 +189,41 @@
           "ops": [
             {
               "op": "+",
-              "operand": 624
+              "operand": 29
             },
             {
               "op": "÷",
-              "operand": 5
+              "operand": 2
             },
             {
               "op": "−",
-              "operand": 15
-            },
-            {
-              "op": "÷",
-              "operand": 5
+              "operand": 2
             },
             {
               "op": "+",
-              "operand": 552
+              "operand": 23
             },
             {
               "op": "+",
-              "operand": 576
+              "operand": 25
             },
             {
               "op": "+",
-              "operand": 507
+              "operand": 26
+            },
+            {
+              "op": "+",
+              "operand": 23
             }
           ],
           "values": [
-            625,
-            125,
-            110,
-            22,
-            574,
-            1150,
-            1657
+            30,
+            15,
+            13,
+            36,
+            61,
+            87,
+            110
           ]
         }
       ]
@@ -232,7 +232,7 @@
   "load": {
     "maxTier": 5,
     "steps": 14,
-    "score": 54,
+    "score": 53,
     "stars": 5
   },
   "seed": 83,
