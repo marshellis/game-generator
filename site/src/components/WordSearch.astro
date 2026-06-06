@@ -1,0 +1,55 @@
+---
+interface Pos { r: number; c: number; }
+interface PlacedWord { word: string; start: Pos; end: Pos; }
+interface Props {
+  size: number;
+  grid: string[][];
+  words: PlacedWord[];
+  theme: string;
+  interactive?: boolean;
+  showSolution?: boolean;
+}
+const { size, grid, words, theme, interactive = false, showSolution = false } = Astro.props;
+
+// Cells covered by each word — used to shade the solution on the answer key.
+const sign = (n: number) => (n > 0 ? 1 : n < 0 ? -1 : 0);
+const cellsOf = (w: PlacedWord): string[] => {
+  const dr = sign(w.end.r - w.start.r), dc = sign(w.end.c - w.start.c);
+  const len = Math.max(Math.abs(w.end.r - w.start.r), Math.abs(w.end.c - w.start.c)) + 1;
+  return Array.from({ length: len }, (_, i) => `${w.start.r + dr * i},${w.start.c + dc * i}`);
+};
+const solutionCells = new Set(showSolution ? words.flatMap(cellsOf) : []);
+const wordsSorted = [...words].map((w) => w.word).sort((a, b) => a.localeCompare(b));
+---
+<div class="wordsearch" data-size={size} data-words={JSON.stringify(words)}>
+  <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-brand-600">Theme: {theme}</p>
+  <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+    <div
+      class="ws-grid mx-auto w-full max-w-xl select-none"
+      style={`display:grid;grid-template-columns:repeat(${size},1fr)`}
+    >
+      {grid.map((row, r) => row.map((ch, c) => (
+        <div
+          data-r={r} data-c={c}
+          class:list={[
+            "ws-cell flex aspect-square items-center justify-center border border-slate-200 text-sm font-semibold uppercase sm:text-base",
+            solutionCells.has(`${r},${c}`) ? "bg-brand-100 text-brand-800" : "bg-white text-slate-800",
+            interactive ? "cursor-pointer" : "",
+          ]}
+        >{ch}</div>
+      )))}
+    </div>
+
+    <ul class="ws-list grid grid-cols-2 gap-x-6 gap-y-1 text-sm sm:grid-cols-3 lg:grid-cols-1">
+      {wordsSorted.map((w) => (
+        <li
+          data-word={w}
+          class:list={[
+            "ws-word font-medium tracking-wide text-slate-700",
+            showSolution ? "text-brand-700" : "",
+          ]}
+        >{w}</li>
+      ))}
+    </ul>
+  </div>
+</div>

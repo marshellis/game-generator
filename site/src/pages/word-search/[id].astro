@@ -1,0 +1,36 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import GameHeader from "../../components/GameHeader.astro";
+import WordSearch from "../../components/WordSearch.astro";
+export async function getStaticPaths() {
+  const items = await getCollection("wordsearches");
+  return items.map((s) => ({ params: { id: s.data.id } }));
+}
+const { id } = Astro.params;
+const s = (await getEntry("wordsearches", id!))!.data;
+---
+<Base title={`${s.title} ${s.size}×${s.size} — Marshellis Games`}>
+  <GameHeader
+    crumbs={[
+      { label: "All games", href: "/" },
+      { label: "Word Search", href: "/word-search" },
+      { label: s.gradeLabel, href: `/word-search/grade/${s.difficulty}` },
+    ]}
+    title={`Word Search ${s.size}×${s.size}`}
+    blurb={`Find every ${s.theme.toLowerCase()} word. Tap the first and last letter of a word to mark it.`}
+    printHref={`/word-search/${s.id}/print`}
+    answerHref={`/word-search/${s.id}/answer`}
+    showCheck={true}
+    showClear={true}
+    revealNoun="answers"
+  />
+  <div class="mt-6">
+    <WordSearch size={s.size} grid={s.grid} words={s.words} theme={s.theme} interactive={true} />
+  </div>
+  <script type="application/json" id="wordsearch-data" set:html={JSON.stringify({ id: s.id, words: s.words })} />
+  <script>
+    import { initWordSearch } from "../../games/word-search/player.ts";
+    initWordSearch(JSON.parse(document.getElementById("wordsearch-data")!.textContent!));
+  </script>
+</Base>

@@ -1,0 +1,24 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import WordSearch from "../../../components/WordSearch.astro";
+import "../../../styles/global.css";
+import "../../../styles/print.css";
+export async function getStaticPaths() {
+  const items = await getCollection("wordsearches");
+  return items.map((s) => ({ params: { id: s.data.id } }));
+}
+const { id } = Astro.params;
+const s = (await getEntry("wordsearches", id!))!.data;
+---
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><title>Word Search {s.size}×{s.size} — answer key</title></head>
+  <body class="bg-white p-6 text-slate-900">
+    <p class="no-print mb-4 text-sm text-slate-500">
+      <a href={`/word-search/${s.id}`} class="text-brand-600 no-underline hover:underline">← Back</a>
+      · Print → Save as PDF · <a href={`/word-search/${s.id}/print`} class="text-brand-600 no-underline hover:underline">Blank →</a>
+    </p>
+    <h1 class="text-2xl font-extrabold">Answer key — Word Search {s.size}×{s.size}</h1>
+    <WordSearch size={s.size} grid={s.grid} words={s.words} theme={s.theme} showSolution={true} />
+  </body>
+</html>

@@ -1,0 +1,174 @@
+{
+  "id": "2026-06-06-word-search-g2-2",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "size": 8,
+  "theme": "Nature",
+  "grid": [
+    [
+      "R",
+      "X",
+      "G",
+      "H",
+      "L",
+      "W",
+      "D",
+      "P"
+    ],
+    [
+      "A",
+      "F",
+      "B",
+      "F",
+      "E",
+      "R",
+      "M",
+      "L"
+    ],
+    [
+      "I",
+      "R",
+      "P",
+      "O",
+      "A",
+      "B",
+      "E",
+      "A"
+    ],
+    [
+      "N",
+      "U",
+      "J",
+      "R",
+      "F",
+      "E",
+      "A",
+      "N"
+    ],
+    [
+      "R",
+      "I",
+      "V",
+      "E",
+      "R",
+      "A",
+      "D",
+      "T"
+    ],
+    [
+      "W",
+      "B",
+      "R",
+      "S",
+      "R",
+      "C",
+      "O",
+      "W"
+    ],
+    [
+      "E",
+      "O",
+      "E",
+      "T",
+      "K",
+      "H",
+      "W",
+      "J"
+    ],
+    [
+      "W",
+      "P",
+      "T",
+      "A",
+      "R",
+      "C",
+      "X",
+      "A"
+    ]
+  ],
+  "words": [
+    {
+      "word": "LEAF",
+      "start": {
+        "r": 0,
+        "c": 4
+      },
+      "end": {
+        "r": 3,
+        "c": 4
+      }
+    },
+    {
+      "word": "PLANT",
+      "start": {
+        "r": 0,
+        "c": 7
+      },
+      "end": {
+        "r": 4,
+        "c": 7
+      }
+    },
+    {
+      "word": "BEACH",
+      "start": {
+        "r": 2,
+        "c": 5
+      },
+      "end": {
+        "r": 6,
+        "c": 5
+      }
+    },
+    {
+      "word": "RAIN",
+      "start": {
+        "r": 0,
+        "c": 0
+      },
+      "end": {
+        "r": 3,
+        "c": 0
+      }
+    },
+    {
+      "word": "RIVER",
+      "start": {
+        "r": 4,
+        "c": 0
+      },
+      "end": {
+        "r": 4,
+        "c": 4
+      }
+    },
+    {
+      "word": "MEADOW",
+      "start": {
+        "r": 1,
+        "c": 6
+      },
+      "end": {
+        "r": 6,
+        "c": 6
+      }
+    },
+    {
+      "word": "FOREST",
+      "start": {
+        "r": 1,
+        "c": 3
+      },
+      "end": {
+        "r": 6,
+        "c": 3
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 2,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

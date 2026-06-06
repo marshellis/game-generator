@@ -2,9 +2,9 @@ import { describe, it, expect } from "vitest";
 import { REGISTRY, getModule } from "../src/registry";
 
 describe("registry", () => {
-  it("contains the four games with unique ids", () => {
+  it("contains the registered games with unique ids", () => {
     const ids = REGISTRY.map((m) => m.id).sort();
-    expect(ids).toEqual(["logic-grid", "math-packet", "maze", "sudoku"]);
+    expect(ids).toEqual(["logic-grid", "math-packet", "maze", "sudoku", "word-search"]);
   });
   it("getModule resolves and throws on unknown", () => {
     expect(getModule("maze").id).toBe("maze");

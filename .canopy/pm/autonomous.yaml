@@ -1,0 +1,52 @@
+email:
+  to: jjackson@dimagi.com
+  from: ace@dimagi-ai.com
+  subject_prefix: "[game-generator]"
+  sender_skill: ace:email-communicator
+
+shipping:
+  branch_prefix: game-generator/auto/
+  pr_label: autonomous
+  merge: merge
+  # Merging to main fires deploy.yml's `push` trigger automatically (see
+  # CLAUDE.md + .github/workflows/deploy.yml). No manual dispatch needed —
+  # a workflow_dispatch would race the push run under the vercel-production
+  # concurrency group. So the deploy "command" is a no-op marker; the cycle
+  # polls deploy_workflow for the push-triggered run.
+  deploy_command: echo "merge to main auto-deploys via deploy.yml push trigger"
+  deploy_workflow: deploy.yml
+  post_deploy_health:
+    - https://games.marshellis.com
+
+testing:
+  # Fresh emdash worktrees start with empty node_modules in both packages.
+  # Lockfile-pinned (npm ci) so prepare never mutates the worktree.
+  prepare: bash -c "(cd generator && npm ci) && (cd site && npm ci)"
+  unit: bash -c "(cd generator && npm test) && (cd site && npm test)"
+  # No lint script configured in either package yet → no-op.
+  lint: "true"
+  types: bash -c "cd generator && npm run typecheck"
+  dogfood:
+    # base_url/start_command/wait_for are the deprecated localhost-dogfood
+    # fields (still required by the validator). 3c dogfoods deployed prod.
+    base_url: https://games.marshellis.com
+    start_command: echo "static Astro site; no local stack — 3c dogfoods prod"
+    wait_for: https://games.marshellis.com
+    headless_browser_skill: gstack
+
+guardrails:
+  one_pr_in_flight: true
+  # Bumped from the 1500 default: this is a static-content puzzle site where a
+  # new game ships ~20 templated/test-covered code files PLUS committed,
+  # deterministic generator-output JSON (one puzzle per grade ≈ sudoku's 1224
+  # lines across 8 files). The cap still guards against sprawling *code* diffs.
+  diff_size_limit_lines: 3000
+  max_fix_forward_attempts: 3
+
+theme_detection:
+  lens_rotation:
+    - user-value
+    - adoption-blockers
+    - integration-depth
+    - trust-reliability
+    - tech-debt
