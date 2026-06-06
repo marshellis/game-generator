@@ -19,7 +19,7 @@ export function cageSatisfied(cage: Cage, grid: number[][]): boolean {
   const vals = cage.cells.map(({ r, c }) => grid[r]![c]!);
   if (vals.some((v) => v === 0)) return false;
   switch (cage.op) {
-    case "=": return vals[0] === cage.target;
+    case "=": return vals.length === 1 && vals[0] === cage.target;
     case "+": return vals.reduce((a, b) => a + b, 0) === cage.target;
     case "*": return vals.reduce((a, b) => a * b, 1) === cage.target;
     case "-": { if (vals.length !== 2) return false; return Math.abs(vals[0]! - vals[1]!) === cage.target; }
@@ -28,6 +28,7 @@ export function cageSatisfied(cage: Cage, grid: number[][]): boolean {
       const hi = Math.max(vals[0]!, vals[1]!), lo = Math.min(vals[0]!, vals[1]!);
       return lo !== 0 && hi % lo === 0 && hi / lo === cage.target;
     }
+    default: return false;
   }
 }
 
