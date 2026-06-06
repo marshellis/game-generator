@@ -1,0 +1,40 @@
+---
+interface Props {
+  size: number; boxW: number; boxH: number;
+  givens: number[][]; solution: number[][];
+  interactive?: boolean; showSolution?: boolean;
+}
+const { size, boxW, boxH, givens, solution, interactive = false, showSolution = false } = Astro.props;
+const cellBorder = (r: number, c: number) => {
+  const right = (c + 1) % boxW === 0 && c < size - 1 ? "3px" : "1px";
+  const bottom = (r + 1) % boxH === 0 && r < size - 1 ? "3px" : "1px";
+  return `border-right:${right} solid #1e293b;border-bottom:${bottom} solid #1e293b;` +
+    `border-top:${r === 0 ? "3px" : "0"} solid #1e293b;border-left:${c === 0 ? "3px" : "0"} solid #1e293b;`;
+};
+---
+<div class="sudoku" data-size={size} data-boxw={boxW} data-boxh={boxH}>
+  <div class="grid mx-auto w-full max-w-md select-none" style={`display:grid;grid-template-columns:repeat(${size},1fr)`}>
+    {givens.map((row, r) => row.map((g, c) => {
+      const given = g !== 0;
+      const shown = showSolution ? solution[r]![c] : (given ? g : "");
+      return (
+        <div
+          data-r={r} data-c={c} data-given={given ? "1" : "0"}
+          class:list={["sudoku-cell flex aspect-square items-center justify-center text-lg font-semibold sm:text-xl",
+            given ? "bg-slate-50 text-slate-900" : "bg-white text-brand-700",
+            interactive && !given ? "cursor-pointer" : ""]}
+          style={cellBorder(r, c)}
+        >{shown}</div>
+      );
+    }))}
+  </div>
+
+  {interactive && (
+    <div class="pad mx-auto mt-4 flex max-w-md flex-wrap justify-center gap-2">
+      {Array.from({ length: size }, (_, i) => i + 1).map((n) => (
+        <button data-n={n} class="num h-10 w-10 rounded-lg border border-slate-300 bg-white text-lg font-bold text-slate-700 transition hover:bg-slate-50">{n}</button>
+      ))}
+      <button data-n="0" class="num h-10 w-14 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-500 transition hover:bg-slate-50">Erase</button>
+    </div>
+  )}
+</div>
