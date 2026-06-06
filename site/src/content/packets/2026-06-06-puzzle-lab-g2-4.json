@@ -1,0 +1,141 @@
+{
+  "id": "2026-06-06-puzzle-lab-g2-4",
+  "title": "Puzzle Lab",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            12,
+            10,
+            9,
+            19
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            12,
+            2,
+            3,
+            10
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            11,
+            9,
+            20,
+            7
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 4
+          },
+          "options": [
+            4,
+            5,
+            6
+          ],
+          "answer": 4
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 2
+          },
+          "options": [
+            2,
+            3,
+            4
+          ],
+          "answer": 2
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 1
+          },
+          "options": [
+            1,
+            0,
+            3
+          ],
+          "answer": 1
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 9
+          },
+          "options": [
+            10,
+            7,
+            9
+          ],
+          "answer": 9
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 51,
+          "op": "−",
+          "b": 13,
+          "answer": 38
+        },
+        {
+          "a": 24,
+          "op": "−",
+          "b": 11,
+          "answer": 13
+        },
+        {
+          "a": 44,
+          "op": "−",
+          "b": 41,
+          "answer": 3
+        },
+        {
+          "a": 12,
+          "op": "+",
+          "b": 97,
+          "answer": 109
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 26,
+    "stars": 2
+  },
+  "seed": 4,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

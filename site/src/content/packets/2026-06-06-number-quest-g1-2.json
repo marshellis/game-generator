@@ -1,0 +1,117 @@
+{
+  "id": "2026-06-06-number-quest-g1-2",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            9,
+            4,
+            11,
+            2
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            3,
+            9,
+            8,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            17,
+            9,
+            8,
+            11
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "coinBubble",
+      "title": "Count the Money",
+      "instructions": "Add up the coins and write the total in cents.",
+      "items": [
+        {
+          "coins": [
+            1,
+            10,
+            10
+          ],
+          "answer": 21
+        },
+        {
+          "coins": [
+            25,
+            25,
+            1
+          ],
+          "answer": 51
+        },
+        {
+          "coins": [
+            25,
+            1,
+            25
+          ],
+          "answer": 51
+        },
+        {
+          "coins": [
+            10,
+            5,
+            10
+          ],
+          "answer": 25
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 10,
+          "answer": 10
+        },
+        {
+          "dots": 10,
+          "answer": 10
+        },
+        {
+          "dots": 8,
+          "answer": 8
+        },
+        {
+          "dots": 6,
+          "answer": 6
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 21,
+    "stars": 1
+  },
+  "seed": 2,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

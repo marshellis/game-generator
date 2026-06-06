@@ -1,0 +1,125 @@
+{
+  "id": "2026-06-06-number-quest-g2-3",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            12,
+            1,
+            13
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            15,
+            14,
+            9,
+            6
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            6,
+            1,
+            4,
+            7
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            2,
+            12,
+            null,
+            32,
+            42
+          ],
+          "answer": 22
+        },
+        {
+          "sequence": [
+            1,
+            null,
+            51,
+            76,
+            101
+          ],
+          "answer": 26
+        },
+        {
+          "sequence": [
+            9,
+            11,
+            null,
+            15,
+            17
+          ],
+          "answer": 13
+        },
+        {
+          "sequence": [
+            10,
+            null,
+            60,
+            85,
+            110
+          ],
+          "answer": 35
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 6,
+          "answer": 6
+        },
+        {
+          "dots": 4,
+          "answer": 4
+        },
+        {
+          "dots": 7,
+          "answer": 7
+        },
+        {
+          "dots": 8,
+          "answer": 8
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 21,
+    "stars": 1
+  },
+  "seed": 3,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

@@ -1,0 +1,279 @@
+{
+  "id": "2026-06-06-number-quest-g7-2",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            29,
+            12,
+            7,
+            42
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            11,
+            2,
+            16,
+            7,
+            8
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            29,
+            30,
+            9,
+            23,
+            7
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
+      "items": [
+        {
+          "start": 8,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 6
+            },
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "+",
+              "operand": 15
+            },
+            {
+              "op": "+",
+              "operand": 11
+            }
+          ],
+          "values": [
+            14,
+            2,
+            4,
+            16,
+            31,
+            42
+          ]
+        },
+        {
+          "start": 8,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 20
+            },
+            {
+              "op": "+",
+              "operand": 18
+            },
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 7
+            },
+            {
+              "op": "−",
+              "operand": 6
+            }
+          ],
+          "values": [
+            28,
+            46,
+            23,
+            30,
+            37,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "onesDigit",
+              "d": 9
+            },
+            {
+              "kind": "tensDigit",
+              "d": 8
+            },
+            {
+              "kind": "gt",
+              "n": 77
+            },
+            {
+              "kind": "lt",
+              "n": 104
+            }
+          ],
+          "answer": 89
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "onesDigit",
+              "d": 3
+            },
+            {
+              "kind": "digitSum",
+              "s": 5
+            },
+            {
+              "kind": "lt",
+              "n": 37
+            }
+          ],
+          "answer": 23
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "tensDigit",
+              "d": 4
+            },
+            {
+              "kind": "digitSum",
+              "s": 6
+            },
+            {
+              "kind": "lt",
+              "n": 151
+            },
+            {
+              "kind": "parity",
+              "even": false
+            }
+          ],
+          "answer": 141
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 7,
+          "op": "×",
+          "right": 2,
+          "result": 14,
+          "blank": "left",
+          "answer": 7
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 4,
+          "result": 8,
+          "blank": "left",
+          "answer": 2
+        },
+        {
+          "left": 639,
+          "op": "+",
+          "right": 416,
+          "result": 1055,
+          "blank": "right",
+          "answer": 416
+        },
+        {
+          "left": 958,
+          "op": "+",
+          "right": 568,
+          "result": 1526,
+          "blank": "result",
+          "answer": 1526
+        },
+        {
+          "left": 11,
+          "op": "×",
+          "right": 11,
+          "result": 121,
+          "blank": "result",
+          "answer": 121
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 8,
+          "result": 16,
+          "blank": "right",
+          "answer": 8
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 11,
+    "score": 52,
+    "stars": 5
+  },
+  "seed": 2,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

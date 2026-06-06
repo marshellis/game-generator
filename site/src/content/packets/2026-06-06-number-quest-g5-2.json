@@ -1,0 +1,292 @@
+{
+  "id": "2026-06-06-number-quest-g5-2",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            27,
+            36,
+            7,
+            4,
+            9
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            46,
+            8,
+            63,
+            72,
+            9
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            57,
+            8,
+            45,
+            9,
+            72
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "onesDigit",
+              "d": 3
+            },
+            {
+              "kind": "gt",
+              "n": 93
+            },
+            {
+              "kind": "lt",
+              "n": 132
+            },
+            {
+              "kind": "digitSum",
+              "s": 5
+            }
+          ],
+          "answer": 113
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "gt",
+              "n": 68
+            },
+            {
+              "kind": "tensDigit",
+              "d": 8
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "lt",
+              "n": 101
+            },
+            {
+              "kind": "onesDigit",
+              "d": 2
+            }
+          ],
+          "answer": 82
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "gt",
+              "n": 153
+            },
+            {
+              "kind": "lt",
+              "n": 183
+            },
+            {
+              "kind": "digitSum",
+              "s": 12
+            }
+          ],
+          "answer": 165
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
+      "items": [
+        {
+          "start": 7,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 7
+            },
+            {
+              "op": "+",
+              "operand": 6
+            },
+            {
+              "op": "+",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 3
+            },
+            {
+              "op": "÷",
+              "operand": 9
+            }
+          ],
+          "values": [
+            1,
+            7,
+            12,
+            9,
+            1
+          ]
+        },
+        {
+          "start": 2,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "×",
+              "operand": 3
+            },
+            {
+              "op": "+",
+              "operand": 5
+            },
+            {
+              "op": "−",
+              "operand": 6
+            },
+            {
+              "op": "×",
+              "operand": 3
+            }
+          ],
+          "values": [
+            1,
+            3,
+            8,
+            2,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              200,
+              90,
+              3
+            ]
+          },
+          "options": [
+            5663,
+            7142,
+            7293
+          ],
+          "answer": 7293
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              1000,
+              800,
+              10,
+              7
+            ]
+          },
+          "options": [
+            1622,
+            1535,
+            1817
+          ],
+          "answer": 1817
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              4000,
+              700,
+              40
+            ]
+          },
+          "options": [
+            4740,
+            4804,
+            4092
+          ],
+          "answer": 4740
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              100,
+              20,
+              6
+            ]
+          },
+          "options": [
+            7126,
+            7294,
+            8425
+          ],
+          "answer": 7126
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 10,
+    "score": 49,
+    "stars": 4
+  },
+  "seed": 2,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

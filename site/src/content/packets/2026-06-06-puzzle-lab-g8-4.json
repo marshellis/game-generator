@@ -1,0 +1,255 @@
+{
+  "id": "2026-06-06-puzzle-lab-g8-4",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            1,
+            19,
+            41,
+            42,
+            12
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            19,
+            24,
+            42,
+            13,
+            23
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            20,
+            13,
+            32,
+            8
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "onesDigit",
+              "d": 0
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "gt",
+              "n": 474
+            },
+            {
+              "kind": "multipleOf",
+              "m": 5
+            },
+            {
+              "kind": "digitSum",
+              "s": 13
+            }
+          ],
+          "answer": 490
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "tensDigit",
+              "d": 3
+            },
+            {
+              "kind": "lt",
+              "n": 254
+            },
+            {
+              "kind": "digitSum",
+              "s": 12
+            },
+            {
+              "kind": "gt",
+              "n": 218
+            }
+          ],
+          "answer": 237
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "gt",
+              "n": 207
+            },
+            {
+              "kind": "lt",
+              "n": 228
+            },
+            {
+              "kind": "onesDigit",
+              "d": 7
+            },
+            {
+              "kind": "tensDigit",
+              "d": 1
+            }
+          ],
+          "answer": 217
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  ×  ÷ ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×",
+        "÷"
+      ],
+      "items": [
+        {
+          "left": 3,
+          "right": 2,
+          "result": 6,
+          "answer": "×"
+        },
+        {
+          "left": 97,
+          "right": 44,
+          "result": 53,
+          "answer": "−"
+        },
+        {
+          "left": 68,
+          "right": 17,
+          "result": 85,
+          "answer": "+"
+        },
+        {
+          "left": 56,
+          "right": 39,
+          "result": 95,
+          "answer": "+"
+        },
+        {
+          "left": 35,
+          "right": 7,
+          "result": 5,
+          "answer": "÷"
+        },
+        {
+          "left": 56,
+          "right": 49,
+          "result": 7,
+          "answer": "−"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 874,
+          "op": "+",
+          "right": 608,
+          "result": 1482,
+          "blank": "result",
+          "answer": 1482
+        },
+        {
+          "left": 10,
+          "op": "×",
+          "right": 3,
+          "result": 30,
+          "blank": "left",
+          "answer": 10
+        },
+        {
+          "left": 116,
+          "op": "−",
+          "right": 6,
+          "result": 110,
+          "blank": "result",
+          "answer": 110
+        },
+        {
+          "left": 143,
+          "op": "+",
+          "right": 505,
+          "result": 648,
+          "blank": "result",
+          "answer": 648
+        },
+        {
+          "left": 336,
+          "op": "−",
+          "right": 13,
+          "result": 323,
+          "blank": "right",
+          "answer": 13
+        },
+        {
+          "left": 491,
+          "op": "+",
+          "right": 121,
+          "result": 612,
+          "blank": "left",
+          "answer": 491
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 43,
+    "stars": 4
+  },
+  "seed": 4,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

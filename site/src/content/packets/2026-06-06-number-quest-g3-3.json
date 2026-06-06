@@ -1,0 +1,215 @@
+{
+  "id": "2026-06-06-number-quest-g3-3",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            33,
+            7,
+            9,
+            35,
+            5
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            41,
+            42,
+            6,
+            7,
+            30
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            22,
+            9,
+            21,
+            23,
+            14
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              11,
+              4
+            ],
+            [
+              5,
+              null,
+              9
+            ],
+            [
+              10,
+              3,
+              null
+            ]
+          ],
+          "answers": [
+            6,
+            7,
+            8
+          ],
+          "magic": 21
+        },
+        {
+          "grid": [
+            [
+              13,
+              6,
+              null
+            ],
+            [
+              null,
+              10,
+              12
+            ],
+            [
+              9,
+              null,
+              7
+            ]
+          ],
+          "answers": [
+            11,
+            8,
+            14
+          ],
+          "magic": 30
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 397,
+          "parts": [
+            300,
+            90,
+            7
+          ],
+          "blankIndex": 0,
+          "answer": 300
+        },
+        {
+          "number": 639,
+          "parts": [
+            600,
+            30,
+            9
+          ],
+          "blankIndex": 0,
+          "answer": 600
+        },
+        {
+          "number": 786,
+          "parts": [
+            700,
+            80,
+            6
+          ],
+          "blankIndex": 2,
+          "answer": 6
+        },
+        {
+          "number": 447,
+          "parts": [
+            400,
+            40,
+            7
+          ],
+          "blankIndex": 1,
+          "answer": 40
+        },
+        {
+          "number": 772,
+          "parts": [
+            700,
+            70,
+            2
+          ],
+          "blankIndex": 0,
+          "answer": 700
+        }
+      ]
+    },
+    {
+      "type": "makeTen",
+      "title": "Make 100",
+      "instructions": "Fill in the number that makes 100.",
+      "items": [
+        {
+          "known": 76,
+          "target": 100,
+          "op": "+",
+          "answer": 24
+        },
+        {
+          "known": 87,
+          "target": 100,
+          "op": "+",
+          "answer": 13
+        },
+        {
+          "known": 97,
+          "target": 100,
+          "op": "+",
+          "answer": 3
+        },
+        {
+          "known": 45,
+          "target": 100,
+          "op": "+",
+          "answer": 55
+        },
+        {
+          "known": 8,
+          "target": 100,
+          "op": "+",
+          "answer": 92
+        },
+        {
+          "known": 24,
+          "target": 100,
+          "op": "+",
+          "answer": 76
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 39,
+    "stars": 3
+  },
+  "seed": 3,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

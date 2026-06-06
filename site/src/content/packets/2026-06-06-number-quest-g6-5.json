@@ -1,0 +1,211 @@
+{
+  "id": "2026-06-06-number-quest-g6-5",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            20,
+            5,
+            14,
+            11,
+            4
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            8,
+            20,
+            13,
+            2,
+            18
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            10,
+            40,
+            8,
+            37,
+            5
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              300,
+              30,
+              4
+            ]
+          },
+          "options": [
+            7334,
+            6171,
+            6724
+          ],
+          "answer": 7334
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              5000,
+              400,
+              80,
+              7
+            ]
+          },
+          "options": [
+            5487,
+            5341,
+            6763
+          ],
+          "answer": 5487
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              1000,
+              100,
+              80,
+              8
+            ]
+          },
+          "options": [
+            1040,
+            1188,
+            1308
+          ],
+          "answer": 1188
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              6000,
+              700,
+              50
+            ]
+          },
+          "options": [
+            5775,
+            8277,
+            6750
+          ],
+          "answer": 6750
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Theo shares 21 coins equally among 7 friends. How many does each friend get?",
+          "answer": 3,
+          "unit": "coins"
+        },
+        {
+          "text": "Theo shares 54 shells equally among 6 friends. How many does each friend get?",
+          "answer": 9,
+          "unit": "shells"
+        },
+        {
+          "text": "Omar has 139 stickers. Sam gives Omar 145 more. How many does Omar have now?",
+          "answer": 284,
+          "unit": "stickers"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              32,
+              62,
+              null
+            ],
+            [
+              null,
+              50,
+              26
+            ],
+            [
+              44,
+              null,
+              68
+            ]
+          ],
+          "answers": [
+            56,
+            74,
+            38
+          ],
+          "magic": 150
+        },
+        {
+          "grid": [
+            [
+              null,
+              43,
+              29
+            ],
+            [
+              31,
+              null,
+              39
+            ],
+            [
+              41,
+              27,
+              null
+            ]
+          ],
+          "answers": [
+            33,
+            35,
+            37
+          ],
+          "magic": 105
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 41,
+    "stars": 4
+  },
+  "seed": 5,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

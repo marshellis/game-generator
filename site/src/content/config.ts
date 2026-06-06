@@ -164,6 +164,53 @@ const activity = z.discriminatedUnion("type", [
       final: cluster,
     })),
   }),
+  z.object({
+    type: z.literal("makeTrue"),
+    title: z.string(),
+    instructions: z.string(),
+    signs: z.array(z.enum(["+", "−", "×", "÷"])),
+    items: z.array(z.object({
+      left: z.number(), right: z.number(), result: z.number(), answer: z.enum(["+", "−", "×", "÷"]),
+    })),
+  }),
+  z.object({
+    type: z.literal("mysteryNumber"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({
+      clues: z.array(z.discriminatedUnion("kind", [
+        z.object({ kind: z.literal("between"), lo: z.number(), hi: z.number() }),
+        z.object({ kind: z.literal("parity"), even: z.boolean() }),
+        z.object({ kind: z.literal("gt"), n: z.number() }),
+        z.object({ kind: z.literal("lt"), n: z.number() }),
+        z.object({ kind: z.literal("digitSum"), s: z.number() }),
+        z.object({ kind: z.literal("tensDigit"), d: z.number() }),
+        z.object({ kind: z.literal("onesDigit"), d: z.number() }),
+        z.object({ kind: z.literal("multipleOf"), m: z.number() }),
+      ])),
+      answer: z.number(),
+    })),
+  }),
+  z.object({
+    type: z.literal("shapeSums"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({
+      shapes: z.array(z.string()),
+      values: z.array(z.number()),
+      equations: z.array(z.object({ terms: z.array(z.number()), sum: z.number() })),
+    })),
+  }),
+  z.object({
+    type: z.literal("magicSquare"),
+    title: z.string(),
+    instructions: z.string(),
+    items: z.array(z.object({
+      grid: z.array(z.array(z.number().nullable())),
+      answers: z.array(z.number()),
+      magic: z.number(),
+    })),
+  }),
 ]);
 
 const packets = defineCollection({

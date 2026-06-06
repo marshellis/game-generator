@@ -1,0 +1,286 @@
+{
+  "id": "2026-06-06-number-quest-g5-1",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            2,
+            3,
+            10,
+            5
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            8,
+            17,
+            5,
+            40,
+            30
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            12,
+            8,
+            6,
+            2,
+            1
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "digitSum",
+              "s": 11
+            },
+            {
+              "kind": "gt",
+              "n": 57
+            },
+            {
+              "kind": "onesDigit",
+              "d": 4
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "tensDigit",
+              "d": 7
+            }
+          ],
+          "answer": 74
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "digitSum",
+              "s": 11
+            },
+            {
+              "kind": "lt",
+              "n": 201
+            },
+            {
+              "kind": "gt",
+              "n": 179
+            },
+            {
+              "kind": "onesDigit",
+              "d": 1
+            }
+          ],
+          "answer": 191
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 200
+            },
+            {
+              "kind": "multipleOf",
+              "m": 3
+            },
+            {
+              "kind": "tensDigit",
+              "d": 9
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "digitSum",
+              "s": 15
+            }
+          ],
+          "answer": 96
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              7000,
+              900,
+              80,
+              1
+            ]
+          },
+          "options": [
+            7981,
+            8886,
+            6482
+          ],
+          "answer": 7981
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              3000,
+              200,
+              40,
+              3
+            ]
+          },
+          "options": [
+            3243,
+            3420,
+            3554
+          ],
+          "answer": 3243
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              700,
+              10,
+              5
+            ]
+          },
+          "options": [
+            2715,
+            3168,
+            3238
+          ],
+          "answer": 2715
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              6000,
+              10,
+              1
+            ]
+          },
+          "options": [
+            5560,
+            6011,
+            5096
+          ],
+          "answer": 6011
+        }
+      ]
+    },
+    {
+      "type": "breakApart",
+      "title": "Break Apart",
+      "instructions": "Write the missing part of each number.",
+      "items": [
+        {
+          "number": 59112,
+          "parts": [
+            50000,
+            9000,
+            100,
+            10,
+            2
+          ],
+          "blankIndex": 4,
+          "answer": 2
+        },
+        {
+          "number": 83246,
+          "parts": [
+            80000,
+            3000,
+            200,
+            40,
+            6
+          ],
+          "blankIndex": 2,
+          "answer": 200
+        },
+        {
+          "number": 24262,
+          "parts": [
+            20000,
+            4000,
+            200,
+            60,
+            2
+          ],
+          "blankIndex": 0,
+          "answer": 20000
+        },
+        {
+          "number": 70071,
+          "parts": [
+            70000,
+            70,
+            1
+          ],
+          "blankIndex": 2,
+          "answer": 1
+        },
+        {
+          "number": 16834,
+          "parts": [
+            10000,
+            6000,
+            800,
+            30,
+            4
+          ],
+          "blankIndex": 1,
+          "answer": 6000
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 44,
+    "stars": 4
+  },
+  "seed": 1,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}
