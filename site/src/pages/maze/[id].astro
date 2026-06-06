@@ -30,12 +30,12 @@ const m = entry!.data;
 
   <div class="mt-6">
     <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end}
-          theme={m.theme} solution={m.solution} interactive={true} />
+          decoyStarts={m.decoyStarts} theme={m.theme} solution={m.solution} interactive={true} />
   </div>
 
   <p class="mt-4 text-xs text-slate-400">Tip: drag from {m.theme.startIcon} to {m.theme.endIcon}. Drag back to undo.</p>
 
-  <script type="application/json" id="maze-data" set:html={JSON.stringify({ id: m.id, cols: m.cols, rows: m.rows, open: m.open, start: m.start, end: m.end, solution: m.solution })} />
+  <script type="application/json" id="maze-data" set:html={JSON.stringify({ id: m.id, cols: m.cols, rows: m.rows, open: m.open, start: m.start, end: m.end, decoyStarts: m.decoyStarts, solution: m.solution })} />
   <script>
     import { initMaze } from "../../games/maze/player.ts";
     const el = document.getElementById("maze-data");

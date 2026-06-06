@@ -15,7 +15,7 @@ describe("maze types", () => {
     const m: Maze = {
       id: "x", title: "t", themeBlurb: "b", gameType: "maze", gradeLabel: "grade 1",
       difficulty: "g1", cols: 2, rows: 2, open: [[E, W], [E, W]],
-      start: c, end: { r: 1, c: 1 }, theme: { startIcon: "🐭", endIcon: "🧀" },
+      start: c, end: { r: 1, c: 1 }, decoyStarts: [], theme: { startIcon: "🐭", endIcon: "🧀" },
       solution: [c], difficultyRating: 1, seed: 1, createdAt: "2026-06-05T00:00:00.000Z",
     };
     expect(m.cols).toBe(2);

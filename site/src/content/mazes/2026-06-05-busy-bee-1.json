@@ -65,6 +65,7 @@
     "r": 2,
     "c": 3
   },
+  "decoyStarts": [],
   "theme": {
     "startIcon": "🐝",
     "endIcon": "🌸"

@@ -1,9 +1,10 @@
 // site/src/games/maze/player.ts
-import { type Cell, isValidStep } from "./grid";
+import { type Cell, isValidStep, isEntryPoint } from "./grid";
 
 interface MazeData {
   id: string; cols: number; rows: number; open: number[][];
   start: Cell; end: Cell; solution: Cell[];
+  decoyStarts?: Cell[];
 }
 const storageKey = (id: string) => `maze:${id}`;
 
@@ -20,6 +21,7 @@ export function initMaze(data: MazeData): void {
   const CS = 28; // must match Maze.astro
   const center = (c: Cell) => `${c.c * CS + CS / 2},${c.r * CS + CS / 2}`;
   const same = (a: Cell, b: Cell) => a.r === b.r && a.c === b.c;
+  const entries: Cell[] = [data.start, ...(data.decoyStarts ?? [])];
 
   let trail: Cell[] = [data.start];
   let revealed = false;
@@ -29,7 +31,7 @@ export function initMaze(data: MazeData): void {
   const load = () => {
     try {
       const raw = localStorage.getItem(storageKey(data.id));
-      if (raw) { const t = JSON.parse(raw) as Cell[]; if (t.length && same(t[0]!, data.start)) trail = t; }
+      if (raw) { const t = JSON.parse(raw) as Cell[]; if (t.length && isEntryPoint(entries, t[0]!)) trail = t; }
     } catch { /* ignore */ }
   };
 
@@ -59,8 +61,14 @@ export function initMaze(data: MazeData): void {
   svg.addEventListener("pointerdown", (ev) => {
     if (revealed) return;
     const cell = cellAt(ev); if (!cell) return;
-    // start dragging only from the current head
-    if (same(cell, trail[trail.length - 1]!)) { dragging = true; svg.setPointerCapture(ev.pointerId); }
+    // continue dragging from the current head, or (re)start a trail at any entrance icon
+    if (same(cell, trail[trail.length - 1]!)) {
+      dragging = true; svg.setPointerCapture(ev.pointerId);
+    } else if (isEntryPoint(entries, cell)) {
+      trail = [cell]; render(); save();
+      dragging = true; svg.setPointerCapture(ev.pointerId);
+      if (result) result.textContent = "";
+    }
   });
   svg.addEventListener("pointermove", (ev) => { if (dragging) { const c = cellAt(ev); if (c) extendTo(c); } });
   svg.addEventListener("pointerup", () => { dragging = false; });

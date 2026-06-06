@@ -21,6 +21,6 @@ const m = (await getEntry("mazes", id!))!.data;
     </p>
     <h1 class="text-2xl font-extrabold tracking-tight">{m.title}</h1>
     <p class="mt-1 mb-4 text-slate-600">{m.themeBlurb}</p>
-    <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end} theme={m.theme} />
+    <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end} decoyStarts={m.decoyStarts} theme={m.theme} />
   </body>
 </html>

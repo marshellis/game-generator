@@ -1,10 +1,19 @@
 import { shuffle, type Rng } from "../../core/rng";
 import { DIRS } from "./types";
 
-/** Carve a perfect maze (spanning tree) with an iterative recursive-backtracker. */
-export function carveMaze(cols: number, rows: number, rng: Rng): number[][] {
+/**
+ * Carve a perfect maze (spanning tree) with an iterative recursive-backtracker.
+ * `blocked` cells (keyed "r,c") are treated as pre-visited: the carve never enters
+ * them and never opens a wall into them, so they stay sealed (open=0). With an empty
+ * set this is byte-identical to the unblocked carve.
+ */
+export function carveMaze(cols: number, rows: number, rng: Rng, blocked: Set<string> = new Set()): number[][] {
   const open: number[][] = Array.from({ length: rows }, () => new Array(cols).fill(0));
   const visited: boolean[][] = Array.from({ length: rows }, () => new Array(cols).fill(false));
+  for (const k of blocked) {
+    const [r, c] = k.split(",").map(Number) as [number, number];
+    if (r >= 0 && r < rows && c >= 0 && c < cols) visited[r]![c] = true;
+  }
   const stack: { r: number; c: number }[] = [{ r: 0, c: 0 }];
   visited[0]![0] = true;
 

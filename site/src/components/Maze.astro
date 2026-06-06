@@ -3,12 +3,13 @@ import { N, E, S, W, type Cell } from "../games/maze/grid";
 interface Props {
   cols: number; rows: number; open: number[][];
   start: Cell; end: Cell;
+  decoyStarts?: Cell[];
   theme: { startIcon: string; endIcon: string };
   interactive?: boolean;
   showSolution?: boolean;
   solution?: Cell[];
 }
-const { cols, rows, open, start, end, theme, interactive = false, showSolution = false, solution = [] } = Astro.props;
+const { cols, rows, open, start, end, decoyStarts = [], theme, interactive = false, showSolution = false, solution = [] } = Astro.props;
 const CS = 28;            // cell size in SVG units
 const w = cols * CS, h = rows * CS;
 const mid = (i: number) => i * CS + CS / 2;
@@ -31,6 +32,9 @@ for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
               stroke-linecap="round" stroke-linejoin="round" style={showSolution ? "" : "display:none"} />
     <polyline id="trail" points="" fill="none" stroke="#4f46e5" stroke-width={CS * 0.34}
               stroke-linecap="round" stroke-linejoin="round" />
+    {decoyStarts.map((c) => (
+      <text x={mid(c.c)} y={mid(c.r)} font-size={CS * 0.7} text-anchor="middle" dominant-baseline="central">{theme.startIcon}</text>
+    ))}
     <text x={mid(start.c)} y={mid(start.r)} font-size={CS * 0.7} text-anchor="middle" dominant-baseline="central">{theme.startIcon}</text>
     <text x={mid(end.c)} y={mid(end.r)} font-size={CS * 0.7} text-anchor="middle" dominant-baseline="central">{theme.endIcon}</text>
   </svg>

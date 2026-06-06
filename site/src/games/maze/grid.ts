@@ -8,6 +8,11 @@ export function isOpen(open: number[][], cell: Cell, dir: number): boolean {
   return !!(open[cell.r]?.[cell.c]! & dir);
 }
 
+/** True iff `c` is one of the entry points (real start or a decoy start). */
+export function isEntryPoint(entries: Cell[], c: Cell): boolean {
+  return entries.some((e) => e.r === c.r && e.c === c.c);
+}
+
 /** True iff b is orthogonally adjacent to a and the wall between them is open. */
 export function isValidStep(open: number[][], a: Cell, b: Cell): boolean {
   const dr = b.r - a.r, dc = b.c - a.c;
