@@ -1,0 +1,149 @@
+{
+  "id": "2026-06-06-mind-stretch-g6-1676754945",
+  "title": "Mind Stretch",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            60,
+            9,
+            8,
+            25,
+            72
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            9,
+            26,
+            55,
+            29,
+            34
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            25,
+            7,
+            5,
+            11
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 8040,
+          "nearest": 1000,
+          "answer": 8000
+        },
+        {
+          "number": 88331,
+          "nearest": 1000,
+          "answer": 88000
+        },
+        {
+          "number": 81198,
+          "nearest": 1000,
+          "answer": 81000
+        },
+        {
+          "number": 48388,
+          "nearest": 1000,
+          "answer": 48000
+        },
+        {
+          "number": 48389,
+          "nearest": 1000,
+          "answer": 48000
+        },
+        {
+          "number": 32419,
+          "nearest": 1000,
+          "answer": 32000
+        }
+      ]
+    },
+    {
+      "type": "placeValue",
+      "title": "Place Value",
+      "instructions": "Write the value of the underlined place for each number.",
+      "items": [
+        {
+          "number": 58553,
+          "place": "ones",
+          "answer": 3
+        },
+        {
+          "number": 72005,
+          "place": "thousands",
+          "answer": 2000
+        },
+        {
+          "number": 10768,
+          "place": "ones",
+          "answer": 8
+        },
+        {
+          "number": 24234,
+          "place": "tens",
+          "answer": 30
+        },
+        {
+          "number": 60734,
+          "place": "ones",
+          "answer": 4
+        }
+      ]
+    },
+    {
+      "type": "wordProblem",
+      "title": "Story Problems",
+      "instructions": "Read each problem and write the answer.",
+      "items": [
+        {
+          "text": "Omar shares 40 coins equally among 5 friends. How many does each friend get?",
+          "answer": 8,
+          "unit": "coins"
+        },
+        {
+          "text": "Mara has 122 stickers. Ruby gives Mara 59 more. How many does Mara have now?",
+          "answer": 181,
+          "unit": "stickers"
+        },
+        {
+          "text": "Theo has 91 books. Lena gives Theo 64 more. How many does Theo have now?",
+          "answer": 155,
+          "unit": "books"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 4,
+    "score": 41,
+    "stars": 4
+  },
+  "seed": 1676754945,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

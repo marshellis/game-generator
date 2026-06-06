@@ -1,0 +1,301 @@
+{
+  "id": "2026-06-06-monster-school-mix-up-2146831482",
+  "title": "Monster School Mix-Up",
+  "themeBlurb": "Ms. Gorgon's class lined up for picture day, and now nobody remembers who's who. Sort out the little monsters before the slime dries.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 5",
+  "difficulty": "g5",
+  "categories": [
+    {
+      "name": "Monster",
+      "items": [
+        "Glob",
+        "Fang",
+        "Murk",
+        "Snot"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Eyeballs",
+        "Swamp Juice",
+        "Bug Pizza",
+        "Toe Jam"
+      ]
+    },
+    {
+      "name": "Power",
+      "items": [
+        "Invisible",
+        "Stinky Breath",
+        "Extra Arms",
+        "Fire Burps"
+      ]
+    },
+    {
+      "name": "Slime",
+      "items": [
+        "Green",
+        "Purple",
+        "Orange",
+        "Blue"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      1,
+      2,
+      0,
+      3
+    ],
+    [
+      0,
+      2,
+      1,
+      3
+    ],
+    [
+      1,
+      3,
+      0,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The monster whose power is Fire Burps has either Toe Jam or Bug Pizza for their snack."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 3
+          },
+          {
+            "cat": 3,
+            "item": 1
+          }
+        ]
+      },
+      "text": "Fang's slime is either Blue or Purple."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The monster whose slime is Blue has either Bug Pizza or Eyeballs for their snack."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 3
+          },
+          {
+            "cat": 0,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The monster whose power is Fire Burps is either Snot or Glob."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The monster whose snack is Bug Pizza is either Fang or Glob."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The monster whose snack is Bug Pizza is either Fang or Snot."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 0
+          },
+          {
+            "cat": 2,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The monster whose slime is Purple has either Invisible or Extra Arms for their power."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 0
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The monster whose snack is Swamp Juice is either Glob or Fang."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The monster whose slime is Green is either Murk or Fang."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 2
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Fang's power is either Extra Arms or Fire Burps."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "The monster whose power is Extra Arms has Blue for their slime."
+    }
+  ],
+  "seed": 2146831482,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

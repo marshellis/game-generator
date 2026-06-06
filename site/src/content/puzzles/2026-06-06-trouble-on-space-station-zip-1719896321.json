@@ -1,0 +1,241 @@
+{
+  "id": "2026-06-06-trouble-on-space-station-zip-1719896321",
+  "title": "Trouble on Space Station Zip",
+  "themeBlurb": "Five astronauts, five jobs, and somebody reprogrammed the snack dispenser. Sort it out.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 4",
+  "difficulty": "g4",
+  "categories": [
+    {
+      "name": "Astronaut",
+      "items": [
+        "Nova",
+        "Pip",
+        "Quill",
+        "Rho"
+      ]
+    },
+    {
+      "name": "Job",
+      "items": [
+        "Pilot",
+        "Cook",
+        "Medic",
+        "Engineer"
+      ]
+    },
+    {
+      "name": "Module",
+      "items": [
+        "Red Bay",
+        "Blue Bay",
+        "Lab",
+        "Dome"
+      ]
+    },
+    {
+      "name": "Pet Robot",
+      "items": [
+        "Bolt",
+        "Chip",
+        "Dot",
+        "Gizmo"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      0,
+      1,
+      3,
+      2
+    ],
+    [
+      1,
+      0,
+      2,
+      3
+    ],
+    [
+      3,
+      1,
+      0,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Nova's job is Pilot."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Quill's module is not Red Bay."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 2,
+          "item": 3
+        }
+      },
+      "text": "Rho's module is Dome."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "Quill's pet robot is Bolt."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "Rho's pet robot is not Chip."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "The astronaut whose job is Pilot does not have Lab for their module."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The astronaut whose job is Cook has Red Bay for their module."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "The astronaut whose job is Pilot has Gizmo for their pet robot."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The astronaut whose job is Medic does not have Bolt for their pet robot."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The astronaut whose module is Lab has Bolt for their pet robot."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The astronaut whose job is Pilot has Blue Bay for their module."
+    }
+  ],
+  "seed": 1719896321,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

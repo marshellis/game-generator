@@ -1,0 +1,160 @@
+{
+  "id": "2026-06-06-trouble-on-space-station-zip-459879190",
+  "title": "Trouble on Space Station Zip",
+  "themeBlurb": "Five astronauts, five jobs, and somebody reprogrammed the snack dispenser. Sort it out.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "categories": [
+    {
+      "name": "Astronaut",
+      "items": [
+        "Nova",
+        "Pip",
+        "Quill"
+      ]
+    },
+    {
+      "name": "Job",
+      "items": [
+        "Pilot",
+        "Cook",
+        "Medic"
+      ]
+    },
+    {
+      "name": "Module",
+      "items": [
+        "Red Bay",
+        "Blue Bay",
+        "Lab"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      0,
+      2,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Nova's job is Pilot."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Nova's module is not Lab."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Quill's module is Blue Bay."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The astronaut whose job is Cook does not have Blue Bay for their module."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Pip's module is Lab."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Nova's module is Red Bay."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The astronaut whose job is Medic has Blue Bay for their module."
+    }
+  ],
+  "seed": 459879190,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}
