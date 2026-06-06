@@ -278,6 +278,6 @@ describe("difficulty calibration (grade-appropriateness framework §3)", () => {
   });
 
   it("each grade's median score lands inside its own band", () => {
-    for (const s of STATS) expect(inBand(s.g, { maxTier: 0, steps: 0, score: s.median })).toBe(true);
+    for (const s of STATS) expect(inBand(s.g, { maxTier: 0, steps: 0, score: s.median, stars: 0 })).toBe(true);
   });
 });
