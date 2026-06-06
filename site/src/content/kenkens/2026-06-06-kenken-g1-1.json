@@ -1,0 +1,96 @@
+{
+  "id": "2026-06-06-kenken-g1-1",
+  "title": "KenKen",
+  "gameType": "kenken",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "size": 3,
+  "cages": [
+    {
+      "cells": [
+        {
+          "r": 2,
+          "c": 1
+        },
+        {
+          "r": 2,
+          "c": 0
+        }
+      ],
+      "op": "+",
+      "target": 5
+    },
+    {
+      "cells": [
+        {
+          "r": 1,
+          "c": 1
+        },
+        {
+          "r": 0,
+          "c": 1
+        }
+      ],
+      "op": "+",
+      "target": 3
+    },
+    {
+      "cells": [
+        {
+          "r": 1,
+          "c": 0
+        },
+        {
+          "r": 0,
+          "c": 0
+        }
+      ],
+      "op": "+",
+      "target": 4
+    },
+    {
+      "cells": [
+        {
+          "r": 1,
+          "c": 2
+        },
+        {
+          "r": 2,
+          "c": 2
+        }
+      ],
+      "op": "+",
+      "target": 4
+    },
+    {
+      "cells": [
+        {
+          "r": 0,
+          "c": 2
+        }
+      ],
+      "op": "=",
+      "target": 2
+    }
+  ],
+  "solution": [
+    [
+      3,
+      1,
+      2
+    ],
+    [
+      1,
+      2,
+      3
+    ],
+    [
+      2,
+      3,
+      1
+    ]
+  ],
+  "difficultyRating": 2,
+  "seed": 1,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

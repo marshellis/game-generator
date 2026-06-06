@@ -293,4 +293,26 @@ const wordsearches = defineCollection({
   }),
 });
 
-export const collections = { puzzles, packets, mazes, sudokus, wordsearches };
+const kenkenCell = z.object({ r: z.number(), c: z.number() });
+const kenkens = defineCollection({
+  type: "data",
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    gameType: z.literal("kenken"),
+    gradeLabel: z.string(),
+    difficulty: z.string(),
+    size: z.number(),
+    cages: z.array(z.object({
+      cells: z.array(kenkenCell),
+      op: z.enum(["+", "-", "*", "/", "="]),
+      target: z.number(),
+    })),
+    solution: z.array(z.array(z.number())),
+    difficultyRating: z.number(),
+    seed: z.number(),
+    createdAt: z.string(),
+  }),
+});
+
+export const collections = { puzzles, packets, mazes, sudokus, wordsearches, kenkens };
