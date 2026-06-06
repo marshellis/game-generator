@@ -1,0 +1,34 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import GameHeader from "../../components/GameHeader.astro";
+import KenKen from "../../components/KenKen.astro";
+export async function getStaticPaths() {
+  const items = await getCollection("kenkens");
+  return items.map((k) => ({ params: { id: k.data.id } }));
+}
+const { id } = Astro.params;
+const k = (await getEntry("kenkens", id!))!.data;
+---
+<Base title={`KenKen ${k.size}×${k.size} — Marshellis Games`}>
+  <GameHeader
+    crumbs={[
+      { label: "All games", href: "/" },
+      { label: "KenKen", href: "/kenken" },
+      { label: k.gradeLabel, href: `/kenken/grade/${k.difficulty}` },
+    ]}
+    title={`KenKen ${k.size}×${k.size}`}
+    blurb={`Fill 1–${k.size} so each row and column has no repeats, and every cage hits its target.`}
+    printHref={`/kenken/${k.id}/print`}
+    answerHref={`/kenken/${k.id}/answer`}
+    showCheck={true} showClear={true} revealNoun="solution"
+  />
+  <div class="mt-6">
+    <KenKen size={k.size} cages={k.cages} solution={k.solution} interactive={true} />
+  </div>
+  <script type="application/json" id="kenken-data" set:html={JSON.stringify({ id: k.id, size: k.size, cages: k.cages, solution: k.solution })} />
+  <script>
+    import { initKenKen } from "../../games/kenken/player.ts";
+    initKenKen(JSON.parse(document.getElementById("kenken-data")!.textContent!));
+  </script>
+</Base>

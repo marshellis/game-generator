@@ -4,7 +4,7 @@ import { REGISTRY, getModule } from "../src/registry";
 describe("registry", () => {
   it("contains the registered games with unique ids", () => {
     const ids = REGISTRY.map((m) => m.id).sort();
-    expect(ids).toEqual(["logic-grid", "math-packet", "maze", "sudoku", "word-search"]);
+    expect(ids).toEqual(["kenken", "logic-grid", "math-packet", "maze", "sudoku", "word-search"]);
   });
   it("getModule resolves and throws on unknown", () => {
     expect(getModule("maze").id).toBe("maze");

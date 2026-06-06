@@ -9,7 +9,10 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: vercel-production
+  # Scope per ref so a PR/merge-queue test run is NOT cancelled by an unrelated
+  # main deploy (they previously shared one group, cancelling each other).
+  # main pushes still serialize against each other (one prod deploy at a time).
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
