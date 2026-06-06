@@ -23,9 +23,3 @@ export const GRADE_BANDS: Record<string, GradeBand> = {
   g7: { grade: "g7", workingMemory: 5, maxReasoningTier: 5, targetScore: [4, 5], readingLevel: "grade 7" },
   g8: { grade: "g8", workingMemory: 5, maxReasoningTier: 5, targetScore: [4, 5], readingLevel: "grade 8" },
 };
-
-export function resolveBand(grade: string): GradeBand {
-  const b = GRADE_BANDS[grade];
-  if (!b) throw new Error(`unknown grade: ${grade}`);
-  return b;
-}

@@ -1,11 +1,9 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { generatePuzzle } from "./games/logic-grid/generate";
 import type { Difficulty } from "./games/logic-grid/difficulty";
-import { generatePacket } from "./games/math-packet/generate";
-import { generateMaze } from "./games/maze/generate";
 import { generateCatalog } from "./catalog";
+import { getModule } from "./registry";
 
 export interface CliArgs {
   game: "logic-grid" | "math-packet" | "maze";
@@ -78,34 +76,15 @@ function main(): void {
     return;
   }
 
-  if (args.game === "maze") {
-    const maze = generateMaze(args);
-    const abs = resolve(generatorRoot, mazeOutputPathFor(maze.id));
-    mkdirSync(dirname(abs), { recursive: true });
-    writeFileSync(abs, JSON.stringify(maze, null, 2) + "\n");
-    console.log(`Wrote ${abs}`);
-    console.log(`Title: ${maze.title} — ${maze.cols}x${maze.rows} — difficulty ${maze.difficulty}`);
-    return;
-  }
-
-  if (args.game === "math-packet") {
-    const packet = generatePacket(args);
-    const abs = resolve(generatorRoot, packetOutputPathFor(packet.id));
-    mkdirSync(dirname(abs), { recursive: true });
-    writeFileSync(abs, JSON.stringify(packet, null, 2) + "\n");
-    console.log(`Wrote ${abs}`);
-    console.log(`Title: ${packet.title} — ${packet.activities.length} activities — difficulty ${packet.difficulty}`);
-    return;
-  }
-
-  const puzzle = generatePuzzle(args);
-  const rel = outputPathFor(puzzle.id); // ../site/src/content/puzzles/<id>.json
-  const abs = resolve(generatorRoot, rel); // <repo>/site/src/content/puzzles/<id>.json
+  // Single-game generation, routed through the registry so a new game needs no CLI edit
+  // (just a module.ts + registry entry). Game-specific override flags are not applied here.
+  const mod = getModule(args.game);
+  const item = mod.generate({ difficulty: args.difficulty, seed: args.seed, date: args.date });
+  const abs = resolve(generatorRoot, mod.contentDir, `${item.id}.json`);
   mkdirSync(dirname(abs), { recursive: true });
-  writeFileSync(abs, JSON.stringify(puzzle, null, 2) + "\n");
+  writeFileSync(abs, JSON.stringify(item.data, null, 2) + "\n");
   console.log(`Wrote ${abs}`);
-  console.log(`Title: ${puzzle.title} — ${puzzle.clues.length} clues — difficulty ${puzzle.difficulty}`);
-  console.log("Clues use plain template phrasing. Rewrite the text fields in-session for theme-flavored, funny wording (keep `structured` unchanged).");
+  console.log(`Game: ${mod.title} — id ${item.id} — difficulty ${args.difficulty}`);
 }
 
 // Run only when executed directly (not when imported by tests).
