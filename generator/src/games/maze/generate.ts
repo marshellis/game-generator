@@ -3,6 +3,7 @@ import { resolveDifficulty, type Difficulty } from "./difficulty";
 import { loadThemes, pickTheme } from "./themes";
 import { carveMaze } from "./carve";
 import { farthestCell, solutionPath, braid } from "./solve";
+import { planDecoys, carveDecoyPockets } from "./decoys";
 import { slugify, makeMazeId } from "./serialize";
 import { type Maze } from "./types";
 
@@ -14,12 +15,18 @@ export interface GenerateMazeOptions {
   gradeLabel?: string;
 }
 
-function ratingFor(cols: number, rows: number, solLen: number, open: number[][]): number {
+function ratingFor(
+  cols: number,
+  rows: number,
+  solLen: number,
+  open: number[][],
+  decoyLoad: number,
+): number {
   let branches = 0;
   for (const row of open) for (const m of row) {
     if ([1, 2, 4, 8].filter((b) => m & b).length >= 3) branches++;
   }
-  const score = cols * rows + solLen + branches;
+  const score = cols * rows + solLen + branches + decoyLoad;
   return Math.min(5, Math.max(1, Math.round(score / 120)));
 }
 
@@ -28,11 +35,20 @@ export function generateMaze(opts: GenerateMazeOptions): Maze {
   const rng = makeRng(opts.seed);
   const theme = pickTheme(loadThemes(), rng);
 
-  const open = carveMaze(diff.cols, diff.rows, rng);
+  // Plan decoys first so the main maze is carved around the reserved cells.
+  // planDecoys/carveDecoyPockets consume no RNG, so count-0 grades stay byte-identical.
+  const { entrances, blocked } = planDecoys(diff.cols, diff.rows, diff.decoys, diff.decoyDepth);
+
+  const open = carveMaze(diff.cols, diff.rows, rng, blocked);
   const start = { r: 0, c: 0 };
   const end = farthestCell(open, diff.rows, diff.cols, start);
   if (diff.braid > 0) braid(open, diff.rows, diff.cols, diff.braid, rng);
   const solution = solutionPath(open, diff.rows, diff.cols, start, end);
+
+  // Carve the sealed dead-end pockets last (main maze + solution already fixed).
+  carveDecoyPockets(open, entrances, diff.decoyDepth, diff.rows);
+
+  const decoyLoad = diff.decoys * (diff.decoyDepth + 1);
 
   return {
     id: makeMazeId(opts.date, slugify(theme.title), opts.seed),
@@ -46,9 +62,10 @@ export function generateMaze(opts: GenerateMazeOptions): Maze {
     open,
     start,
     end,
+    decoyStarts: entrances,
     theme: { startIcon: theme.startIcon, endIcon: theme.endIcon },
     solution,
-    difficultyRating: ratingFor(diff.cols, diff.rows, solution.length, open),
+    difficultyRating: ratingFor(diff.cols, diff.rows, solution.length, open, decoyLoad),
     seed: opts.seed,
     createdAt: `${opts.date}T00:00:00.000Z`,
   };

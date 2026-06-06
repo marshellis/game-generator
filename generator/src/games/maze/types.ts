@@ -23,6 +23,8 @@ export interface Maze {
   open: number[][];
   start: Cell;
   end: Cell;
+  /** Extra start icons clustered by the real start; sealed dead-ends. [] when none. */
+  decoyStarts: Cell[];
   theme: { startIcon: string; endIcon: string };
   solution: Cell[];        // inclusive start→end path
   difficultyRating: number; // 1–5
