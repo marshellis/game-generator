@@ -35,15 +35,18 @@ export function generateSudoku(opts: GenerateSudokuOptions): Sudoku {
   const solution = buildFullGrid(size, d.boxW, d.boxH, rng);
 
   const givens = solution.map((r) => r.slice());
+  let remaining = size * size; // clues left as we dig; stop at the grade's floor
   const cells: Cell[] = [];
   for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) cells.push({ r, c });
   for (const { r, c } of shuffle(cells, rng)) {
+    if (remaining <= d.minGivens) break; // keep enough clues that obvious moves remain
     const saved = givens[r]![c]!;
     if (saved === 0) continue;
     givens[r]![c] = 0;
     const unique = countSolutions(givens, size, d.boxW, d.boxH, 2) === 1;
     const logical = solveLogical(givens, size, d.boxW, d.boxH, d.maxTier).solved;
     if (!unique || !logical) givens[r]![c] = saved; // restore: removal made it ambiguous or too hard
+    else remaining--;
   }
 
   const res = solveLogical(givens, size, d.boxW, d.boxH, d.maxTier);
