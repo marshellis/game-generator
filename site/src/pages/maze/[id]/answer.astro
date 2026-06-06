@@ -20,7 +20,7 @@ const m = (await getEntry("mazes", id!))!.data;
       · <a href={`/maze/${m.id}/print`} class="text-brand-600 no-underline hover:underline">Blank maze →</a>
     </p>
     <h1 class="text-2xl font-extrabold tracking-tight">Solution — {m.title}</h1>
-    <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end} theme={m.theme}
+    <Maze cols={m.cols} rows={m.rows} open={m.open} start={m.start} end={m.end} decoyStarts={m.decoyStarts} theme={m.theme}
           showSolution={true} solution={m.solution} />
   </body>
 </html>
