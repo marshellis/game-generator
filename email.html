@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background-color:#f6f7f9;-webkit-font-smoothing:antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f6f7f9;">
+    <tr><td align="center" style="padding:32px 16px;">
+      <table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;width:100%;background:#ffffff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1f2937;">
+
+        <!-- Brand bar -->
+        <tr><td style="padding:20px 32px;background:#0f172a;color:#fff;">
+          <table role="presentation" width="100%"><tr>
+            <td style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;">Marshellis Games · release notes</td>
+            <td align="right" style="font-size:13px;color:#94a3b8;white-space:nowrap;">June 6, 2026</td>
+          </tr></table>
+        </td></tr>
+
+        <!-- Hero -->
+        <tr><td style="padding:36px 32px 8px;">
+          <h1 style="margin:0 0 12px;font-size:26px;line-height:1.25;color:#0f172a;font-weight:700;">A new game tonight: Word Search</h1>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#475569;">Themed letter hunts for grades 1–8 — animals, space, ocean, and more. Play on a screen or print a sheet with a matching answer key.</p>
+        </td></tr>
+
+        <!-- Highlight 1: play -->
+        <tr><td style="padding:28px 32px 0;">
+          <h2 style="margin:0 0 8px;font-size:18px;font-weight:600;">
+            <a href="https://games.marshellis.com/word-search" style="color:#0f172a;text-decoration:none;">Tap to find, right in the browser</a>
+          </h2>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155;">Tap a word's first and last letter and it lights up in the grid and crosses off the list. Grids scale by grade — an 8×8 with across/down words for the little ones, up to a 12×12 with diagonals and backwards words for older kids. Each grade picks a theme (this one's Nature).</p>
+          <a href="https://games.marshellis.com/word-search" style="text-decoration:none;display:block;">
+            <img src="https://raw.githubusercontent.com/marshellis/game-generator/pm-assets/2026-06-06-word-search/screenshots/word-search-play.png"
+                 alt="Word Search play screen with GRASS and RAIN found and highlighted"
+                 width="576" style="display:block;width:100%;max-width:576px;height:auto;border:1px solid #e2e8f0;border-radius:8px;margin:0 0 8px;">
+          </a>
+          <p style="margin:0 0 18px;font-size:13px;color:#64748b;font-style:italic;">Two words found — GRASS (down) and RAIN (diagonal) — shaded in the grid and struck off the list.</p>
+          <p style="margin:0 0 4px;font-size:14px;">
+            <a href="https://games.marshellis.com/word-search" style="color:#4338ca;text-decoration:none;font-weight:500;">Play a Word Search →</a>
+          </p>
+        </td></tr>
+
+        <tr><td style="padding:28px 32px 0;"><div style="height:1px;background:#e2e8f0;"></div></td></tr>
+
+        <!-- Highlight 2: print + answer key -->
+        <tr><td style="padding:28px 32px 0;">
+          <h2 style="margin:0 0 8px;font-size:18px;font-weight:600;">
+            <a href="https://games.marshellis.com/word-search/2026-06-06-word-search-g3-3/answer" style="color:#0f172a;text-decoration:none;">Print it — answer key included</a>
+          </h2>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155;">Every puzzle has a clean print page and a one-click answer key that shades exactly where each word hides. Good for the car, the kitchen table, or a screen-free afternoon.</p>
+          <a href="https://games.marshellis.com/word-search/2026-06-06-word-search-g3-3/answer" style="text-decoration:none;display:block;">
+            <img src="https://raw.githubusercontent.com/marshellis/game-generator/pm-assets/2026-06-06-word-search/screenshots/word-search-answer.png"
+                 alt="Word Search printable answer key with every word path shaded"
+                 width="576" style="display:block;width:100%;max-width:576px;height:auto;border:1px solid #e2e8f0;border-radius:8px;margin:0 0 8px;">
+          </a>
+          <p style="margin:0 0 18px;font-size:13px;color:#64748b;font-style:italic;">The answer key — every word's path highlighted.</p>
+          <p style="margin:0 0 4px;font-size:14px;">
+            <a href="https://games.marshellis.com/word-search/2026-06-06-word-search-g3-3/answer" style="color:#4338ca;text-decoration:none;font-weight:500;">See an answer key →</a>
+          </p>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:36px 32px 32px;">
+          <div style="height:1px;background:#e2e8f0;margin-bottom:20px;"></div>
+          <p style="margin:0 0 8px;font-size:13px;color:#64748b;">
+            <strong style="color:#475569;">Sprint internals.</strong> One autonomous cycle, two PRs (<a href="https://github.com/marshellis/game-generator/pull/10" style="color:#4338ca;text-decoration:none;">#10</a> the game, <a href="https://github.com/marshellis/game-generator/pull/14" style="color:#4338ca;text-decoration:none;">#14</a> a highlight fix the prod dogfood caught), gates green, deploy verified live. Built on the shared catalog framework — Word Search is game #5.
+          </p>
+          <p style="margin:0 0 8px;font-size:13px;color:#64748b;">
+            <strong style="color:#475569;">Up next, optionally.</strong> More puzzles per grade (one each ships today), and more themes. Correctness is locked by tests: every hidden word is placed by coordinate, so the answer key is right by construction.
+          </p>
+          <p style="margin:0 0 14px;font-size:13px;color:#475569;">— The autonomous PM cycle, on behalf of Marshellis Games</p>
+          <p style="margin:0;font-size:12px;color:#94a3b8;">Sent automatically by the autonomous PM cycle. Reply to opt out.</p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
