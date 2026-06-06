@@ -1,0 +1,322 @@
+{
+  "id": "2026-06-02-spellhaven-first-years-1158525554",
+  "title": "Spellhaven First-Years",
+  "themeBlurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 5",
+  "difficulty": "g5",
+  "categories": [
+    {
+      "name": "Wizard",
+      "items": [
+        "Pip",
+        "Hazel",
+        "Dorian",
+        "Maple"
+      ]
+    },
+    {
+      "name": "Familiar",
+      "items": [
+        "Cat",
+        "Owl",
+        "Toad",
+        "Raven"
+      ]
+    },
+    {
+      "name": "Potion",
+      "items": [
+        "Fizzy",
+        "Glow",
+        "Sneeze",
+        "Shrink"
+      ]
+    },
+    {
+      "name": "Hat",
+      "items": [
+        "Red",
+        "Blue",
+        "Green",
+        "Purple"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      1,
+      3,
+      2,
+      0
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      3,
+      1,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The wizard whose potion is Glow has either Cat or Owl for their familiar."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose potion is Fizzy is either Hazel or Maple."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 3
+          },
+          {
+            "cat": 2,
+            "item": 0
+          }
+        ]
+      },
+      "text": "Pip's potion is either Shrink or Fizzy."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The wizard whose hat is Purple has either Raven or Owl for their familiar."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 3
+          },
+          {
+            "cat": 0,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The wizard whose familiar is Cat is either Maple or Dorian."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose hat is Blue has either Toad or Raven for their familiar."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 2
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Dorian's familiar is either Toad or Raven."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 0
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose familiar is Raven has either Fizzy or Shrink for their potion."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose hat is Green has either Cat or Raven for their familiar."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 2
+          }
+        ]
+      },
+      "text": "Hazel's familiar is either Raven or Toad."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The wizard whose hat is Purple is either Hazel or Dorian."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Dorian's familiar is Toad."
+    }
+  ],
+  "seed": 1158525554,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

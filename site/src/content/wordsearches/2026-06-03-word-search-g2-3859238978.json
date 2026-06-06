@@ -1,0 +1,174 @@
+{
+  "id": "2026-06-03-word-search-g2-3859238978",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "size": 8,
+  "theme": "Space",
+  "grid": [
+    [
+      "B",
+      "B",
+      "P",
+      "E",
+      "E",
+      "X",
+      "K",
+      "P"
+    ],
+    [
+      "O",
+      "L",
+      "L",
+      "A",
+      "M",
+      "C",
+      "H",
+      "L"
+    ],
+    [
+      "R",
+      "X",
+      "U",
+      "R",
+      "E",
+      "Q",
+      "B",
+      "A"
+    ],
+    [
+      "B",
+      "B",
+      "T",
+      "T",
+      "R",
+      "W",
+      "E",
+      "N"
+    ],
+    [
+      "I",
+      "N",
+      "O",
+      "H",
+      "C",
+      "D",
+      "O",
+      "E"
+    ],
+    [
+      "T",
+      "N",
+      "E",
+      "B",
+      "U",
+      "L",
+      "A",
+      "T"
+    ],
+    [
+      "L",
+      "U",
+      "N",
+      "A",
+      "R",
+      "U",
+      "W",
+      "K"
+    ],
+    [
+      "E",
+      "E",
+      "H",
+      "L",
+      "Y",
+      "M",
+      "A",
+      "H"
+    ]
+  ],
+  "words": [
+    {
+      "word": "MERCURY",
+      "start": {
+        "r": 1,
+        "c": 4
+      },
+      "end": {
+        "r": 7,
+        "c": 4
+      }
+    },
+    {
+      "word": "EARTH",
+      "start": {
+        "r": 0,
+        "c": 3
+      },
+      "end": {
+        "r": 4,
+        "c": 3
+      }
+    },
+    {
+      "word": "PLANET",
+      "start": {
+        "r": 0,
+        "c": 7
+      },
+      "end": {
+        "r": 5,
+        "c": 7
+      }
+    },
+    {
+      "word": "LUNAR",
+      "start": {
+        "r": 6,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 4
+      }
+    },
+    {
+      "word": "ORBIT",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 5,
+        "c": 0
+      }
+    },
+    {
+      "word": "NEBULA",
+      "start": {
+        "r": 5,
+        "c": 1
+      },
+      "end": {
+        "r": 5,
+        "c": 6
+      }
+    },
+    {
+      "word": "PLUTO",
+      "start": {
+        "r": 0,
+        "c": 2
+      },
+      "end": {
+        "r": 4,
+        "c": 2
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 3859238978,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

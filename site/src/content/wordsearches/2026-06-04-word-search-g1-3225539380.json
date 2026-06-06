@@ -1,0 +1,163 @@
+{
+  "id": "2026-06-04-word-search-g1-3225539380",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "size": 8,
+  "theme": "Ocean",
+  "grid": [
+    [
+      "S",
+      "T",
+      "A",
+      "R",
+      "F",
+      "I",
+      "S",
+      "H"
+    ],
+    [
+      "U",
+      "R",
+      "C",
+      "H",
+      "I",
+      "N",
+      "C",
+      "T"
+    ],
+    [
+      "E",
+      "S",
+      "E",
+      "A",
+      "W",
+      "E",
+      "E",
+      "D"
+    ],
+    [
+      "X",
+      "P",
+      "Q",
+      "N",
+      "O",
+      "Z",
+      "Y",
+      "Y"
+    ],
+    [
+      "Z",
+      "O",
+      "C",
+      "O",
+      "R",
+      "A",
+      "L",
+      "N"
+    ],
+    [
+      "S",
+      "N",
+      "A",
+      "H",
+      "H",
+      "Z",
+      "T",
+      "W"
+    ],
+    [
+      "Y",
+      "G",
+      "C",
+      "C",
+      "V",
+      "M",
+      "X",
+      "I"
+    ],
+    [
+      "U",
+      "E",
+      "Z",
+      "Y",
+      "T",
+      "I",
+      "D",
+      "E"
+    ]
+  ],
+  "words": [
+    {
+      "word": "TIDE",
+      "start": {
+        "r": 7,
+        "c": 4
+      },
+      "end": {
+        "r": 7,
+        "c": 7
+      }
+    },
+    {
+      "word": "URCHIN",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 1,
+        "c": 5
+      }
+    },
+    {
+      "word": "SPONGE",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 7,
+        "c": 1
+      }
+    },
+    {
+      "word": "STARFISH",
+      "start": {
+        "r": 0,
+        "c": 0
+      },
+      "end": {
+        "r": 0,
+        "c": 7
+      }
+    },
+    {
+      "word": "CORAL",
+      "start": {
+        "r": 4,
+        "c": 2
+      },
+      "end": {
+        "r": 4,
+        "c": 6
+      }
+    },
+    {
+      "word": "SEAWEED",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 2,
+        "c": 7
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 3225539380,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

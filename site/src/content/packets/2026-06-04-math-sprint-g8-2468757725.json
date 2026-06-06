@@ -1,0 +1,209 @@
+{
+  "id": "2026-06-04-math-sprint-g8-2468757725",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            1,
+            14,
+            18,
+            3
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            8,
+            1,
+            27,
+            6,
+            35
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            1,
+            72,
+            50,
+            9
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "equiv",
+          "num": 3,
+          "den": 6,
+          "newDen": 12,
+          "answer": 6
+        },
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 4,
+          "bNum": 4,
+          "bDen": 4,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 3,
+          "newDen": 12,
+          "answer": 8
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 4,
+          "answer": 2
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 4,
+          "newDen": 8,
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "🔺",
+            "🟧",
+            "⭐"
+          ],
+          "values": [
+            11,
+            9,
+            12
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 22
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 20
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 21
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "🟦",
+            "🔷",
+            "🟢"
+          ],
+          "values": [
+            1,
+            2,
+            11
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 2
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 3
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 637147,
+          "op": "−",
+          "b": 234266,
+          "answer": 402881
+        },
+        {
+          "a": 216,
+          "op": "×",
+          "b": 91,
+          "answer": 19656
+        },
+        {
+          "a": 440002,
+          "op": "−",
+          "b": 200497,
+          "answer": 239505
+        },
+        {
+          "a": 413,
+          "op": "×",
+          "b": 45,
+          "answer": 18585
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 46,
+    "stars": 4
+  },
+  "seed": 2468757725,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

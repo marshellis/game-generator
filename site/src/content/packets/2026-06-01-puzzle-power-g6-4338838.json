@@ -1,0 +1,235 @@
+{
+  "id": "2026-06-01-puzzle-power-g6-4338838",
+  "title": "Puzzle Power",
+  "blurb": "A 4-puzzle mix for Grade 6.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 6",
+  "difficulty": "g6",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            15,
+            31,
+            7,
+            25
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            5,
+            30,
+            8,
+            40,
+            37
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            5,
+            15,
+            4,
+            3,
+            9
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 172,
+          "op": "−",
+          "right": 59,
+          "result": 113,
+          "blank": "left",
+          "answer": 172
+        },
+        {
+          "left": 6,
+          "op": "×",
+          "right": 6,
+          "result": 36,
+          "blank": "left",
+          "answer": 6
+        },
+        {
+          "left": 6,
+          "op": "÷",
+          "right": 3,
+          "result": 2,
+          "blank": "result",
+          "answer": 2
+        },
+        {
+          "left": 35,
+          "op": "÷",
+          "right": 5,
+          "result": 7,
+          "blank": "left",
+          "answer": 35
+        },
+        {
+          "left": 12,
+          "op": "×",
+          "right": 12,
+          "result": 144,
+          "blank": "left",
+          "answer": 12
+        },
+        {
+          "left": 257,
+          "op": "−",
+          "right": 100,
+          "result": 157,
+          "blank": "result",
+          "answer": 157
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 38122,
+          "nearest": 1000,
+          "answer": 38000
+        },
+        {
+          "number": 85820,
+          "nearest": 1000,
+          "answer": 86000
+        },
+        {
+          "number": 81183,
+          "nearest": 1000,
+          "answer": 81000
+        },
+        {
+          "number": 63132,
+          "nearest": 1000,
+          "answer": 63000
+        },
+        {
+          "number": 79049,
+          "nearest": 1000,
+          "answer": 79000
+        },
+        {
+          "number": 67675,
+          "nearest": 1000,
+          "answer": 68000
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                2,
+                13,
+                10,
+                12
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                13,
+                12,
+                15,
+                2
+              ],
+              "answerIndex": 2
+            },
+            {
+              "numbers": [
+                9,
+                16,
+                27,
+                11
+              ],
+              "answerIndex": 2
+            }
+          ],
+          "final": {
+            "numbers": [
+              15,
+              12,
+              27
+            ],
+            "answerIndex": 2
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                12,
+                9,
+                10,
+                3
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                7,
+                2,
+                4,
+                11
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                15,
+                8,
+                24,
+                23
+              ],
+              "answerIndex": 3
+            }
+          ],
+          "final": {
+            "numbers": [
+              12,
+              23,
+              11
+            ],
+            "answerIndex": 1
+          }
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 7,
+    "score": 47,
+    "stars": 4
+  },
+  "seed": 4338838,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

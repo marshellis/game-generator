@@ -1,0 +1,151 @@
+{
+  "id": "2026-06-02-number-quest-g2-1617602069",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            4,
+            2,
+            3
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            7,
+            11,
+            2,
+            13
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            8,
+            1,
+            9
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 50
+            },
+            {
+              "kind": "gt",
+              "n": 31
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "tensDigit",
+              "d": 5
+            }
+          ],
+          "answer": 50
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 50
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "lt",
+              "n": 47
+            },
+            {
+              "kind": "tensDigit",
+              "d": 2
+            },
+            {
+              "kind": "gt",
+              "n": 9
+            },
+            {
+              "kind": "onesDigit",
+              "d": 7
+            }
+          ],
+          "answer": 27
+        }
+      ]
+    },
+    {
+      "type": "numberBond",
+      "title": "Number Bonds",
+      "instructions": "Find the missing part of each bond.",
+      "items": [
+        {
+          "total": 15,
+          "known": 8,
+          "answer": 7
+        },
+        {
+          "total": 14,
+          "known": 13,
+          "answer": 1
+        },
+        {
+          "total": 16,
+          "known": 15,
+          "answer": 1
+        },
+        {
+          "total": 18,
+          "known": 12,
+          "answer": 6
+        },
+        {
+          "total": 20,
+          "known": 16,
+          "answer": 4
+        },
+        {
+          "total": 9,
+          "known": 1,
+          "answer": 8
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 29,
+    "stars": 2
+  },
+  "seed": 1617602069,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

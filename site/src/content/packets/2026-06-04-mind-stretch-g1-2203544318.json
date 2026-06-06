@@ -1,0 +1,139 @@
+{
+  "id": "2026-06-04-mind-stretch-g1-2203544318",
+  "title": "Mind Stretch",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            13,
+            6,
+            2
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            2,
+            10,
+            9,
+            11
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            5,
+            1,
+            9
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            9,
+            null,
+            13,
+            15,
+            17
+          ],
+          "answer": 11
+        },
+        {
+          "sequence": [
+            0,
+            1,
+            null,
+            3,
+            4
+          ],
+          "answer": 2
+        },
+        {
+          "sequence": [
+            6,
+            null,
+            10,
+            12,
+            14
+          ],
+          "answer": 8
+        },
+        {
+          "sequence": [
+            10,
+            null,
+            30,
+            40,
+            50
+          ],
+          "answer": 20
+        }
+      ]
+    },
+    {
+      "type": "numberBond",
+      "title": "Number Bonds",
+      "instructions": "Find the missing part of each bond.",
+      "items": [
+        {
+          "total": 5,
+          "known": 3,
+          "answer": 2
+        },
+        {
+          "total": 7,
+          "known": 4,
+          "answer": 3
+        },
+        {
+          "total": 7,
+          "known": 3,
+          "answer": 4
+        },
+        {
+          "total": 3,
+          "known": 1,
+          "answer": 2
+        },
+        {
+          "total": 8,
+          "known": 6,
+          "answer": 2
+        },
+        {
+          "total": 4,
+          "known": 3,
+          "answer": 1
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 22,
+    "stars": 1
+  },
+  "seed": 2203544318,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

@@ -1,0 +1,199 @@
+{
+  "id": "2026-06-03-puzzle-lab-g5-2481428461",
+  "title": "Puzzle Lab",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            15,
+            7,
+            39,
+            6,
+            24
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            12,
+            8,
+            25,
+            9,
+            13
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            23,
+            18,
+            16,
+            5,
+            14
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              9,
+              12
+            ],
+            [
+              3,
+              null,
+              27
+            ],
+            [
+              18,
+              21,
+              null
+            ]
+          ],
+          "answers": [
+            24,
+            15,
+            6
+          ],
+          "magic": 45
+        },
+        {
+          "grid": [
+            [
+              null,
+              41,
+              46
+            ],
+            [
+              31,
+              null,
+              71
+            ],
+            [
+              56,
+              61,
+              null
+            ]
+          ],
+          "answers": [
+            66,
+            51,
+            36
+          ],
+          "magic": 153
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "title": "What Comes Next?",
+      "instructions": "Find the rule and fill in the missing number.",
+      "items": [
+        {
+          "sequence": [
+            6,
+            12,
+            18,
+            24,
+            null
+          ],
+          "answer": 30
+        },
+        {
+          "sequence": [
+            43,
+            null,
+            25,
+            16,
+            7
+          ],
+          "answer": 34
+        },
+        {
+          "sequence": [
+            33,
+            30,
+            27,
+            null,
+            21
+          ],
+          "answer": 24
+        },
+        {
+          "sequence": [
+            6,
+            106,
+            206,
+            null,
+            406
+          ],
+          "answer": 306
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 1000",
+      "instructions": "Round each number to the nearest 1000.",
+      "items": [
+        {
+          "number": 97987,
+          "nearest": 1000,
+          "answer": 98000
+        },
+        {
+          "number": 66330,
+          "nearest": 1000,
+          "answer": 66000
+        },
+        {
+          "number": 37730,
+          "nearest": 1000,
+          "answer": 38000
+        },
+        {
+          "number": 72563,
+          "nearest": 1000,
+          "answer": 73000
+        },
+        {
+          "number": 93943,
+          "nearest": 1000,
+          "answer": 94000
+        },
+        {
+          "number": 98661,
+          "nearest": 1000,
+          "answer": 99000
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 42,
+    "stars": 4
+  },
+  "seed": 2481428461,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

@@ -1,0 +1,204 @@
+{
+  "id": "2026-06-05-word-search-g4-2565462158",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 4",
+  "difficulty": "g4",
+  "size": 9,
+  "theme": "Space",
+  "grid": [
+    [
+      "C",
+      "W",
+      "P",
+      "I",
+      "C",
+      "C",
+      "A",
+      "K",
+      "K"
+    ],
+    [
+      "W",
+      "S",
+      "A",
+      "J",
+      "F",
+      "M",
+      "S",
+      "H",
+      "N"
+    ],
+    [
+      "N",
+      "M",
+      "O",
+      "H",
+      "Y",
+      "A",
+      "T",
+      "P",
+      "E"
+    ],
+    [
+      "X",
+      "E",
+      "P",
+      "L",
+      "S",
+      "R",
+      "E",
+      "X",
+      "B"
+    ],
+    [
+      "R",
+      "R",
+      "P",
+      "Q",
+      "A",
+      "S",
+      "R",
+      "D",
+      "U"
+    ],
+    [
+      "S",
+      "C",
+      "O",
+      "T",
+      "T",
+      "R",
+      "O",
+      "U",
+      "L"
+    ],
+    [
+      "Y",
+      "U",
+      "Y",
+      "S",
+      "U",
+      "V",
+      "I",
+      "S",
+      "A"
+    ],
+    [
+      "X",
+      "R",
+      "F",
+      "U",
+      "R",
+      "N",
+      "D",
+      "T",
+      "G"
+    ],
+    [
+      "F",
+      "Y",
+      "V",
+      "S",
+      "N",
+      "P",
+      "E",
+      "C",
+      "S"
+    ]
+  ],
+  "words": [
+    {
+      "word": "NEPTUNE",
+      "start": {
+        "r": 2,
+        "c": 0
+      },
+      "end": {
+        "r": 8,
+        "c": 6
+      }
+    },
+    {
+      "word": "NEBULA",
+      "start": {
+        "r": 1,
+        "c": 8
+      },
+      "end": {
+        "r": 6,
+        "c": 8
+      }
+    },
+    {
+      "word": "DUST",
+      "start": {
+        "r": 4,
+        "c": 7
+      },
+      "end": {
+        "r": 7,
+        "c": 7
+      }
+    },
+    {
+      "word": "ASTEROID",
+      "start": {
+        "r": 0,
+        "c": 6
+      },
+      "end": {
+        "r": 7,
+        "c": 6
+      }
+    },
+    {
+      "word": "MERCURY",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 8,
+        "c": 1
+      }
+    },
+    {
+      "word": "SOLAR",
+      "start": {
+        "r": 1,
+        "c": 1
+      },
+      "end": {
+        "r": 5,
+        "c": 5
+      }
+    },
+    {
+      "word": "SATURN",
+      "start": {
+        "r": 3,
+        "c": 4
+      },
+      "end": {
+        "r": 8,
+        "c": 4
+      }
+    },
+    {
+      "word": "MARS",
+      "start": {
+        "r": 1,
+        "c": 5
+      },
+      "end": {
+        "r": 4,
+        "c": 5
+      }
+    }
+  ],
+  "maxDirections": 3,
+  "difficultyRating": 2,
+  "seed": 2565462158,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

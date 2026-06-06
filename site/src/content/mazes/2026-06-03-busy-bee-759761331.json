@@ -1,0 +1,94 @@
+{
+  "id": "2026-06-03-busy-bee-759761331",
+  "title": "Busy Bee",
+  "themeBlurb": "Buzz the bee over to the flower!",
+  "gameType": "maze",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "cols": 6,
+  "rows": 6,
+  "open": [
+    [
+      2,
+      12,
+      6,
+      10,
+      10,
+      12
+    ],
+    [
+      6,
+      13,
+      3,
+      10,
+      10,
+      13
+    ],
+    [
+      5,
+      3,
+      12,
+      6,
+      12,
+      5
+    ],
+    [
+      7,
+      10,
+      11,
+      9,
+      3,
+      13
+    ],
+    [
+      5,
+      6,
+      10,
+      12,
+      6,
+      9
+    ],
+    [
+      3,
+      11,
+      8,
+      3,
+      11,
+      8
+    ]
+  ],
+  "start": {
+    "r": 0,
+    "c": 0
+  },
+  "end": {
+    "r": 1,
+    "c": 0
+  },
+  "decoyStarts": [],
+  "theme": {
+    "startIcon": "🐝",
+    "endIcon": "🌸"
+  },
+  "solution": [
+    {
+      "r": 0,
+      "c": 0
+    },
+    {
+      "r": 0,
+      "c": 1
+    },
+    {
+      "r": 1,
+      "c": 1
+    },
+    {
+      "r": 1,
+      "c": 0
+    }
+  ],
+  "difficultyRating": 1,
+  "seed": 759761331,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

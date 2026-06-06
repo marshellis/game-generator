@@ -1,0 +1,241 @@
+{
+  "id": "2026-06-01-math-mix-g3-1264355969",
+  "title": "Math Mix",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            8,
+            9,
+            30,
+            29,
+            72
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            2,
+            11,
+            18,
+            7,
+            15
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            28,
+            7,
+            10,
+            9,
+            63
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              200,
+              60,
+              3
+            ]
+          },
+          "options": [
+            263,
+            276,
+            274
+          ],
+          "answer": 263
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              700,
+              10,
+              2
+            ]
+          },
+          "options": [
+            700,
+            795,
+            712
+          ],
+          "answer": 712
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              400,
+              60,
+              2
+            ]
+          },
+          "options": [
+            398,
+            462,
+            512
+          ],
+          "answer": 462
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              600,
+              70,
+              4
+            ]
+          },
+          "options": [
+            674,
+            725,
+            654
+          ],
+          "answer": 674
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 58,
+          "op": "+",
+          "right": 77,
+          "result": 135,
+          "blank": "left",
+          "answer": 58
+        },
+        {
+          "left": 52,
+          "op": "+",
+          "right": 74,
+          "result": 126,
+          "blank": "result",
+          "answer": 126
+        },
+        {
+          "left": 82,
+          "op": "+",
+          "right": 60,
+          "result": 142,
+          "blank": "result",
+          "answer": 142
+        },
+        {
+          "left": 8,
+          "op": "×",
+          "right": 5,
+          "result": 40,
+          "blank": "result",
+          "answer": 40
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 6,
+          "result": 12,
+          "blank": "left",
+          "answer": 2
+        },
+        {
+          "left": 4,
+          "op": "×",
+          "right": 5,
+          "result": 20,
+          "blank": "right",
+          "answer": 5
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              9,
+              4
+            ],
+            [
+              7,
+              5,
+              null
+            ],
+            [
+              6,
+              null,
+              8
+            ]
+          ],
+          "answers": [
+            2,
+            3,
+            1
+          ],
+          "magic": 15
+        },
+        {
+          "grid": [
+            [
+              4,
+              null,
+              8
+            ],
+            [
+              null,
+              7,
+              3
+            ],
+            [
+              6,
+              5,
+              null
+            ]
+          ],
+          "answers": [
+            9,
+            11,
+            10
+          ],
+          "magic": 21
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 39,
+    "stars": 3
+  },
+  "seed": 1264355969,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

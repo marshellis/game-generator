@@ -1,0 +1,348 @@
+{
+  "id": "2026-06-03-spellhaven-first-years-832881527",
+  "title": "Spellhaven First-Years",
+  "themeBlurb": "First-years at Spellhaven swapped their spellbooks during a fire drill. Untangle who's who before someone accidentally turns into a newt.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 7",
+  "difficulty": "g7",
+  "categories": [
+    {
+      "name": "Wizard",
+      "items": [
+        "Pip",
+        "Hazel",
+        "Dorian",
+        "Maple",
+        "Wren"
+      ]
+    },
+    {
+      "name": "Year",
+      "ordered": true,
+      "items": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
+    },
+    {
+      "name": "Familiar",
+      "items": [
+        "Cat",
+        "Owl",
+        "Toad",
+        "Raven",
+        "Bat"
+      ]
+    },
+    {
+      "name": "Potion",
+      "items": [
+        "Fizzy",
+        "Glow",
+        "Sneeze",
+        "Shrink",
+        "Bounce"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    [
+      4,
+      3,
+      1,
+      0,
+      2
+    ],
+    [
+      0,
+      1,
+      3,
+      2,
+      4
+    ],
+    [
+      1,
+      4,
+      0,
+      3,
+      2
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 2
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose year is 1 has either Toad or Raven for their familiar."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose familiar is Bat has either Sneeze or Shrink for their potion."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 0
+          },
+          {
+            "cat": 2,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The wizard whose year is 5 has either Cat or Bat for their familiar."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose familiar is Raven is either Dorian or Maple."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 4
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 1
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The wizard whose potion is Bounce is either Hazel or Maple."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 0
+          },
+          {
+            "cat": 3,
+            "item": 4
+          }
+        ]
+      },
+      "text": "The wizard whose year is 2 has either Fizzy or Bounce for their potion."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 3
+          }
+        ]
+      },
+      "text": "Maple's year is either 1 or 4."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 3
+          },
+          {
+            "cat": 1,
+            "item": 4
+          }
+        ]
+      },
+      "text": "Hazel's year is either 4 or 5."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 1
+        },
+        "lesser": {
+          "cat": 0,
+          "item": 1
+        },
+        "orderedCat": 1
+      },
+      "text": "The wizard whose potion is Glow is in a higher year than Hazel."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 3
+        },
+        "orderedCat": 1
+      },
+      "text": "Wren is in a higher year than the wizard whose potion is Shrink."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 2,
+          "item": 3
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "The wizard whose familiar is Raven is in a higher year than the wizard whose familiar is Toad."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 0,
+          "item": 0
+        },
+        "lesser": {
+          "cat": 3,
+          "item": 4
+        },
+        "orderedCat": 1
+      },
+      "text": "Pip is in a higher year than the wizard whose potion is Bounce."
+    },
+    {
+      "id": "c13",
+      "structured": {
+        "type": "comparative",
+        "greater": {
+          "cat": 3,
+          "item": 4
+        },
+        "lesser": {
+          "cat": 2,
+          "item": 2
+        },
+        "orderedCat": 1
+      },
+      "text": "The wizard whose potion is Bounce is in a higher year than the wizard whose familiar is Toad."
+    },
+    {
+      "id": "c14",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 4
+        }
+      },
+      "text": "Hazel's potion is Bounce."
+    }
+  ],
+  "seed": 832881527,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

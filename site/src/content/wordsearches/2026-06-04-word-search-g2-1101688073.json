@@ -1,0 +1,174 @@
+{
+  "id": "2026-06-04-word-search-g2-1101688073",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "size": 8,
+  "theme": "Sports",
+  "grid": [
+    [
+      "J",
+      "F",
+      "D",
+      "R",
+      "E",
+      "L",
+      "A",
+      "Y"
+    ],
+    [
+      "L",
+      "J",
+      "T",
+      "K",
+      "G",
+      "O",
+      "A",
+      "L"
+    ],
+    [
+      "R",
+      "M",
+      "R",
+      "I",
+      "G",
+      "B",
+      "N",
+      "X"
+    ],
+    [
+      "S",
+      "E",
+      "J",
+      "J",
+      "J",
+      "O",
+      "E",
+      "V"
+    ],
+    [
+      "U",
+      "D",
+      "B",
+      "U",
+      "Z",
+      "X",
+      "T",
+      "K"
+    ],
+    [
+      "R",
+      "A",
+      "M",
+      "M",
+      "P",
+      "I",
+      "W",
+      "V"
+    ],
+    [
+      "F",
+      "L",
+      "B",
+      "P",
+      "A",
+      "N",
+      "G",
+      "Q"
+    ],
+    [
+      "Z",
+      "I",
+      "A",
+      "U",
+      "Q",
+      "G",
+      "F",
+      "S"
+    ]
+  ],
+  "words": [
+    {
+      "word": "SURF",
+      "start": {
+        "r": 3,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 0
+      }
+    },
+    {
+      "word": "GOAL",
+      "start": {
+        "r": 1,
+        "c": 4
+      },
+      "end": {
+        "r": 1,
+        "c": 7
+      }
+    },
+    {
+      "word": "MEDAL",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 6,
+        "c": 1
+      }
+    },
+    {
+      "word": "JUMP",
+      "start": {
+        "r": 3,
+        "c": 3
+      },
+      "end": {
+        "r": 6,
+        "c": 3
+      }
+    },
+    {
+      "word": "RELAY",
+      "start": {
+        "r": 0,
+        "c": 3
+      },
+      "end": {
+        "r": 0,
+        "c": 7
+      }
+    },
+    {
+      "word": "BOXING",
+      "start": {
+        "r": 2,
+        "c": 5
+      },
+      "end": {
+        "r": 7,
+        "c": 5
+      }
+    },
+    {
+      "word": "NET",
+      "start": {
+        "r": 2,
+        "c": 6
+      },
+      "end": {
+        "r": 4,
+        "c": 6
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 1101688073,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

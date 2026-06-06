@@ -1,0 +1,243 @@
+{
+  "id": "2026-06-02-math-mix-g7-3173817362",
+  "title": "Math Mix",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            31,
+            34,
+            65,
+            37,
+            9
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            16,
+            70,
+            29,
+            40,
+            30
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            5,
+            19,
+            2,
+            41,
+            36
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  ×  ÷ ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×",
+        "÷"
+      ],
+      "items": [
+        {
+          "left": 40,
+          "right": 9,
+          "result": 31,
+          "answer": "−"
+        },
+        {
+          "left": 7,
+          "right": 7,
+          "result": 49,
+          "answer": "×"
+        },
+        {
+          "left": 77,
+          "right": 21,
+          "result": 56,
+          "answer": "−"
+        },
+        {
+          "left": 27,
+          "right": 90,
+          "result": 117,
+          "answer": "+"
+        },
+        {
+          "left": 9,
+          "right": 7,
+          "result": 63,
+          "answer": "×"
+        },
+        {
+          "left": 61,
+          "right": 15,
+          "result": 46,
+          "answer": "−"
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
+      "items": [
+        {
+          "start": 9,
+          "ops": [
+            {
+              "op": "−",
+              "operand": 2
+            },
+            {
+              "op": "×",
+              "operand": 5
+            },
+            {
+              "op": "×",
+              "operand": 2
+            },
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 6
+            },
+            {
+              "op": "×",
+              "operand": 2
+            }
+          ],
+          "values": [
+            7,
+            35,
+            70,
+            35,
+            41,
+            82
+          ]
+        },
+        {
+          "start": 2,
+          "ops": [
+            {
+              "op": "÷",
+              "operand": 2
+            },
+            {
+              "op": "+",
+              "operand": 10
+            },
+            {
+              "op": "+",
+              "operand": 19
+            },
+            {
+              "op": "÷",
+              "operand": 3
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 12
+            }
+          ],
+          "values": [
+            1,
+            11,
+            30,
+            10,
+            40,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 478,
+          "op": "+",
+          "right": 274,
+          "result": 752,
+          "blank": "left",
+          "answer": 478
+        },
+        {
+          "left": 9,
+          "op": "×",
+          "right": 3,
+          "result": 27,
+          "blank": "left",
+          "answer": 9
+        },
+        {
+          "left": 4,
+          "op": "×",
+          "right": 2,
+          "result": 8,
+          "blank": "right",
+          "answer": 2
+        },
+        {
+          "left": 7,
+          "op": "×",
+          "right": 3,
+          "result": 21,
+          "blank": "result",
+          "answer": 21
+        },
+        {
+          "left": 210,
+          "op": "−",
+          "right": 207,
+          "result": 3,
+          "blank": "right",
+          "answer": 207
+        },
+        {
+          "left": 263,
+          "op": "+",
+          "right": 25,
+          "result": 288,
+          "blank": "left",
+          "answer": 263
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 9,
+    "score": 47,
+    "stars": 4
+  },
+  "seed": 3173817362,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

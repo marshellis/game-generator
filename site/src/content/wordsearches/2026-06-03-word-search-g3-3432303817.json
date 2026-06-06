@@ -1,0 +1,204 @@
+{
+  "id": "2026-06-03-word-search-g3-3432303817",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 3",
+  "difficulty": "g3",
+  "size": 9,
+  "theme": "Space",
+  "grid": [
+    [
+      "Y",
+      "O",
+      "M",
+      "C",
+      "R",
+      "O",
+      "T",
+      "O",
+      "U"
+    ],
+    [
+      "M",
+      "Q",
+      "M",
+      "E",
+      "O",
+      "L",
+      "K",
+      "O",
+      "R"
+    ],
+    [
+      "Z",
+      "E",
+      "U",
+      "Z",
+      "T",
+      "S",
+      "S",
+      "D",
+      "A"
+    ],
+    [
+      "S",
+      "P",
+      "R",
+      "Z",
+      "U",
+      "E",
+      "M",
+      "N",
+      "N"
+    ],
+    [
+      "A",
+      "L",
+      "O",
+      "C",
+      "K",
+      "H",
+      "O",
+      "O",
+      "U"
+    ],
+    [
+      "T",
+      "U",
+      "C",
+      "L",
+      "U",
+      "N",
+      "A",
+      "R",
+      "S"
+    ],
+    [
+      "U",
+      "T",
+      "K",
+      "G",
+      "N",
+      "R",
+      "G",
+      "K",
+      "E"
+    ],
+    [
+      "R",
+      "O",
+      "E",
+      "G",
+      "D",
+      "Q",
+      "Y",
+      "X",
+      "D"
+    ],
+    [
+      "N",
+      "G",
+      "T",
+      "P",
+      "R",
+      "T",
+      "L",
+      "X",
+      "I"
+    ]
+  ],
+  "words": [
+    {
+      "word": "MERCURY",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 7,
+        "c": 6
+      }
+    },
+    {
+      "word": "LUNAR",
+      "start": {
+        "r": 5,
+        "c": 3
+      },
+      "end": {
+        "r": 5,
+        "c": 7
+      }
+    },
+    {
+      "word": "SATURN",
+      "start": {
+        "r": 3,
+        "c": 0
+      },
+      "end": {
+        "r": 8,
+        "c": 0
+      }
+    },
+    {
+      "word": "ROCKET",
+      "start": {
+        "r": 3,
+        "c": 2
+      },
+      "end": {
+        "r": 8,
+        "c": 2
+      }
+    },
+    {
+      "word": "METEOR",
+      "start": {
+        "r": 0,
+        "c": 2
+      },
+      "end": {
+        "r": 5,
+        "c": 7
+      }
+    },
+    {
+      "word": "COSMOS",
+      "start": {
+        "r": 0,
+        "c": 3
+      },
+      "end": {
+        "r": 5,
+        "c": 8
+      }
+    },
+    {
+      "word": "URANUS",
+      "start": {
+        "r": 0,
+        "c": 8
+      },
+      "end": {
+        "r": 5,
+        "c": 8
+      }
+    },
+    {
+      "word": "PLUTO",
+      "start": {
+        "r": 3,
+        "c": 1
+      },
+      "end": {
+        "r": 7,
+        "c": 1
+      }
+    }
+  ],
+  "maxDirections": 3,
+  "difficultyRating": 2,
+  "seed": 3432303817,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

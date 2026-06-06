@@ -1,0 +1,165 @@
+{
+  "id": "2026-06-03-number-quest-g2-923497148",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 2.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 2",
+  "difficulty": "g2",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            9,
+            12,
+            21,
+            16
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            14,
+            3,
+            11,
+            7
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            10,
+            2,
+            12,
+            7
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 50
+            },
+            {
+              "kind": "lt",
+              "n": 51
+            },
+            {
+              "kind": "parity",
+              "even": true
+            },
+            {
+              "kind": "gt",
+              "n": 31
+            },
+            {
+              "kind": "onesDigit",
+              "d": 6
+            },
+            {
+              "kind": "tensDigit",
+              "d": 4
+            }
+          ],
+          "answer": 46
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 50
+            },
+            {
+              "kind": "tensDigit",
+              "d": 3
+            },
+            {
+              "kind": "onesDigit",
+              "d": 3
+            }
+          ],
+          "answer": 33
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 45,
+          "op": "+",
+          "right": 73,
+          "result": 118,
+          "blank": "right",
+          "answer": 73
+        },
+        {
+          "left": 64,
+          "op": "−",
+          "right": 5,
+          "result": 59,
+          "blank": "left",
+          "answer": 64
+        },
+        {
+          "left": 29,
+          "op": "−",
+          "right": 28,
+          "result": 1,
+          "blank": "left",
+          "answer": 29
+        },
+        {
+          "left": 39,
+          "op": "+",
+          "right": 16,
+          "result": 55,
+          "blank": "left",
+          "answer": 39
+        },
+        {
+          "left": 32,
+          "op": "+",
+          "right": 98,
+          "result": 130,
+          "blank": "right",
+          "answer": 98
+        },
+        {
+          "left": 3,
+          "op": "+",
+          "right": 30,
+          "result": 33,
+          "blank": "left",
+          "answer": 3
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 5,
+    "score": 32,
+    "stars": 3
+  },
+  "seed": 923497148,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

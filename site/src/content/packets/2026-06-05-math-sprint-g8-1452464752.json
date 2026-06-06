@@ -1,0 +1,249 @@
+{
+  "id": "2026-06-05-math-sprint-g8-1452464752",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 8.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 8",
+  "difficulty": "g8",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            9,
+            28,
+            22,
+            26,
+            19
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            1,
+            26,
+            11,
+            28,
+            29
+          ],
+          "answerIndex": 4,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            8,
+            12,
+            40,
+            30,
+            5
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              51,
+              null,
+              59
+            ],
+            [
+              55,
+              47,
+              null
+            ],
+            [
+              null,
+              63,
+              43
+            ]
+          ],
+          "answers": [
+            31,
+            39,
+            35
+          ],
+          "magic": 141
+        },
+        {
+          "grid": [
+            [
+              24,
+              27,
+              null
+            ],
+            [
+              9,
+              null,
+              33
+            ],
+            [
+              null,
+              15,
+              18
+            ]
+          ],
+          "answers": [
+            12,
+            21,
+            30
+          ],
+          "magic": 63
+        }
+      ]
+    },
+    {
+      "type": "mysteryNumber",
+      "title": "Mystery Number",
+      "instructions": "Use all the clues together to find the one number that fits.",
+      "items": [
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "tensDigit",
+              "d": 4
+            },
+            {
+              "kind": "digitSum",
+              "s": 9
+            },
+            {
+              "kind": "lt",
+              "n": 359
+            },
+            {
+              "kind": "gt",
+              "n": 330
+            }
+          ],
+          "answer": 342
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "parity",
+              "even": false
+            },
+            {
+              "kind": "digitSum",
+              "s": 8
+            },
+            {
+              "kind": "lt",
+              "n": 64
+            },
+            {
+              "kind": "gt",
+              "n": 45
+            }
+          ],
+          "answer": 53
+        },
+        {
+          "clues": [
+            {
+              "kind": "between",
+              "lo": 10,
+              "hi": 500
+            },
+            {
+              "kind": "lt",
+              "n": 289
+            },
+            {
+              "kind": "digitSum",
+              "s": 17
+            },
+            {
+              "kind": "tensDigit",
+              "d": 7
+            },
+            {
+              "kind": "gt",
+              "n": 270
+            }
+          ],
+          "answer": 278
+        }
+      ]
+    },
+    {
+      "type": "makeTrue",
+      "title": "Make It True",
+      "instructions": "Write the sign ( +  −  ×  ÷ ) that makes each equation true.",
+      "signs": [
+        "+",
+        "−",
+        "×",
+        "÷"
+      ],
+      "items": [
+        {
+          "left": 4,
+          "right": 2,
+          "result": 8,
+          "answer": "×"
+        },
+        {
+          "left": 6,
+          "right": 2,
+          "result": 12,
+          "answer": "×"
+        },
+        {
+          "left": 94,
+          "right": 39,
+          "result": 55,
+          "answer": "−"
+        },
+        {
+          "left": 70,
+          "right": 10,
+          "result": 7,
+          "answer": "÷"
+        },
+        {
+          "left": 86,
+          "right": 39,
+          "result": 125,
+          "answer": "+"
+        },
+        {
+          "left": 40,
+          "right": 21,
+          "result": 61,
+          "answer": "+"
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 7,
+    "score": 46,
+    "stars": 4
+  },
+  "seed": 1452464752,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

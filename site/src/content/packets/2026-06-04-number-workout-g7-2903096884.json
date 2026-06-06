@@ -1,0 +1,269 @@
+{
+  "id": "2026-06-04-number-workout-g7-2903096884",
+  "title": "Number Workout",
+  "blurb": "A 4-puzzle mix for Grade 7.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 7",
+  "difficulty": "g7",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            37,
+            8,
+            42,
+            5,
+            23
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            9,
+            5,
+            36,
+            14,
+            4
+          ],
+          "answerIndex": 2,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            20,
+            9,
+            18,
+            21,
+            1
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "fraction",
+      "title": "Fraction Workout",
+      "instructions": "Fill the equal fraction, or write < , > , = between the two fractions.",
+      "items": [
+        {
+          "kind": "compare",
+          "aNum": 3,
+          "aDen": 2,
+          "bNum": 3,
+          "bDen": 8,
+          "answer": ">"
+        },
+        {
+          "kind": "equiv",
+          "num": 2,
+          "den": 5,
+          "newDen": 20,
+          "answer": 8
+        },
+        {
+          "kind": "compare",
+          "aNum": 5,
+          "aDen": 6,
+          "bNum": 2,
+          "bDen": 2,
+          "answer": "<"
+        },
+        {
+          "kind": "compare",
+          "aNum": 4,
+          "aDen": 8,
+          "bNum": 3,
+          "bDen": 3,
+          "answer": "<"
+        },
+        {
+          "kind": "equiv",
+          "num": 1,
+          "den": 2,
+          "newDen": 6,
+          "answer": 3
+        }
+      ]
+    },
+    {
+      "type": "snake",
+      "title": "Number Path",
+      "instructions": "Start at the first number. Do each step in order and fill the boxes. The last number is given — make sure you land on it!",
+      "items": [
+        {
+          "start": 4,
+          "ops": [
+            {
+              "op": "+",
+              "operand": 18
+            },
+            {
+              "op": "−",
+              "operand": 12
+            },
+            {
+              "op": "−",
+              "operand": 9
+            },
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "÷",
+              "operand": 4
+            },
+            {
+              "op": "×",
+              "operand": 2
+            }
+          ],
+          "values": [
+            22,
+            10,
+            1,
+            4,
+            1,
+            2
+          ]
+        },
+        {
+          "start": 1,
+          "ops": [
+            {
+              "op": "×",
+              "operand": 4
+            },
+            {
+              "op": "−",
+              "operand": 4
+            },
+            {
+              "op": "÷",
+              "operand": 6
+            },
+            {
+              "op": "÷",
+              "operand": 4
+            },
+            {
+              "op": "÷",
+              "operand": 5
+            },
+            {
+              "op": "÷",
+              "operand": 9
+            }
+          ],
+          "values": [
+            4,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                3,
+                12,
+                13,
+                9
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                14,
+                2,
+                16,
+                1
+              ],
+              "answerIndex": 2
+            },
+            {
+              "numbers": [
+                23,
+                28,
+                25,
+                5
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              12,
+              28,
+              16
+            ],
+            "answerIndex": 1
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                5,
+                12,
+                13,
+                17
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                8,
+                5,
+                7,
+                3
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                16,
+                24,
+                25,
+                9
+              ],
+              "answerIndex": 2
+            }
+          ],
+          "final": {
+            "numbers": [
+              17,
+              8,
+              25
+            ],
+            "answerIndex": 2
+          }
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 12,
+    "score": 54,
+    "stars": 5
+  },
+  "seed": 2903096884,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

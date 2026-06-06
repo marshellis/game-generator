@@ -1,0 +1,147 @@
+{
+  "id": "2026-06-02-number-quest-g1-1054474480",
+  "title": "Number Quest",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            2,
+            1,
+            5,
+            4
+          ],
+          "answerIndex": 2,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            9,
+            6,
+            13
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            15,
+            9,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Greater, Less, or Equal",
+      "instructions": "Write < , > , or = between each pair.",
+      "items": [
+        {
+          "leftText": "18",
+          "rightText": "18",
+          "answer": "="
+        },
+        {
+          "leftText": "12",
+          "rightText": "13",
+          "answer": "<"
+        },
+        {
+          "leftText": "11",
+          "rightText": "11",
+          "answer": "="
+        },
+        {
+          "leftText": "12",
+          "rightText": "12",
+          "answer": "="
+        },
+        {
+          "leftText": "19",
+          "rightText": "18",
+          "answer": ">"
+        },
+        {
+          "leftText": "8",
+          "rightText": "9",
+          "answer": "<"
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 5
+          },
+          "options": [
+            4,
+            3,
+            5
+          ],
+          "answer": 5
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 4
+          },
+          "options": [
+            4,
+            6,
+            2
+          ],
+          "answer": 4
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 9
+          },
+          "options": [
+            8,
+            7,
+            9
+          ],
+          "answer": 9
+        },
+        {
+          "prompt": {
+            "kind": "tenFrame",
+            "dots": 8
+          },
+          "options": [
+            6,
+            10,
+            8
+          ],
+          "answer": 8
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 22,
+    "stars": 1
+  },
+  "seed": 1054474480,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

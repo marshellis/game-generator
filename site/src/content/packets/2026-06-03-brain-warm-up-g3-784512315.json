@@ -1,0 +1,181 @@
+{
+  "id": "2026-06-03-brain-warm-up-g3-784512315",
+  "title": "Brain Warm-Up",
+  "blurb": "A 4-puzzle mix for Grade 3.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 3",
+  "difficulty": "g3",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            12,
+            17,
+            18,
+            16
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            15,
+            10,
+            12,
+            4,
+            3
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            30,
+            45,
+            5,
+            18,
+            9
+          ],
+          "answerIndex": 1,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 501,
+          "op": "−",
+          "b": 167,
+          "answer": 334
+        },
+        {
+          "a": 177,
+          "op": "−",
+          "b": 162,
+          "answer": 15
+        },
+        {
+          "a": 219,
+          "op": "−",
+          "b": 171,
+          "answer": 48
+        },
+        {
+          "a": 598,
+          "op": "−",
+          "b": 405,
+          "answer": 193
+        }
+      ]
+    },
+    {
+      "type": "orderOfOps",
+      "title": "Hit the Target",
+      "instructions": "Write + − × in the boxes so each row equals the target. (× before + and −.)",
+      "items": [
+        {
+          "operands": [
+            8,
+            7,
+            8
+          ],
+          "ops": [
+            "+",
+            "+"
+          ],
+          "target": 23
+        },
+        {
+          "operands": [
+            8,
+            8,
+            6
+          ],
+          "ops": [
+            "+",
+            "×"
+          ],
+          "target": 56
+        },
+        {
+          "operands": [
+            4,
+            6,
+            2
+          ],
+          "ops": [
+            "×",
+            "+"
+          ],
+          "target": 26
+        },
+        {
+          "operands": [
+            9,
+            1,
+            2
+          ],
+          "ops": [
+            "+",
+            "−"
+          ],
+          "target": 8
+        }
+      ]
+    },
+    {
+      "type": "rounding",
+      "title": "Round to the Nearest 10",
+      "instructions": "Round each number to the nearest 10.",
+      "items": [
+        {
+          "number": 732,
+          "nearest": 10,
+          "answer": 730
+        },
+        {
+          "number": 230,
+          "nearest": 10,
+          "answer": 230
+        },
+        {
+          "number": 10,
+          "nearest": 10,
+          "answer": 10
+        },
+        {
+          "number": 669,
+          "nearest": 10,
+          "answer": 670
+        },
+        {
+          "number": 76,
+          "nearest": 10,
+          "answer": 80
+        },
+        {
+          "number": 942,
+          "nearest": 10,
+          "answer": 940
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 42,
+    "stars": 4
+  },
+  "seed": 784512315,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

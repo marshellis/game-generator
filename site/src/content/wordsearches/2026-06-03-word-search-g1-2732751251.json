@@ -1,0 +1,163 @@
+{
+  "id": "2026-06-03-word-search-g1-2732751251",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "size": 8,
+  "theme": "Ocean",
+  "grid": [
+    [
+      "R",
+      "O",
+      "H",
+      "O",
+      "T",
+      "T",
+      "E",
+      "R"
+    ],
+    [
+      "D",
+      "C",
+      "L",
+      "D",
+      "W",
+      "R",
+      "L",
+      "L"
+    ],
+    [
+      "O",
+      "E",
+      "A",
+      "Z",
+      "A",
+      "T",
+      "O",
+      "T"
+    ],
+    [
+      "L",
+      "A",
+      "D",
+      "M",
+      "N",
+      "V",
+      "B",
+      "U"
+    ],
+    [
+      "P",
+      "N",
+      "Y",
+      "U",
+      "A",
+      "W",
+      "S",
+      "R"
+    ],
+    [
+      "H",
+      "H",
+      "L",
+      "L",
+      "S",
+      "W",
+      "T",
+      "T"
+    ],
+    [
+      "I",
+      "Y",
+      "I",
+      "S",
+      "E",
+      "Y",
+      "E",
+      "L"
+    ],
+    [
+      "N",
+      "J",
+      "L",
+      "Q",
+      "A",
+      "F",
+      "R",
+      "E"
+    ]
+  ],
+  "words": [
+    {
+      "word": "OTTER",
+      "start": {
+        "r": 0,
+        "c": 3
+      },
+      "end": {
+        "r": 0,
+        "c": 7
+      }
+    },
+    {
+      "word": "TURTLE",
+      "start": {
+        "r": 2,
+        "c": 7
+      },
+      "end": {
+        "r": 7,
+        "c": 7
+      }
+    },
+    {
+      "word": "LOBSTER",
+      "start": {
+        "r": 1,
+        "c": 6
+      },
+      "end": {
+        "r": 7,
+        "c": 6
+      }
+    },
+    {
+      "word": "DOLPHIN",
+      "start": {
+        "r": 1,
+        "c": 0
+      },
+      "end": {
+        "r": 7,
+        "c": 0
+      }
+    },
+    {
+      "word": "OCEAN",
+      "start": {
+        "r": 0,
+        "c": 1
+      },
+      "end": {
+        "r": 4,
+        "c": 1
+      }
+    },
+    {
+      "word": "SEA",
+      "start": {
+        "r": 5,
+        "c": 4
+      },
+      "end": {
+        "r": 7,
+        "c": 4
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 2732751251,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

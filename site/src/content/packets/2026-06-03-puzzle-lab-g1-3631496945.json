@@ -1,0 +1,121 @@
+{
+  "id": "2026-06-03-puzzle-lab-g1-3631496945",
+  "title": "Puzzle Lab",
+  "blurb": "A 3-puzzle mix for Grade 1.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 1",
+  "difficulty": "g1",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            7,
+            10,
+            3,
+            2
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            2,
+            8,
+            5,
+            6
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            10,
+            2,
+            8,
+            1
+          ],
+          "answerIndex": 0,
+          "op": "+"
+        }
+      ]
+    },
+    {
+      "type": "makeTen",
+      "title": "Make 20",
+      "instructions": "Fill in the number that makes 20.",
+      "items": [
+        {
+          "known": 19,
+          "target": 20,
+          "op": "+",
+          "answer": 1
+        },
+        {
+          "known": 5,
+          "target": 20,
+          "op": "+",
+          "answer": 15
+        },
+        {
+          "known": 1,
+          "target": 20,
+          "op": "+",
+          "answer": 19
+        },
+        {
+          "known": 6,
+          "target": 20,
+          "op": "+",
+          "answer": 14
+        },
+        {
+          "known": 16,
+          "target": 20,
+          "op": "+",
+          "answer": 4
+        },
+        {
+          "known": 14,
+          "target": 20,
+          "op": "+",
+          "answer": 6
+        }
+      ]
+    },
+    {
+      "type": "tenFrame",
+      "title": "How Many?",
+      "instructions": "Write how many dots are filled in each ten-frame.",
+      "items": [
+        {
+          "dots": 9,
+          "answer": 9
+        },
+        {
+          "dots": 3,
+          "answer": 3
+        },
+        {
+          "dots": 2,
+          "answer": 2
+        },
+        {
+          "dots": 8,
+          "answer": 8
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 3,
+    "steps": 3,
+    "score": 20,
+    "stars": 1
+  },
+  "seed": 3631496945,
+  "createdAt": "2026-06-03T00:00:00.000Z"
+}

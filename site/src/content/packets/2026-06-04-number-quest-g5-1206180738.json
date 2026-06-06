@@ -1,0 +1,231 @@
+{
+  "id": "2026-06-04-number-quest-g5-1206180738",
+  "title": "Number Quest",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            6,
+            9,
+            5,
+            10,
+            2
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            9,
+            23,
+            18,
+            41,
+            7
+          ],
+          "answerIndex": 3,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            4,
+            2,
+            5,
+            3,
+            10
+          ],
+          "answerIndex": 4,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "stdAlgorithm",
+      "title": "Line It Up",
+      "instructions": "Solve each one. Line up the digits and regroup when you need to.",
+      "items": [
+        {
+          "a": 67628,
+          "op": "+",
+          "b": 66911,
+          "answer": 134539
+        },
+        {
+          "a": 721,
+          "op": "×",
+          "b": 65,
+          "answer": 46865
+        },
+        {
+          "a": 58198,
+          "op": "+",
+          "b": 98600,
+          "answer": 156798
+        },
+        {
+          "a": 88095,
+          "op": "−",
+          "b": 17148,
+          "answer": 70947
+        }
+      ]
+    },
+    {
+      "type": "magicSquare",
+      "title": "Number Square",
+      "instructions": "Fill the empty squares so every row and every column adds up to the number shown.",
+      "items": [
+        {
+          "grid": [
+            [
+              null,
+              74,
+              44
+            ],
+            [
+              62,
+              50,
+              null
+            ],
+            [
+              56,
+              null,
+              68
+            ]
+          ],
+          "answers": [
+            32,
+            38,
+            26
+          ],
+          "magic": 150
+        },
+        {
+          "grid": [
+            [
+              11,
+              null,
+              21
+            ],
+            [
+              36,
+              26,
+              null
+            ],
+            [
+              null,
+              6,
+              41
+            ]
+          ],
+          "answers": [
+            46,
+            16,
+            31
+          ],
+          "magic": 78
+        }
+      ]
+    },
+    {
+      "type": "sumChain",
+      "title": "Find the Sum Challenge",
+      "instructions": "Circle the sum-number in each small group. Then circle the sum-number in the final group made of your answers.",
+      "items": [
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                8,
+                12,
+                4,
+                13
+              ],
+              "answerIndex": 1
+            },
+            {
+              "numbers": [
+                2,
+                5,
+                6,
+                11
+              ],
+              "answerIndex": 3
+            },
+            {
+              "numbers": [
+                23,
+                5,
+                10,
+                13
+              ],
+              "answerIndex": 0
+            }
+          ],
+          "final": {
+            "numbers": [
+              23,
+              12,
+              11
+            ],
+            "answerIndex": 0
+          }
+        },
+        {
+          "subClusters": [
+            {
+              "numbers": [
+                17,
+                2,
+                12,
+                15
+              ],
+              "answerIndex": 0
+            },
+            {
+              "numbers": [
+                7,
+                3,
+                8,
+                5
+              ],
+              "answerIndex": 2
+            },
+            {
+              "numbers": [
+                20,
+                25,
+                13,
+                5
+              ],
+              "answerIndex": 1
+            }
+          ],
+          "final": {
+            "numbers": [
+              25,
+              17,
+              8
+            ],
+            "answerIndex": 0
+          }
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 5,
+    "steps": 8,
+    "score": 51,
+    "stars": 5
+  },
+  "seed": 1206180738,
+  "createdAt": "2026-06-04T00:00:00.000Z"
+}

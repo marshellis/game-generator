@@ -1,0 +1,263 @@
+{
+  "id": "2026-06-02-math-sprint-g5-596554564",
+  "title": "Math Sprint",
+  "blurb": "A 4-puzzle mix for Grade 5.",
+  "gameType": "math-packet",
+  "gradeLabel": "Grade 5",
+  "difficulty": "g5",
+  "activities": [
+    {
+      "type": "findTheSum",
+      "title": "Find the Sum",
+      "instructions": "In each group, one number equals two of the others added or multiplied together. Circle it.",
+      "items": [
+        {
+          "numbers": [
+            48,
+            3,
+            8,
+            6,
+            33
+          ],
+          "answerIndex": 0,
+          "op": "×"
+        },
+        {
+          "numbers": [
+            21,
+            23,
+            2,
+            16,
+            7
+          ],
+          "answerIndex": 1,
+          "op": "+"
+        },
+        {
+          "numbers": [
+            27,
+            6,
+            9,
+            54,
+            14
+          ],
+          "answerIndex": 3,
+          "op": "×"
+        }
+      ]
+    },
+    {
+      "type": "shapeSums",
+      "title": "Shape Sums",
+      "instructions": "Each shape stands for a number. Use the clues to find what every shape is worth.",
+      "items": [
+        {
+          "shapes": [
+            "⭐",
+            "❤️",
+            "🟦"
+          ],
+          "values": [
+            6,
+            11,
+            7
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 12
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 17
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 18
+            }
+          ]
+        },
+        {
+          "shapes": [
+            "🔺",
+            "🟦",
+            "⭐"
+          ],
+          "values": [
+            9,
+            10,
+            1
+          ],
+          "equations": [
+            {
+              "terms": [
+                0,
+                0
+              ],
+              "sum": 18
+            },
+            {
+              "terms": [
+                0,
+                1
+              ],
+              "sum": 19
+            },
+            {
+              "terms": [
+                1,
+                2
+              ],
+              "sum": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "missingNumber",
+      "title": "Missing Number",
+      "instructions": "Find the number that makes each equation true.",
+      "items": [
+        {
+          "left": 508,
+          "op": "+",
+          "right": 421,
+          "result": 929,
+          "blank": "result",
+          "answer": 929
+        },
+        {
+          "left": 118,
+          "op": "−",
+          "right": 71,
+          "result": 47,
+          "blank": "right",
+          "answer": 71
+        },
+        {
+          "left": 4,
+          "op": "×",
+          "right": 5,
+          "result": 20,
+          "blank": "left",
+          "answer": 4
+        },
+        {
+          "left": 2,
+          "op": "×",
+          "right": 9,
+          "result": 18,
+          "blank": "result",
+          "answer": 18
+        },
+        {
+          "left": 711,
+          "op": "−",
+          "right": 279,
+          "result": 432,
+          "blank": "result",
+          "answer": 432
+        },
+        {
+          "left": 740,
+          "op": "−",
+          "right": 226,
+          "result": 514,
+          "blank": "result",
+          "answer": 514
+        }
+      ]
+    },
+    {
+      "type": "match",
+      "title": "Match the Value",
+      "instructions": "Tap the number that matches each picture.",
+      "items": [
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              1000,
+              400,
+              10,
+              3
+            ]
+          },
+          "options": [
+            1290,
+            1573,
+            1413
+          ],
+          "answer": 1413
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              8000,
+              700,
+              70,
+              4
+            ]
+          },
+          "options": [
+            8774,
+            6636,
+            7108
+          ],
+          "answer": 8774
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              6000,
+              100,
+              4
+            ]
+          },
+          "options": [
+            6104,
+            5244,
+            5373
+          ],
+          "answer": 6104
+        },
+        {
+          "prompt": {
+            "kind": "expanded",
+            "parts": [
+              2000,
+              900,
+              7
+            ]
+          },
+          "options": [
+            2641,
+            2907,
+            3494
+          ],
+          "answer": 2907
+        }
+      ]
+    }
+  ],
+  "load": {
+    "maxTier": 4,
+    "steps": 6,
+    "score": 41,
+    "stars": 4
+  },
+  "seed": 596554564,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

@@ -1,0 +1,163 @@
+{
+  "id": "2026-06-02-word-search-g1-224235918",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "size": 8,
+  "theme": "Animals",
+  "grid": [
+    [
+      "S",
+      "D",
+      "V",
+      "L",
+      "Q",
+      "J",
+      "F",
+      "D"
+    ],
+    [
+      "G",
+      "E",
+      "L",
+      "Z",
+      "E",
+      "B",
+      "R",
+      "A"
+    ],
+    [
+      "J",
+      "E",
+      "W",
+      "M",
+      "M",
+      "T",
+      "U",
+      "H"
+    ],
+    [
+      "T",
+      "R",
+      "O",
+      "Q",
+      "C",
+      "U",
+      "U",
+      "M"
+    ],
+    [
+      "S",
+      "A",
+      "L",
+      "W",
+      "H",
+      "A",
+      "L",
+      "E"
+    ],
+    [
+      "G",
+      "R",
+      "F",
+      "L",
+      "A",
+      "G",
+      "O",
+      "F"
+    ],
+    [
+      "K",
+      "A",
+      "N",
+      "G",
+      "A",
+      "R",
+      "O",
+      "O"
+    ],
+    [
+      "D",
+      "C",
+      "R",
+      "A",
+      "B",
+      "H",
+      "M",
+      "G"
+    ]
+  ],
+  "words": [
+    {
+      "word": "WHALE",
+      "start": {
+        "r": 4,
+        "c": 3
+      },
+      "end": {
+        "r": 4,
+        "c": 7
+      }
+    },
+    {
+      "word": "KANGAROO",
+      "start": {
+        "r": 6,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 7
+      }
+    },
+    {
+      "word": "ZEBRA",
+      "start": {
+        "r": 1,
+        "c": 3
+      },
+      "end": {
+        "r": 1,
+        "c": 7
+      }
+    },
+    {
+      "word": "DEER",
+      "start": {
+        "r": 0,
+        "c": 1
+      },
+      "end": {
+        "r": 3,
+        "c": 1
+      }
+    },
+    {
+      "word": "WOLF",
+      "start": {
+        "r": 2,
+        "c": 2
+      },
+      "end": {
+        "r": 5,
+        "c": 2
+      }
+    },
+    {
+      "word": "CRAB",
+      "start": {
+        "r": 7,
+        "c": 1
+      },
+      "end": {
+        "r": 7,
+        "c": 4
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 224235918,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

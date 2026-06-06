@@ -1,0 +1,110 @@
+{
+  "id": "2026-06-01-lost-in-space-3792655677",
+  "title": "Lost in Space",
+  "themeBlurb": "Guide the astronaut back to the rocket!",
+  "gameType": "maze",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "cols": 6,
+  "rows": 6,
+  "open": [
+    [
+      2,
+      12,
+      6,
+      10,
+      14,
+      12
+    ],
+    [
+      6,
+      11,
+      9,
+      6,
+      13,
+      5
+    ],
+    [
+      5,
+      6,
+      10,
+      13,
+      3,
+      13
+    ],
+    [
+      5,
+      3,
+      12,
+      3,
+      14,
+      13
+    ],
+    [
+      7,
+      8,
+      5,
+      6,
+      9,
+      5
+    ],
+    [
+      3,
+      10,
+      11,
+      11,
+      10,
+      9
+    ]
+  ],
+  "start": {
+    "r": 0,
+    "c": 0
+  },
+  "end": {
+    "r": 0,
+    "c": 5
+  },
+  "decoyStarts": [],
+  "theme": {
+    "startIcon": "👩‍🚀",
+    "endIcon": "🚀"
+  },
+  "solution": [
+    {
+      "r": 0,
+      "c": 0
+    },
+    {
+      "r": 0,
+      "c": 1
+    },
+    {
+      "r": 1,
+      "c": 1
+    },
+    {
+      "r": 1,
+      "c": 2
+    },
+    {
+      "r": 0,
+      "c": 2
+    },
+    {
+      "r": 0,
+      "c": 3
+    },
+    {
+      "r": 0,
+      "c": 4
+    },
+    {
+      "r": 0,
+      "c": 5
+    }
+  ],
+  "difficultyRating": 1,
+  "seed": 3792655677,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

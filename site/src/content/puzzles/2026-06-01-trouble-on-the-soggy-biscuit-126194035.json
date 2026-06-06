@@ -1,0 +1,175 @@
+{
+  "id": "2026-06-01-trouble-on-the-soggy-biscuit-126194035",
+  "title": "Trouble on the Soggy Biscuit",
+  "themeBlurb": "The crew of the Soggy Biscuit split the loot in the dark, and now it's pure chaos. Match each pirate to their stuff before the captain wakes up.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 1",
+  "difficulty": "g1",
+  "categories": [
+    {
+      "name": "Pirate",
+      "items": [
+        "Bones",
+        "Patch",
+        "Scarlet"
+      ]
+    },
+    {
+      "name": "Treasure",
+      "items": [
+        "Gold Tooth",
+        "Ruby",
+        "Old Map"
+      ]
+    },
+    {
+      "name": "Job",
+      "items": [
+        "Captain",
+        "Cook",
+        "Lookout"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      2,
+      0,
+      1
+    ],
+    [
+      2,
+      1,
+      0
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Bones's treasure is not Ruby."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 1,
+          "item": 0
+        }
+      },
+      "text": "Scarlet's treasure is not Gold Tooth."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "Bones's job is not Cook."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Scarlet's job is not Lookout."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The pirate whose treasure is Gold Tooth has Cook for their job."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "Scarlet's job is Captain."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 2,
+          "item": 2
+        }
+      },
+      "text": "Bones's job is Lookout."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The pirate whose treasure is Ruby has Captain for their job."
+    }
+  ],
+  "seed": 126194035,
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

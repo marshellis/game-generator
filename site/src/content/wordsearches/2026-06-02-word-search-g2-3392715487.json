@@ -1,0 +1,174 @@
+{
+  "id": "2026-06-02-word-search-g2-3392715487",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 2",
+  "difficulty": "g2",
+  "size": 8,
+  "theme": "Ocean",
+  "grid": [
+    [
+      "R",
+      "U",
+      "I",
+      "W",
+      "O",
+      "G",
+      "I",
+      "D"
+    ],
+    [
+      "E",
+      "G",
+      "H",
+      "H",
+      "A",
+      "M",
+      "T",
+      "Z"
+    ],
+    [
+      "E",
+      "S",
+      "M",
+      "A",
+      "C",
+      "X",
+      "U",
+      "G"
+    ],
+    [
+      "F",
+      "X",
+      "G",
+      "L",
+      "S",
+      "V",
+      "R",
+      "D"
+    ],
+    [
+      "Y",
+      "C",
+      "G",
+      "E",
+      "E",
+      "Z",
+      "T",
+      "C"
+    ],
+    [
+      "L",
+      "O",
+      "C",
+      "E",
+      "A",
+      "N",
+      "L",
+      "H"
+    ],
+    [
+      "X",
+      "F",
+      "I",
+      "S",
+      "H",
+      "L",
+      "E",
+      "L"
+    ],
+    [
+      "Z",
+      "H",
+      "S",
+      "Q",
+      "U",
+      "I",
+      "D",
+      "Q"
+    ]
+  ],
+  "words": [
+    {
+      "word": "WHALE",
+      "start": {
+        "r": 0,
+        "c": 3
+      },
+      "end": {
+        "r": 4,
+        "c": 3
+      }
+    },
+    {
+      "word": "SQUID",
+      "start": {
+        "r": 7,
+        "c": 2
+      },
+      "end": {
+        "r": 7,
+        "c": 6
+      }
+    },
+    {
+      "word": "OCEAN",
+      "start": {
+        "r": 5,
+        "c": 1
+      },
+      "end": {
+        "r": 5,
+        "c": 5
+      }
+    },
+    {
+      "word": "REEF",
+      "start": {
+        "r": 0,
+        "c": 0
+      },
+      "end": {
+        "r": 3,
+        "c": 0
+      }
+    },
+    {
+      "word": "TURTLE",
+      "start": {
+        "r": 1,
+        "c": 6
+      },
+      "end": {
+        "r": 6,
+        "c": 6
+      }
+    },
+    {
+      "word": "SEA",
+      "start": {
+        "r": 3,
+        "c": 4
+      },
+      "end": {
+        "r": 5,
+        "c": 4
+      }
+    },
+    {
+      "word": "FISH",
+      "start": {
+        "r": 6,
+        "c": 1
+      },
+      "end": {
+        "r": 6,
+        "c": 4
+      }
+    }
+  ],
+  "maxDirections": 2,
+  "difficultyRating": 1,
+  "seed": 3392715487,
+  "createdAt": "2026-06-02T00:00:00.000Z"
+}

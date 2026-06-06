@@ -1,0 +1,322 @@
+{
+  "id": "2026-06-05-the-great-pet-mix-up-923858675",
+  "title": "The Great Pet Mix-Up",
+  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 5",
+  "difficulty": "g5",
+  "categories": [
+    {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev"
+      ]
+    },
+    {
+      "name": "Pet",
+      "items": [
+        "Cat",
+        "Dog",
+        "Frog",
+        "Hamster"
+      ]
+    },
+    {
+      "name": "Color",
+      "items": [
+        "Red",
+        "Blue",
+        "Green",
+        "Pink"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Pretzels",
+        "Grapes",
+        "Cookies",
+        "Popcorn"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      0,
+      3,
+      2,
+      1
+    ],
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      1,
+      3,
+      2,
+      0
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 1
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 0
+          },
+          {
+            "cat": 1,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The kid whose snack is Grapes has either Cat or Frog for their pet."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 1
+          },
+          {
+            "cat": 3,
+            "item": 2
+          }
+        ]
+      },
+      "text": "Ava's snack is either Grapes or Cookies."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 2
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The kid whose pet is Frog has either Green or Pink for their color."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The kid whose pet is Frog is either Cora or Dev."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 2
+          },
+          {
+            "cat": 2,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The kid whose pet is Frog has either Green or Red for their color."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 2
+          },
+          {
+            "cat": 0,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The kid whose snack is Cookies is either Cora or Ben."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 2,
+            "item": 1
+          },
+          {
+            "cat": 2,
+            "item": 3
+          }
+        ]
+      },
+      "text": "The kid whose pet is Hamster has either Blue or Pink for their color."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 1
+          },
+          {
+            "cat": 1,
+            "item": 2
+          }
+        ]
+      },
+      "text": "Dev's pet is either Dog or Frog."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "options": [
+          {
+            "cat": 1,
+            "item": 1
+          },
+          {
+            "cat": 1,
+            "item": 2
+          }
+        ]
+      },
+      "text": "The kid whose color is Pink has either Dog or Frog for their pet."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "options": [
+          {
+            "cat": 3,
+            "item": 2
+          },
+          {
+            "cat": 3,
+            "item": 1
+          }
+        ]
+      },
+      "text": "The kid whose pet is Frog has either Cookies or Grapes for their snack."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "eitherOr",
+        "a": {
+          "cat": 3,
+          "item": 0
+        },
+        "options": [
+          {
+            "cat": 0,
+            "item": 3
+          },
+          {
+            "cat": 0,
+            "item": 0
+          }
+        ]
+      },
+      "text": "The kid whose snack is Pretzels is either Dev or Ava."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 1
+        }
+      },
+      "text": "The kid whose color is Red has Grapes for their snack."
+    }
+  ],
+  "seed": 923858675,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}

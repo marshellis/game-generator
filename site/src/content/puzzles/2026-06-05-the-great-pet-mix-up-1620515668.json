@@ -1,0 +1,346 @@
+{
+  "id": "2026-06-05-the-great-pet-mix-up-1620515668",
+  "title": "The Great Pet Mix-Up",
+  "themeBlurb": "Every kid on Maple Street swears they remember whose pet is whose. They do not.",
+  "gameType": "logic-grid",
+  "gradeLabel": "grade 4",
+  "difficulty": "g4",
+  "categories": [
+    {
+      "name": "Kid",
+      "items": [
+        "Ava",
+        "Ben",
+        "Cora",
+        "Dev"
+      ]
+    },
+    {
+      "name": "Pet",
+      "items": [
+        "Cat",
+        "Dog",
+        "Frog",
+        "Hamster"
+      ]
+    },
+    {
+      "name": "Color",
+      "items": [
+        "Red",
+        "Blue",
+        "Green",
+        "Pink"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Pretzels",
+        "Grapes",
+        "Cookies",
+        "Popcorn"
+      ]
+    }
+  ],
+  "solution": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      0,
+      3,
+      1,
+      2
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      3,
+      2,
+      1
+    ]
+  ],
+  "clues": [
+    {
+      "id": "c1",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Ava's pet is not Dog."
+    },
+    {
+      "id": "c2",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 1,
+          "item": 1
+        }
+      },
+      "text": "Ben's pet is not Dog."
+    },
+    {
+      "id": "c3",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 1,
+          "item": 2
+        }
+      },
+      "text": "Dev's pet is Frog."
+    },
+    {
+      "id": "c4",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "Ava's snack is not Cookies."
+    },
+    {
+      "id": "c5",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "Ben's snack is not Pretzels."
+    },
+    {
+      "id": "c6",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "Ben's snack is not Cookies."
+    },
+    {
+      "id": "c7",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 0,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "Dev's snack is not Cookies."
+    },
+    {
+      "id": "c8",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 1
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The kid whose pet is Dog does not have Blue for their color."
+    },
+    {
+      "id": "c9",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 0
+        }
+      },
+      "text": "The kid whose pet is Frog does not have Red for their color."
+    },
+    {
+      "id": "c10",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The kid whose pet is Frog does not have Pretzels for their snack."
+    },
+    {
+      "id": "c11",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 1,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The kid whose pet is Hamster does not have Pretzels for their snack."
+    },
+    {
+      "id": "c12",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 0
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "The kid whose color is Red does not have Cookies for their snack."
+    },
+    {
+      "id": "c13",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 0
+        }
+      },
+      "text": "The kid whose color is Blue does not have Pretzels for their snack."
+    },
+    {
+      "id": "c14",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 1
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "The kid whose color is Blue does not have Popcorn for their snack."
+    },
+    {
+      "id": "c15",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "The kid whose color is Pink does not have Cookies for their snack."
+    },
+    {
+      "id": "c16",
+      "structured": {
+        "type": "isNot",
+        "a": {
+          "cat": 2,
+          "item": 3
+        },
+        "b": {
+          "cat": 3,
+          "item": 3
+        }
+      },
+      "text": "The kid whose color is Pink does not have Popcorn for their snack."
+    },
+    {
+      "id": "c17",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 2,
+          "item": 2
+        },
+        "b": {
+          "cat": 3,
+          "item": 2
+        }
+      },
+      "text": "The kid whose color is Green has Cookies for their snack."
+    },
+    {
+      "id": "c18",
+      "structured": {
+        "type": "is",
+        "a": {
+          "cat": 1,
+          "item": 2
+        },
+        "b": {
+          "cat": 2,
+          "item": 1
+        }
+      },
+      "text": "The kid whose pet is Frog has Blue for their color."
+    }
+  ],
+  "seed": 1620515668,
+  "createdAt": "2026-06-05T00:00:00.000Z"
+}
