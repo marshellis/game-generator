@@ -1,0 +1,204 @@
+{
+  "id": "2026-06-06-word-search-g3-3",
+  "title": "Word Search",
+  "gameType": "word-search",
+  "gradeLabel": "grade 3",
+  "difficulty": "g3",
+  "size": 9,
+  "theme": "Nature",
+  "grid": [
+    [
+      "A",
+      "Z",
+      "I",
+      "C",
+      "C",
+      "R",
+      "A",
+      "M",
+      "R"
+    ],
+    [
+      "W",
+      "O",
+      "G",
+      "O",
+      "A",
+      "W",
+      "A",
+      "Q",
+      "W"
+    ],
+    [
+      "B",
+      "H",
+      "R",
+      "F",
+      "W",
+      "N",
+      "P",
+      "I",
+      "G"
+    ],
+    [
+      "E",
+      "I",
+      "A",
+      "L",
+      "O",
+      "Y",
+      "Y",
+      "N",
+      "N"
+    ],
+    [
+      "A",
+      "L",
+      "S",
+      "O",
+      "F",
+      "E",
+      "S",
+      "O",
+      "O"
+    ],
+    [
+      "C",
+      "L",
+      "S",
+      "W",
+      "F",
+      "Q",
+      "W",
+      "U",
+      "N"
+    ],
+    [
+      "H",
+      "E",
+      "V",
+      "E",
+      "R",
+      "I",
+      "G",
+      "X",
+      "N"
+    ],
+    [
+      "T",
+      "L",
+      "X",
+      "R",
+      "K",
+      "V",
+      "L",
+      "J",
+      "U"
+    ],
+    [
+      "J",
+      "R",
+      "S",
+      "T",
+      "O",
+      "N",
+      "E",
+      "F",
+      "T"
+    ]
+  ],
+  "words": [
+    {
+      "word": "GRASS",
+      "start": {
+        "r": 1,
+        "c": 2
+      },
+      "end": {
+        "r": 5,
+        "c": 2
+      }
+    },
+    {
+      "word": "RAIN",
+      "start": {
+        "r": 0,
+        "c": 5
+      },
+      "end": {
+        "r": 3,
+        "c": 8
+      }
+    },
+    {
+      "word": "CANYON",
+      "start": {
+        "r": 0,
+        "c": 3
+      },
+      "end": {
+        "r": 5,
+        "c": 8
+      }
+    },
+    {
+      "word": "FLOWER",
+      "start": {
+        "r": 2,
+        "c": 3
+      },
+      "end": {
+        "r": 7,
+        "c": 3
+      }
+    },
+    {
+      "word": "BEACH",
+      "start": {
+        "r": 2,
+        "c": 0
+      },
+      "end": {
+        "r": 6,
+        "c": 0
+      }
+    },
+    {
+      "word": "HILL",
+      "start": {
+        "r": 2,
+        "c": 1
+      },
+      "end": {
+        "r": 5,
+        "c": 1
+      }
+    },
+    {
+      "word": "SUN",
+      "start": {
+        "r": 4,
+        "c": 6
+      },
+      "end": {
+        "r": 6,
+        "c": 8
+      }
+    },
+    {
+      "word": "STONE",
+      "start": {
+        "r": 8,
+        "c": 2
+      },
+      "end": {
+        "r": 8,
+        "c": 6
+      }
+    }
+  ],
+  "maxDirections": 3,
+  "difficultyRating": 2,
+  "seed": 3,
+  "createdAt": "2026-06-06T00:00:00.000Z"
+}

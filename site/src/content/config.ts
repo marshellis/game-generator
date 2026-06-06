@@ -225,4 +225,24 @@ const sudokus = defineCollection({
   }),
 });
 
-export const collections = { puzzles, packets, mazes, sudokus };
+const wpos = z.object({ r: z.number(), c: z.number() });
+const wordsearches = defineCollection({
+  type: "data",
+  schema: z.object({
+    id: z.string(),
+    title: z.string(),
+    gameType: z.literal("word-search"),
+    gradeLabel: z.string(),
+    difficulty: z.string(),
+    size: z.number(),
+    theme: z.string(),
+    grid: z.array(z.array(z.string())),
+    words: z.array(z.object({ word: z.string(), start: wpos, end: wpos })),
+    maxDirections: z.number(),
+    difficultyRating: z.number(),
+    seed: z.number(),
+    createdAt: z.string(),
+  }),
+});
+
+export const collections = { puzzles, packets, mazes, sudokus, wordsearches };
