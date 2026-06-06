@@ -21,10 +21,18 @@ export function initWordSearch(data: WordSearchData): void {
   let revealed = false;
 
   const at = (p: Pos) => cellEls.find((e) => +e.dataset.r! === p.r && +e.dataset.c! === p.c)!;
+  // The component paints unsolved cells `bg-white text-slate-800`. Both base and
+  // highlight are Tailwind utilities, so the one later in the stylesheet wins
+  // regardless of DOM class order — `bg-white` shadowed `bg-brand-100`. Swap the
+  // base classes OUT when highlighting (and back when clearing) so the colour shows.
+  const BASE_CLASSES = ["bg-white", "text-slate-800"];
   const FOUND_CLASSES = ["bg-brand-100", "text-brand-800"];
 
+  const paintCell = (el: HTMLElement) => { el.classList.remove(...BASE_CLASSES); el.classList.add(...FOUND_CLASSES); };
+  const unpaintCell = (el: HTMLElement) => { el.classList.remove(...FOUND_CLASSES); el.classList.add(...BASE_CLASSES); };
+
   const paintWord = (i: number) => {
-    for (const p of wordCells(words[i]!)) at(p).classList.add(...FOUND_CLASSES);
+    for (const p of wordCells(words[i]!)) paintCell(at(p));
     const el = wordEls.find((e) => e.dataset.word === words[i]!.word);
     el?.classList.add("line-through", "text-slate-400");
   };
@@ -70,7 +78,7 @@ export function initWordSearch(data: WordSearchData): void {
     if (revealed) { if (result) result.textContent = "Hide the answers first."; return; }
     found.clear();
     localStorage.removeItem(storageKey(data.id));
-    for (const el of cellEls) el.classList.remove(...FOUND_CLASSES);
+    for (const el of cellEls) unpaintCell(el);
     for (const el of wordEls) el.classList.remove("line-through", "text-slate-400");
     clearSelection();
     if (result) result.textContent = "";
@@ -84,7 +92,7 @@ export function initWordSearch(data: WordSearchData): void {
       for (let i = 0; i < total; i++) paintWord(i);
       if (result) result.textContent = "Showing every word.";
     } else {
-      for (const el of cellEls) el.classList.remove(...FOUND_CLASSES);
+      for (const el of cellEls) unpaintCell(el);
       for (const el of wordEls) el.classList.remove("line-through", "text-slate-400");
       for (const i of found) paintWord(i);
       status();
