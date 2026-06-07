@@ -50,7 +50,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Pin to 20: @astrojs/vercel@7 maps the build-time Node major to the
+          # function runtime. Node 22 isn't recognized by v7 → falls back to the
+          # now-invalid nodejs18.x and the deploy fails. Node 20 → nodejs20.x.
+          node-version: 20
 
       - name: Check for Vercel token
         id: check
