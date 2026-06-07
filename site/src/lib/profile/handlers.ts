@@ -69,6 +69,6 @@ export async function recordCompletion(
   const puzzleId = String(input.puzzleId ?? "");
   const grade = String(input.grade ?? "");
   if (!KNOWN_GAMES.has(game) || !puzzleId) return { status: 400, json: { error: "invalid" } };
-  await deps.store.putCompletion(username, completionField(game, puzzleId), JSON.stringify({ grade, ts: deps.now }));
+  await deps.store.putCompletion(username, completionField(game, puzzleId), { grade, ts: deps.now });
   return { status: 200, json: { ok: true } };
 }

@@ -8,7 +8,7 @@ describe("completionField", () => {
 });
 
 describe("parseCompletions", () => {
-  it("parses fields, splits on the first colon, sorts newest first", () => {
+  it("parses JSON-string values, splits on the first colon, sorts newest first", () => {
     const raw = {
       "maze:maze-1": JSON.stringify({ grade: "g3", ts: 100 }),
       "word-search:ws-1": JSON.stringify({ grade: "g2", ts: 200 }),
@@ -19,8 +19,19 @@ describe("parseCompletions", () => {
       { game: "maze", puzzleId: "maze-1", grade: "g3", ts: 100 },
     ]);
   });
-  it("skips malformed JSON values", () => {
+  it("parses already-deserialized object values (the @upstash/redis read path)", () => {
+    const raw = {
+      "maze:maze-1": { grade: "g3", ts: 100 },
+      "kenken:kk-1": { grade: "g5", ts: 300 },
+    };
+    expect(parseCompletions(raw)).toEqual([
+      { game: "kenken", puzzleId: "kk-1", grade: "g5", ts: 300 },
+      { game: "maze", puzzleId: "maze-1", grade: "g3", ts: 100 },
+    ]);
+  });
+  it("skips malformed values", () => {
     expect(parseCompletions({ "maze:x": "not json" })).toEqual([]);
+    expect(parseCompletions({ "maze:y": { grade: "g1" } })).toEqual([]); // no ts
   });
 });
 
