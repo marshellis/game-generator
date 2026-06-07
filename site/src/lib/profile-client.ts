@@ -3,19 +3,40 @@
 // grade lists, home count, and the /profile listing. All network calls degrade
 // silently — gameplay never depends on them.
 import { groupByGame, type GameGroup } from "./profile/completions";
+import { deriveBadges, earnedBadgeIds, currentStreak, type Badge } from "./profile/badges";
 import type { Completion } from "./profile/types";
 
 type Me = { username: string } | null;
 type Meta = { game?: string; puzzleId?: string; grade?: string };
 
-const GAME_LABELS: Record<string, string> = {
-  "logic-grid": "Logic Grid",
-  "math-packet": "Math Worksheets",
-  "maze": "Mazes",
-  "sudoku": "Sudoku",
-  "word-search": "Word Search",
-  "kenken": "KenKen",
+const GAME_META: Record<string, { label: string; emoji: string; path: string }> = {
+  "logic-grid": { label: "Logic Grid", emoji: "🧩", path: "/logic-grid" },
+  "math-packet": { label: "Math Worksheets", emoji: "🔢", path: "/math" },
+  "maze": { label: "Mazes", emoji: "🌀", path: "/maze" },
+  "sudoku": { label: "Sudoku", emoji: "⭐", path: "/sudoku" },
+  "word-search": { label: "Word Search", emoji: "🔎", path: "/word-search" },
+  "kenken": { label: "KenKen", emoji: "✖️", path: "/kenken" },
 };
+
+const MASTERY_NEED = 5;
+const SEEN_KEY = "mg_seen_badges";
+
+// In-memory completion list, seeded once and kept current so the solve handler
+// can derive badges optimistically (the server write may not have landed yet).
+let completionsCache: Completion[] | null = null;
+async function getCompletions(): Promise<Completion[]> {
+  if (completionsCache) return completionsCache;
+  completionsCache = await fetchCompletions();
+  return completionsCache;
+}
+
+function loadSeen(): Set<string> {
+  try { return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) ?? "[]") as string[]); }
+  catch { return new Set(); }
+}
+function saveSeen(ids: Iterable<string>): void {
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify([...ids])); } catch { /* ignore */ }
+}
 
 // Set once at init; lets the solve handler decide record-vs-nudge without a round trip.
 let currentMe: Me = null;
@@ -248,6 +269,7 @@ function wireSolveRecording(): void {
     if (!meta) return;
     if (currentMe) {
       void postCompletion(meta);
+      void maybeCelebrateBadges(meta);
     } else {
       pendingCompletion = meta;
       // Splash overlay is appended synchronously right after this event fires.
@@ -256,11 +278,56 @@ function wireSolveRecording(): void {
   });
 }
 
+/**
+ * After a logged-in solve, optimistically fold the just-solved puzzle into the
+ * cached completions, recompute earned badges, and toast any that are newly
+ * earned. Purely client-side and best-effort — never blocks gameplay.
+ */
+async function maybeCelebrateBadges(meta: Meta): Promise<void> {
+  if (!meta.game || !meta.puzzleId) return;
+  const cache = await getCompletions();
+  const field = `${meta.game}:${meta.puzzleId}`;
+  if (!cache.some((c) => `${c.game}:${c.puzzleId}` === field)) {
+    cache.push({ game: meta.game, puzzleId: meta.puzzleId, grade: meta.grade ?? "", ts: Date.now() });
+  }
+  const seen = loadSeen();
+  const earnedNow = earnedBadgeIds(cache, Date.now());
+  const fresh = earnedNow.filter((id) => !seen.has(id));
+  saveSeen(earnedNow);
+  if (fresh.length === 0) return;
+  const byId = new Map(deriveBadges(cache, Date.now()).map((b) => [b.id, b]));
+  // Win splash lands first; stack badge toasts above it, one after another.
+  setTimeout(() => fresh.forEach((id, i) => { const b = byId.get(id); if (b) setTimeout(() => toastBadge(b), i * 600); }), 700);
+}
+
+function toastBadge(b: Badge): void {
+  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  const t = document.createElement("div");
+  t.style.cssText =
+    "position:fixed;left:50%;top:24px;transform:translateX(-50%);z-index:10080;" +
+    "display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:12px 18px;" +
+    `box-shadow:0 16px 40px rgba(15,23,42,.28);font-family:${FONT};border:2px solid #facc15;max-width:90vw;`;
+  t.innerHTML =
+    `<span style="font-size:30px;line-height:1;">${b.emoji}</span>` +
+    `<span style="text-align:left;"><span style="display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#ca8a04;">New badge!</span>` +
+    `<span style="display:block;font-size:16px;font-weight:800;color:#0f172a;">${b.label}</span></span>`;
+  if (!reduce) t.animate(
+    [{ transform: "translateX(-50%) translateY(-16px)", opacity: 0 }, { transform: "translateX(-50%) translateY(0)", opacity: 1 }],
+    { duration: 260, easing: "cubic-bezier(.2,.9,.3,1.3)" },
+  );
+  document.body.appendChild(t);
+  setTimeout(() => {
+    const done = () => t.remove();
+    if (reduce) return done();
+    t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300 }).finished.then(done, done);
+  }, 3200);
+}
+
 // ---- solved badges on grade lists ----------------------------------------
 async function markSolvedCards(): Promise<void> {
   const cards = Array.from(document.querySelectorAll<HTMLElement>("a[data-puzzle-id]"));
   if (cards.length === 0) return;
-  const done = new Set((await fetchCompletions()).map((c) => `${c.game}:${c.puzzleId}`));
+  const done = new Set((await getCompletions()).map((c) => `${c.game}:${c.puzzleId}`));
   for (const card of cards) {
     const key = `${card.dataset.game}:${card.dataset.puzzleId}`;
     if (done.has(key)) {
@@ -274,11 +341,36 @@ async function markSolvedCards(): Promise<void> {
 async function renderHomeCount(): Promise<void> {
   const el = document.getElementById("solved-count");
   if (!el) return;
-  const n = (await fetchCompletions()).length;
-  if (n > 0) { el.textContent = `✓ ${n} puzzles solved`; el.hidden = false; }
+  const cs = await getCompletions();
+  const streak = currentStreak(cs, Date.now());
+  if (cs.length > 0) {
+    el.textContent = streak > 1 ? `✓ ${cs.length} solved · 🔥 ${streak}-day streak` : `✓ ${cs.length} puzzles solved`;
+    el.hidden = false;
+  }
 }
 
 // ---- /profile listing -----------------------------------------------------
+const esc = (s: string) => s.replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]!));
+
+function badgeChip(b: Badge): string {
+  const ring = b.earned ? "#facc15" : "#e2e8f0";
+  const bg = b.earned ? "#fffbeb" : "#f8fafc";
+  const titleColor = b.earned ? "#0f172a" : "#94a3b8";
+  const emoji = b.earned
+    ? `<span style="font-size:30px;line-height:1;">${b.emoji}</span>`
+    : `<span style="font-size:30px;line-height:1;filter:grayscale(1);opacity:.45;">${b.emoji}</span>`;
+  const sub = b.earned
+    ? `<span style="font-size:11px;color:#ca8a04;font-weight:600;">${esc(b.description)}</span>`
+    : `<span style="font-size:11px;color:#94a3b8;">${esc(b.description)}</span>` +
+      `<span style="display:block;margin-top:4px;height:5px;border-radius:9999px;background:#e2e8f0;overflow:hidden;">` +
+        `<span style="display:block;height:100%;width:${Math.min(100, Math.round((b.have / b.need) * 100))}%;background:#cbd5e1;"></span></span>`;
+  return `<div title="${esc(b.label)}" style="border:2px solid ${ring};background:${bg};border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
+    ${emoji}
+    <span style="font-size:13px;font-weight:800;color:${titleColor};line-height:1.15;">${esc(b.label)}</span>
+    ${sub}
+  </div>`;
+}
+
 async function renderProfile(me: Me): Promise<void> {
   const root = document.getElementById("profile-root");
   if (!root) return;
@@ -287,19 +379,65 @@ async function renderProfile(me: Me): Promise<void> {
     document.getElementById("profile-signin")?.addEventListener("click", () => openAuthModal());
     return;
   }
-  const groups: GameGroup[] = groupByGame(await fetchCompletions());
+  const completions = await getCompletions();
+  const groups: GameGroup[] = groupByGame(completions);
   const total = groups.reduce((s, g) => s + g.count, 0);
-  root.innerHTML =
-    `<p style="font-size:18px;font-weight:700;margin:0 0 16px;">${me.username} — ${total} puzzles solved</p>` +
-    (groups.length === 0
-      ? `<p style="color:#64748b;">No puzzles solved yet. Go play one!</p>`
-      : groups.map((g) => `
-        <div style="margin-bottom:18px;">
-          <div style="font-weight:700;margin-bottom:6px;">${GAME_LABELS[g.game] ?? g.game} · ${g.count}</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;">
-            ${g.completions.map((c) => `<span style="font-size:12px;background:#f1f5f9;border-radius:9999px;padding:3px 10px;color:#475569;">${c.puzzleId}</span>`).join("")}
-          </div>
-        </div>`).join(""));
+  const badges = deriveBadges(completions, Date.now());
+  const earnedCount = badges.filter((b) => b.earned).length;
+  const streak = currentStreak(completions, Date.now());
+
+  if (total === 0) {
+    root.innerHTML = `<div style="text-align:center;padding:32px 16px;background:#f8fafc;border-radius:16px;">
+      <div style="font-size:48px;">🎯</div>
+      <p style="font-size:17px;font-weight:700;margin:10px 0 4px;color:#0f172a;">No trophies yet, ${esc(me.username)}!</p>
+      <p style="color:#64748b;margin:0 0 16px;">Solve your first puzzle to start your collection.</p>
+      <a href="/" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:10px 18px;border-radius:10px;">Pick a game →</a>
+    </div>`;
+    return;
+  }
+
+  const stat = (big: string, small: string) =>
+    `<div style="flex:1;min-width:96px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 12px;text-align:center;">
+      <div style="font-size:26px;font-weight:800;color:#0f172a;line-height:1;">${big}</div>
+      <div style="font-size:12px;color:#64748b;margin-top:4px;">${small}</div></div>`;
+
+  const cards = groups.map((g) => {
+    const meta = GAME_META[g.game] ?? { label: g.game, emoji: "🎮", path: "/" };
+    const mastered = g.count >= MASTERY_NEED;
+    const progress = mastered
+      ? `<span style="font-size:12px;color:#ca8a04;font-weight:700;">⭐ Mastered</span>`
+      : `<span style="display:block;margin-top:6px;height:6px;border-radius:9999px;background:#eef2f7;overflow:hidden;">
+           <span style="display:block;height:100%;width:${Math.round((g.count / MASTERY_NEED) * 100)}%;background:#4f46e5;"></span></span>
+         <span style="font-size:11px;color:#94a3b8;">${g.count}/${MASTERY_NEED} to master</span>`;
+    return `<a href="${meta.path}" style="display:block;text-decoration:none;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:26px;line-height:1;">${meta.emoji}</span>
+        <span style="flex:1;"><span style="display:block;font-size:15px;font-weight:800;color:#0f172a;">${esc(meta.label)}</span>
+        <span style="font-size:12px;color:#64748b;">${g.count} solved</span></span>
+      </div>
+      <div style="margin-top:10px;">${progress}</div>
+    </a>`;
+  }).join("");
+
+  root.innerHTML = `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+      ${stat(String(total), "puzzles solved")}
+      ${stat(`${earnedCount}<span style="font-size:15px;color:#94a3b8;">/${badges.length}</span>`, "badges earned")}
+      ${stat(streak > 0 ? `🔥 ${streak}` : "—", streak > 0 ? "day streak" : "no streak yet")}
+    </div>
+
+    <h2 style="font-size:16px;font-weight:800;color:#0f172a;margin:0 0 12px;">🏆 Trophy shelf</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:28px;">
+      ${badges.map(badgeChip).join("")}
+    </div>
+
+    <h2 style="font-size:16px;font-weight:800;color:#0f172a;margin:0 0 12px;">By game</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;">
+      ${cards}
+    </div>`;
+
+  // Earned badges shown here count as "seen" so the next solve only toasts new ones.
+  saveSeen(earnedBadgeIds(completions, Date.now()));
 }
 
 // ---- bootstrap ------------------------------------------------------------
@@ -307,6 +445,11 @@ async function init(): Promise<void> {
   wireSolveRecording();
   currentMe = await fetchMe();
   renderChip(currentMe);
+  // Seed the "seen" set once so badges earned before this load never toast —
+  // only genuinely new ones earned during this session pop.
+  void getCompletions().then((cs) => {
+    if (loadSeen().size === 0) saveSeen(earnedBadgeIds(cs, Date.now()));
+  });
   void markSolvedCards();
   void renderHomeCount();
   void renderProfile(currentMe);
