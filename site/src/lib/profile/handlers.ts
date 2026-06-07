@@ -2,6 +2,7 @@ import type { Deps, HandlerResult } from "./types";
 import { normalizeUsername, validateUsername, validatePin, hashPin, verifyPin } from "./auth";
 import { signSession, verifySession, SESSION_MAX_AGE_SEC } from "./session";
 import { parseCompletions, groupByGame, completionField } from "./completions";
+import { sanitizeAvatar, sanitizeColor } from "./avatars";
 
 const LOCKOUT_MAX = 8;
 const LOCKOUT_TTL_SEC = 15 * 60;
@@ -19,13 +20,18 @@ function authed(token: string | undefined, deps: Deps): string | null {
   return s?.username ?? null;
 }
 
-export async function signup(input: { username?: string; pin?: string }, deps: Deps): Promise<HandlerResult> {
+export async function signup(
+  input: { username?: string; pin?: string; avatar?: string; avatarColor?: string },
+  deps: Deps,
+): Promise<HandlerResult> {
   const username = normalizeUsername(input.username ?? "");
   const pin = (input.pin ?? "").trim();
   if (!validateUsername(username) || !validatePin(pin)) return { status: 400, json: { error: "invalid" } };
-  const created = await deps.store.createUser(username, { pinHash: hashPin(pin), createdAt: deps.now });
+  const avatar = sanitizeAvatar(input.avatar);
+  const avatarColor = sanitizeColor(input.avatarColor);
+  const created = await deps.store.createUser(username, { pinHash: hashPin(pin), createdAt: deps.now, avatar, avatarColor });
   if (!created) return { status: 409, json: { error: "taken" } };
-  return { status: 201, json: { username }, cookie: sessionCookie(username, deps) };
+  return { status: 201, json: { username, avatar, avatarColor }, cookie: sessionCookie(username, deps) };
 }
 
 export async function login(input: { username?: string; pin?: string }, deps: Deps): Promise<HandlerResult> {
@@ -38,17 +44,22 @@ export async function login(input: { username?: string; pin?: string }, deps: De
     await deps.store.bumpLockout(username, LOCKOUT_TTL_SEC);
     return { status: 401, json: { error: "bad-credentials" } };
   }
-  return { status: 200, json: { username }, cookie: sessionCookie(username, deps) };
+  return {
+    status: 200,
+    json: { username, avatar: sanitizeAvatar(user.avatar), avatarColor: sanitizeColor(user.avatarColor) },
+    cookie: sessionCookie(username, deps),
+  };
 }
 
 export function logout(): HandlerResult {
   return { status: 204, cookie: { clear: true } };
 }
 
-export function me(token: string | undefined, deps: Deps): HandlerResult {
+export async function me(token: string | undefined, deps: Deps): Promise<HandlerResult> {
   const username = authed(token, deps);
   if (!username) return { status: 401, json: { error: "unauthenticated" } };
-  return { status: 200, json: { username } };
+  const user = await deps.store.getUser(username);
+  return { status: 200, json: { username, avatar: sanitizeAvatar(user?.avatar), avatarColor: sanitizeColor(user?.avatarColor) } };
 }
 
 export async function listCompletions(token: string | undefined, deps: Deps): Promise<HandlerResult> {

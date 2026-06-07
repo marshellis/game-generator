@@ -5,5 +5,5 @@ import { deps, readToken, toResponse } from "../../lib/profile/route-helpers";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ cookies }) => {
-  return toResponse(me(readToken(cookies), deps()));
+  return toResponse(await me(readToken(cookies), deps()));
 };
