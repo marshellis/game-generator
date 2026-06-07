@@ -1,5 +1,5 @@
 // site/src/games/maze/player.ts
-import { type Cell, isValidStep, isEntryPoint, corridorPath } from "./grid";
+import { type Cell, isValidStep, isEntryPoint, corridorPath, nearestReachable } from "./grid";
 import { celebrate } from "../shared/win";
 
 // How far the trail will "catch up" along a corridor in a single pointer move.
@@ -51,6 +51,17 @@ export function initMaze(data: MazeData): void {
     return { r, c };
   };
 
+  // continuous finger position in grid units (cell (r,c) center = (c+0.5, r+0.5)).
+  // We chase the *nearest reachable corridor cell* to this point, not the cell the
+  // finger floors onto, so an off-center drag still flows in the obvious direction.
+  const fingerAt = (ev: PointerEvent): { x: number; y: number } => {
+    const rect = svg.getBoundingClientRect();
+    return {
+      x: (ev.clientX - rect.left) / rect.width * data.cols,
+      y: (ev.clientY - rect.top) / rect.height * data.rows,
+    };
+  };
+
   const trailIndexOf = (cell: Cell) => trail.findIndex((t) => same(t, cell));
   const truncateTo = (i: number) => { if (i >= 0 && i < trail.length - 1) { trail.length = i + 1; render(); save(); } };
 
@@ -67,22 +78,23 @@ export function initMaze(data: MazeData): void {
     }
   };
 
-  // move the trail head toward `cell`: fill the unique corridor forward so the line
-  // follows the finger through corners and at speed, or retrace the trail backward.
-  // Backward retrace is contiguous from the head only — we never jump the head to a
-  // far/earlier part of the trail the finger merely drifted close to (that's how a
-  // drag near a previous line used to erase a long detour). The head can only walk
-  // back over its own most-recent cells (within MAX_STEP, matching the forward fill).
-  const dragTo = (cell: Cell) => {
+  // chase the finger at grid coords (fx, fy): pick the nearest reachable corridor
+  // cell and move the head there so the line flows smoothly in the obvious direction
+  // even when the finger is off-center. Forward: fill the unique corridor (follows
+  // corners and catches up on fast drags). Backward: retrace contiguously from the
+  // head only — never jump the head to a far/earlier segment the finger drifted near.
+  // `allowBack` is off for taps so a tap can only ever advance, never back up.
+  const chase = (fx: number, fy: number, allowBack: boolean) => {
     if (revealed) return;
     const head = trail[trail.length - 1]!;
-    if (same(cell, head)) return;
-    const onTrail = trailIndexOf(cell);
+    const target = nearestReachable(data.open, head, fx, fy, MAX_STEP);
+    if (same(target, head)) return;
+    const onTrail = trailIndexOf(target);
     if (onTrail >= 0) {
-      if (trail.length - 1 - onTrail <= MAX_STEP) truncateTo(onTrail);
+      if (allowBack && trail.length - 1 - onTrail <= MAX_STEP) truncateTo(onTrail);
       return;
     }
-    const path = corridorPath(data.open, head, cell, MAX_STEP);
+    const path = corridorPath(data.open, head, target, MAX_STEP);
     if (path) for (const step of path) extendStep(step);
   };
 
@@ -103,15 +115,14 @@ export function initMaze(data: MazeData): void {
       if (result) result.textContent = "";
     }
   });
-  svg.addEventListener("pointermove", (ev) => { if (dragging) { const c = cellAt(ev); if (c) dragTo(c); } });
+  svg.addEventListener("pointermove", (ev) => { if (dragging) { const f = fingerAt(ev); chase(f.x, f.y, true); } });
   svg.addEventListener("pointerup", () => { dragging = false; });
-  // tap fallback: tapping ahead fills the corridor forward. Tapping the trail never
-  // backs up — you have to drag the head back, so a tap on a previous line can't jump.
+  // tap fallback: tapping ahead flows the corridor forward toward the tap. Taps never
+  // back up (allowBack=false) — you drag the head back, so a tap can't jump the trail.
   svg.addEventListener("click", (ev) => {
     if (revealed) return;
-    const c = cellAt(ev as unknown as PointerEvent); if (!c) return;
-    if (trailIndexOf(c) >= 0) return;
-    dragTo(c);
+    const f = fingerAt(ev as unknown as PointerEvent);
+    chase(f.x, f.y, false);
   });
 
   // Laptop: arrow keys step the trail head (extendStep handles walls, backtrack, win).

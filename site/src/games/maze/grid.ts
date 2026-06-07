@@ -39,6 +39,44 @@ const STEPS: { dr: number; dc: number; bit: number }[] = [
  * events skip cells (fast drags, diagonal motion around corners). In a perfect
  * maze the path between two cells is unique, so this is exactly the traced route.
  */
+/**
+ * The open-passage cell, reachable from `from` within `maxLen` steps, whose center
+ * is closest to the finger at grid-unit coords (fx, fy) — cell (r,c)'s center is
+ * (c + 0.5, r + 0.5). Always returns at least `from`.
+ *
+ * This is what makes the trail "flow" toward where the finger is heading: we chase
+ * the nearest cell of the actual corridor rather than the exact cell under the
+ * finger, so an off-center drag still follows the obvious direction. Cells on other
+ * corridors that happen to be spatially close but are walled off (more than `maxLen`
+ * away through passages) are never reachable here, so the head can't jump to them.
+ */
+export function nearestReachable(open: number[][], from: Cell, fx: number, fy: number, maxLen: number): Cell {
+  const dist2 = (cell: Cell) => {
+    const dx = cell.c + 0.5 - fx, dy = cell.r + 0.5 - fy;
+    return dx * dx + dy * dy;
+  };
+  let best = from, bestD = dist2(from);
+  const seen = new Set<string>([cellKey(from)]);
+  let frontier: Cell[] = [from];
+  for (let depth = 0; depth < maxLen && frontier.length; depth++) {
+    const next: Cell[] = [];
+    for (const cur of frontier) {
+      for (const s of STEPS) {
+        if (!(open[cur.r]?.[cur.c]! & s.bit)) continue;
+        const nb: Cell = { r: cur.r + s.dr, c: cur.c + s.dc };
+        const k = cellKey(nb);
+        if (seen.has(k)) continue;
+        seen.add(k);
+        const d = dist2(nb);
+        if (d < bestD) { bestD = d; best = nb; }
+        next.push(nb);
+      }
+    }
+    frontier = next;
+  }
+  return best;
+}
+
 export function corridorPath(open: number[][], from: Cell, to: Cell, maxLen: number): Cell[] | null {
   if (from.r === to.r && from.c === to.c) return [];
   const prev = new Map<string, Cell>();
