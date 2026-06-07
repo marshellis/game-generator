@@ -3,3 +3,7 @@ dist/
 .astro/
 .vercel
 .gstack/
+# local env files (vercel env pull writes .env.local with real secrets)
+.env
+.env.*
+!.env.example
