@@ -23,11 +23,21 @@ counted, never rewarded. That was the gap.
    - The header confirm()/alert() menu was ALSO independently fixed by peer PR #29
      mid-sprint — kept #29's dropdown wholesale, dropped my duplicate.
 
+3. **Pick-your-avatar** — Effort: S–M — Status: MERGED (#37, same day)
+   - Branch: feat/avatars (built on fresh main after #30, as planned — kept the
+     auth/store backend change off the pure-client trophy-case PR).
+   - New pure `profile/avatars.ts` (5 unit tests): allowlist of 16 animals + 6 colors,
+     sanitizeAvatar/sanitizeColor collapse off-list input to default (never store raw).
+   - Backend: avatar+avatarColor on UserRecord; signup persists+echoes; login+me return
+     it; me() now reads the store (async) and defaults legacy records. Handler tests
+     extended. Client: signup modal "Pick your character" picker (16 emoji + 6 colors +
+     live preview, random default); chip + profile header render the avatar circle.
+   - Verified on prod: fresh signup with a picked panda+green persisted through
+     /api/me; a legacy pre-avatar user defaulted cleanly to fox+yellow in the chip.
+   - Dropped the "avatar on solved badges" sub-idea — visual clutter, low value.
+
 ### Backlog
-1. **Pick-your-avatar** — Effort: S–M — disposition was "Do it", deferred to a second
-   PR (touches the auth/store backend — a different risk surface I didn't want to mix
-   with the pure-client UI work). Build on fresh main: emoji/animal + color at signup,
-   shown in header chip + profile + solved badges. Needs signup API + store + types.
+(empty — all three user-value proposals shipped 2026-06-07)
 
 ### Meta-observations
 - **Concurrency was real this time.** TWO peer PRs landed mid-sprint: #29 (menu/modal
