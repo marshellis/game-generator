@@ -11,6 +11,7 @@ const { id } = Astro.params;
 const s = (await getEntry("wordsearches", id!))!.data;
 ---
 <Base title={`${s.title} ${s.size}×${s.size} — Marshellis Games`}>
+  <script type="application/json" id="puzzle-meta" set:html={JSON.stringify({ game: s.gameType, puzzleId: s.id, grade: s.difficulty })} />
   <GameHeader
     crumbs={[
       { label: "All games", href: "/" },

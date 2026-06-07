@@ -14,6 +14,7 @@ const entry = await getEntry("puzzles", id!);
 const puzzle = entry!.data;
 ---
 <Base title={`${puzzle.title} — Marshellis Games`}>
+  <script type="application/json" id="puzzle-meta" set:html={JSON.stringify({ game: puzzle.gameType, puzzleId: puzzle.id, grade: puzzle.difficulty })} />
   <GameHeader
     crumbs={[
       { label: "All games", href: "/" },
