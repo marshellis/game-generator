@@ -45,3 +45,16 @@ Items closed or rejected during PM cycles. Read this before every scout run to a
   "one PR in flight" guardrail is session-scoped — it does not see peer agents' PRs. Expect
   merge-queue cancellations and watch for theme collisions (a parallel KenKen sprint also
   claimed "game 5" on 2026-06-06). Re-enqueue if your merge_group run gets cancelled.
+- **Force-push is BLOCKED on all branches** (server pre-receive hook: "protected branch hook
+  declined"), not just `main`. You cannot rebase-and-force an open PR's branch. To rewrite
+  history (rebase onto newer main), push a **new branch + new PR** and close the old — or merge
+  main IN (non-rewriting). Caught 2026-06-07.
+- **Squash-merge ships the PR's DIFF, not the branch's file snapshot.** A PR whose base predates
+  a peer's change to file X will NOT revert X when it merges, as long as the PR's own diff doesn't
+  touch X. `git diff origin/main` on a behind-branch showing X as "changed" is cosmetic (you're
+  just behind) — don't panic-rebase over it; only rebase if YOUR diff conflicts. (2026-06-07:
+  feared a trophy-case PR was reverting the #31 maze fix; the squash kept #31 intact.)
+- **Peer refactored the same file concurrently?** Take their version wholesale
+  (`git checkout origin/main -- <file>`), then re-apply your *additive* changes via Edit. Cleaner
+  than a line-level rebase conflict when both sides rewrote the same functions. (2026-06-07: #29
+  rewrote profile-client.ts's menu/modal while I added the trophy shelf.)
