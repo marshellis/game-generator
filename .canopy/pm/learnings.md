@@ -22,6 +22,23 @@ Items closed or rejected during PM cycles. Read this before every scout run to a
 - **Adding a game = module + `registry.ts` entry + content collection in `content/config.ts`
   + render component + island + 5 routes + home card.** `cli.ts` needs NO edit (dispatches via
   registry). Sudoku (PR #8) and Word Search (PR #10) are the templates.
+- **Serverless functions ⇒ build under Node 20.** The site is `output: 'hybrid'` with
+  `@astrojs/vercel@7` (pinned for Astro 4). That adapter only recognizes Node **18/20**
+  (`SUPPORTED_NODE_VERSIONS`); building under anything else (CI was Node 22) silently falls
+  back to the now-**invalid `nodejs18.x`** runtime and *every* Vercel deploy fails with
+  `invalid "runtime": _render (nodejs18.x)`. `.github/workflows/deploy.yml` pins the deploy
+  job to Node 20 → `nodejs20.x`. Don't bump it without checking the adapter's supported set.
+  Caught after the user-profiles feature (2026-06-07). Upgrading to `@astrojs/vercel@8`
+  (needs Astro 5) would lift this.
+- **`@upstash/redis` auto-(de)serializes JSON.** `set`/`hset` an object → it's stored as
+  JSON; `get`/`hgetall` returns it already **parsed to an object**, not a string. Do NOT
+  `JSON.parse()` the read value (it throws and you silently lose data — the completions list
+  came back empty for exactly this reason). Store/read plain objects. Caught 2026-06-07.
+- **Profiles/accounts run on a thin `/api/*` serverless layer** (username+PIN, Upstash Redis).
+  Pure logic lives in `site/src/lib/profile/` (unit-tested with a fake store); routes are thin
+  adapters with `export const prerender = false`. The integration injects `KV_REST_API_URL/TOKEN`
+  (not `UPSTASH_REDIS_REST_*`); `SESSION_SECRET` is set manually in Vercel (Production). CI
+  needs no secrets. Pages stay static and personalize client-side via `profile-client.ts`.
 
 ## Process notes
 - This repo is worked by **multiple concurrent autonomous sessions** (emdash worktrees). The
