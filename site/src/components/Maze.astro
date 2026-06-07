@@ -17,7 +17,10 @@ const solPts = solution.map((c) => `${mid(c.c)},${mid(c.r)}`).join(" ");
 // interior walls drawn once: right edge if !openE, bottom edge if !openS
 const vlines: { x: number; y1: number; y2: number }[] = [];
 const hlines: { x1: number; x2: number; y: number }[] = [];
+// sealed cells (mask 0) are pruned short dead-ends — render them as solid wall mass
+const blocks: { x: number; y: number }[] = [];
 for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+  if (open[r]![c]! === 0) blocks.push({ x: c * CS, y: r * CS });
   if (c < cols - 1 && !(open[r]![c]! & E)) vlines.push({ x: (c + 1) * CS, y1: r * CS, y2: (r + 1) * CS });
   if (r < rows - 1 && !(open[r]![c]! & S)) hlines.push({ x1: c * CS, x2: (c + 1) * CS, y: (r + 1) * CS });
 }
@@ -26,6 +29,7 @@ for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
   <svg class="maze-svg" viewBox={`0 0 ${w} ${h}`} role="img" aria-label="maze"
        style="width:100%;max-width:560px;height:auto;touch-action:none;user-select:none">
     <rect x="0" y="0" width={w} height={h} fill="#fff" stroke="#1e293b" stroke-width="2" />
+    {blocks.map((b) => <rect x={b.x} y={b.y} width={CS} height={CS} fill="#cbd5e1" />)}
     {vlines.map((l) => <line x1={l.x} y1={l.y1} x2={l.x} y2={l.y2} stroke="#1e293b" stroke-width="2" stroke-linecap="round" />)}
     {hlines.map((l) => <line x1={l.x1} y1={l.y} x2={l.x2} y2={l.y} stroke="#1e293b" stroke-width="2" stroke-linecap="round" />)}
     <polyline id="solution" points={solPts} fill="none" stroke="#16a34a" stroke-width={CS * 0.28}

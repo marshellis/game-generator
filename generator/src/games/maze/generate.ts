@@ -3,6 +3,7 @@ import { resolveDifficulty, type Difficulty } from "./difficulty";
 import { loadThemes, pickTheme } from "./themes";
 import { carveMaze } from "./carve";
 import { farthestCell, solutionPath, braid } from "./solve";
+import { pruneShortDeadEnds } from "./prune";
 import { planDecoys, carveDecoyPockets } from "./decoys";
 import { slugify, makeMazeId } from "./serialize";
 import { type Maze } from "./types";
@@ -44,6 +45,13 @@ export function generateMaze(opts: GenerateMazeOptions): Maze {
   const end = farthestCell(open, diff.rows, diff.cols, start);
   if (diff.braid > 0) braid(open, diff.rows, diff.cols, diff.braid, rng);
   const solution = solutionPath(open, diff.rows, diff.cols, start, end);
+
+  // Seal short off-solution dead-ends so wrong turns aren't obvious at a glance.
+  // Runs after the solution is fixed (protected) and before decoy pockets are carved
+  // (decoy cells are still blocked/degree-0 here, so they're skipped either way).
+  const protectedCells = new Set<string>([...blocked]);
+  for (const cell of solution) protectedCells.add(`${cell.r},${cell.c}`);
+  pruneShortDeadEnds(open, diff.rows, diff.cols, diff.minWrongPath, protectedCells);
 
   // Carve the sealed dead-end pockets last (main maze + solution already fixed).
   carveDecoyPockets(open, entrances, diff.decoyDepth, diff.rows);
