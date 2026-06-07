@@ -67,13 +67,21 @@ export function initMaze(data: MazeData): void {
     }
   };
 
-  // move the trail head toward `cell`: drag back over the trail to undo, or fill the
-  // unique corridor forward so the line follows the finger through corners and at speed.
+  // move the trail head toward `cell`: fill the unique corridor forward so the line
+  // follows the finger through corners and at speed, or retrace the trail backward.
+  // Backward retrace is contiguous from the head only — we never jump the head to a
+  // far/earlier part of the trail the finger merely drifted close to (that's how a
+  // drag near a previous line used to erase a long detour). The head can only walk
+  // back over its own most-recent cells (within MAX_STEP, matching the forward fill).
   const dragTo = (cell: Cell) => {
     if (revealed) return;
-    const onTrail = trailIndexOf(cell);
-    if (onTrail >= 0) { truncateTo(onTrail); return; }
     const head = trail[trail.length - 1]!;
+    if (same(cell, head)) return;
+    const onTrail = trailIndexOf(cell);
+    if (onTrail >= 0) {
+      if (trail.length - 1 - onTrail <= MAX_STEP) truncateTo(onTrail);
+      return;
+    }
     const path = corridorPath(data.open, head, cell, MAX_STEP);
     if (path) for (const step of path) extendStep(step);
   };
@@ -84,8 +92,10 @@ export function initMaze(data: MazeData): void {
     const cell = cellAt(ev); if (!cell) return;
     const onTrail = trailIndexOf(cell);
     if (onTrail >= 0) {
-      // grab the trail anywhere (it's a fat, easy target) — back up to that point
-      truncateTo(onTrail);
+      // grab the trail (it's a fat, easy target) to start dragging — but never jump
+      // the head back to the press point. Backing up happens only by dragging the
+      // head back over the trail (see dragTo), so a press near a previous line can't
+      // erase progress.
       dragging = true; svg.setPointerCapture(ev.pointerId);
     } else if (isEntryPoint(entries, cell)) {
       trail = [cell]; render(); save();
@@ -95,10 +105,13 @@ export function initMaze(data: MazeData): void {
   });
   svg.addEventListener("pointermove", (ev) => { if (dragging) { const c = cellAt(ev); if (c) dragTo(c); } });
   svg.addEventListener("pointerup", () => { dragging = false; });
-  // tap fallback: tapping along the trail backs up to there; tapping ahead fills the corridor
+  // tap fallback: tapping ahead fills the corridor forward. Tapping the trail never
+  // backs up — you have to drag the head back, so a tap on a previous line can't jump.
   svg.addEventListener("click", (ev) => {
     if (revealed) return;
-    const c = cellAt(ev as unknown as PointerEvent); if (c) dragTo(c);
+    const c = cellAt(ev as unknown as PointerEvent); if (!c) return;
+    if (trailIndexOf(c) >= 0) return;
+    dragTo(c);
   });
 
   // Laptop: arrow keys step the trail head (extendStep handles walls, backtrack, win).
