@@ -22,3 +22,51 @@ export function isValidStep(open: number[][], a: Cell, b: Cell): boolean {
   if (dc === 1) return isOpen(open, a, E);
   return isOpen(open, a, W);
 }
+
+const STEPS: { dr: number; dc: number; bit: number }[] = [
+  { dr: -1, dc: 0, bit: N },
+  { dr: 1, dc: 0, bit: S },
+  { dr: 0, dc: 1, bit: E },
+  { dr: 0, dc: -1, bit: W },
+];
+
+/**
+ * Shortest path through open passages from `from` to `to`, as the list of step
+ * cells (excluding `from`, including `to`). Returns `[]` when they're the same
+ * cell, and `null` when `to` is unreachable or farther than `maxLen` steps.
+ *
+ * Lets a finger-drag "catch up" along the only legal corridor when pointer
+ * events skip cells (fast drags, diagonal motion around corners). In a perfect
+ * maze the path between two cells is unique, so this is exactly the traced route.
+ */
+export function corridorPath(open: number[][], from: Cell, to: Cell, maxLen: number): Cell[] | null {
+  if (from.r === to.r && from.c === to.c) return [];
+  const prev = new Map<string, Cell>();
+  const seen = new Set<string>([cellKey(from)]);
+  let frontier: Cell[] = [from];
+  for (let depth = 0; depth < maxLen && frontier.length; depth++) {
+    const next: Cell[] = [];
+    for (const cur of frontier) {
+      for (const s of STEPS) {
+        if (!(open[cur.r]?.[cur.c]! & s.bit)) continue;
+        const nb: Cell = { r: cur.r + s.dr, c: cur.c + s.dc };
+        const k = cellKey(nb);
+        if (seen.has(k)) continue;
+        seen.add(k);
+        prev.set(k, cur);
+        if (nb.r === to.r && nb.c === to.c) {
+          const path: Cell[] = [];
+          let cell: Cell | undefined = nb;
+          while (cell && !(cell.r === from.r && cell.c === from.c)) {
+            path.push(cell);
+            cell = prev.get(cellKey(cell));
+          }
+          return path.reverse();
+        }
+        next.push(nb);
+      }
+    }
+    frontier = next;
+  }
+  return null;
+}

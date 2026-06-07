@@ -1,6 +1,11 @@
 // site/src/games/maze/player.ts
-import { type Cell, isValidStep, isEntryPoint } from "./grid";
+import { type Cell, isValidStep, isEntryPoint, corridorPath } from "./grid";
 import { celebrate } from "../shared/win";
+
+// How far the trail will "catch up" along a corridor in a single pointer move.
+// Covers sparse pointer events on fast drags and the 2-cell diagonal jump at a
+// corner, while keeping an accidental cross-wall drift from filling a long detour.
+const MAX_STEP = 6;
 
 interface MazeData {
   id: string; cols: number; rows: number; open: number[][];
@@ -46,7 +51,11 @@ export function initMaze(data: MazeData): void {
     return { r, c };
   };
 
-  const extendTo = (cell: Cell) => {
+  const trailIndexOf = (cell: Cell) => trail.findIndex((t) => same(t, cell));
+  const truncateTo = (i: number) => { if (i >= 0 && i < trail.length - 1) { trail.length = i + 1; render(); save(); } };
+
+  // one orthogonal step from the head (push, per-step backtrack, win detection)
+  const extendStep = (cell: Cell) => {
     if (revealed) return;
     const head = trail[trail.length - 1]!;
     if (same(cell, head)) return;
@@ -58,12 +67,25 @@ export function initMaze(data: MazeData): void {
     }
   };
 
+  // move the trail head toward `cell`: drag back over the trail to undo, or fill the
+  // unique corridor forward so the line follows the finger through corners and at speed.
+  const dragTo = (cell: Cell) => {
+    if (revealed) return;
+    const onTrail = trailIndexOf(cell);
+    if (onTrail >= 0) { truncateTo(onTrail); return; }
+    const head = trail[trail.length - 1]!;
+    const path = corridorPath(data.open, head, cell, MAX_STEP);
+    if (path) for (const step of path) extendStep(step);
+  };
+
   let dragging = false;
   svg.addEventListener("pointerdown", (ev) => {
     if (revealed) return;
     const cell = cellAt(ev); if (!cell) return;
-    // continue dragging from the current head, or (re)start a trail at any entrance icon
-    if (same(cell, trail[trail.length - 1]!)) {
+    const onTrail = trailIndexOf(cell);
+    if (onTrail >= 0) {
+      // grab the trail anywhere (it's a fat, easy target) — back up to that point
+      truncateTo(onTrail);
       dragging = true; svg.setPointerCapture(ev.pointerId);
     } else if (isEntryPoint(entries, cell)) {
       trail = [cell]; render(); save();
@@ -71,15 +93,15 @@ export function initMaze(data: MazeData): void {
       if (result) result.textContent = "";
     }
   });
-  svg.addEventListener("pointermove", (ev) => { if (dragging) { const c = cellAt(ev); if (c) extendTo(c); } });
+  svg.addEventListener("pointermove", (ev) => { if (dragging) { const c = cellAt(ev); if (c) dragTo(c); } });
   svg.addEventListener("pointerup", () => { dragging = false; });
-  // tap-to-step fallback: tapping a neighbor of the head steps once
+  // tap fallback: tapping along the trail backs up to there; tapping ahead fills the corridor
   svg.addEventListener("click", (ev) => {
     if (revealed) return;
-    const c = cellAt(ev as unknown as PointerEvent); if (c) extendTo(c);
+    const c = cellAt(ev as unknown as PointerEvent); if (c) dragTo(c);
   });
 
-  // Laptop: arrow keys step the trail head (extendTo handles walls, backtrack, win).
+  // Laptop: arrow keys step the trail head (extendStep handles walls, backtrack, win).
   document.addEventListener("keydown", (e) => {
     if (revealed) return;
     const t = e.target as HTMLElement | null;
@@ -93,7 +115,7 @@ export function initMaze(data: MazeData): void {
     else return;
     e.preventDefault();
     if (next.r < 0 || next.r >= data.rows || next.c < 0 || next.c >= data.cols) return;
-    extendTo(next);
+    extendStep(next);
   });
 
   clearBtn?.addEventListener("click", () => {
