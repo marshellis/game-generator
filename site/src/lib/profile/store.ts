@@ -3,9 +3,15 @@ import type { Store, UserRecord } from "./types";
 
 let redis: Redis | null = null;
 function client(): Redis {
-  // Reads UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN from the environment.
+  // The Vercel "Upstash for Redis" integration injects KV_REST_API_URL/TOKEN;
+  // a manual Upstash setup uses UPSTASH_REDIS_REST_URL/TOKEN. Accept either.
   // Lazy so the build never needs these vars (only request time does).
-  if (!redis) redis = Redis.fromEnv();
+  if (!redis) {
+    const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+    if (!url || !token) throw new Error("Missing Redis env (KV_REST_API_URL/TOKEN)");
+    redis = new Redis({ url, token });
+  }
   return redis;
 }
 

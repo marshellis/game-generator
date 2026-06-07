@@ -140,8 +140,10 @@ The generator test suite is unaffected.
 
 In the Vercel project:
 
-- Add the Upstash (Vercel KV / Redis) integration.
-- Set env vars: `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `SESSION_SECRET`.
+- Add the Upstash for Redis (Vercel KV) integration and connect it to the project. This
+  auto-injects `KV_REST_API_URL` + `KV_REST_API_TOKEN` (the store reads these, falling back
+  to `UPSTASH_REDIS_REST_URL`/`TOKEN` for a manual setup).
+- Set one env var manually: `SESSION_SECRET` (long random string).
 
 The existing `vercel build --prebuilt` / deploy flow picks up the adapter automatically.
 The CI `test` job continues to run without any of these secrets (fake store in tests).
