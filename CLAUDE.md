@@ -9,10 +9,11 @@ leave PRs open pending approval.
 
 - After opening a PR, **merge it yourself immediately** once CI is green. There is no human
   review gate.
-- Prefer: `gh pr create ...` then `gh pr merge <n> --merge --auto --delete-branch`
-  (`--auto` lets GitHub merge the moment the `test` check passes; repo auto-merge is enabled).
-  If `--auto` isn't applicable, merge directly: `gh pr merge <n> --merge --delete-branch`.
-- You may also commit small changes straight to `main` — that's fine here.
+- Prefer: `gh pr create ...` then `gh pr merge <n> --squash --auto --delete-branch`
+  (`--auto` adds the PR to the merge queue; it merges the moment the `test` check passes).
+- `main` is a **protected, squash-only merge queue** — direct pushes are blocked and
+  `--merge` commits are rejected. Everything goes through a PR. See `AGENTS.md` for the
+  full concurrent-merge norms (rebase-first, watch for merge-queue cancellations).
 - The **only** gate is **green CI** (the `test` job: generator + site test suites). Never
   merge red. If tests fail, fix them, then merge.
 - Quality still matters: keep using TDD and the spec → plan → build flow for features. The
@@ -35,15 +36,21 @@ gating check but no deploy happens. Live at games.marshellis.com. Manual fallbac
   `cli.ts` dispatches by `--game`; `catalog.ts` + `--all` drive every registered module.
   Generators write JSON into `site/src/content/<collection>/`.
 - `site/` — Astro + Tailwind v4 static app. Per-game render components in
-  `site/src/components/`, client islands in `site/src/games/<game>/`, routes in
+  `site/src/components/`, client islands in `site/src/games/<game>/`, shared island helpers
+  (N×N number-grid controller, win splash) in `site/src/games/shared/`, routes in
   `site/src/pages/<game>/`. Shared `GameHeader.astro`; play/print/answer route split.
 - `docs/grade-appropriateness.md` — cited grade-level framework ALL games calibrate
   difficulty against. `docs/research/` — raw research. `docs/superpowers/` — specs + plans.
+- `AGENTS.md` — concurrent-merge norms (this repo is worked by multiple parallel agents).
+  `.canopy/pm/learnings.md` — project gotchas worth reading before a new game (e.g. Tailwind
+  utility-shadowing in islands: swap the base class OUT, don't just add a state class).
 
 Games so far: logic-grid (Logic Grid), math-packet (Math Worksheets), maze (Mazes),
-sudoku (Sudoku). New games add a module under `generator/src/games/`, register it in
-`registry.ts`, add a content collection + render component + route, calibrate to the grade
-framework, and ship web play + a printable + an answer key.
+sudoku (Sudoku), word-search (Word Search), kenken (KenKen). Adding a game = a module under
+`generator/src/games/<game>/` registered in `registry.ts`, a content collection in
+`site/src/content/config.ts`, a render component + client island + route set + home card —
+all calibrated to the grade framework and shipping web play + a printable + an answer key.
+`cli.ts` needs no edit (it dispatches via the registry).
 
 ## Commands
 
