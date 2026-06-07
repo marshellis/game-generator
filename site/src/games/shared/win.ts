@@ -33,6 +33,8 @@ let shown = false;
 export function celebrate(title = "You solved it!"): void {
   if (shown) return;
   shown = true;
+  // Single recording chokepoint for every game — the profile client listens for this.
+  document.dispatchEvent(new CustomEvent("puzzle:solved"));
   confetti();
 
   // GameHeader breadcrumb is [All games / <Game> / <grade>]. Last link = grade list
