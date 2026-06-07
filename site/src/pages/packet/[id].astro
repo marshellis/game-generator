@@ -14,6 +14,7 @@ const entry = await getEntry("packets", id!);
 const packet = entry!.data;
 ---
 <Base title={`${packet.title} — Math Worksheets`}>
+  <script type="application/json" id="puzzle-meta" set:html={JSON.stringify({ game: packet.gameType, puzzleId: packet.id, grade: packet.difficulty })} />
   <GameHeader
     crumbs={[
       { label: "All games", href: "/" },

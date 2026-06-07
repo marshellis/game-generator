@@ -31,8 +31,9 @@ const { puzzles, label } = Astro.props;
   <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {puzzles.map((p) => (
       <li>
-        <a href={`/puzzle/${p.data.id}`}
+        <a href={`/puzzle/${p.data.id}`} data-game={p.data.gameType} data-puzzle-id={p.data.id}
            class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md">
+          <span data-solved-badge hidden style="align-self:flex-start;font-size:11px;font-weight:700;color:#15803d;background:#dcfce7;border-radius:9999px;padding:2px 8px;margin-bottom:6px;">✓ Solved</span>
           <span class="text-base font-bold text-slate-900">{p.data.title}</span>
           <span class="mt-1 text-sm text-slate-500">{p.data.themeBlurb}</span>
           <span class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-slate-400">

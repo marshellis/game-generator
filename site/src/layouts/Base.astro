@@ -17,6 +17,7 @@ const { title } = Astro.props;
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-600 text-sm text-white">M</span>
           Marshellis Games
         </a>
+        <span id="profile-chip" class="ml-auto"></span>
       </div>
     </header>
     <main class="mx-auto max-w-5xl px-5 py-8">
@@ -25,5 +26,8 @@ const { title } = Astro.props;
     <footer class="mx-auto max-w-5xl px-5 py-10 text-xs text-slate-400">
       Made for the Marshellis kids · games.marshellis.com
     </footer>
+    <script>
+      import "../lib/profile-client.ts";
+    </script>
   </body>
 </html>

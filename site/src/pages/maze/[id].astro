@@ -13,6 +13,7 @@ const entry = await getEntry("mazes", id!);
 const m = entry!.data;
 ---
 <Base title={`${m.title} — Marshellis Games`}>
+  <script type="application/json" id="puzzle-meta" set:html={JSON.stringify({ game: m.gameType, puzzleId: m.id, grade: m.difficulty })} />
   <GameHeader
     crumbs={[
       { label: "All games", href: "/" },
