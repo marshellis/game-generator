@@ -10,28 +10,30 @@ function client(): Redis {
 }
 
 export function upstashStore(): Store {
-  const r = client();
+  // client() is called per-method (not once up front) so building the store is
+  // free: routes that never touch Redis (e.g. an unauthenticated /api/me) don't
+  // trigger Redis.fromEnv() and so return a clean 401 even if env is missing.
   return {
     async getUser(u) {
-      return (await r.get<UserRecord>(`user:${u}`)) ?? null;
+      return (await client().get<UserRecord>(`user:${u}`)) ?? null;
     },
     async createUser(u, rec) {
-      const res = await r.set(`user:${u}`, rec, { nx: true });
+      const res = await client().set(`user:${u}`, rec, { nx: true });
       return res === "OK";
     },
     async getCompletions(u) {
-      return (await r.hgetall<Record<string, string>>(`completions:${u}`)) ?? {};
+      return (await client().hgetall<Record<string, string>>(`completions:${u}`)) ?? {};
     },
     async putCompletion(u, field, value) {
-      await r.hset(`completions:${u}`, { [field]: value });
+      await client().hset(`completions:${u}`, { [field]: value });
     },
     async bumpLockout(u, ttlSec) {
-      const n = await r.incr(`lockout:${u}`);
-      if (n === 1) await r.expire(`lockout:${u}`, ttlSec);
+      const n = await client().incr(`lockout:${u}`);
+      if (n === 1) await client().expire(`lockout:${u}`, ttlSec);
       return n;
     },
     async getLockout(u) {
-      return Number(await r.get(`lockout:${u}`)) || 0;
+      return Number(await client().get(`lockout:${u}`)) || 0;
     },
   };
 }
