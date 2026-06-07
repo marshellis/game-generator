@@ -4,20 +4,23 @@ export function completionField(game: string, puzzleId: string): string {
   return `${game}:${puzzleId}`;
 }
 
-export function parseCompletions(raw: Record<string, string>): Completion[] {
+export function parseCompletions(raw: Record<string, unknown>): Completion[] {
   const out: Completion[] = [];
-  for (const [field, value] of Object.entries(raw)) {
+  for (const [field, rawValue] of Object.entries(raw)) {
     const sep = field.indexOf(":");
     if (sep < 0) continue;
     const game = field.slice(0, sep);
     const puzzleId = field.slice(sep + 1);
+    // @upstash/redis auto-deserializes JSON, so values normally arrive as
+    // objects; tolerate a raw JSON string too (auto-deser off / a fake store).
+    let v: { grade?: unknown; ts?: unknown };
     try {
-      const v = JSON.parse(value) as { grade?: string; ts?: number };
-      if (typeof v.ts !== "number") continue;
-      out.push({ game, puzzleId, grade: String(v.grade ?? ""), ts: v.ts });
+      v = (typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue) as typeof v;
     } catch {
-      // skip malformed
+      continue;
     }
+    if (!v || typeof v.ts !== "number") continue;
+    out.push({ game, puzzleId, grade: String(v.grade ?? ""), ts: v.ts });
   }
   return out.sort((a, b) => b.ts - a.ts);
 }

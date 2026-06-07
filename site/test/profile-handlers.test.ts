@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import type { Store, UserRecord, Deps } from "../src/lib/profile/types";
+import type { Store, UserRecord, CompletionValue, Deps } from "../src/lib/profile/types";
 import { signup, login, logout, me, listCompletions, recordCompletion } from "../src/lib/profile/handlers";
 
 class FakeStore implements Store {
   users = new Map<string, UserRecord>();
-  completions = new Map<string, Record<string, string>>();
+  completions = new Map<string, Record<string, unknown>>();
   lockouts = new Map<string, number>();
   async getUser(u: string) { return this.users.get(u) ?? null; }
   async createUser(u: string, rec: UserRecord) {
@@ -12,7 +12,7 @@ class FakeStore implements Store {
     this.users.set(u, rec); return true;
   }
   async getCompletions(u: string) { return this.completions.get(u) ?? {}; }
-  async putCompletion(u: string, field: string, value: string) {
+  async putCompletion(u: string, field: string, value: CompletionValue) {
     const h = this.completions.get(u) ?? {}; h[field] = value; this.completions.set(u, h);
   }
   async bumpLockout(u: string) { const n = (this.lockouts.get(u) ?? 0) + 1; this.lockouts.set(u, n); return n; }

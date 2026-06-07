@@ -28,7 +28,7 @@ export function upstashStore(): Store {
       return res === "OK";
     },
     async getCompletions(u) {
-      return (await client().hgetall<Record<string, string>>(`completions:${u}`)) ?? {};
+      return (await client().hgetall<Record<string, unknown>>(`completions:${u}`)) ?? {};
     },
     async putCompletion(u, field, value) {
       await client().hset(`completions:${u}`, { [field]: value });
