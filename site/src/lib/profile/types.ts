@@ -1,6 +1,8 @@
 export interface UserRecord {
   pinHash: string;
   createdAt: number; // epoch ms
+  avatar?: string; // allowlisted emoji (see avatars.ts); absent on pre-avatar records
+  avatarColor?: string; // allowlisted hex
 }
 
 export interface Completion {

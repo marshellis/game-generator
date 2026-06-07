@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Store, UserRecord, CompletionValue, Deps } from "../src/lib/profile/types";
 import { signup, login, logout, me, listCompletions, recordCompletion } from "../src/lib/profile/handlers";
+import { AVATARS, AVATAR_COLORS, DEFAULT_AVATAR, DEFAULT_COLOR } from "../src/lib/profile/avatars";
 
 class FakeStore implements Store {
   users = new Map<string, UserRecord>();
@@ -32,9 +33,19 @@ describe("signup", () => {
   it("creates a user and returns a session cookie", async () => {
     const res = await signup({ username: "Alice", pin: "4821" }, deps);
     expect(res.status).toBe(201);
-    expect(res.json).toEqual({ username: "alice" });
+    expect(res.json).toMatchObject({ username: "alice" });
     expect(cookieValue(res)).toContain("alice.");
     expect(store.users.has("alice")).toBe(true);
+  });
+  it("persists a chosen avatar + color and echoes them back", async () => {
+    const avatar = AVATARS[3], avatarColor = AVATAR_COLORS[2];
+    const res = await signup({ username: "alice", pin: "4821", avatar, avatarColor }, deps);
+    expect(res.json).toEqual({ username: "alice", avatar, avatarColor });
+    expect(store.users.get("alice")).toMatchObject({ avatar, avatarColor });
+  });
+  it("falls back to defaults when the avatar is missing or not allowlisted", async () => {
+    const res = await signup({ username: "alice", pin: "4821", avatar: "<script>", avatarColor: "red" }, deps);
+    expect(res.json).toEqual({ username: "alice", avatar: DEFAULT_AVATAR, avatarColor: DEFAULT_COLOR });
   });
   it("rejects invalid input with 400", async () => {
     expect((await signup({ username: "ab", pin: "4821" }, deps)).status).toBe(400);
@@ -52,6 +63,12 @@ describe("login", () => {
     const res = await login({ username: "alice", pin: "4821" }, deps);
     expect(res.status).toBe(200);
     expect(cookieValue(res)).toContain("alice.");
+  });
+  it("returns the stored avatar on login", async () => {
+    store.users.delete("alice");
+    await signup({ username: "alice", pin: "4821", avatar: AVATARS[5], avatarColor: AVATAR_COLORS[1] }, deps);
+    const res = await login({ username: "alice", pin: "4821" }, deps);
+    expect(res.json).toEqual({ username: "alice", avatar: AVATARS[5], avatarColor: AVATAR_COLORS[1] });
   });
   it("fails with the wrong pin (401) and bumps lockout", async () => {
     const res = await login({ username: "alice", pin: "0000" }, deps);
@@ -76,10 +93,16 @@ describe("logout", () => {
 });
 
 describe("me", () => {
-  it("returns username for a valid token, 401 otherwise", async () => {
-    const token = cookieValue(await signup({ username: "alice", pin: "4821" }, deps));
-    expect(me(token, deps)).toEqual({ status: 200, json: { username: "alice" } });
-    expect(me(undefined, deps).status).toBe(401);
+  it("returns username + stored avatar for a valid token, 401 otherwise", async () => {
+    const token = cookieValue(await signup({ username: "alice", pin: "4821", avatar: AVATARS[4], avatarColor: AVATAR_COLORS[3] }, deps));
+    expect(await me(token, deps)).toEqual({ status: 200, json: { username: "alice", avatar: AVATARS[4], avatarColor: AVATAR_COLORS[3] } });
+    expect((await me(undefined, deps)).status).toBe(401);
+  });
+  it("defaults the avatar for a pre-avatar user record", async () => {
+    await signup({ username: "alice", pin: "4821" }, deps);
+    store.users.set("alice", { pinHash: store.users.get("alice")!.pinHash, createdAt: 1 }); // legacy record, no avatar
+    const token = cookieValue(await login({ username: "alice", pin: "4821" }, deps));
+    expect((await me(token, deps)).json).toEqual({ username: "alice", avatar: DEFAULT_AVATAR, avatarColor: DEFAULT_COLOR });
   });
 });
 

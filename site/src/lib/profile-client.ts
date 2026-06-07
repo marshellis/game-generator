@@ -4,10 +4,17 @@
 // silently — gameplay never depends on them.
 import { groupByGame, type GameGroup } from "./profile/completions";
 import { deriveBadges, earnedBadgeIds, currentStreak, type Badge } from "./profile/badges";
+import { AVATARS, AVATAR_COLORS, DEFAULT_AVATAR, DEFAULT_COLOR, sanitizeAvatar, sanitizeColor } from "./profile/avatars";
 import type { Completion } from "./profile/types";
 
-type Me = { username: string } | null;
+type Me = { username: string; avatar?: string; avatarColor?: string } | null;
 type Meta = { game?: string; puzzleId?: string; grade?: string };
+
+/** A solid-color circle holding the avatar emoji — reused in chip, modal, profile. */
+function avatarCircle(avatar: string, color: string, size = 28): string {
+  return `<span style="display:inline-flex;align-items:center;justify-content:center;flex:none;` +
+    `width:${size}px;height:${size}px;border-radius:9999px;background:${color};font-size:${Math.round(size * 0.58)}px;line-height:1;">${avatar}</span>`;
+}
 
 const GAME_META: Record<string, { label: string; emoji: string; path: string }> = {
   "logic-grid": { label: "Logic Grid", emoji: "🧩", path: "/logic-grid" },
@@ -102,13 +109,16 @@ function renderChip(me: Me): void {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.setAttribute("data-chip", "");
-  btn.style.cssText =
-    "border:1px solid #cbd5e1;background:#fff;border-radius:9999px;padding:4px 12px;" +
-    `font-size:13px;font-weight:600;color:#334155;cursor:pointer;transition:background .15s,border-color .15s;font-family:${FONT};`;
   if (me) {
-    btn.textContent = `👤 ${me.username} ▾`;
+    btn.style.cssText =
+      "display:inline-flex;align-items:center;gap:6px;border:1px solid #cbd5e1;background:#fff;border-radius:9999px;" +
+      `padding:3px 10px 3px 4px;font-size:13px;font-weight:600;color:#334155;cursor:pointer;transition:background .15s,border-color .15s;font-family:${FONT};`;
+    btn.innerHTML = `${avatarCircle(sanitizeAvatar(me.avatar), sanitizeColor(me.avatarColor), 24)}<span>${me.username}</span><span aria-hidden="true" style="color:#94a3b8;">▾</span>`;
     btn.addEventListener("click", (e) => { e.stopPropagation(); toggleMenu(); });
   } else {
+    btn.style.cssText =
+      "border:1px solid #cbd5e1;background:#fff;border-radius:9999px;padding:4px 12px;" +
+      `font-size:13px;font-weight:600;color:#334155;cursor:pointer;transition:background .15s,border-color .15s;font-family:${FONT};`;
     btn.textContent = "Sign in";
     btn.addEventListener("click", () => openAuthModal());
   }
@@ -167,6 +177,12 @@ function openAuthModal(): void {
       <p style="margin:0;font-size:13px;color:#64748b;">Username + PIN. No email needed.</p>
       <input data-username placeholder="username" autocomplete="username" maxlength="20" style="${input}" />
       <input data-pin placeholder="PIN (4-8 digits)" inputmode="numeric" autocomplete="off" maxlength="8" style="${input}" />
+      <div data-avatar-picker hidden style="margin-top:14px;">
+        <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#334155;">Pick your character</p>
+        <div data-av-preview style="display:flex;justify-content:center;margin-bottom:10px;"></div>
+        <div data-av-grid style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;"></div>
+        <div data-col-row style="display:flex;gap:8px;justify-content:center;margin-top:10px;"></div>
+      </div>
       <p data-error style="margin:10px 0 0;font-size:13px;color:#dc2626;min-height:16px;"></p>
       <button data-submit style="${btn}background:#4f46e5;color:#fff;margin-top:8px;">Sign in</button>
       <button data-toggle style="background:none;border:none;margin-top:12px;width:100%;font-size:13px;color:#4f46e5;cursor:pointer;">New here? Create a profile</button>
@@ -180,11 +196,48 @@ function openAuthModal(): void {
   const submit = $<HTMLButtonElement>("[data-submit]");
   const usernameEl = $<HTMLInputElement>("[data-username]");
   const pinEl = $<HTMLInputElement>("[data-pin]");
+
+  // Avatar picker (signup only). Defaults to a random character so each new kid
+  // starts unique. Selection is held locally and sent with the signup request.
+  const picker = $("[data-avatar-picker]");
+  const preview = $("[data-av-preview]");
+  const avGrid = $("[data-av-grid]");
+  const colRow = $("[data-col-row]");
+  let selAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)] ?? DEFAULT_AVATAR;
+  let selColor = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)] ?? DEFAULT_COLOR;
+  const syncSel = () => {
+    preview.innerHTML = avatarCircle(selAvatar, selColor, 52);
+    avGrid.querySelectorAll<HTMLElement>("[data-av-opt]").forEach((el) => {
+      const on = el.getAttribute("data-av-opt") === selAvatar;
+      el.style.borderColor = on ? "#4f46e5" : "transparent";
+      el.style.background = on ? "#eef2ff" : "#f8fafc";
+    });
+    colRow.querySelectorAll<HTMLElement>("[data-col-opt]").forEach((el) => {
+      el.style.borderColor = el.getAttribute("data-col-opt") === selColor ? "#0f172a" : "#e2e8f0";
+    });
+  };
+  for (const a of AVATARS) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = a; b.setAttribute("data-av-opt", a);
+    b.style.cssText = "display:flex;align-items:center;justify-content:center;height:34px;border-radius:9px;border:2px solid transparent;background:#f8fafc;font-size:20px;line-height:1;cursor:pointer;";
+    b.addEventListener("click", () => { selAvatar = a; syncSel(); });
+    avGrid.appendChild(b);
+  }
+  for (const c of AVATAR_COLORS) {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("data-col-opt", c);
+    b.style.cssText = `width:28px;height:28px;border-radius:9999px;background:${c};border:2px solid #e2e8f0;cursor:pointer;`;
+    b.addEventListener("click", () => { selColor = c; syncSel(); });
+    colRow.appendChild(b);
+  }
+  syncSel();
+
   const setMode = (m: "login" | "signup") => {
     mode = m;
     $("[data-title]").textContent = m === "login" ? "Sign in" : "Create a profile";
     submit.textContent = m === "login" ? "Sign in" : "Create profile";
     $("[data-toggle]").textContent = m === "login" ? "New here? Create a profile" : "Have a profile? Sign in";
+    picker.hidden = m === "login";
   };
 
   const close = () => {
@@ -209,7 +262,7 @@ function openAuthModal(): void {
         method: "POST",
         credentials: "same-origin",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ username, pin }),
+        body: JSON.stringify(mode === "signup" ? { username, pin, avatar: selAvatar, avatarColor: selColor } : { username, pin }),
       });
       if (r.ok) {
         // Save a solve the player made before signing in, then refresh everything.
@@ -386,8 +439,14 @@ async function renderProfile(me: Me): Promise<void> {
   const earnedCount = badges.filter((b) => b.earned).length;
   const streak = currentStreak(completions, Date.now());
 
+  const av = sanitizeAvatar(me.avatar), avc = sanitizeColor(me.avatarColor);
+  const header = `<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      ${avatarCircle(av, avc, 56)}
+      <span style="font-size:22px;font-weight:800;color:#0f172a;">${esc(me.username)}</span>
+    </div>`;
+
   if (total === 0) {
-    root.innerHTML = `<div style="text-align:center;padding:32px 16px;background:#f8fafc;border-radius:16px;">
+    root.innerHTML = header + `<div style="text-align:center;padding:32px 16px;background:#f8fafc;border-radius:16px;">
       <div style="font-size:48px;">🎯</div>
       <p style="font-size:17px;font-weight:700;margin:10px 0 4px;color:#0f172a;">No trophies yet, ${esc(me.username)}!</p>
       <p style="color:#64748b;margin:0 0 16px;">Solve your first puzzle to start your collection.</p>
@@ -419,7 +478,7 @@ async function renderProfile(me: Me): Promise<void> {
     </a>`;
   }).join("");
 
-  root.innerHTML = `
+  root.innerHTML = header + `
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
       ${stat(String(total), "puzzles solved")}
       ${stat(`${earnedCount}<span style="font-size:15px;color:#94a3b8;">/${badges.length}</span>`, "badges earned")}
