@@ -15,7 +15,8 @@ const colCats = Array.from({ length: N - 1 }, (_, i) => i);           // 0 .. N-
 const rowCats = Array.from({ length: N - 1 }, (_, i) => N - 1 - i);   // N-1 .. 1
 ---
 <div class="logic-grid" data-interactive={interactive ? "1" : "0"}>
-  <div class="grid-scroll">
+  <div class="grid-frame">
+    <div class="grid-scroll">
     <table class="lg">
       <thead>
         <tr>
@@ -55,6 +56,8 @@ const rowCats = Array.from({ length: N - 1 }, (_, i) => N - 1 - i);   // N-1 .. 
         )}
       </tbody>
     </table>
+    </div>
+    <span class="scroll-hint" aria-hidden="true">Swipe for more →</span>
   </div>
   <ol class="clues">
     {puzzle.clues.map((c) => <li>{c.text}</li>)}
@@ -63,7 +66,32 @@ const rowCats = Array.from({ length: N - 1 }, (_, i) => N - 1 - i);   // N-1 .. 
 
 <style>
   .logic-grid { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
-  .grid-scroll { overflow-x: auto; max-width: 100%; }
+  /* The frame stays put while .grid-scroll scrolls inside it, so the edge fades
+     and the swipe hint can be pinned to the visible edges (a ::after inside an
+     overflow:auto box would scroll away with the content). */
+  .grid-frame { position: relative; max-width: 100%; min-width: 0; }
+  .grid-scroll { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+
+  /* Edge fades: a soft gradient on whichever side has more grid off-screen, so a
+     hidden answer column never reads as "there is no more grid". JS toggles
+     data-overflow on .grid-frame as the user scrolls / resizes. */
+  .grid-frame::before, .grid-frame::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 26px;
+    pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 1;
+  }
+  .grid-frame::before { left: 0; background: linear-gradient(to left, rgba(255,255,255,0), #fff); }
+  .grid-frame::after { right: 0; background: linear-gradient(to right, rgba(255,255,255,0), #fff); }
+  .grid-frame[data-overflow~="left"]::before { opacity: 1; }
+  .grid-frame[data-overflow~="right"]::after { opacity: 1; }
+
+  .scroll-hint {
+    display: none; position: absolute; right: 8px; bottom: 8px; z-index: 2;
+    background: rgba(30,41,59,.88); color: #fff; font-size: 11px; font-weight: 600;
+    padding: 3px 9px; border-radius: 9999px; pointer-events: none; white-space: nowrap;
+  }
+  /* Show the swipe nudge only until the first scroll, and only when there IS more
+     to the right. The persistent edge fade carries the affordance after that. */
+  .grid-frame[data-overflow~="right"]:not([data-scrolled]) .scroll-hint { display: inline-block; }
 
   table.lg { border-collapse: collapse; }
   table.lg th, table.lg td { border: 1px solid #cbd5e1; }
@@ -97,5 +125,36 @@ const rowCats = Array.from({ length: N - 1 }, (_, i) => N - 1 - i);   // N-1 .. 
 
   .clues { min-width: 260px; max-width: 420px; flex: 1; }
   .clues li { margin-bottom: 6px; }
-  @media (max-width: 640px) { .logic-grid { gap: 16px; } }
+  @media (max-width: 640px) {
+    .logic-grid { gap: 16px; }
+    /* Finger-friendlier tap targets on phones. The grid now scrolls with a
+       visible affordance, so a wider grid is fine; what matters is that each
+       X/O cell is comfortable to hit. */
+    td.cell { width: 38px; height: 38px; min-width: 38px; font-size: 20px; }
+  }
 </style>
+
+<script>
+  // Reflect how much grid is scrolled off each edge onto .grid-frame[data-overflow],
+  // so the CSS edge-fades + "Swipe for more" hint only appear when a column is
+  // actually hidden. Runs on every page that renders the grid (play + print);
+  // it only enhances and no-ops when there's nothing to scroll.
+  function wireGridScroll(frame: HTMLElement) {
+    const scroller = frame.querySelector<HTMLElement>(".grid-scroll");
+    if (!scroller) return;
+    const update = () => {
+      const max = scroller.scrollWidth - scroller.clientWidth;
+      const sides: string[] = [];
+      if (scroller.scrollLeft > 2) sides.push("left");
+      if (scroller.scrollLeft < max - 2) sides.push("right");
+      frame.dataset.overflow = sides.join(" ");
+    };
+    scroller.addEventListener("scroll", () => {
+      frame.dataset.scrolled = "1"; // retire the one-time swipe nudge
+      update();
+    }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  }
+  document.querySelectorAll<HTMLElement>(".grid-frame").forEach(wireGridScroll);
+</script>
