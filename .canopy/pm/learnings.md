@@ -5,11 +5,41 @@ Items closed or rejected during PM cycles. Read this before every scout run to a
 ## Closed Items
 (none yet)
 
+## Backlog (open ideas — promote or close in a future cycle)
+- **Logic-grid Clear: native `confirm()` → in-app modal** (Effort: S). Backlogged
+  2026-06-08 (mobile lens). Low impact; works on touch, just inconsistent with the
+  win/profile modals. Park until a logic-grid polish pass touches that island.
+
+## Mobile state (as of 2026-06-08 — lens: ease of use on mobile)
+- **A full 390px prod dogfood of all 7 game types found only ONE mobile failure: Logic
+  Grid.** Both halves are now fixed (#40 grid horizontal-scroll affordance + 38px cells;
+  #41 thumb-reachable bottom control bar). **Sudoku, KenKen, Word Search, Maze, Math
+  Worksheets, and the home page were all measured mobile-solid** — don't re-propose generic
+  "make X responsive" for those without NEW evidence (controls fit, 39–48px taps, grids
+  use `w-full max-w-md` + `aspect-square`).
+- **For a mobile/responsive/UX lens, dogfood real device widths FIRST (390px), then read
+  code only for confirmed offenders.** Reading CSS alone over-generates speculative issues;
+  the live dogfood collapsed ~4 suspected problems to 1 real one with measured evidence.
+- **Build-output path for local dogfooding = `site/.vercel/output/static/`, NOT `dist/`.**
+  `astro preview` is unsupported with `output:'hybrid'` + `@astrojs/vercel`; serve that
+  static dir with `python3 -m http.server <port>` to screenshot a local build before pushing.
+
 ## Preferences
 - Audience is the owner's kids + friends' kids — fun-first, not commercial, not schools. Discoverability/SEO is out of scope.
 - Priorities: more games > polish existing > correctness. Lead proposals with kid-facing value, not code cleanliness.
 
 ## Project gotchas
+- **Inner-scroll overflow has zero affordance by default.** When content overflows an
+  `overflow-x/y:auto` *child* (not the page), the page shows no scrollbar — so there's no
+  hint more content exists (a hidden logic-grid answer column read as "no more grid"). If you
+  put content in an inner scroll box you OWN discoverability: add an edge-fade + a one-time
+  hint, driven by a tiny scroll listener toggling `data-overflow`. Pattern lives in
+  `LogicGrid.astro` (#40, 2026-06-08). Audit any new inner scroll container the same way.
+- **GameHeader has two control groups now (#41):** `.gh-setup` (print/answer-key) +
+  `.gh-play` (check/clear/reveal + `#result`), the latter docking to a `position:fixed`
+  bottom bar under 640px. The island IDs (`#check #clear #reveal #result`) are unchanged —
+  don't duplicate those nodes (the islands `querySelector` the first match). Reserve page
+  space for the bar via `:global(main){padding-bottom}` (mobile only).
 - **Tailwind utility shadowing in client islands.** Components paint base classes
   (`bg-white text-slate-800`); an island that *adds* a highlight class (`bg-brand-100`)
   without *removing* the base sees no visual change — both are utilities, so the one later
