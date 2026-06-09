@@ -41,25 +41,67 @@ const {
   {date && <p class="mt-1 text-sm font-semibold text-brand-600">📅 {dayLabel(date)}</p>}
   {blurb && <p class="mt-1 max-w-2xl text-slate-500">{blurb}</p>}
 
-  <div class="mt-5 flex flex-wrap items-center gap-3">
-    {showCheck && (
-      <button id="check" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">Check</button>
-    )}
-    {showClear && (
-      <button id="clear" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Clear</button>
-    )}
-    {printHref && (
-      <a href={printHref} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print</a>
-    )}
-    {answerHref && (
-      <a href={answerHref} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print answer key</a>
-    )}
-    {revealNoun && (
-      <button id="reveal" aria-pressed="false" data-noun={revealNoun}
-              class="ml-auto rounded-lg border border-amber-400 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 transition hover:bg-amber-100">
-        👁 Reveal {revealNoun}
-      </button>
-    )}
+  {/* Two groups: "setup" (print / answer key) stays at the top of the page; the
+      "play" actions (check / clear / reveal) + the result line dock to a fixed,
+      thumb-reachable bottom bar on phones — so a kid doesn't have to scroll back
+      up past a tall puzzle (logic grid especially) to check their work. On ≥ sm
+      the toolbar is one flex row and looks unchanged. */}
+  <div class="gh-toolbar mt-5 flex flex-wrap items-center gap-3">
+    <div class="gh-setup flex flex-wrap items-center gap-3">
+      {printHref && (
+        <a href={printHref} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print</a>
+      )}
+      {answerHref && (
+        <a href={answerHref} class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:bg-slate-50">Print answer key</a>
+      )}
+    </div>
+    <div class="gh-play flex flex-wrap items-center gap-3">
+      {showCheck && (
+        <button id="check" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">Check</button>
+      )}
+      {showClear && (
+        <button id="clear" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Clear</button>
+      )}
+      {revealNoun && (
+        <button id="reveal" aria-pressed="false" data-noun={revealNoun}
+                class="gh-reveal rounded-lg border border-amber-400 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 transition hover:bg-amber-100">
+          👁 Reveal {revealNoun}
+        </button>
+      )}
+      <p id="result" class="gh-result mt-3 min-h-5 w-full text-sm font-semibold text-slate-700"></p>
+    </div>
   </div>
-  <p id="result" class="mt-3 min-h-5 text-sm font-semibold text-slate-700"></p>
 </header>
+
+<style>
+  /* Desktop: one toolbar row. Reveal pushed to the right edge, result on its own
+     line below — matches the pre-split layout. */
+  .gh-toolbar { width: 100%; }
+  .gh-reveal { margin-left: auto; }
+
+  @media (max-width: 640px) {
+    /* Setup actions (print / answer key) stay in flow at the top. */
+    .gh-toolbar { display: block; }
+
+    /* Play actions + result dock to a fixed, thumb-reachable bottom bar. */
+    .gh-play {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      margin: 0; gap: .5rem; flex-wrap: wrap; align-items: stretch;
+      background: rgba(255, 255, 255, .97);
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+      border-top: 1px solid #e2e8f0;
+      box-shadow: 0 -2px 10px rgba(15, 23, 42, .06);
+      padding: .55rem .9rem calc(.55rem + env(safe-area-inset-bottom));
+    }
+    .gh-play > button { flex: 1 1 0; min-width: 0; padding-top: .6rem; padding-bottom: .6rem; }
+    .gh-reveal { margin-left: 0; }
+    /* Result sits full-width above the buttons — Check feedback lands right where
+       the thumb is, not off-screen at the top of the page. */
+    .gh-result { order: -1; margin: 0 0 .35rem; width: 100%; text-align: center; }
+    .gh-result:empty { display: none; }
+
+    /* Reserve space so the fixed bar never hides the bottom of the puzzle. Only
+       emitted on pages that use GameHeader. */
+    :global(main) { padding-bottom: 5.5rem; }
+  }
+</style>
