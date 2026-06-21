@@ -40,7 +40,7 @@ export function generateMaze(opts: GenerateMazeOptions): Maze {
   // planDecoys/carveDecoyPockets consume no RNG, so count-0 grades stay byte-identical.
   const { entrances, blocked } = planDecoys(diff.cols, diff.rows, diff.decoys, diff.decoyDepth);
 
-  const open = carveMaze(diff.cols, diff.rows, rng, blocked);
+  const open = carveMaze(diff.cols, diff.rows, rng, blocked, diff.straightBias);
   const start = { r: 0, c: 0 };
   const end = farthestCell(open, diff.rows, diff.cols, start);
   if (diff.braid > 0) braid(open, diff.rows, diff.cols, diff.braid, rng);
