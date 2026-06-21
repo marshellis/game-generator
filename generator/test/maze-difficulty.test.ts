@@ -34,6 +34,24 @@ describe("maze difficulty", () => {
       prev = d.decoys;
     }
   });
+  it("minWrongPath: 0 for braided grades, non-decreasing and >=5 for perfect-maze grades", () => {
+    expect(PRESETS.g1!.minWrongPath).toBe(0);
+    expect(PRESETS.g2!.minWrongPath).toBe(0);
+    let prev = 0;
+    for (let g = 3; g <= 8; g++) {
+      const d = PRESETS[`g${g}`]!;
+      expect(d.minWrongPath).toBeGreaterThanOrEqual(5); // wrong turns cost real backtracking
+      expect(d.minWrongPath).toBeGreaterThanOrEqual(prev);
+      prev = d.minWrongPath;
+    }
+  });
+  it("straightBias is a sane probability for every grade", () => {
+    for (let g = 1; g <= 8; g++) {
+      const b = PRESETS[`g${g}`]!.straightBias;
+      expect(b).toBeGreaterThan(0);
+      expect(b).toBeLessThanOrEqual(1);
+    }
+  });
   it("decoyDepth is non-decreasing and >=1 wherever there are decoys", () => {
     let prev = 0;
     for (let g = 1; g <= 8; g++) {

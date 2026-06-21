@@ -45,4 +45,32 @@ describe("carveMaze", () => {
   it("is deterministic for a seed", () => {
     expect(carveMaze(6, 6, makeRng(9))).toEqual(carveMaze(6, 6, makeRng(9)));
   });
+
+  it("straight bias still yields a connected spanning tree", () => {
+    const open = carveMaze(12, 12, makeRng(4), new Set(), 0.8);
+    expect(reachableCount(open, 12, 12)).toBe(144);
+    expect(edgeCount(open, 12, 12)).toBe(144 - 1);
+  });
+
+  it("straight bias is deterministic for a seed", () => {
+    expect(carveMaze(10, 10, makeRng(3), new Set(), 0.8))
+      .toEqual(carveMaze(10, 10, makeRng(3), new Set(), 0.8));
+  });
+
+  it("straight bias produces fewer (longer) dead-ends than an unbiased carve", () => {
+    const deadEnds = (open: number[][], rows: number, cols: number) => {
+      let d = 0;
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        if ([N, E, S, W].filter((b) => open[r]![c]! & b).length === 1) d++;
+      }
+      return d;
+    };
+    let biased = 0, plain = 0;
+    for (let seed = 0; seed < 12; seed++) {
+      biased += deadEnds(carveMaze(16, 16, makeRng(seed), new Set(), 0.85), 16, 16);
+      plain += deadEnds(carveMaze(16, 16, makeRng(seed), new Set(), 0), 16, 16);
+    }
+    // Fewer dead-ends ⇒ longer corridors ⇒ wrong turns run further before ending.
+    expect(biased).toBeLessThan(plain);
+  });
 });
