@@ -126,3 +126,22 @@ export function isNew(createdAt: string, now: Date, withinDays = 14): boolean {
   const age = (now.getTime() - Date.parse(createdAt)) / 86_400_000;
   return age >= 0 && age <= withinDays;
 }
+
+/**
+ * URL of the raw, self-contained game file (served from public/). This is what
+ * the wrapper iframes and the "fullscreen" link targets.
+ */
+export function gameUrl(slug: string): string {
+  return `/arcade/${slug}/index.html`;
+}
+
+/**
+ * URL of the wrapper play page (site chrome + iframed game). It MUST live one
+ * segment deeper than the game folder: Astro builds a page route `/x` to the
+ * file `x/index.html`, so a wrapper at `/arcade/<slug>` would overwrite the
+ * static game at `arcade/<slug>/index.html`. The trailing `/play` segment keeps
+ * the wrapper's output (`arcade/<slug>/play/index.html`) clear of the game.
+ */
+export function playUrl(slug: string): string {
+  return `/arcade/${slug}/play`;
+}
