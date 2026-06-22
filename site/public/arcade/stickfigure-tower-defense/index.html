@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stick Figure Tower Defense</title>
+  <style>
+    body { background: #87CEEB; display: flex; flex-direction: column; align-items: center; font-family: Arial, sans-serif; margin: 0; padding: 10px; }
+    canvas { border: 3px solid #333; background: #87CEEB; cursor: crosshair; }
+    #ui { font-size: 20px; margin-bottom: 8px; color: #333; }
+    #gameover { display: none; font-size: 36px; color: red; font-weight: bold; margin-top: 10px; }
+    button { font-size: 18px; padding: 8px 20px; margin-top: 8px; cursor: pointer; }
+    #pauseBtn {
+      position: fixed;
+      bottom: 16px;
+      right: 70px;
+      font-size: 22px;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0;
+      z-index: 999;
+    }
+    #pauseBtn:hover { background: rgba(0,0,0,0.85); }
+    #fullscreenBtn {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      font-size: 22px;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0;
+      z-index: 999;
+    }
+    #fullscreenBtn:hover { background: rgba(0,0,0,0.85); }
+    #cheatPanel {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(0,0,0,0.82);
+      border: 2px solid #FFD700;
+      border-radius: 10px;
+      padding: 10px 12px;
+      z-index: 999;
+      font-family: monospace;
+      min-width: 220px;
+    }
+    #cheatPanel h4 {
+      color: #FFD700;
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+    #cheatInput {
+      width: 140px;
+      padding: 5px 8px;
+      font-size: 13px;
+      background: #111;
+      color: #0f0;
+      border: 1px solid #FFD700;
+      border-radius: 5px;
+      font-family: monospace;
+      outline: none;
+    }
+    #cheatSubmit {
+      font-size: 13px;
+      padding: 5px 10px;
+      margin: 0 0 0 4px;
+      background: #FFD700;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #cheatSubmit:hover { background: #ffe44d; }
+    #cheatMsg {
+      font-size: 12px;
+      color: #0f0;
+      margin-top: 6px;
+      min-height: 16px;
+    }
+    #cheatToggle {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      font-size: 18px;
+      padding: 7px 11px;
+      background: rgba(0,0,0,0.6);
+      color: #FFD700;
+      border: 2px solid #FFD700;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0;
+      z-index: 1000;
+    }
+    #cheatToggle:hover { background: rgba(0,0,0,0.85); }
+  </style>
+</head>
+<body>
+<div id="ui">❤️ Lives: <span id="lives">5</span> &nbsp;&nbsp; ⭐ Score: <span id="score">0</span> &nbsp;&nbsp; Wave: <span id="wave">1</span></div>
+<canvas id="canvas" width="800" height="450"></canvas>
+<div id="gameover">GAME OVER! <button onclick="restartGame()">Play Again</button></div>
+<button id="cheatToggle" onclick="toggleCheatPanel()">🔑</button>
+<div id="cheatPanel" style="display:none">
+  <h4>⚡ CHEAT CODES ⚡</h4>
+  <input id="cheatInput" type="text" placeholder="enter code..." onkeydown="if(event.key==='Enter')submitCheat()">
+  <button id="cheatSubmit" onclick="submitCheat()">GO</button>
+  <div id="cheatMsg"></div>
+</div>
+<button id="pauseBtn" onclick="togglePause()">⏸</button>
+<button id="fullscreenBtn" onclick="toggleFullscreen()">⛶</button>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+let lives = 5, score = 0, wave = 1, gameOver = false;
+let arrows = [], enemies = [], particles = [], stuckArrows = [];
+let lastShotTime = 0;
+
+// Clouds for background
+const clouds = Array.from({length: 5}, (_, i) => ({
+  x: i * 170 + 60, y: 40 + i * 18, w: 80 + i * 20, speed: 0.15 + i * 0.05
+}));
+let mouse = { x: 400, y: 200 };
+let spawnTimer = 0, spawnInterval = 120;
+let enemiesPerWave = 5;
+let waveEnemiesSpawned = 0;
+
+let onStartScreen = true;
+let paused = false;
+
+// Powerups
+let powerups = { tripleShot: false, damageMultiplier: 1, fastCooldown: false, piercing: false, slowEnemies: false, explosive: false, poison: false, bigArrows: false, fastArrows: false, shield: 0, doubleScore: false, chainLightning: false, freezeArrows: false, fiveShot: false, criticalHit: false, weaken: false, bleed: false, homing: false, arrowRain: false, spikes: false, moat: false, vampiric: false, tripleScore: false, bigExplosion: false, frozenHeadshot: false, rapidFire: false, bouncing: false, lightningStorm: false, berserker: false, earthquake: false, goldArrows: false, nukeArrows: false };
+let spikeTimer = 0, rainTimer = 0, quakeTimer = 0, killCount = 0;
+let cheatLog = { booleans: new Set(), shieldAdded: 0, livesAdded: 0 };
+let choosingPowerup = false;
+let powerupDeadline = 0;
+let currentPowerupChoices = [];
+let chosenPowerups = new Set();
+
+const ALL_POWERUPS = [
+  {
+    id: 'tripleShot',
+    name: 'Triple Shot',
+    desc: 'Every shot fires 3 arrows in a spread!',
+    icon: '🏹🏹🏹',
+    color: '#e67e22'
+  },
+  {
+    id: 'damageMultiplier',
+    name: '1.5x Damage',
+    desc: 'Your arrows deal 1.5x damage — enemies fall in fewer hits!',
+    icon: '💥',
+    color: '#c0392b'
+  },
+  {
+    id: 'fastCooldown',
+    name: 'Quick Reload',
+    desc: 'Cut your reload time in half — shoot twice as fast!',
+    icon: '⚡',
+    color: '#8e44ad'
+  },
+  {
+    id: 'piercing',
+    name: 'Piercing Arrows',
+    desc: 'Arrows fly straight through enemies hitting everyone in a line!',
+    icon: '🎯',
+    color: '#2980b9'
+  },
+  {
+    id: 'slowEnemies',
+    name: 'Heavy Feet',
+    desc: 'All enemies slow down to half speed permanently!',
+    icon: '🐢',
+    color: '#27ae60'
+  },
+  {
+    id: 'explosive',
+    name: 'Explosive Arrows',
+    desc: 'Arrows explode on hit and damage nearby enemies too!',
+    icon: '💣',
+    color: '#d35400'
+  },
+  {
+    id: 'extraLife',
+    name: 'Extra Lives',
+    desc: 'Gain 3 extra lives right now!',
+    icon: '❤️❤️❤️',
+    color: '#e74c3c'
+  },
+  {
+    id: 'poison',
+    name: 'Poison Arrows',
+    desc: 'Arrows poison enemies — they lose 1 HP every second after being hit!',
+    icon: '☠️',
+    color: '#1e8449'
+  },
+  {
+    id: 'bigArrows',
+    name: 'Giant Arrows',
+    desc: 'Your arrows are huge — much easier to hit enemies!',
+    icon: '⬆️',
+    color: '#7f8c8d'
+  },
+  {
+    id: 'fastArrows',
+    name: 'Speed Arrows',
+    desc: 'Arrows fly twice as fast — way easier to hit moving targets!',
+    icon: '💨',
+    color: '#16a085'
+  },
+  {
+    id: 'shield',
+    name: 'Shield',
+    desc: 'Gain a shield that blocks the next 3 enemies that reach your tower!',
+    icon: '🛡️',
+    color: '#2471a3'
+  },
+  {
+    id: 'doubleScore',
+    name: 'Double Score',
+    desc: 'All kills give double points for the rest of the game!',
+    icon: '⭐⭐',
+    color: '#d4ac0d'
+  },
+  {
+    id: 'chainLightning',
+    name: 'Chain Lightning',
+    desc: 'Killing an enemy zaps the nearest enemy with lightning for 3 damage!',
+    icon: '🌩️',
+    color: '#1a5276'
+  },
+  {
+    id: 'freezeArrows',
+    name: 'Freeze Arrows',
+    desc: 'Arrows freeze enemies solid for 2 seconds on hit!',
+    icon: '❄️',
+    color: '#5dade2'
+  },
+  {
+    id: 'fiveShot',
+    name: 'Five Shot',
+    desc: 'Every shot blasts out 5 arrows in a huge spread!',
+    icon: '🏹🏹🏹🏹🏹',
+    color: '#b7770d'
+  },
+  {
+    id: 'criticalHit',
+    name: 'Critical Hit',
+    desc: '25% chance each arrow deals triple damage — boom!',
+    icon: '🎯💥',
+    color: '#922b21'
+  },
+  {
+    id: 'weaken',
+    name: 'Weakening Shot',
+    desc: 'Body shots slow enemies by 50% for 3 seconds!',
+    icon: '🐌',
+    color: '#6c3483'
+  },
+  {
+    id: 'bleed',
+    name: 'Bleed',
+    desc: 'Body shots make enemies bleed — 1 damage every half second for 3 seconds!',
+    icon: '🩸',
+    color: '#78281f'
+  },
+  {
+    id: 'homing',
+    name: 'Homing Arrows',
+    desc: 'Arrows curve gently toward the nearest enemy!',
+    icon: '🔄',
+    color: '#117a65'
+  },
+  {
+    id: 'arrowRain',
+    name: 'Arrow Rain',
+    desc: 'Every 5 seconds, a volley of arrows rains down from the sky!',
+    icon: '🌧️🏹',
+    color: '#1f618d'
+  },
+  {
+    id: 'spikes',
+    name: 'Ground Spikes',
+    desc: 'Spikes on the ground deal 1 damage to all enemies every 2 seconds!',
+    icon: '⚡🗡️',
+    color: '#424949'
+  },
+  {
+    id: 'moat',
+    name: 'Moat',
+    desc: 'Enemies crawl at 20% speed when close to your tower!',
+    icon: '🏰💧',
+    color: '#1a5276'
+  },
+  {
+    id: 'vampiric',
+    name: 'Vampiric',
+    desc: 'Killing an enemy gives you 1 extra life!',
+    icon: '🧛',
+    color: '#4a235a'
+  },
+  {
+    id: 'tripleScore',
+    name: 'Triple Score',
+    desc: 'All kills give 3x points — stack with Double Score for 6x!',
+    icon: '⭐⭐⭐',
+    color: '#b7950b'
+  },
+  {
+    id: 'bigExplosion',
+    name: 'Mega Explosion',
+    desc: 'Explosion radius doubles — wipe out whole groups at once!',
+    icon: '💥💥',
+    color: '#a04000'
+  },
+  {
+    id: 'frozenHeadshot',
+    name: 'Ice Head',
+    desc: 'Headshots also freeze the enemy solid for 2 seconds!',
+    icon: '🧊🎯',
+    color: '#1a8fbd'
+  },
+  {
+    id: 'rapidFire',
+    name: 'Rapid Fire',
+    desc: 'Each click fires 2 extra arrows right after the first — a quick burst!',
+    icon: '🔫',
+    color: '#717d7e'
+  },
+  {
+    id: 'bouncing',
+    name: 'Bouncing Arrows',
+    desc: 'Arrows bounce off the ground once before disappearing!',
+    icon: '↗️↘️',
+    color: '#148f77'
+  },
+  {
+    id: 'lightningStorm',
+    name: 'Lightning Storm',
+    desc: 'Every 10 kills triggers a lightning bolt hitting ALL enemies for 3 damage!',
+    icon: '⛈️',
+    color: '#1f3a6e'
+  },
+  {
+    id: 'berserker',
+    name: 'Berserker',
+    desc: 'The more enemies on screen, the more damage your arrows deal!',
+    icon: '😤',
+    color: '#6e2f1a'
+  },
+  {
+    id: 'earthquake',
+    name: 'Earthquake',
+    desc: 'Every 8 seconds, a quake stuns all enemies for 1 second!',
+    icon: '🌍',
+    color: '#5d4037'
+  },
+  {
+    id: 'goldArrows',
+    name: 'Gold Arrows',
+    desc: 'Arrows turn gold and every kill gives bonus score!',
+    icon: '✨🏹',
+    color: '#b7860d'
+  },
+  {
+    id: 'megaLives',
+    name: 'Mega Lives',
+    desc: 'Gain 5 extra lives right now — stock up!',
+    icon: '❤️❤️❤️❤️❤️',
+    color: '#c0392b'
+  },
+  {
+    id: 'extraShield',
+    name: 'Mega Shield',
+    desc: 'Gain 5 shield charges that block enemies reaching your tower!',
+    icon: '🛡️🛡️',
+    color: '#1f5f8b'
+  }
+];
+
+// Tower position
+const tower = { x: 650, y: 200, w: 60, h: 250 };
+// Player on top of tower
+const player = { x: tower.x + tower.w / 2, y: tower.y - 10 };
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = e.clientX - rect.left;
+  mouse.y = e.clientY - rect.top;
+});
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && !onStartScreen && !gameOver && !choosingPowerup) {
+    e.preventDefault();
+    shootArrow();
+  }
+});
+
+canvas.addEventListener('click', e => {
+  if (onStartScreen) {
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    // Play button: centered, 200x60, y=270
+    if (cx >= 300 && cx <= 500 && cy >= 270 && cy <= 330) {
+      onStartScreen = false;
+      const randomPowerup = ALL_POWERUPS[Math.floor(Math.random() * ALL_POWERUPS.length)];
+      grantPowerup(randomPowerup);
+      loop();
+    }
+    return;
+  }
+  if (gameOver) return;
+  if (choosingPowerup) {
+    handlePowerupClick(e);
+    return;
+  }
+  shootArrow();
+});
+
+function drawStartScreen() {
+  drawBackground();
+  drawGround();
+  drawTower();
+  drawStickFigure(player.x, player.y, '#1a1a8c', 1, 0, true);
+
+  // Title
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 52px Arial';
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 5;
+  ctx.strokeText('Stick Figure Tower Defense', canvas.width / 2, 120);
+  ctx.fillStyle = '#FFD700';
+  ctx.fillText('Stick Figure Tower Defense', canvas.width / 2, 120);
+
+  // Subtitle
+  ctx.font = '20px Arial';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('Shoot enemies before they reach your tower!', canvas.width / 2, 165);
+  ctx.fillText('Headshots deal 5x damage  •  Survive as many waves as you can!', canvas.width / 2, 192);
+
+  // Play button
+  ctx.fillStyle = '#27ae60';
+  ctx.beginPath();
+  ctx.roundRect(300, 270, 200, 60, 12);
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.roundRect(300, 270, 200, 60, 12);
+  ctx.stroke();
+
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 28px Arial';
+  ctx.fillText('▶  Play Game', canvas.width / 2, 310);
+
+  ctx.textAlign = 'left';
+}
+
+function scoreMultiplier() {
+  let m = 1;
+  if (powerups.doubleScore) m *= 2;
+  if (powerups.tripleScore) m *= 3;
+  if (powerups.goldArrows) m *= 2;
+  return m;
+}
+
+function makeArrow(vx, vy) {
+  return { x: player.x, y: player.y - 20, vx, vy, life: 120, bounced: false };
+}
+
+function spawnRainArrow(x) {
+  arrows.push({ x, y: -10, vx: 0, vy: 8, life: 200, bounced: true, rain: true });
+}
+
+function shootArrow() {
+  const now = performance.now();
+  if (now - lastShotTime < (powerups.fastCooldown ? 250 : 500)) return;
+  lastShotTime = now;
+  const dx = mouse.x - player.x;
+  const dy = mouse.y - (player.y - 20);
+  const len = Math.sqrt(dx * dx + dy * dy);
+  const speed = powerups.fastArrows ? 22 : 14;
+  const vx = (dx / len) * speed, vy = (dy / len) * speed;
+  const fire = (avx, avy) => arrows.push(makeArrow(avx, avy));
+  if (powerups.fiveShot) {
+    for (let i = -2; i <= 2; i++) {
+      const a = Math.atan2(vy, vx) + i * 0.18;
+      fire(Math.cos(a) * speed, Math.sin(a) * speed);
+    }
+  } else if (powerups.tripleShot) {
+    const spread = 0.2;
+    const cos = Math.cos(spread), sin = Math.sin(spread);
+    fire(vx, vy);
+    fire(vx * cos - vy * sin, vx * sin + vy * cos);
+    fire(vx * cos + vy * sin, -vx * sin + vy * cos);
+  } else {
+    fire(vx, vy);
+  }
+  if (powerups.rapidFire) {
+    setTimeout(() => { if (!gameOver && !paused) { fire(vx, vy * 0.95); } }, 80);
+    setTimeout(() => { if (!gameOver && !paused) { fire(vx, vy * 0.9); } }, 160);
+  }
+}
+
+function handlePowerupClick(e) {
+  const rect = canvas.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+  const cardW = 240, cardH = 200, cardY = 140;
+  const card1X = 130, card2X = 430;
+  if (cx >= card1X && cx <= card1X + cardW && cy >= cardY && cy <= cardY + cardH) {
+    applyPowerup(currentPowerupChoices[0]);
+  } else if (cx >= card2X && cx <= card2X + cardW && cy >= cardY && cy <= cardY + cardH) {
+    applyPowerup(currentPowerupChoices[1]);
+  }
+}
+
+function grantPowerup(p) {
+  chosenPowerups.add(p.id);
+  if (p.id === 'tripleShot') powerups.tripleShot = true;
+  if (p.id === 'damageMultiplier') powerups.damageMultiplier = (powerups.damageMultiplier || 1) * 1.5;
+  if (p.id === 'fastCooldown') powerups.fastCooldown = true;
+  if (p.id === 'piercing') powerups.piercing = true;
+  if (p.id === 'slowEnemies') powerups.slowEnemies = true;
+  if (p.id === 'explosive') powerups.explosive = true;
+  if (p.id === 'extraLife') { lives += 3; updateUI(); }
+  if (p.id === 'poison') powerups.poison = true;
+  if (p.id === 'bigArrows') powerups.bigArrows = true;
+  if (p.id === 'fastArrows') powerups.fastArrows = true;
+  if (p.id === 'shield') { powerups.shield += 3; updateUI(); }
+  if (p.id === 'doubleScore') powerups.doubleScore = true;
+  if (p.id === 'chainLightning') powerups.chainLightning = true;
+  if (p.id === 'freezeArrows') powerups.freezeArrows = true;
+  if (p.id === 'fiveShot') powerups.fiveShot = true;
+  if (p.id === 'criticalHit') powerups.criticalHit = true;
+  if (p.id === 'weaken') powerups.weaken = true;
+  if (p.id === 'bleed') powerups.bleed = true;
+  if (p.id === 'homing') powerups.homing = true;
+  if (p.id === 'arrowRain') powerups.arrowRain = true;
+  if (p.id === 'spikes') powerups.spikes = true;
+  if (p.id === 'moat') powerups.moat = true;
+  if (p.id === 'vampiric') powerups.vampiric = true;
+  if (p.id === 'tripleScore') powerups.tripleScore = true;
+  if (p.id === 'bigExplosion') powerups.bigExplosion = true;
+  if (p.id === 'frozenHeadshot') powerups.frozenHeadshot = true;
+  if (p.id === 'rapidFire') powerups.rapidFire = true;
+  if (p.id === 'bouncing') powerups.bouncing = true;
+  if (p.id === 'lightningStorm') powerups.lightningStorm = true;
+  if (p.id === 'berserker') powerups.berserker = true;
+  if (p.id === 'earthquake') powerups.earthquake = true;
+  if (p.id === 'goldArrows') powerups.goldArrows = true;
+  if (p.id === 'megaLives') { lives += 5; updateUI(); }
+  if (p.id === 'extraShield') { powerups.shield += 5; updateUI(); }
+}
+
+function applyPowerup(p) {
+  grantPowerup(p);
+  choosingPowerup = false;
+  startNextWave();
+}
+
+function startNextWave() {
+  wave++;
+  enemiesPerWave = wave * 5;
+  waveEnemiesSpawned = 0;
+  spawnTimer = 0;
+  spawnInterval = Math.max(40, 120 - wave * 10);
+  updateUI();
+}
+
+function drawPowerupScreen() {
+  // Dark overlay
+  ctx.fillStyle = 'rgba(0,0,0,0.65)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = '#FFD700';
+  ctx.font = 'bold 32px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Wave Clear! Choose a Powerup:', canvas.width / 2, 110);
+
+  currentPowerupChoices.forEach((p, i) => {
+    const cardW = 240, cardH = 200, cardY = 140;
+    const cardX = i === 0 ? 130 : 430;
+
+    // Card background
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+    ctx.fill();
+
+    // Card border
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+    ctx.stroke();
+
+    // Icon
+    ctx.font = '48px Arial';
+    ctx.fillStyle = '#fff';
+    ctx.fillText(p.icon, cardX + cardW / 2, cardY + 70);
+
+    // Name
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText(p.name, cardX + cardW / 2, cardY + 110);
+
+    // Description (word wrap manually)
+    ctx.font = '14px Arial';
+    ctx.fillStyle = '#ffe';
+    const words = p.desc.split(' ');
+    let line = '', lineY = cardY + 138;
+    for (const word of words) {
+      const test = line + word + ' ';
+      if (ctx.measureText(test).width > cardW - 20 && line) {
+        ctx.fillText(line.trim(), cardX + cardW / 2, lineY);
+        line = word + ' ';
+        lineY += 20;
+      } else {
+        line = test;
+      }
+    }
+    ctx.fillText(line.trim(), cardX + cardW / 2, lineY);
+  });
+
+  // Countdown timer
+  const secondsLeft = Math.ceil((powerupDeadline - performance.now()) / 1000);
+  const urgent = secondsLeft <= 5;
+  ctx.font = 'bold 22px Arial';
+  ctx.fillStyle = urgent ? '#ff4444' : '#fff';
+  ctx.fillText(`⏱ Choose in ${secondsLeft}s or miss out!`, canvas.width / 2, 380);
+
+  ctx.textAlign = 'left';
+}
+
+function spawnEnemy() {
+  if (waveEnemiesSpawned >= enemiesPerWave) return;
+  waveEnemiesSpawned++;
+  const baseSpeed = Math.min(6, Math.pow(1.2, wave - 1));
+  const speed = baseSpeed * (powerups.slowEnemies ? 0.5 : 1);
+  const hp = 4 + wave;
+  enemies.push({
+    x: -30,
+    y: canvas.height - 60,
+    speed: speed,
+    hp: hp,
+    maxHp: hp,
+    hit: false,
+    falling: false,
+    vy: 0,
+    vx: 0,
+    dead: false,
+    poisoned: false,
+    poisonTimer: 0,
+    frozen: false,
+    frozenTimer: 0,
+    weakened: false,
+    weakenTimer: 0,
+    bleeding: false,
+    bleedTimer: 0,
+    bleedTicks: 0,
+    walkCycle: Math.random() * Math.PI * 2
+  });
+}
+
+function drawStickFigure(x, y, color = '#222', scale = 1, armAngle = 0, bowSide = false, tension = 0) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.fillStyle = color;
+
+  // Head
+  ctx.beginPath();
+  ctx.arc(0, -30, 10, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Body — lean forward slightly when shooting
+  const leanX = bowSide ? tension * 3 : 0;
+  ctx.beginPath();
+  ctx.moveTo(leanX, -20);
+  ctx.lineTo(0, 10);
+  ctx.stroke();
+
+  if (bowSide) {
+    // Player legs — static
+    ctx.beginPath();
+    ctx.moveTo(0, 10); ctx.lineTo(-10, 30);
+    ctx.moveTo(0, 10); ctx.lineTo(10, 30);
+    ctx.stroke();
+  } else {
+    // Enemy legs — animated with walk cycle (armAngle holds walkCycle for enemies)
+    const legSwing = Math.sin(armAngle) * 12;
+    ctx.beginPath();
+    ctx.moveTo(0, 10); ctx.lineTo(-8 + legSwing, 30);
+    ctx.moveTo(0, 10); ctx.lineTo(8 - legSwing, 30);
+    ctx.stroke();
+  }
+
+  if (bowSide) {
+    const pullBack = tension * 10;
+
+    // Bow hand position (left arm, fixed)
+    const bowHandX = -16, bowHandY = -8;
+    // Bow center just left of the bow hand
+    const bowCX = bowHandX - 8, bowCY = bowHandY;
+
+    // Left arm holding the bow
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(leanX, -10);
+    ctx.lineTo(bowHandX, bowHandY);
+    ctx.stroke();
+
+    // Bow arc — vertical, opens to the right
+    ctx.strokeStyle = '#8B4513';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(bowCX, bowCY, 13, -1.2, 1.2);
+    ctx.stroke();
+
+    // Bowstring endpoints (top and bottom of bow arc)
+    const topX = bowCX + 13 * Math.cos(-1.2);
+    const topY = bowCY + 13 * Math.sin(-1.2);
+    const botX = bowCX + 13 * Math.cos(1.2);
+    const botY = bowCY + 13 * Math.sin(1.2);
+
+    // Draw arm extends in aimAngle direction from shoulder
+    const armLen = 15;
+    const drawHandX = leanX + Math.cos(armAngle) * armLen - pullBack;
+    const drawHandY = -10 + Math.sin(armAngle) * armLen;
+
+    // String midpoint pulled to draw hand
+    const midX = drawHandX;
+    const midY = (topY + botY) / 2 + (drawHandY - (topY + botY) / 2) * 0.6;
+
+    ctx.strokeStyle = tension > 0.05 ? '#ffdd88' : '#ccc';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(topX, topY);
+    ctx.lineTo(midX, midY);
+    ctx.lineTo(botX, botY);
+    ctx.stroke();
+
+    // Arrow nocked on string when pulled
+    if (tension > 0.05) {
+      ctx.save();
+      ctx.translate(midX, midY);
+      ctx.rotate(armAngle);
+      ctx.strokeStyle = '#8B4513';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(-14, 0);
+      ctx.lineTo(2, 0);
+      ctx.stroke();
+      ctx.fillStyle = '#555';
+      ctx.beginPath();
+      ctx.moveTo(2, 0);
+      ctx.lineTo(-2, -3);
+      ctx.lineTo(-2, 3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Draw (right) arm pointing toward aim target
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(leanX, -10);
+    ctx.lineTo(drawHandX, drawHandY);
+    ctx.stroke();
+  } else {
+    // Enemy arms swing opposite to legs
+    const armSwing = Math.sin(armAngle) * 10;
+    ctx.beginPath();
+    ctx.moveTo(0, -10);
+    ctx.lineTo(-14 + armSwing, 5);
+    ctx.moveTo(0, -10);
+    ctx.lineTo(14 - armSwing, 5);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function drawArrow(x, y, vx, vy) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(Math.atan2(vy, vx));
+  const big = powerups.bigArrows;
+  const gold = powerups.goldArrows;
+  ctx.strokeStyle = gold ? '#FFD700' : big ? '#5d3891' : '#8B4513';
+  ctx.lineWidth = big ? 4 : 2;
+  ctx.beginPath();
+  ctx.moveTo(big ? -18 : -10, 0);
+  ctx.lineTo(big ? 18 : 10, 0);
+  ctx.stroke();
+  ctx.fillStyle = big ? '#9b59b6' : '#555';
+  ctx.beginPath();
+  ctx.moveTo(big ? 18 : 10, 0);
+  ctx.lineTo(big ? 12 : 6, big ? -5 : -3);
+  ctx.lineTo(big ? 12 : 6, big ? 5 : 3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawTower() {
+  const tx = tower.x, ty = tower.y, tw = tower.w, th = tower.h;
+
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+  ctx.fillRect(tx + 8, ty + 10, tw, th);
+
+  // Main tower body gradient
+  const tGrad = ctx.createLinearGradient(tx, 0, tx + tw, 0);
+  tGrad.addColorStop(0, '#7a7a7a');
+  tGrad.addColorStop(0.4, '#a0a0a0');
+  tGrad.addColorStop(1, '#606060');
+  ctx.fillStyle = tGrad;
+  ctx.fillRect(tx, ty, tw, th);
+
+  // Brick rows
+  const brickH = 18, brickW = 28;
+  for (let row = 0; row * brickH < th; row++) {
+    const offset = row % 2 === 0 ? 0 : 14;
+    for (let col = -1; col < 4; col++) {
+      const bx = tx + col * brickW + offset;
+      const by = ty + row * brickH;
+      // Brick face with slight variation
+      const shade = 150 + Math.sin(row * 3 + col * 7) * 15;
+      ctx.fillStyle = `rgb(${shade},${shade - 5},${shade - 10})`;
+      ctx.fillRect(bx + 1, by + 1, brickW - 2, brickH - 2);
+      // Mortar line
+      ctx.strokeStyle = '#555';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(bx + 1, by + 1, brickW - 2, brickH - 2);
+    }
+  }
+
+  // Arrow slit window
+  ctx.fillStyle = '#222';
+  ctx.fillRect(tx + tw / 2 - 3, ty + 60, 6, 18);
+  ctx.fillRect(tx + tw / 2 - 8, ty + 67, 16, 6);
+
+  // Battlements
+  const merlonW = 13, merlonH = 22, gap = 4;
+  for (let i = 0; i < 3; i++) {
+    const mx = tx + 2 + i * (merlonW + gap);
+    const mGrad = ctx.createLinearGradient(mx, ty - merlonH, mx + merlonW, ty);
+    mGrad.addColorStop(0, '#aaa');
+    mGrad.addColorStop(1, '#666');
+    ctx.fillStyle = mGrad;
+    ctx.fillRect(mx, ty - merlonH, merlonW, merlonH);
+    // Merlon brick line
+    ctx.strokeStyle = '#555';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(mx, ty - merlonH, merlonW, merlonH);
+  }
+
+  // Left edge darkening
+  ctx.fillStyle = 'rgba(0,0,0,0.15)';
+  ctx.fillRect(tx, ty, 6, th);
+  // Right edge darkening
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.fillRect(tx + tw - 6, ty, 6, th);
+}
+
+function drawBackground() {
+  // Sky gradient
+  const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  sky.addColorStop(0, '#1a6abf');
+  sky.addColorStop(0.6, '#5fb8f5');
+  sky.addColorStop(1, '#b8e0f7');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Sun
+  const sunX = 80, sunY = 70;
+  const sunGrad = ctx.createRadialGradient(sunX, sunY, 2, sunX, sunY, 38);
+  sunGrad.addColorStop(0, '#fffde0');
+  sunGrad.addColorStop(0.5, '#ffe84d');
+  sunGrad.addColorStop(1, 'rgba(255,200,0,0)');
+  ctx.fillStyle = sunGrad;
+  ctx.beginPath();
+  ctx.arc(sunX, sunY, 38, 0, Math.PI * 2);
+  ctx.fill();
+  // Sun rays
+  ctx.strokeStyle = 'rgba(255,230,80,0.4)';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(sunX + Math.cos(a) * 26, sunY + Math.sin(a) * 26);
+    ctx.lineTo(sunX + Math.cos(a) * 48, sunY + Math.sin(a) * 48);
+    ctx.stroke();
+  }
+
+  // Mountains
+  ctx.fillStyle = '#4a6741';
+  ctx.beginPath();
+  ctx.moveTo(0, 300);
+  ctx.lineTo(80, 180); ctx.lineTo(160, 270);
+  ctx.lineTo(220, 160); ctx.lineTo(310, 280);
+  ctx.lineTo(370, 200); ctx.lineTo(440, 290);
+  ctx.lineTo(500, 220); ctx.lineTo(560, 310);
+  ctx.lineTo(620, 240); ctx.lineTo(680, 300);
+  ctx.lineTo(canvas.width, 320); ctx.lineTo(canvas.width, canvas.height);
+  ctx.lineTo(0, canvas.height);
+  ctx.closePath();
+  ctx.fill();
+
+  // Mountain snow caps
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  [[80,180],[220,160],[370,200],[500,220],[620,240]].forEach(([px,py]) => {
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(px - 18, py + 30);
+    ctx.lineTo(px + 18, py + 30);
+    ctx.closePath();
+    ctx.fill();
+  });
+
+  // Clouds
+  clouds.forEach(c => {
+    ctx.fillStyle = 'rgba(255,255,255,0.88)';
+    ctx.beginPath();
+    ctx.ellipse(c.x, c.y, c.w, 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(c.x - c.w * 0.3, c.y + 4, c.w * 0.5, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(c.x + c.w * 0.3, c.y + 2, c.w * 0.45, 13, 0, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawGround() {
+  const gy = canvas.height - 40;
+
+  // Dirt layer
+  const dirtGrad = ctx.createLinearGradient(0, gy, 0, canvas.height);
+  dirtGrad.addColorStop(0, '#8B6340');
+  dirtGrad.addColorStop(1, '#5C3D1E');
+  ctx.fillStyle = dirtGrad;
+  ctx.fillRect(0, gy, canvas.width, 40);
+
+  // Dirt pebbles
+  ctx.fillStyle = 'rgba(0,0,0,0.12)';
+  for (let i = 0; i < 40; i++) {
+    const px = (i * 197) % canvas.width;
+    const py = gy + 12 + (i * 53) % 22;
+    ctx.beginPath();
+    ctx.ellipse(px, py, 3, 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Grass base
+  const grassGrad = ctx.createLinearGradient(0, gy - 8, 0, gy + 12);
+  grassGrad.addColorStop(0, '#5abf2e');
+  grassGrad.addColorStop(1, '#3a7a1e');
+  ctx.fillStyle = grassGrad;
+  ctx.fillRect(0, gy - 5, canvas.width, 14);
+
+  // Grass blades
+  for (let i = 0; i < canvas.width; i += 6) {
+    const h = 5 + (i * 13) % 7;
+    const lean = ((i * 7) % 7) - 3;
+    ctx.strokeStyle = i % 3 === 0 ? '#4abf20' : '#3aaa18';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(i, gy - 5);
+    ctx.quadraticCurveTo(i + lean / 2, gy - 5 - h * 0.6, i + lean, gy - 5 - h);
+    ctx.stroke();
+  }
+
+  // Bright highlight on grass top
+  ctx.fillStyle = 'rgba(120,230,60,0.35)';
+  ctx.fillRect(0, gy - 6, canvas.width, 3);
+
+  // Stuck arrows in ground
+  stuckArrows.forEach(a => {
+    ctx.save();
+    ctx.translate(a.x, a.y);
+    ctx.rotate(a.angle);
+    ctx.strokeStyle = '#6B3A10';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-10, 0); ctx.lineTo(8, 0);
+    ctx.stroke();
+    ctx.fillStyle = '#444';
+    ctx.beginPath();
+    ctx.moveTo(8,0); ctx.lineTo(4,-3); ctx.lineTo(4,3);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+    a.life--;
+  });
+  stuckArrows = stuckArrows.filter(a => a.life > 0);
+}
+
+function addParticles(x, y) {
+  for (let i = 0; i < 8; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 5,
+      vy: -Math.random() * 5,
+      life: 40,
+      color: `hsl(${Math.random() * 30 + 10}, 80%, 50%)`
+    });
+  }
+}
+
+function updateUI() {
+  document.getElementById('lives').textContent = lives;
+  document.getElementById('score').textContent = score;
+  document.getElementById('wave').textContent = wave;
+}
+
+function restartGame() {
+  lives = 5; score = 0; wave = 1; gameOver = false;
+  arrows = []; enemies = []; particles = []; stuckArrows = [];
+  spawnTimer = 0; spawnInterval = 120;
+  enemiesPerWave = 5; waveEnemiesSpawned = 0;
+  choosingPowerup = false;
+  currentPowerupChoices = [];
+  chosenPowerups = new Set();
+  spikeTimer = 0; rainTimer = 0; quakeTimer = 0; killCount = 0;
+  cheatLog = { booleans: new Set(), shieldAdded: 0, livesAdded: 0 };
+  powerups = { tripleShot: false, damageMultiplier: 1, fastCooldown: false, piercing: false, slowEnemies: false, explosive: false, poison: false, bigArrows: false, fastArrows: false, shield: 0, doubleScore: false, chainLightning: false, freezeArrows: false, fiveShot: false, criticalHit: false, weaken: false, bleed: false, homing: false, arrowRain: false, spikes: false, moat: false, vampiric: false, tripleScore: false, bigExplosion: false, frozenHeadshot: false, rapidFire: false, bouncing: false, lightningStorm: false, berserker: false, earthquake: false, goldArrows: false, nukeArrows: false };
+  document.getElementById('gameover').style.display = 'none';
+  updateUI();
+  const randomPowerup = ALL_POWERUPS[Math.floor(Math.random() * ALL_POWERUPS.length)];
+  grantPowerup(randomPowerup);
+  loop();
+}
+
+function loop() {
+  if (gameOver || paused) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Animate clouds
+  clouds.forEach(c => {
+    c.x += c.speed;
+    if (c.x - c.w > canvas.width) c.x = -c.w;
+  });
+
+  drawBackground();
+  drawGround();
+  drawTower();
+
+  // Aim line from player to mouse
+  ctx.save();
+  ctx.setLineDash([5, 8]);
+  ctx.strokeStyle = 'rgba(255,255,100,0.4)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(player.x, player.y - 20);
+  ctx.lineTo(mouse.x, mouse.y);
+  ctx.stroke();
+  ctx.restore();
+
+  // Actual aim angle in radians toward mouse
+  const dx = mouse.x - player.x;
+  const dy = mouse.y - (player.y - 20);
+  const aimAngle = Math.atan2(dy, dx);
+
+  // Draw player with shoot animation tension
+  const elapsed = performance.now() - lastShotTime;
+  const animDuration = 300;
+  const tension = elapsed < animDuration ? Math.max(0, 1 - elapsed / animDuration) : 0;
+  drawStickFigure(player.x, player.y, '#1a1a8c', 1, aimAngle, true, tension);
+
+  // Global timers
+  if (powerups.arrowRain) {
+    rainTimer++;
+    if (rainTimer >= 300) {
+      rainTimer = 0;
+      for (let i = 0; i < 6; i++) spawnRainArrow(80 + Math.random() * 560);
+      particles.push({ x: canvas.width / 2, y: 20, vx: 0, vy: 0, life: 50, text: true, label: '🌧️ Arrow Rain!' });
+    }
+  }
+  if (powerups.spikes) {
+    spikeTimer++;
+    if (spikeTimer >= 120) {
+      spikeTimer = 0;
+      enemies.forEach(e => {
+        if (!e.falling) {
+          e.hp -= 1;
+          addParticles(e.x, e.y);
+          if (e.hp <= 0) { e.falling = true; e.vy = -6; e.vx = 3; score += 10 * wave * scoreMultiplier(); killCount++; if (powerups.vampiric) { lives++; } updateUI(); }
+        }
+      });
+    }
+  }
+  if (powerups.earthquake) {
+    quakeTimer++;
+    if (quakeTimer >= 480) {
+      quakeTimer = 0;
+      enemies.forEach(e => { if (!e.falling) { e.frozen = true; e.frozenTimer = 60; } });
+      particles.push({ x: canvas.width / 2, y: canvas.height / 2, vx: 0, vy: 0, life: 60, text: true, label: '🌍 EARTHQUAKE!' });
+    }
+  }
+
+  // Spawn enemies
+  spawnTimer++;
+  if (spawnTimer >= spawnInterval) {
+    spawnTimer = 0;
+    spawnEnemy();
+  }
+
+  // Check wave complete
+  if (!choosingPowerup && waveEnemiesSpawned >= enemiesPerWave && enemies.length === 0) {
+    choosingPowerup = true;
+    powerupDeadline = performance.now() + 15000;
+    // Pick 2 random powerups from the full pool
+    const available = ALL_POWERUPS.filter(p => !chosenPowerups.has(p.id));
+    const shuffled = available.sort(() => Math.random() - 0.5);
+    currentPowerupChoices = shuffled.slice(0, 2);
+  }
+
+  if (choosingPowerup) {
+    if (performance.now() >= powerupDeadline) {
+      choosingPowerup = false;
+      startNextWave();
+    } else {
+      drawPowerupScreen();
+      requestAnimationFrame(loop);
+      return;
+    }
+  }
+
+  // Update and draw enemies
+  enemies.forEach(e => {
+    // Freeze countdown
+    if (e.frozen) { e.frozenTimer--; if (e.frozenTimer <= 0) e.frozen = false; }
+    // Weaken countdown
+    if (e.weakened) { e.weakenTimer--; if (e.weakenTimer <= 0) e.weakened = false; }
+    // Poison tick (every 60 frames)
+    if (e.poisoned && !e.frozen) {
+      e.poisonTimer--;
+      if (e.poisonTimer <= 0) {
+        e.hp -= 1; e.poisonTimer = 60;
+        addParticles(e.x, e.y - 20);
+        if (e.hp <= 0 && !e.falling) {
+          e.falling = true; e.vy = -6; e.vx = 3;
+          score += 10 * wave * scoreMultiplier(); updateUI();
+        }
+      }
+    }
+    // Bleed tick (every 30 frames, 6 ticks)
+    if (e.bleeding && !e.frozen) {
+      e.bleedTimer--;
+      if (e.bleedTimer <= 0 && e.bleedTicks > 0) {
+        e.hp -= 1; e.bleedTicks--; e.bleedTimer = 30;
+        addParticles(e.x, e.y - 10);
+        if (e.hp <= 0 && !e.falling) {
+          e.falling = true; e.vy = -6; e.vx = 3;
+          score += 10 * wave * scoreMultiplier(); updateUI();
+          if (powerups.vampiric) { lives++; updateUI(); }
+          killCount++;
+        }
+      }
+      if (e.bleedTicks <= 0) e.bleeding = false;
+    }
+    if (e.falling) {
+      e.vy += 0.5; e.vx *= 0.92;
+      e.y += e.vy; e.x += e.vx;
+    } else if (!e.frozen) {
+      // Moat: slow near tower
+      const nearTower = e.x > tower.x - 120;
+      const effectiveSpeed = e.speed * (e.weakened ? 0.5 : 1) * (powerups.moat && nearTower ? 0.2 : 1);
+      e.x += effectiveSpeed;
+      e.walkCycle += effectiveSpeed * 0.08;
+    }
+
+    // Reached tower?
+    if (!e.falling && e.x >= tower.x - 10) {
+      e.falling = true;
+      e.vy = -4;
+      if (powerups.shield > 0) {
+        powerups.shield--;
+        particles.push({ x: player.x, y: player.y - 20, vx: 0, vy: -1.5, life: 50, text: true, label: '🛡️ Blocked!' });
+      } else {
+        lives--;
+      }
+      updateUI();
+      if (lives <= 0) {
+        gameOver = true;
+        document.getElementById('gameover').style.display = 'block';
+      }
+    }
+
+    if (e.y > canvas.height + 50) e.dead = true;
+
+    const damage = 1 - (e.hp / e.maxHp);
+    const r = Math.round(140 + damage * 100);
+    let color = `rgb(${r}, 20, 20)`;
+    if (e.frozen) color = '#5dade2';
+    else if (e.poisoned) color = '#27ae60';
+    if (!e.dead) {
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.beginPath();
+      ctx.ellipse(e.x, canvas.height - 42, 14, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      drawStickFigure(e.x, e.y, color, 1, e.walkCycle, false, 0);
+      // Health bar above head
+      const barW = 36, barH = 5;
+      const barX = e.x - barW / 2, barY = e.y - 52;
+      ctx.fillStyle = '#555';
+      ctx.fillRect(barX, barY, barW, barH);
+      ctx.fillStyle = `hsl(${(e.hp / e.maxHp) * 120}, 90%, 45%)`;
+      ctx.fillRect(barX, barY, barW * (e.hp / e.maxHp), barH);
+    }
+  });
+  enemies = enemies.filter(e => !e.dead);
+
+  // Update and draw arrows
+  arrows.forEach(a => {
+    a.vy += 0.15;
+    // Homing: steer toward nearest enemy
+    if (powerups.homing && !a.rain) {
+      let nearest = null, nearDist = Infinity;
+      enemies.forEach(e => {
+        if (!e.falling) {
+          const d = Math.hypot(a.x - e.x, a.y - (e.y - 20));
+          if (d < nearDist) { nearDist = d; nearest = e; }
+        }
+      });
+      if (nearest) {
+        const tdx = nearest.x - a.x, tdy = (nearest.y - 20) - a.y;
+        const tlen = Math.hypot(tdx, tdy);
+        a.vx += (tdx / tlen) * 0.6;
+        a.vy += (tdy / tlen) * 0.6;
+        const spd = Math.hypot(a.vx, a.vy);
+        const cap = powerups.fastArrows ? 22 : 14;
+        if (spd > cap) { a.vx = (a.vx / spd) * cap; a.vy = (a.vy / spd) * cap; }
+      }
+    }
+    a.x += a.vx;
+    a.y += a.vy;
+    a.life--;
+
+    drawArrow(a.x, a.y, a.vx, a.vy);
+
+    // Hit detection
+    enemies.forEach(e => {
+      if (e.falling || a.life <= 0) return;
+      const hitbox = powerups.bigArrows ? 30 : 18;
+      const bodyHit = Math.abs(a.x - e.x) < hitbox && Math.abs(a.y - (e.y - 15)) < hitbox + 7;
+      const headDist = Math.sqrt((a.x - e.x) ** 2 + (a.y - (e.y - 30)) ** 2);
+      const headHit = headDist < (powerups.bigArrows ? 24 : 16);
+      if (headHit || bodyHit) {
+        addParticles(e.x, e.y - 30);
+        if (!powerups.piercing) a.life = 0;
+        const sm = scoreMultiplier();
+        const crit = powerups.criticalHit && Math.random() < 0.25;
+        const berserkerBonus = powerups.berserker ? 1 + enemies.filter(x => !x.falling).length * 0.15 : 1;
+        const baseDmg = powerups.damageMultiplier * berserkerBonus * (crit ? 3 : 1);
+        if (powerups.nukeArrows) {
+          enemies.forEach(other => {
+            if (!other.falling) {
+              other.falling = true; other.vy = -6; other.vx = 3;
+              addParticles(other.x, other.y - 20);
+              score += 10 * wave * scoreMultiplier();
+              killCount++;
+              if (powerups.vampiric) { lives++; }
+            }
+          });
+          updateUI();
+          particles.push({ x: canvas.width/2, y: canvas.height/2 - 60, vx: 0, vy: 0, life: 70, text: true, label: '☢️ NUKE!' });
+        }
+        if (headHit) {
+          e.hp = 0;
+          score += 25 * wave * sm;
+          particles.push({ x: e.x, y: e.y - 40, vx: 0, vy: -1.5, life: 60, text: true, label: crit ? '💥 CRIT HEADSHOT!' : 'HEADSHOT!' });
+          if (powerups.frozenHeadshot) { e.frozen = true; e.frozenTimer = 120; }
+        } else {
+          e.hp -= baseDmg;
+          if (crit) particles.push({ x: e.x, y: e.y - 25, vx: 0, vy: -1.2, life: 40, text: true, label: '💥 CRIT!' });
+          if (powerups.freezeArrows) { e.frozen = true; e.frozenTimer = 120; }
+          if (powerups.poison) { e.poisoned = true; e.poisonTimer = 60; }
+          if (powerups.weaken) { e.weakened = true; e.weakenTimer = 180; }
+          if (powerups.bleed) { e.bleeding = true; e.bleedTimer = 30; e.bleedTicks = 6; }
+        }
+        if (powerups.explosive) {
+          const radius = powerups.bigExplosion ? 160 : 80;
+          enemies.forEach(other => {
+            if (other !== e && !other.falling && Math.abs(other.x - e.x) < radius) {
+              other.hp -= baseDmg * 0.5;
+              addParticles(other.x, other.y - 15);
+              if (other.hp <= 0) { other.falling = true; other.vy = -5; other.vx = 3; score += 10 * wave * sm; killCount++; if (powerups.vampiric) { lives++; updateUI(); } }
+            }
+          });
+        }
+        if (e.hp <= 0 && !e.falling) {
+          e.falling = true; e.vy = -6; e.vx = 3;
+          if (!headHit) score += 10 * wave * sm;
+          killCount++;
+          if (powerups.vampiric) { lives++; updateUI(); }
+          if (powerups.lightningStorm && killCount % 10 === 0) {
+            enemies.forEach(other => {
+              if (!other.falling) { other.hp -= 3; addParticles(other.x, other.y - 20); if (other.hp <= 0) { other.falling = true; other.vy = -5; other.vx = 3; score += 10 * wave * sm; } }
+            });
+            particles.push({ x: canvas.width / 2, y: 30, vx: 0, vy: 0, life: 60, text: true, label: '⛈️ LIGHTNING STORM!' });
+          }
+          if (powerups.chainLightning) {
+            let nearest = null, nearDist = Infinity;
+            enemies.forEach(other => {
+              if (other !== e && !other.falling) { const d = Math.abs(other.x - e.x); if (d < nearDist) { nearDist = d; nearest = other; } }
+            });
+            if (nearest) {
+              nearest.hp -= 3;
+              addParticles(nearest.x, nearest.y - 20);
+              particles.push({ x: nearest.x, y: nearest.y - 30, vx: 0, vy: -1.5, life: 45, text: true, label: '⚡ ZAP!' });
+              if (nearest.hp <= 0) { nearest.falling = true; nearest.vy = -5; nearest.vx = 3; score += 10 * wave * sm; killCount++; if (powerups.vampiric) { lives++; updateUI(); } }
+            }
+          }
+          updateUI();
+        }
+      }
+    });
+
+    // Bounce or stick in ground
+    if (a.y >= canvas.height - 44 && a.life > 0) {
+      if (powerups.bouncing && !a.bounced) {
+        a.bounced = true;
+        a.vy = -Math.abs(a.vy) * 0.6;
+        a.y = canvas.height - 45;
+      } else {
+        stuckArrows.push({ x: a.x, y: canvas.height - 44, angle: Math.atan2(a.vy, a.vx), life: 180 });
+        a.life = 0;
+      }
+    }
+    if (a.x > canvas.width || a.x < 0 || a.y > canvas.height || a.life <= 0) a.life = 0;
+  });
+  arrows = arrows.filter(a => a.life > 0);
+
+  // Particles
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.2;
+    p.life--;
+    ctx.globalAlpha = Math.min(1, p.life / 30);
+    if (p.text) {
+      const label = p.label || 'HEADSHOT!';
+      ctx.font = 'bold 16px Arial';
+      ctx.fillStyle = p.label ? '#fff' : '#FFD700';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 3;
+      ctx.textAlign = 'center';
+      ctx.strokeText(label, p.x, p.y);
+      ctx.fillText(label, p.x, p.y);
+      ctx.textAlign = 'left';
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+  ctx.globalAlpha = 1;
+  particles = particles.filter(p => p.life > 0);
+
+  // Instructions
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.font = '14px Arial';
+  ctx.fillText('Click to shoot! Protect your tower!', 10, 25);
+
+  // Cooldown indicator
+  const cooldownFraction = Math.min(1, (performance.now() - lastShotTime) / (powerups.fastCooldown ? 250 : 500));
+  ctx.fillStyle = '#333';
+  ctx.fillRect(player.x - 20, player.y + 45, 40, 6);
+  ctx.fillStyle = cooldownFraction >= 1 ? '#44ff44' : '#ffaa00';
+  ctx.fillRect(player.x - 20, player.y + 45, 40 * cooldownFraction, 6);
+
+  requestAnimationFrame(loop);
+}
+
+function toggleCheatPanel() {
+  const panel = document.getElementById('cheatPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function submitCheat() {
+  const input = document.getElementById('cheatInput');
+  const msg = document.getElementById('cheatMsg');
+  const code = input.value.trim().toLowerCase();
+  input.value = '';
+
+  function cheatBool(...keys) {
+    keys.forEach(k => { if (!powerups[k]) { powerups[k] = true; cheatLog.booleans.add(k); } });
+  }
+  function cheatShield(n) { powerups.shield += n; cheatLog.shieldAdded += n; updateUI(); }
+  function cheatLives(n) { lives += n; cheatLog.livesAdded += n; updateUI(); }
+
+  const cheats = {
+    '1111':  () => { ALL_POWERUPS.forEach(p => { if (!powerups[p.id] && p.id !== 'extraLife' && p.id !== 'shield' && p.id !== 'megaLives' && p.id !== 'extraShield') cheatBool(p.id); }); updateUI(); return '😈 ALL POWERUPS GRANTED!' },
+    '2222':  () => { enemies.forEach(e => { e.falling = true; e.vy = -6; e.vx = 3; }); waveEnemiesSpawned = enemiesPerWave; return '⏩ Wave skipped!' },
+    '3333':  () => { const add = 99 - lives; if (add > 0) { lives = 99; cheatLog.livesAdded += add; } updateUI(); return '❤️ Lives set to 99!' },
+    '4444':  () => { cheatShield(20); return '🛡️ +20 shields!' },
+    '5555':  () => { score += 99999; updateUI(); return '💰 +99999 score!' },
+    '6666':  () => { enemies.forEach(e => { if (!e.falling) { e.falling = true; e.vy = -6; e.vx = 3; } }); return '💀 All enemies wiped!' },
+    '7777':  () => { wave = 10; updateUI(); return '🌊 Jumped to wave 10!' },
+    '8888':  () => { wave = 25; updateUI(); return '🌊 Jumped to wave 25!' },
+    '9999':  () => { wave = 50; updateUI(); return '🌊 Jumped to wave 50!' },
+    '1234':  () => { cheatBool('tripleShot'); return '🏹🏹🏹 Triple Shot!' },
+    '2345':  () => { cheatBool('fiveShot'); return '🏹🏹🏹🏹🏹 Five Shot!' },
+    '3456':  () => { cheatBool('fastCooldown', 'fastArrows'); return '⚡ Super speed arrows!' },
+    '4567':  () => { cheatBool('explosive', 'bigExplosion'); return '💥 Mega Explosion!' },
+    '5678':  () => { cheatBool('vampiric'); return '🧛 Vampiric on!' },
+    '6789':  () => { cheatBool('homing'); return '🔄 Homing arrows!' },
+    '7890':  () => { cheatBool('chainLightning', 'lightningStorm'); return '⛈️ Lightning powers!' },
+    '1357':  () => { enemies.forEach(e => { if (!e.falling) { e.frozen = true; e.frozenTimer = 300; } }); return '❄️ All enemies frozen!' },
+    '2468':  () => { cheatShield(999); return '🛡️ 999 shields — good luck losing!' },
+    '6767':  () => { wave = 100; updateUI(); cheatBool('nukeArrows'); return '☢️ Wave 100 + NUKE ARROWS activated!' },
+    '0000':  () => {
+      cheatLog.booleans.forEach(k => { powerups[k] = false; });
+      powerups.shield = Math.max(0, powerups.shield - cheatLog.shieldAdded);
+      lives = Math.max(1, lives - cheatLog.livesAdded);
+      cheatLog = { booleans: new Set(), shieldAdded: 0, livesAdded: 0 };
+      updateUI();
+      return '🔄 Cheat powerups removed — earned ones kept!';
+    },
+  };
+
+  if (cheats[code]) {
+    const result = cheats[code]();
+    msg.style.color = '#0f0';
+    msg.textContent = result;
+  } else {
+    msg.style.color = '#f55';
+    msg.textContent = '❌ Unknown code!';
+  }
+  setTimeout(() => { msg.textContent = ''; }, 3000);
+}
+
+function togglePause() {
+  if (onStartScreen || gameOver) return;
+  paused = !paused;
+  document.getElementById('pauseBtn').textContent = paused ? '▶' : '⏸';
+  if (paused) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 56px Arial';
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 4;
+    ctx.strokeText('PAUSED', canvas.width / 2, canvas.height / 2 - 10);
+    ctx.fillStyle = '#fff';
+    ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2 - 10);
+    ctx.font = '22px Arial';
+    ctx.fillStyle = '#ccc';
+    ctx.fillText('Press Esc or ▶ to resume', canvas.width / 2, canvas.height / 2 + 30);
+    ctx.textAlign = 'left';
+  } else {
+    loop();
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Escape') togglePause();
+});
+
+function toggleFullscreen() {
+  const btn = document.getElementById('fullscreenBtn');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+    btn.textContent = '✕';
+  } else {
+    document.exitFullscreen();
+    btn.textContent = '⛶';
+  }
+}
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    document.getElementById('fullscreenBtn').textContent = '⛶';
+  }
+});
+
+updateUI();
+drawStartScreen();
+</script>
+</body>
+</html>
