@@ -1,6 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { loadArcadeGames, isNew } from "../../lib/arcade";
+import { loadArcadeGames, isNew, playUrl } from "../../lib/arcade";
 
 const games = loadArcadeGames();
 const now = new Date();
@@ -23,7 +23,7 @@ const now = new Date();
     <ul class="mt-8 grid gap-5 sm:grid-cols-2">
       {games.map((g) => (
         <li>
-          <a href={`/arcade/${g.slug}`}
+          <a href={playUrl(g.slug)}
              class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md">
             <div class="flex items-center gap-2">
               <span class="text-4xl">{g.emoji}</span>

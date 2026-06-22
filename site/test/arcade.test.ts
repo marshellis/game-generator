@@ -2,7 +2,17 @@ import { afterEach, describe, expect, it } from "vitest";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { validateManifest, loadArcadeGames, isNew, ARCADE_DIR } from "../src/lib/arcade";
+import { validateManifest, loadArcadeGames, isNew, gameUrl, playUrl, ARCADE_DIR } from "../src/lib/arcade";
+
+/**
+ * Astro builds a page route `/x` to the static file `x/index.html`. So the
+ * wrapper play route and the raw game file collide on disk unless their URLs
+ * differ by more than a trailing slash. This mirrors that rule.
+ */
+function astroOutputPath(url: string): string {
+  const clean = url.replace(/^\//, "").replace(/\/$/, "");
+  return clean.endsWith(".html") ? clean : `${clean}/index.html`;
+}
 
 const VALID = {
   title: "Space Blaster",
@@ -102,6 +112,27 @@ describe("loadArcadeGames", () => {
     fs.writeFileSync(path.join(folder, "index.html"), "<!doctype html>");
     fs.writeFileSync(path.join(folder, "game.json"), "{ not json");
     expect(() => loadArcadeGames(tmp)).toThrow("arcade/broken");
+  });
+});
+
+describe("play/game URL collision (regression: recursive iframe bug)", () => {
+  it("the wrapper route never overwrites the raw game file on build", () => {
+    for (const slug of ["minecraft-2d", "a", "space-blaster"]) {
+      const game = astroOutputPath(gameUrl(slug)); // arcade/<slug>/index.html
+      const play = astroOutputPath(playUrl(slug)); // arcade/<slug>/play/index.html
+      expect(play).not.toBe(game);
+      // The game file must not be a build target of the wrapper route.
+      expect(play.startsWith(`arcade/${slug}/`)).toBe(true);
+      expect(game).toBe(`arcade/${slug}/index.html`);
+    }
+  });
+
+  it("the wrapper iframes the raw game, not itself", () => {
+    // src === gameUrl, and gameUrl !== the wrapper's own URL → no recursion.
+    const slug = "minecraft-2d";
+    expect(gameUrl(slug)).toBe("/arcade/minecraft-2d/index.html");
+    expect(playUrl(slug)).toBe("/arcade/minecraft-2d/play");
+    expect(astroOutputPath(playUrl(slug))).not.toBe(astroOutputPath(gameUrl(slug)));
   });
 });
 

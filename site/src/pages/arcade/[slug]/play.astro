@@ -1,7 +1,7 @@
 ---
-import Base from "../../layouts/Base.astro";
-import GameHeader from "../../components/GameHeader.astro";
-import { loadArcadeGames } from "../../lib/arcade";
+import Base from "../../../layouts/Base.astro";
+import GameHeader from "../../../components/GameHeader.astro";
+import { loadArcadeGames, gameUrl } from "../../../lib/arcade";
 
 export function getStaticPaths() {
   return loadArcadeGames().map((game) => ({
@@ -11,7 +11,10 @@ export function getStaticPaths() {
 }
 
 const { game } = Astro.props;
-const src = `/arcade/${game.slug}/index.html`;
+// The raw game lives at /arcade/<slug>/index.html (served from public/). This
+// wrapper sits one segment deeper (/arcade/<slug>/play) so its build output
+// never overwrites that file — see playUrl()/gameUrl() in lib/arcade.ts.
+const src = gameUrl(game.slug);
 ---
 <Base title={`${game.title} · Arcade`}>
   <GameHeader
@@ -29,7 +32,8 @@ const src = `/arcade/${game.slug}/index.html`;
       src={src}
       title={game.title}
       sandbox="allow-scripts allow-same-origin"
-      class="h-[70vh] w-full rounded-2xl border border-slate-200 bg-white shadow-sm"
+      allow="fullscreen; autoplay; gamepad"
+      class="h-[78vh] w-full rounded-2xl border border-slate-200 bg-white shadow-sm"
       loading="lazy"
     ></iframe>
     <p class="mt-3 text-sm text-slate-400">
