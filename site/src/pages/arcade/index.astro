@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+import { loadArcadeGames, isNew } from "../../lib/arcade";
+
+const games = loadArcadeGames();
+const now = new Date();
+---
+<Base title="Arcade · Marshellis Games">
+  <nav class="mb-4 text-sm text-slate-500">
+    <a href="/" class="text-slate-500 no-underline hover:underline">Home</a>
+    <span class="px-1">/</span>
+    <span class="text-slate-700">Arcade</span>
+  </nav>
+
+  <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">🕹️ Arcade</h1>
+  <p class="mt-2 text-slate-500">Pick a game and play. Made by the Marshellis kids.</p>
+
+  {games.length === 0 ? (
+    <p class="mt-8 rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
+      No games yet — drop one into <code class="rounded bg-slate-100 px-1">public/arcade/</code>.
+    </p>
+  ) : (
+    <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+      {games.map((g) => (
+        <li>
+          <a href={`/arcade/${g.slug}`}
+             class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md">
+            <div class="flex items-center gap-2">
+              <span class="text-4xl">{g.emoji}</span>
+              {isNew(g.createdAt, now) && (
+                <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">NEW</span>
+              )}
+            </div>
+            <div class="mt-3 text-xl font-bold text-slate-900">{g.title}</div>
+            <p class="mt-1 text-sm text-slate-500">{g.description}</p>
+            <div class="mt-4 flex items-center gap-2 text-xs font-medium text-slate-400">
+              <span class="rounded-full bg-slate-100 px-2 py-0.5">by {g.author}</span>
+            </div>
+            <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 transition-all group-hover:gap-2">
+              Play now <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>

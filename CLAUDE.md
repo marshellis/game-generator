@@ -52,6 +52,18 @@ sudoku (Sudoku), word-search (Word Search), kenken (KenKen). Adding a game = a m
 all calibrated to the grade framework and shipping web play + a printable + an answer key.
 `cli.ts` needs no edit (it dispatches via the registry).
 
+## Arcade — static games (a separate, simpler pathway)
+
+The games above are generator-driven, grade-calibrated puzzle content. **Static games** are
+a parallel track: self-contained interactive HTML/JS games that live in the **Arcade**
+(`/arcade`), are NOT grade-calibrated and NOT daily. Adding one = drop a single folder into
+`site/public/arcade/<slug>/` (with `index.html`, a `game.json` manifest, and any assets) and
+open a PR — no shared code is edited. Discovery (`site/src/lib/arcade.ts`) auto-generates the
+Arcade card grid and per-game play routes (a sandboxed-iframe wrapper); a Vitest gate
+(`site/test/arcade.test.ts`) validates every manifest. The contract for authors (and their
+AI) is `site/public/arcade/README.md`; `_template/` is a working worked example. See the
+design at `docs/superpowers/specs/2026-06-22-arcade-static-games-design.md`.
+
 ## Commands
 
 - Generator: `cd generator && npm test` · `npm run generate -- --game <game> --difficulty g3 --seed 1`
