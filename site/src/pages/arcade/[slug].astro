@@ -1,0 +1,40 @@
+---
+import Base from "../../layouts/Base.astro";
+import GameHeader from "../../components/GameHeader.astro";
+import { loadArcadeGames } from "../../lib/arcade";
+
+export function getStaticPaths() {
+  return loadArcadeGames().map((game) => ({
+    params: { slug: game.slug },
+    props: { game },
+  }));
+}
+
+const { game } = Astro.props;
+const src = `/arcade/${game.slug}/index.html`;
+---
+<Base title={`${game.title} · Arcade`}>
+  <GameHeader
+    crumbs={[{ label: "Home", href: "/" }, { label: "Arcade", href: "/arcade" }, { label: game.title }]}
+    title={`${game.emoji} ${game.title}`}
+    blurb={game.description}
+    showCheck={false}
+    showClear={false}
+  />
+
+  <div class="mt-5">
+    {/* The game runs in a sandboxed iframe so its code can't touch the site
+        chrome. allow-same-origin is kept so games can use localStorage. */}
+    <iframe
+      src={src}
+      title={game.title}
+      sandbox="allow-scripts allow-same-origin"
+      class="h-[70vh] w-full rounded-2xl border border-slate-200 bg-white shadow-sm"
+      loading="lazy"
+    ></iframe>
+    <p class="mt-3 text-sm text-slate-400">
+      Made by {game.author} ·
+      <a href={src} target="_blank" rel="noopener" class="text-brand-600 hover:underline">Open fullscreen ↗</a>
+    </p>
+  </div>
+</Base>

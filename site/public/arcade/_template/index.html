@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Click the Dot</title>
+    <style>
+      /* A game is self-contained: all of its styles live right here (or in its
+         own files in this folder). It runs inside an isolated iframe, so nothing
+         here can affect the rest of the site. */
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; }
+      body {
+        font-family: system-ui, sans-serif;
+        background: #0f172a;
+        color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem;
+        user-select: none;
+      }
+      h1 { margin: 0; font-size: 1.25rem; }
+      .hud { display: flex; gap: 1.5rem; font-weight: 700; }
+      .hud span { color: #38bdf8; }
+      #arena {
+        position: relative;
+        width: min(90vw, 480px);
+        flex: 1;
+        min-height: 280px;
+        background: #1e293b;
+        border-radius: 1rem;
+        overflow: hidden;
+        touch-action: manipulation;
+      }
+      #dot {
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #86efac, #16a34a);
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+      }
+      button {
+        font: inherit;
+        font-weight: 700;
+        padding: 0.6rem 1.4rem;
+        border: 0;
+        border-radius: 0.6rem;
+        background: #38bdf8;
+        color: #0f172a;
+        cursor: pointer;
+      }
+      .msg { min-height: 1.5rem; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <h1>Click the Dot</h1>
+    <div class="hud">
+      <div>Score: <span id="score">0</span></div>
+      <div>Time: <span id="time">15</span>s</div>
+      <div>Best: <span id="best">0</span></div>
+    </div>
+    <div id="arena"><div id="dot" hidden></div></div>
+    <p class="msg" id="msg">Press start and click the dot!</p>
+    <button id="start">Start</button>
+
+    <script>
+      const arena = document.getElementById("arena");
+      const dot = document.getElementById("dot");
+      const scoreEl = document.getElementById("score");
+      const timeEl = document.getElementById("time");
+      const bestEl = document.getElementById("best");
+      const msgEl = document.getElementById("msg");
+      const startBtn = document.getElementById("start");
+
+      // localStorage works because the wrapper iframe allows same-origin — use it
+      // for high scores, saved progress, settings, etc.
+      const BEST_KEY = "click-the-dot:best";
+      let best = Number(localStorage.getItem(BEST_KEY) || 0);
+      bestEl.textContent = best;
+
+      let score = 0, time = 15, timer = null;
+
+      function moveDot() {
+        const pad = 30;
+        dot.style.left = pad + Math.random() * (arena.clientWidth - pad * 2) + "px";
+        dot.style.top = pad + Math.random() * (arena.clientHeight - pad * 2) + "px";
+      }
+
+      dot.addEventListener("pointerdown", () => {
+        if (timer === null) return;
+        score++;
+        scoreEl.textContent = score;
+        moveDot();
+      });
+
+      function end() {
+        clearInterval(timer);
+        timer = null;
+        dot.hidden = true;
+        startBtn.disabled = false;
+        if (score > best) {
+          best = score;
+          localStorage.setItem(BEST_KEY, best);
+          bestEl.textContent = best;
+          msgEl.textContent = "New best score! 🎉";
+        } else {
+          msgEl.textContent = "Time's up — press start to try again.";
+        }
+      }
+
+      startBtn.addEventListener("click", () => {
+        score = 0; time = 15;
+        scoreEl.textContent = 0;
+        timeEl.textContent = 15;
+        msgEl.textContent = "Go!";
+        dot.hidden = false;
+        startBtn.disabled = true;
+        moveDot();
+        timer = setInterval(() => {
+          time--;
+          timeEl.textContent = time;
+          if (time <= 0) end();
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
