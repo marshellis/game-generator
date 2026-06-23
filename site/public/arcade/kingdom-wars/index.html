@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kingdom Wars</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { overflow:hidden; background:#05060d; font-family:'Trebuchet MS','Segoe UI',sans-serif; color:#eee; user-select:none; }
+#canvas { display:block; }
+
+/* ── Top resource bar ───────────────────────── */
+#hud {
+  position:fixed; top:12px; left:50%; transform:translateX(-50%);
+  display:flex; gap:6px; z-index:10; pointer-events:none;
+}
+.res {
+  display:flex; align-items:center; gap:6px;
+  background:rgba(12,14,26,0.88); padding:8px 16px;
+  border-radius:10px; border:1px solid #2a3050; font-size:15px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.res .ico { font-size:18px; }
+.res .val { font-weight:bold; color:#ffd84d; min-width:30px; text-align:right; }
+
+/* ── Build panel ────────────────────────────── */
+#build-panel {
+  position:fixed; left:14px; top:50%; transform:translateY(-50%);
+  background:rgba(12,14,26,0.9); border:1px solid #2a3050; border-radius:14px;
+  padding:16px; width:210px; z-index:10; box-shadow:0 4px 16px rgba(0,0,0,0.5);
+}
+#build-panel h3 { font-size:12px; color:#7a85aa; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
+.bld-btn {
+  position:relative; display:block; width:100%; padding:10px 12px; margin-bottom:8px;
+  background:linear-gradient(180deg,#1c2540,#161d33); color:#cdd6f0;
+  border:1px solid #34406e; border-radius:9px; cursor:pointer; font-size:13px;
+  text-align:left; transition:transform 0.08s, box-shadow 0.12s, border-color 0.12s;
+}
+.bld-btn:hover:not(:disabled) { border-color:#5570c0; transform:translateX(2px); }
+.bld-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.bld-btn.active { background:linear-gradient(180deg,#2a4a22,#1d3318); border-color:#5a9a3a; box-shadow:0 0 12px rgba(90,154,58,0.4); }
+.bld-btn .name { font-weight:bold; display:flex; align-items:center; gap:6px; }
+.bld-btn .cost { color:#ffd84d; font-size:11.5px; margin-top:3px; }
+.bld-btn .tip  { color:#8a93b5; font-size:10.5px; margin-top:1px; }
+.divider { border:0; border-top:1px solid #2a3050; margin:12px 0; }
+#train-btn {
+  display:block; width:100%; padding:11px; border-radius:9px; cursor:pointer; font-size:14px;
+  background:linear-gradient(180deg,#4a1d1d,#371414); color:#ffc9c9;
+  border:1px solid #8a3030; transition:transform 0.08s, box-shadow 0.12s;
+}
+#train-btn:hover:not(:disabled) { box-shadow:0 0 12px rgba(180,60,60,0.4); transform:translateY(-1px); }
+#train-btn:disabled { opacity:0.4; cursor:not-allowed; }
+#rally-btn {
+  display:block; width:100%; padding:11px; margin-top:8px; border-radius:9px; cursor:pointer; font-size:14px; font-weight:bold;
+  background:linear-gradient(180deg,#5a3a0a,#3f2806); color:#ffe0a0;
+  border:1px solid #b08020; transition:transform 0.08s, box-shadow 0.12s;
+}
+#rally-btn:hover:not(:disabled) { box-shadow:0 0 14px rgba(200,150,40,0.5); transform:translateY(-1px); }
+#rally-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* ── Kingdom status ─────────────────────────── */
+#status-panel {
+  position:fixed; right:14px; top:72px;
+  background:rgba(12,14,26,0.9); border:1px solid #2a3050; border-radius:14px;
+  padding:14px; width:178px; z-index:10; box-shadow:0 4px 16px rgba(0,0,0,0.5);
+}
+#status-panel h3 { font-size:12px; color:#7a85aa; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; }
+.kdom { display:flex; align-items:center; gap:9px; margin-bottom:9px; }
+.kdot { width:12px; height:12px; border-radius:50%; flex-shrink:0; box-shadow:0 0 6px currentColor; }
+.kbar-wrap { flex:1; }
+.kbar-name { font-size:12px; font-weight:bold; }
+.kbar-bg { height:5px; background:#222a40; border-radius:3px; margin-top:3px; overflow:hidden; }
+.kbar-fill { height:100%; border-radius:3px; transition:width 0.3s; }
+.kbar-info { font-size:10px; color:#6a7090; margin-top:2px; }
+
+/* ── Controls hint ──────────────────────────── */
+#controls-help {
+  position:fixed; top:12px; right:14px;
+  background:rgba(12,14,26,0.8); border:1px solid #232a44; border-radius:10px;
+  padding:8px 14px; font-size:11.5px; color:#8a93b5; z-index:10; pointer-events:none; line-height:1.9;
+}
+#controls-help b { color:#cdd6f0; }
+
+/* ── Toast message ──────────────────────────── */
+#msg {
+  position:fixed; bottom:74px; left:50%; transform:translateX(-50%) translateY(8px);
+  background:rgba(12,14,26,0.94); border:1px solid #3a4470; border-radius:10px;
+  padding:9px 22px; font-size:14px; z-index:10; pointer-events:none;
+  opacity:0; transition:opacity 0.25s, transform 0.25s; white-space:nowrap; font-weight:bold;
+}
+#msg.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+#hint {
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  color:#4a5170; font-size:11.5px; pointer-events:none; z-index:5;
+}
+
+/* ── Castle HP ──────────────────────────────── */
+#castle-hp {
+  position:fixed; bottom:16px; right:14px;
+  background:rgba(12,14,26,0.9); border:1px solid #2a3050; border-radius:12px;
+  padding:10px 14px; font-size:12px; z-index:10; pointer-events:none; box-shadow:0 4px 14px rgba(0,0,0,0.5);
+}
+.hp-bar { width:140px; height:10px; background:#222a40; border-radius:5px; margin-top:5px; overflow:hidden; }
+.hp-fill { height:100%; border-radius:5px; transition:width 0.25s, background 0.25s; }
+
+/* ── Minimap ────────────────────────────────── */
+#minimap {
+  position:fixed; left:14px; bottom:16px; z-index:10;
+  border:2px solid #2a3050; border-radius:8px; background:rgba(5,6,13,0.9);
+  box-shadow:0 4px 14px rgba(0,0,0,0.5);
+}
+
+/* ── Modal / start screen ───────────────────── */
+.overlay {
+  position:fixed; inset:0; background:radial-gradient(circle at 50% 40%, rgba(20,24,48,0.85), rgba(3,4,10,0.96));
+  display:flex; align-items:center; justify-content:center; z-index:100;
+}
+.overlay.hidden { display:none; }
+.panel-box {
+  background:linear-gradient(180deg,#141838,#0c0f22); border:1px solid #3a4470;
+  border-radius:18px; padding:34px 40px; text-align:center; max-width:460px; width:92%;
+  box-shadow:0 10px 50px rgba(0,0,0,0.7);
+}
+.panel-box h1 { font-size:38px; margin-bottom:6px; letter-spacing:1px;
+  background:linear-gradient(90deg,#ffd84d,#ff9a3d); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.panel-box h2 { font-size:30px; margin-bottom:14px; }
+.panel-box .sub { color:#8a93b5; font-size:14px; margin-bottom:22px; }
+.howto { text-align:left; background:rgba(0,0,0,0.25); border-radius:12px; padding:16px 18px; margin-bottom:24px; font-size:13.5px; line-height:1.95; color:#bcc4e0; }
+.howto b { color:#ffd84d; }
+.howto .k { display:inline-block; background:#2a3358; border:1px solid #44508a; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:bold; color:#dce4ff; margin:0 1px; }
+.start-btn {
+  padding:14px 44px; font-size:18px; font-weight:bold; cursor:pointer;
+  background:linear-gradient(180deg,#2a6a3a,#1d4a28); color:#dfffe8;
+  border:1px solid #4aaa5a; border-radius:11px; transition:transform 0.1s, box-shadow 0.15s;
+  box-shadow:0 4px 16px rgba(40,140,60,0.3);
+}
+.start-btn:hover { transform:translateY(-2px); box-shadow:0 6px 22px rgba(40,160,70,0.5); }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="res"><span class="ico">🪙</span><span class="val" id="h-coins">50</span></div>
+  <div class="res"><span class="ico">🪵</span><span class="val" id="h-wood">0</span></div>
+  <div class="res"><span class="ico">🪨</span><span class="val" id="h-rock">0</span></div>
+  <div class="res"><span class="ico">⚔️</span><span class="val" id="h-army">0</span></div>
+</div>
+
+<div id="build-panel">
+  <h3>⚒️ Build Kingdom</h3>
+  <button class="bld-btn" id="btn-lumbercamp" onclick="selectBuild('lumbercamp')">
+    <span class="name">🪚 Lumbercamp</span>
+    <span class="cost">🪙 30</span>
+    <span class="tip">Lumberjacks gather wood · forest tile</span>
+  </button>
+  <button class="bld-btn" id="btn-mine" onclick="selectBuild('mine')">
+    <span class="name">⛏️ Mine</span>
+    <span class="cost">🪙 40 · 🪵 10</span>
+    <span class="tip">Miners dig rock · mountain tile</span>
+  </button>
+  <button class="bld-btn" id="btn-barracks" onclick="selectBuild('barracks')">
+    <span class="name">🏰 Barracks</span>
+    <span class="cost">🪙 50 · 🪵 20 · 🪨 10</span>
+    <span class="tip">Train soldiers · grass tile</span>
+  </button>
+  <hr class="divider">
+  <button id="train-btn" onclick="trainSoldier()" disabled>🪖 Train Soldier · 🪙 10</button>
+  <button id="rally-btn" onclick="rallyArmy()" disabled>⚔️ Rally Army <small>[Space]</small></button>
+</div>
+
+<div id="status-panel">
+  <h3>👑 Kingdoms</h3>
+  <div id="kdom-list"></div>
+</div>
+
+<div id="controls-help">
+  <b>WASD</b> / Arrows — Move<br>
+  <b>Space</b> — Rally army to attack<br>
+  <b>Click</b> map — Place building<br>
+  <b>B</b> / Esc — Cancel build
+</div>
+
+<div id="msg"></div>
+<div id="hint">Collect 🪙 by walking over them · Build your economy · Defend your castle 🏰</div>
+
+<div id="castle-hp">
+  <div>🏰 Your Castle</div>
+  <div class="hp-bar"><div class="hp-fill" id="castle-hp-fill" style="width:100%;background:#4caf50"></div></div>
+  <div id="castle-hp-text" style="color:#6f6;margin-top:4px;font-weight:bold">100 / 100</div>
+</div>
+
+<canvas id="minimap" width="150" height="150"></canvas>
+
+<!-- Start screen -->
+<div id="start-screen" class="overlay">
+  <div class="panel-box">
+    <h1>⚔️ KINGDOM WARS ⚔️</h1>
+    <div class="sub">Adventure · Build · Conquer</div>
+    <div class="howto">
+      🗺️ <b>Explore</b> the realm with <span class="k">W</span><span class="k">A</span><span class="k">S</span><span class="k">D</span> and walk over <b>gold coins</b> to collect them.<br>
+      🪚 <b>Build</b> Lumbercamps in forests for wood, Mines in mountains for rock.<br>
+      🏰 <b>Barracks</b> let you train soldiers — walk up to one and train an army.<br>
+      🛡️ Your soldiers <b>follow and protect you</b>, fighting any enemy nearby.<br>
+      ⚔️ Press <span class="k">Space</span> to <b>rally your whole army</b> and storm the nearest enemy castle.<br>
+      💀 Three rival kingdoms will <b>attack your castle</b> — destroy all of theirs to win!
+    </div>
+    <button class="start-btn" onclick="startGame()">▶ Begin Your Reign</button>
+  </div>
+</div>
+
+<!-- End modal -->
+<div id="modal" class="overlay hidden">
+  <div class="panel-box">
+    <h2 id="modal-title"></h2>
+    <p class="sub" id="modal-msg"></p>
+    <button class="start-btn" onclick="restartGame()">↻ Play Again</button>
+  </div>
+</div>
+
+<script src="./three.min.js"></script>
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════════════════════
+const GRID  = 38;
+const TS    = 2.4;
+const HALF  = (GRID * TS) / 2;
+const T_GRASS=0, T_FOREST=1, T_MOUNTAIN=2, T_WATER=3;
+const TCOL = { 0:0x4a8c46, 1:0x235e29, 2:0x837868, 3:0x1f5e82 };
+const TH   = { 0:0.24, 1:0.34, 2:0.66, 3:0.12 };
+
+const K_COLORS = [0x3a78ff, 0xe23b3b, 0xff9b21, 0xb13bd6];
+const K_GLOW   = ['#3a78ff','#e23b3b','#ff9b21','#b13bd6'];
+const K_NAMES  = ['Azure','Crimson','Amber','Violet'];
+const PLAYER_KID = 0;
+const KINGDOM_STARTS = [[3,3],[3,GRID-9],[GRID-9,3],[GRID-9,GRID-9]]; // [tz,tx]
+
+const BDATA = {
+  lumbercamp:{ cost:{coins:30,wood:0,rock:0},  tile:T_FOREST,   income:{wood:0.45}, label:'Lumbercamp', need:'forest'   },
+  mine:      { cost:{coins:40,wood:10,rock:0}, tile:T_MOUNTAIN, income:{rock:0.30}, label:'Mine',       need:'mountain' },
+  barracks:  { cost:{coins:50,wood:20,rock:10},tile:T_GRASS,    income:{},          label:'Barracks',   need:'grass'    },
+};
+
+const PLAYER_SPEED  = 8.5;
+const SOLDIER_SPEED = 5.2;
+const CAM_OFFSET    = new THREE.Vector3(26, 32, 26);
+const ISO = {
+  w:new THREE.Vector3(-1,0,-1).normalize(), s:new THREE.Vector3(1,0,1).normalize(),
+  a:new THREE.Vector3(-1,0,1).normalize(),  d:new THREE.Vector3(1,0,-1).normalize(),
+};
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let scene, camera, renderer, raycaster, mouse, sun;
+let tileMap=[], tileMeshes=[];
+let player={}, kingdoms=[], playerK=null;
+let coinObjs=[], soldiers=[], buildings=[], effects=[];
+let keys={}, buildMode=null, highlightMesh=null;
+let gameOver=false, gameStarted=false, msgTimer=null;
+let camCurrent=new THREE.Vector3();
+let clock=new THREE.Clock();
+const mmCtx=document.getElementById('minimap').getContext('2d');
+
+// shared geometries/materials (perf)
+const barBgMat=new THREE.SpriteMaterial({color:0x111111});
+
+// ═══════════════════════════════════════════════════════════
+//  THREE SETUP
+// ═══════════════════════════════════════════════════════════
+function initThree() {
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x0a0e1c);
+
+  camera=new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.5, 260);
+  camCurrent.copy(CAM_OFFSET);
+  camera.position.copy(CAM_OFFSET);
+  camera.lookAt(0,0,0);
+
+  renderer=new THREE.WebGLRenderer({canvas:document.getElementById('canvas'),antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+  scene.add(new THREE.AmbientLight(0x9aabcc, 0.7));
+  const hemi=new THREE.HemisphereLight(0xbfd4ff, 0x4a6030, 0.5);
+  scene.add(hemi);
+  sun=new THREE.DirectionalLight(0xffe9bf, 1.25);
+  sun.position.set(40,70,30);
+  sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);
+  sun.shadow.camera.near=1; sun.shadow.camera.far=220;
+  sun.shadow.camera.left=-HALF*1.2; sun.shadow.camera.right=HALF*1.2;
+  sun.shadow.camera.top=HALF*1.2; sun.shadow.camera.bottom=-HALF*1.2;
+  sun.shadow.bias=-0.0005;
+  scene.add(sun);
+  scene.add(sun.target);
+
+  raycaster=new THREE.Raycaster();
+  mouse=new THREE.Vector2();
+
+  window.addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+  renderer.domElement.addEventListener('click',onMapClick);
+  renderer.domElement.addEventListener('mousemove',onMouseMove);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MAP
+// ═══════════════════════════════════════════════════════════
+function generateMap() {
+  tileMap=[]; tileMeshes=[];
+  for (let z=0;z<GRID;z++){
+    tileMap[z]=[]; tileMeshes[z]=[];
+    for (let x=0;x<GRID;x++){
+      let type=T_GRASS;
+      const bx=x/GRID, bz=z/GRID;
+      if (x<2||x>GRID-3||z<2||z>GRID-3) type=T_WATER;
+      else if (Math.sin(bx*9+1)*Math.cos(bz*7)>0.5 && Math.random()<0.72) type=T_MOUNTAIN;
+      else if (Math.sin(bx*6+2.5)*Math.sin(bz*5+1)>0.28 && Math.random()<0.68) type=T_FOREST;
+      const corners=[[3,3],[3,GRID-8],[GRID-8,3],[GRID-8,GRID-8]];
+      if (corners.some(([cz,cx])=>Math.abs(z-cz)<5&&Math.abs(x-cx)<5)) type=T_GRASS;
+      tileMap[z][x]={x,z,type,building:null,owner:null};
+    }
+  }
+
+  const grassGeo=new THREE.BoxGeometry(TS-0.05,TH[T_GRASS],TS-0.05);
+  for (let z=0;z<GRID;z++) for (let x=0;x<GRID;x++){
+    const t=tileMap[z][x], h=TH[t.type];
+    const geo=(t.type===T_GRASS)?grassGeo:new THREE.BoxGeometry(TS-0.05,h,TS-0.05);
+    // subtle per-tile shade variation
+    const base=new THREE.Color(TCOL[t.type]);
+    base.offsetHSL(0,0,(Math.random()-0.5)*0.05);
+    const mat=new THREE.MeshLambertMaterial({color:base});
+    const mesh=new THREE.Mesh(geo,mat);
+    mesh.position.set(x*TS-HALF+TS/2, h/2, z*TS-HALF+TS/2);
+    mesh.receiveShadow=true;
+    mesh.userData={tile:t};
+    scene.add(mesh);
+    tileMeshes[z][x]=mesh;
+    if (t.type===T_FOREST)   addTree(mesh.position.x,h,mesh.position.z);
+    if (t.type===T_MOUNTAIN) addRock(mesh.position.x,h,mesh.position.z);
+  }
+
+  highlightMesh=new THREE.Mesh(
+    new THREE.BoxGeometry(TS,0.08,TS),
+    new THREE.MeshBasicMaterial({color:0xffff00,transparent:true,opacity:0.55})
+  );
+  highlightMesh.visible=false;
+  scene.add(highlightMesh);
+}
+
+function tileToWorld(tx,tz){ return new THREE.Vector3(tx*TS-HALF+TS/2,0,tz*TS-HALF+TS/2); }
+function worldToTile(wx,wz){
+  return { x:Math.max(0,Math.min(GRID-1,Math.floor((wx+HALF)/TS))),
+           z:Math.max(0,Math.min(GRID-1,Math.floor((wz+HALF)/TS))) };
+}
+function getTile(tx,tz){ return (tx<0||tx>=GRID||tz<0||tz>=GRID)?null:tileMap[tz][tx]; }
+
+function addTree(wx,bh,wz){
+  const off=(Math.random()-0.5)*0.7;
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.11,0.55,5),
+    new THREE.MeshLambertMaterial({color:0x5c3a1e}));
+  trunk.position.set(wx+off,bh+0.27,wz+off*0.5); trunk.castShadow=true; scene.add(trunk);
+  const c=new THREE.Color().setHSL(0.32,0.55,0.22+Math.random()*0.1);
+  const leaves=new THREE.Mesh(new THREE.ConeGeometry(0.45,0.85,6),
+    new THREE.MeshLambertMaterial({color:c}));
+  leaves.position.set(wx+off,bh+0.92,wz+off*0.5); leaves.castShadow=true; scene.add(leaves);
+}
+function addRock(wx,bh,wz){
+  const peak=new THREE.Mesh(new THREE.ConeGeometry(0.6,0.95,5),
+    new THREE.MeshLambertMaterial({color:0x9a8f7e}));
+  peak.position.set(wx+(Math.random()-0.5)*0.5,bh+0.45,wz+(Math.random()-0.5)*0.5);
+  peak.rotation.y=Math.random()*3; peak.castShadow=true; scene.add(peak);
+  const snow=new THREE.Mesh(new THREE.ConeGeometry(0.22,0.3,5),
+    new THREE.MeshLambertMaterial({color:0xeef2ff}));
+  snow.position.set(peak.position.x,bh+0.92,peak.position.z); scene.add(snow);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  HEALTH BAR (sprites that always face camera)
+// ═══════════════════════════════════════════════════════════
+function makeHealthBar(width, yOffset){
+  const grp=new THREE.Group();
+  const bg=new THREE.Sprite(barBgMat.clone());
+  bg.scale.set(width,width*0.16,1);
+  const fg=new THREE.Sprite(new THREE.SpriteMaterial({color:0x44dd55}));
+  fg.scale.set(width,width*0.16,1);
+  fg.position.z=0.01;
+  grp.add(bg); grp.add(fg);
+  grp.position.y=yOffset;
+  grp.userData={fg,bg,width};
+  grp.visible=false;
+  return grp;
+}
+function updateHealthBar(grp,frac){
+  frac=Math.max(0,Math.min(1,frac));
+  const {fg,width}=grp.userData;
+  fg.scale.x=width*frac;
+  fg.position.x=-(width*(1-frac))/2;
+  fg.material.color.setHex(frac>0.5?0x44dd55:frac>0.25?0xddcc33:0xdd4433);
+  grp.visible = frac<0.999 && frac>0;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CHARACTER MESH
+// ═══════════════════════════════════════════════════════════
+function makeCharacter(color,scale,isPlayer){
+  const g=new THREE.Group();
+  const dark=new THREE.Color(color).multiplyScalar(0.65);
+  const body=new THREE.Mesh(new THREE.BoxGeometry(0.46*scale,0.62*scale,0.32*scale),
+    new THREE.MeshLambertMaterial({color}));
+  body.position.y=0.6*scale; body.castShadow=true; g.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(0.21*scale,10,10),
+    new THREE.MeshLambertMaterial({color:0xffd0a8}));
+  head.position.y=1.04*scale; head.castShadow=true; g.add(head);
+  const lleg=new THREE.Mesh(new THREE.BoxGeometry(0.15*scale,0.42*scale,0.15*scale),
+    new THREE.MeshLambertMaterial({color:dark}));
+  lleg.position.set(-0.13*scale,0.21*scale,0); g.add(lleg);
+  const rleg=lleg.clone(); rleg.position.x=0.13*scale; g.add(rleg);
+  // weapon/marker
+  if (isPlayer){
+    const crown=new THREE.Mesh(new THREE.CylinderGeometry(0.16*scale,0.2*scale,0.14*scale,6),
+      new THREE.MeshLambertMaterial({color:0xffd84d,emissive:0x553300}));
+    crown.position.y=1.28*scale; g.add(crown);
+  }
+  const sword=new THREE.Mesh(new THREE.BoxGeometry(0.05*scale,0.5*scale,0.05*scale),
+    new THREE.MeshLambertMaterial({color:0xddddee}));
+  sword.position.set(0.32*scale,0.6*scale,0); g.add(sword);
+  g.userData.sword=sword;
+  g.userData.legs=[lleg,rleg];
+  g.userData.body=body;
+  return g;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  KINGDOMS
+// ═══════════════════════════════════════════════════════════
+function initKingdoms(){
+  kingdoms=[]; soldiers=[]; buildings=[];
+  for (let i=0;i<4;i++){
+    const [sz,sx]=KINGDOM_STARTS[i];
+    const wp=tileToWorld(sx+2,sz+2);
+    const k={ id:i,name:K_NAMES[i],color:K_COLORS[i],isPlayer:i===0,isEliminated:false,
+              coins:i===0?50:70, wood:0, rock:0,
+              castleHP:100, castleMaxHP:100,
+              aiBuildTimer:8+i*3, aiAttackTimer:50+i*18, castlePos:new THREE.Vector3(wp.x,0,wp.z) };
+    kingdoms.push(k); if(i===0)playerK=k;
+
+    const castle=makeCastle(wp.x,wp.z,K_COLORS[i]);
+    scene.add(castle); k.castle=castle;
+    const startCount = i===0?5:4;
+    for (let s=0;s<startCount;s++)
+      spawnSoldier(i,wp.x+(Math.random()-0.5)*4,wp.z+(Math.random()-0.5)*4);
+  }
+}
+
+function makeCastle(wx,wz,color){
+  const g=new THREE.Group();
+  const base=new THREE.Mesh(new THREE.BoxGeometry(3,1.3,3),
+    new THREE.MeshLambertMaterial({color:0x8d877a}));
+  base.position.y=0.65; base.castShadow=true; base.receiveShadow=true; g.add(base);
+  // battlements
+  for (let i=0;i<4;i++){
+    const c=new THREE.Mesh(new THREE.BoxGeometry(0.35,0.35,0.35),
+      new THREE.MeshLambertMaterial({color:0x9a948a}));
+    const ang=(i/4)*Math.PI*2+Math.PI/4;
+    c.position.set(Math.cos(ang)*1.25,1.45,Math.sin(ang)*1.25); c.castShadow=true; g.add(c);
+  }
+  const tower=new THREE.Mesh(new THREE.CylinderGeometry(0.75,0.85,2.1,8),
+    new THREE.MeshLambertMaterial({color:0x7d776a}));
+  tower.position.y=2.35; tower.castShadow=true; g.add(tower);
+  const roof=new THREE.Mesh(new THREE.ConeGeometry(0.92,1.1,8),
+    new THREE.MeshLambertMaterial({color}));
+  roof.position.y=3.95; roof.castShadow=true; g.add(roof);
+  const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.9,4),
+    new THREE.MeshLambertMaterial({color:0xbbbbbb}));
+  pole.position.y=4.9; g.add(pole);
+  const flag=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.34,0.04),
+    new THREE.MeshLambertMaterial({color}));
+  flag.position.set(0.28,5.15,0); g.add(flag);
+  g.userData.flag=flag;
+  // HP bar
+  const hp=makeHealthBar(3.4,6.0);
+  g.add(hp); g.userData.hpBar=hp;
+  g.position.set(wx,0,wz);
+  return g;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PLAYER
+// ═══════════════════════════════════════════════════════════
+function initPlayer(){
+  const [sz,sx]=KINGDOM_STARTS[0];
+  const wp=tileToWorld(sx+3,sz+3);
+  const mesh=makeCharacter(0x4d90ff,1.05,true);
+  mesh.position.set(wp.x,0,wp.z);
+  scene.add(mesh);
+  player={mesh,speed:PLAYER_SPEED,hp:100,maxHp:100,attackTimer:0,legPhase:0,swing:0};
+  // init camera at player
+  camCurrent.set(wp.x+CAM_OFFSET.x,CAM_OFFSET.y,wp.z+CAM_OFFSET.z);
+  camera.position.copy(camCurrent);
+  camera.lookAt(wp.x,1,wp.z);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  COINS
+// ═══════════════════════════════════════════════════════════
+function spawnCoins(n){ for(let i=0;i<n;i++) spawnOneCoin(); }
+function spawnOneCoin(){
+  let tx,tz,t;
+  for (let a=0;a<60;a++){
+    tx=3+Math.floor(Math.random()*(GRID-6));
+    tz=3+Math.floor(Math.random()*(GRID-6));
+    t=tileMap[tz][tx];
+    if (t.type!==T_WATER && !t.building) break;
+  }
+  const wp=tileToWorld(tx,tz);
+  const g=new THREE.Group();
+  const coin=new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.24,0.07,12),
+    new THREE.MeshLambertMaterial({color:0xffd84d,emissive:0x4a3800}));
+  coin.rotation.x=Math.PI/2; g.add(coin);
+  g.position.set(wp.x+(Math.random()-0.5)*0.8, TH[t.type]+0.45, wp.z+(Math.random()-0.5)*0.8);
+  scene.add(g);
+  coinObjs.push({mesh:g,baseY:g.position.y,collected:false,phase:Math.random()*6.28});
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SOLDIERS
+// ═══════════════════════════════════════════════════════════
+function spawnSoldier(kid,wx,wz){
+  const mesh=makeCharacter(K_COLORS[kid],0.85,false);
+  mesh.position.set(wx,0,wz);
+  const hp=makeHealthBar(1.1,2.0);
+  mesh.add(hp);
+  scene.add(mesh);
+  soldiers.push({ kingdom:kid,mesh,hpBar:hp,hp:60,maxHp:60,speed:SOLDIER_SPEED,
+    attackRange:2.0,attackDamage:9,cool:0,state:'idle',legPhase:Math.random()*6.28,
+    swing:0,flash:0 });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BUILDINGS
+// ═══════════════════════════════════════════════════════════
+function placeBuilding(tile,type,kid){
+  const wp=tileToWorld(tile.x,tile.z), color=K_COLORS[kid], h=TH[tile.type];
+  const g=new THREE.Group();
+  if (type==='lumbercamp'){
+    const hut=new THREE.Mesh(new THREE.BoxGeometry(1.2,0.7,1.2),
+      new THREE.MeshLambertMaterial({color:0x8b5a2b})); hut.position.y=0.35; hut.castShadow=true; g.add(hut);
+    const roof=new THREE.Mesh(new THREE.ConeGeometry(1,0.6,4),
+      new THREE.MeshLambertMaterial({color:0x5c3a1e})); roof.position.y=0.95; roof.rotation.y=Math.PI/4; roof.castShadow=true; g.add(roof);
+    const logs=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.12,1,6),
+      new THREE.MeshLambertMaterial({color:0x6b4423})); logs.rotation.z=Math.PI/2; logs.position.set(0.7,0.12,0.5); g.add(logs);
+  } else if (type==='mine'){
+    const ent=new THREE.Mesh(new THREE.BoxGeometry(1.1,0.85,1),
+      new THREE.MeshLambertMaterial({color:0x6e6a62})); ent.position.y=0.42; ent.castShadow=true; g.add(ent);
+    const hole=new THREE.Mesh(new THREE.CircleGeometry(0.3,12),
+      new THREE.MeshBasicMaterial({color:0x111111})); hole.position.set(0,0.42,0.51); g.add(hole);
+    const cart=new THREE.Mesh(new THREE.BoxGeometry(0.4,0.25,0.3),
+      new THREE.MeshLambertMaterial({color:0x444})); cart.position.set(0.65,0.13,0.4); g.add(cart);
+  } else {
+    const main=new THREE.Mesh(new THREE.BoxGeometry(1.5,1,1.5),
+      new THREE.MeshLambertMaterial({color:0xb04545})); main.position.y=0.5; main.castShadow=true; g.add(main);
+    const roof=new THREE.Mesh(new THREE.BoxGeometry(1.7,0.25,1.7),
+      new THREE.MeshLambertMaterial({color:0x7a2e2e})); roof.position.y=1.1; g.add(roof);
+    const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.7,4),
+      new THREE.MeshLambertMaterial({color:0xbbb})); pole.position.set(0,1.55,0); g.add(pole);
+    const flag=new THREE.Mesh(new THREE.BoxGeometry(0.4,0.26,0.04),
+      new THREE.MeshLambertMaterial({color})); flag.position.set(0.21,1.7,0); g.add(flag);
+  }
+  g.position.set(wp.x,h,wp.z);
+  scene.add(g);
+  tile.building=type; tile.owner=kid;
+  buildings.push({tile,type,mesh:g,kingdom:kid,smoke:0});
+}
+
+function selectBuild(type){
+  if (!gameStarted||gameOver) return;
+  if (buildMode===type){ cancelBuild(); return; }
+  buildMode=type;
+  document.querySelectorAll('.bld-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+type).classList.add('active');
+  showMsg(`Click a ${BDATA[type].need} tile to build your ${BDATA[type].label}`);
+}
+function cancelBuild(){
+  buildMode=null;
+  document.querySelectorAll('.bld-btn').forEach(b=>b.classList.remove('active'));
+  if (highlightMesh) highlightMesh.visible=false;
+}
+function canAfford(type,k){
+  const c=BDATA[type].cost;
+  return k.coins>=c.coins && k.wood>=(c.wood||0) && k.rock>=(c.rock||0);
+}
+
+function onMapClick(e){
+  if (!buildMode||gameOver||!gameStarted) return;
+  const tile=pickTile(e); if(!tile) return;
+  const bd=BDATA[buildMode];
+  if (tile.type!==bd.tile){ showMsg(`That needs a ${bd.need} tile!`,'bad'); return; }
+  if (tile.building){ showMsg('Already a building there!','bad'); return; }
+  if (!canAfford(buildMode,playerK)){ showMsg('Not enough resources!','bad'); return; }
+  const c=bd.cost;
+  playerK.coins-=c.coins; playerK.wood-=(c.wood||0); playerK.rock-=(c.rock||0);
+  placeBuilding(tile,buildMode,PLAYER_KID);
+  showMsg(`${bd.label} built! 🎉`,'good');
+  cancelBuild();
+}
+function pickTile(e){
+  mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const all=[]; tileMeshes.forEach(r=>r.forEach(m=>m&&all.push(m)));
+  const h=raycaster.intersectObjects(all);
+  return h.length?h[0].object.userData.tile:null;
+}
+function onMouseMove(e){
+  if (!buildMode){ if(highlightMesh)highlightMesh.visible=false; return; }
+  mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const all=[]; tileMeshes.forEach(r=>r.forEach(m=>m&&all.push(m)));
+  const h=raycaster.intersectObjects(all);
+  if (!h.length){ highlightMesh.visible=false; return; }
+  const tile=h[0].object.userData.tile, bd=BDATA[buildMode];
+  const ok=tile.type===bd.tile&&!tile.building&&canAfford(buildMode,playerK);
+  highlightMesh.material.color.setHex(ok?0x44ff44:0xff4444);
+  highlightMesh.position.set(h[0].object.position.x,TH[tile.type]+0.05,h[0].object.position.z);
+  highlightMesh.visible=true;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  COMMANDS
+// ═══════════════════════════════════════════════════════════
+function trainSoldier(){
+  if (!gameStarted||gameOver||playerK.coins<10) return;
+  const b=buildings.find(b=>b.kingdom===PLAYER_KID&&b.type==='barracks');
+  if (!b){ showMsg('Build a barracks first!','bad'); return; }
+  if (!isNearBarracks()){ showMsg('Walk up to your barracks to train!','bad'); return; }
+  playerK.coins-=10;
+  const wp=tileToWorld(b.tile.x,b.tile.z);
+  spawnSoldier(PLAYER_KID,wp.x+(Math.random()-0.5)*2.4,wp.z+(Math.random()-0.5)*2.4);
+  showMsg('Soldier trained! 🪖','good');
+}
+function rallyArmy(){
+  if (!gameStarted||gameOver) return;
+  const mine=soldiers.filter(s=>s.kingdom===PLAYER_KID&&s.hp>0);
+  if (!mine.length){ showMsg('No soldiers to rally! Train some first.','bad'); return; }
+  // nearest enemy castle
+  let target=null,best=Infinity;
+  for (const k of kingdoms){
+    if (k.isPlayer||k.isEliminated) continue;
+    const d=player.mesh.position.distanceTo(k.castlePos);
+    if (d<best){ best=d; target=k; }
+  }
+  if (!target){ return; }
+  mine.forEach(s=>{ s.state='march'; s.marchTarget=target.castlePos; });
+  showMsg(`⚔️ Army marching on ${target.name} Castle!`,'good');
+}
+function recallArmy(){
+  soldiers.filter(s=>s.kingdom===PLAYER_KID).forEach(s=>s.state='idle');
+}
+function isNearBarracks(){
+  const pp=player.mesh.position;
+  return buildings.some(b=>b.kingdom===PLAYER_KID&&b.type==='barracks'&&pp.distanceTo(b.mesh.position)<5.5);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  EFFECTS
+// ═══════════════════════════════════════════════════════════
+function spawnHitSpark(pos,color){
+  const m=new THREE.Mesh(new THREE.SphereGeometry(0.25,6,6),
+    new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.9}));
+  m.position.copy(pos); m.position.y+=0.8;
+  scene.add(m);
+  effects.push({mesh:m,life:0.3,max:0.3,type:'spark'});
+}
+function spawnDeathPoof(pos,color){
+  for (let i=0;i<5;i++){
+    const m=new THREE.Mesh(new THREE.SphereGeometry(0.18,5,5),
+      new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.85}));
+    m.position.copy(pos); m.position.y+=0.5;
+    const v=new THREE.Vector3((Math.random()-0.5)*3,Math.random()*3+1,(Math.random()-0.5)*3);
+    scene.add(m);
+    effects.push({mesh:m,life:0.5,max:0.5,type:'poof',vel:v});
+  }
+}
+function updateEffects(dt){
+  for (let i=effects.length-1;i>=0;i--){
+    const e=effects[i]; e.life-=dt;
+    const f=e.life/e.max;
+    e.mesh.material.opacity=f;
+    if (e.type==='spark'){ e.mesh.scale.setScalar(1+(1-f)*2); }
+    if (e.type==='poof'){ e.mesh.position.addScaledVector(e.vel,dt); e.vel.y-=6*dt; }
+    if (e.life<=0){ scene.remove(e.mesh); effects.splice(i,1); }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UPDATE LOOP
+// ═══════════════════════════════════════════════════════════
+function update(dt){
+  if (!gameStarted||gameOver) return;
+  updatePlayer(dt);
+  updateSoldiers(dt);
+  updateBuildings(dt);
+  updateCoins(dt);
+  updateEnemyAI(dt);
+  updateEffects(dt);
+  updateCastles(dt);
+  updateUI();
+  drawMinimap();
+  checkWinLose();
+}
+
+function updatePlayer(dt){
+  const p=player.mesh.position;
+  const mv=new THREE.Vector3();
+  if (keys['w']||keys['arrowup'])    mv.add(ISO.w);
+  if (keys['s']||keys['arrowdown'])  mv.add(ISO.s);
+  if (keys['a']||keys['arrowleft'])  mv.add(ISO.a);
+  if (keys['d']||keys['arrowright']) mv.add(ISO.d);
+  let moving=false;
+  if (mv.lengthSq()>0){
+    moving=true;
+    mv.normalize().multiplyScalar(player.speed*dt);
+    if (isWalkable(p.x+mv.x,p.z)) p.x+=mv.x;
+    if (isWalkable(p.x,p.z+mv.z)) p.z+=mv.z;
+    player.mesh.rotation.y=Math.atan2(mv.x,mv.z);
+  }
+  animateLegs(player,dt,moving);
+  // swing
+  if (player.swing>0){ player.swing-=dt*6; player.mesh.userData.sword.rotation.x=-player.swing*2; }
+  // camera smooth follow
+  const goal=new THREE.Vector3(p.x+CAM_OFFSET.x,CAM_OFFSET.y,p.z+CAM_OFFSET.z);
+  camCurrent.lerp(goal,1-Math.pow(0.0009,dt));
+  camera.position.copy(camCurrent);
+  camera.lookAt(p.x,1,p.z);
+  sun.position.set(p.x+40,70,p.z+30);
+  sun.target.position.set(p.x,0,p.z);
+  // auto attack
+  player.attackTimer-=dt;
+  if (player.attackTimer<=0){
+    const e=soldiers.find(s=>s.kingdom!==PLAYER_KID&&s.hp>0&&p.distanceTo(s.mesh.position)<2.6);
+    if (e){ e.hp-=22; e.flash=0.2; player.attackTimer=0.55; player.swing=1; spawnHitSpark(e.mesh.position,0xffff66); }
+    else player.attackTimer=0.1;
+  }
+}
+
+function updateSoldiers(dt){
+  const pp=player.mesh.position;
+  for (let i=soldiers.length-1;i>=0;i--){
+    const s=soldiers[i];
+    if (s.hp<=0){ spawnDeathPoof(s.mesh.position,K_COLORS[s.kingdom]); scene.remove(s.mesh); soldiers.splice(i,1); continue; }
+    s.cool=Math.max(0,s.cool-dt);
+    if (s.swing>0) s.swing-=dt*6;
+    if (s.flash>0){ s.flash-=dt; s.mesh.userData.body.material.emissive.setHex(0x661111); }
+    else s.mesh.userData.body.material.emissive.setHex(0x000000);
+    const sp=s.mesh.position;
+    let moving=false;
+
+    if (s.kingdom===PLAYER_KID){
+      if (s.state==='march' && s.marchTarget){
+        const d=sp.distanceTo(s.marchTarget);
+        if (d>2.4){ moveToward(sp,s.marchTarget,s.speed*dt,s); moving=true; }
+        else if (s.cool<=0){
+          const ek=kingdoms.find(k=>!k.isPlayer&&!k.isEliminated&&sp.distanceTo(k.castlePos)<3.6);
+          if (ek){ ek.castleHP=Math.max(0,ek.castleHP-9*dt); s.cool=0.4; }
+        }
+      } else {
+        const dPlayer=sp.distanceTo(pp);
+        if (dPlayer<20){ if (dPlayer>2.6){ moveToward(sp,pp,s.speed*dt,s); moving=true; } }
+        else { if (sp.distanceTo(playerK.castlePos)>6){ moveToward(sp,playerK.castlePos,s.speed*dt,s); moving=true; } }
+      }
+      // attack enemies in range
+      if (s.cool<=0){
+        const e=soldiers.find(o=>o.kingdom!==PLAYER_KID&&o.hp>0&&sp.distanceTo(o.mesh.position)<s.attackRange);
+        if (e){ e.hp-=s.attackDamage; e.flash=0.2; s.cool=1.0; s.swing=1; spawnHitSpark(e.mesh.position,0xffaa44); }
+      }
+    } else {
+      // enemy soldier
+      if (s.state==='march'){
+        const tgt=playerK.castlePos;
+        if (sp.distanceTo(tgt)>2.6){ moveToward(sp,tgt,s.speed*dt,s); moving=true; }
+        else if (s.cool<=0){ playerK.castleHP=Math.max(0,playerK.castleHP-7*dt); s.cool=0.4; }
+        // fight player units en route
+        if (s.cool<=0){
+          const f=soldiers.find(o=>o.kingdom===PLAYER_KID&&o.hp>0&&sp.distanceTo(o.mesh.position)<s.attackRange);
+          if (f){ f.hp-=s.attackDamage; f.flash=0.2; s.cool=1.0; s.swing=1; spawnHitSpark(f.mesh.position,0xff5544); }
+        }
+      } else {
+        const home=kingdoms[s.kingdom].castlePos;
+        if (sp.distanceTo(home)>7){ moveToward(sp,home,s.speed*0.6*dt,s); moving=true; }
+      }
+      // attack player
+      if (s.cool<=0 && sp.distanceTo(pp)<s.attackRange){
+        player.hp=Math.max(0,player.hp-6); s.cool=1.0; s.swing=1; spawnHitSpark(pp,0xff3333);
+      }
+    }
+
+    animateLegs(s,dt,moving);
+    if (s.swing>0) s.mesh.userData.sword.rotation.x=-s.swing*2; else s.mesh.userData.sword.rotation.x=0;
+    updateHealthBar(s.hpBar,s.hp/s.maxHp);
+    s.hpBar.children.forEach(c=>c.material.rotation=0);
+  }
+}
+
+function moveToward(pos,target,step,unit){
+  const dir=new THREE.Vector3().subVectors(target,pos).setY(0);
+  if (dir.lengthSq()<0.0001) return;
+  dir.normalize();
+  const nx=pos.x+dir.x*step, nz=pos.z+dir.z*step;
+  if (isWalkable(nx,pos.z)) pos.x=nx;
+  if (isWalkable(pos.x,nz)) pos.z=nz;
+  if (unit) unit.mesh.rotation.y=Math.atan2(dir.x,dir.z);
+}
+
+function animateLegs(u,dt,moving){
+  if (moving){ u.legPhase+=dt*10; } else { u.legPhase*=0.8; }
+  const legs=u.mesh.userData.legs;
+  if (legs){ legs[0].rotation.x=Math.sin(u.legPhase)*0.6; legs[1].rotation.x=-Math.sin(u.legPhase)*0.6; }
+}
+
+function updateBuildings(dt){
+  for (const b of buildings){
+    const k=kingdoms[b.kingdom]; if (k.isEliminated) continue;
+    const inc=BDATA[b.type].income;
+    if (inc.wood) k.wood+=inc.wood*dt;
+    if (inc.rock) k.rock+=inc.rock*dt;
+  }
+}
+
+function updateCoins(dt){
+  const pp=player.mesh.position, t=performance.now()*0.003;
+  for (let i=coinObjs.length-1;i>=0;i--){
+    const c=coinObjs[i];
+    c.mesh.rotation.y+=dt*2.5;
+    c.mesh.position.y=c.baseY+Math.sin(t+c.phase)*0.12;
+    if (pp.distanceTo(c.mesh.position)<1.2){
+      scene.remove(c.mesh); coinObjs.splice(i,1);
+      playerK.coins++; spawnHitSpark(c.mesh.position,0xffd84d);
+      setTimeout(spawnOneCoin, 6000+Math.random()*10000);
+    }
+  }
+}
+
+function updateEnemyAI(dt){
+  for (const k of kingdoms){
+    if (k.isPlayer||k.isEliminated) continue;
+    k.coins+=0.9*dt; k.wood+=0.35*dt; k.rock+=0.25*dt;
+    k.aiBuildTimer-=dt; k.aiAttackTimer-=dt;
+    if (k.aiBuildTimer<=0){
+      k.aiBuildTimer=16+Math.random()*8;
+      const [sz,sx]=KINGDOM_STARTS[k.id];
+      if (k.coins>=50&&k.wood>=20&&k.rock>=10){
+        const cand=[];
+        for (let dz=-3;dz<=3;dz++) for(let dx=-3;dx<=3;dx++){
+          const t=getTile(sx+dx,sz+dz); if(t&&t.type===T_GRASS&&!t.building) cand.push(t);
+        }
+        if (cand.length){ placeBuilding(cand[(Math.random()*cand.length)|0],'barracks',k.id); k.coins-=50;k.wood-=20;k.rock-=10; }
+      }
+      if (k.coins>=10){
+        const n=Math.min(3,Math.floor(k.coins/10));
+        const wp=tileToWorld(sx+2,sz+2);
+        for (let i=0;i<n;i++) spawnSoldier(k.id,wp.x+(Math.random()-0.5)*4,wp.z+(Math.random()-0.5)*4);
+        k.coins-=n*10;
+      }
+    }
+    if (k.aiAttackTimer<=0){
+      k.aiAttackTimer=38+Math.random()*26;
+      const army=soldiers.filter(s=>s.kingdom===k.id&&s.hp>0);
+      if (army.length>=3){ army.forEach(s=>s.state='march'); showMsg(`⚔️ ${k.name} Kingdom attacks your castle!`,'bad'); }
+    }
+  }
+}
+
+function updateCastles(dt){
+  for (const k of kingdoms){
+    if (k.isEliminated) continue;
+    if (k.castle.userData.flag) k.castle.userData.flag.rotation.y=Math.sin(performance.now()*0.002)*0.2;
+    updateHealthBar(k.castle.userData.hpBar,k.castleHP/k.castleMaxHP);
+  }
+}
+
+function isWalkable(wx,wz){
+  const {x,z}=worldToTile(wx,wz); const t=getTile(x,z);
+  return t&&t.type!==T_WATER;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  WIN / LOSE
+// ═══════════════════════════════════════════════════════════
+function checkWinLose(){
+  for (const k of kingdoms){
+    if (!k.isPlayer&&!k.isEliminated&&k.castleHP<=0){
+      k.isEliminated=true;
+      spawnDeathPoof(k.castlePos,k.color);
+      scene.remove(k.castle);
+      soldiers.filter(s=>s.kingdom===k.id).forEach(s=>scene.remove(s.mesh));
+      soldiers=soldiers.filter(s=>s.kingdom!==k.id);
+      showMsg(`💥 ${k.name} Kingdom destroyed!`,'good');
+    }
+  }
+  if (kingdoms.filter(k=>!k.isPlayer&&!k.isEliminated).length===0){
+    endGame('🏆 VICTORY!','You conquered every rival kingdom and rule the entire realm!');
+  } else if (playerK.castleHP<=0){
+    endGame('💀 DEFEAT','Your castle has fallen. The realm slips into enemy hands.');
+  } else if (player.hp<=0){
+    endGame('💀 DEFEAT','Your hero has fallen in battle.');
+  }
+}
+function endGame(title,msg){
+  gameOver=true;
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-msg').textContent=msg;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UI
+// ═══════════════════════════════════════════════════════════
+function updateUI(){
+  document.getElementById('h-coins').textContent=Math.floor(playerK.coins);
+  document.getElementById('h-wood').textContent=Math.floor(playerK.wood);
+  document.getElementById('h-rock').textContent=Math.floor(playerK.rock);
+  const army=soldiers.filter(s=>s.kingdom===PLAYER_KID&&s.hp>0).length;
+  document.getElementById('h-army').textContent=army;
+
+  document.getElementById('train-btn').disabled=!(isNearBarracks()&&playerK.coins>=10);
+  document.getElementById('rally-btn').disabled=army===0;
+  for (const type of Object.keys(BDATA)){
+    document.getElementById('btn-'+type).disabled=!canAfford(type,playerK);
+  }
+
+  document.getElementById('kdom-list').innerHTML=kingdoms.map(k=>{
+    const cnt=soldiers.filter(s=>s.kingdom===k.id&&s.hp>0).length;
+    const pct=Math.max(0,k.castleHP/k.castleMaxHP*100);
+    const col=k.castleHP>50?'#4caf50':k.castleHP>25?'#d4c542':'#d44';
+    return `<div class="kdom" style="${k.isEliminated?'opacity:0.3':''}">
+      <div class="kdot" style="background:${K_GLOW[k.id]};color:${K_GLOW[k.id]}"></div>
+      <div class="kbar-wrap">
+        <div class="kbar-name">${k.isPlayer?'👑 ':''}${k.name}${k.isEliminated?' ☠️':''}</div>
+        <div class="kbar-bg"><div class="kbar-fill" style="width:${pct}%;background:${col}"></div></div>
+        <div class="kbar-info">⚔️ ${cnt} · 🏰 ${Math.ceil(Math.max(0,k.castleHP))}</div>
+      </div></div>`;
+  }).join('');
+
+  const pct=Math.max(0,playerK.castleHP/playerK.castleMaxHP);
+  document.getElementById('castle-hp-fill').style.width=(pct*100)+'%';
+  document.getElementById('castle-hp-fill').style.background=pct>0.5?'#4caf50':pct>0.25?'#d4c542':'#d44';
+  const txt=document.getElementById('castle-hp-text');
+  txt.textContent=Math.ceil(Math.max(0,playerK.castleHP))+' / '+playerK.castleMaxHP;
+  txt.style.color=pct>0.5?'#6f6':pct>0.25?'#dd6':'#f66';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MINIMAP
+// ═══════════════════════════════════════════════════════════
+function drawMinimap(){
+  const S=150, sc=S/(GRID*TS);
+  mmCtx.clearRect(0,0,S,S);
+  mmCtx.fillStyle='#0a1420'; mmCtx.fillRect(0,0,S,S);
+  // terrain (coarse)
+  for (let z=0;z<GRID;z+=2) for (let x=0;x<GRID;x+=2){
+    const t=tileMap[z][x];
+    mmCtx.fillStyle = t.type===T_WATER?'#16384f':t.type===T_FOREST?'#1c4a22':t.type===T_MOUNTAIN?'#6a6258':'#3c7038';
+    mmCtx.fillRect(x*TS*sc,z*TS*sc,TS*sc*2,TS*sc*2);
+  }
+  // castles
+  for (const k of kingdoms){
+    if (k.isEliminated) continue;
+    const mx=(k.castlePos.x+HALF)*sc, mz=(k.castlePos.z+HALF)*sc;
+    mmCtx.fillStyle=K_GLOW[k.id];
+    mmCtx.fillRect(mx-3,mz-3,6,6);
+  }
+  // soldiers
+  for (const s of soldiers){
+    const mx=(s.mesh.position.x+HALF)*sc, mz=(s.mesh.position.z+HALF)*sc;
+    mmCtx.fillStyle=K_GLOW[s.kingdom];
+    mmCtx.fillRect(mx-1,mz-1,2,2);
+  }
+  // player
+  const px=(player.mesh.position.x+HALF)*sc, pz=(player.mesh.position.z+HALF)*sc;
+  mmCtx.fillStyle='#fff';
+  mmCtx.beginPath(); mmCtx.arc(px,pz,3,0,7); mmCtx.fill();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MESSAGES
+// ═══════════════════════════════════════════════════════════
+function showMsg(text,type=''){
+  const el=document.getElementById('msg');
+  el.textContent=text;
+  el.style.color=type==='bad'?'#ff7a7a':type==='good'?'#7aff8a':'#eef';
+  el.classList.add('show');
+  if (msgTimer) clearTimeout(msgTimer);
+  msgTimer=setTimeout(()=>el.classList.remove('show'),2600);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INPUT
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  keys[k]=true;
+  if (k===' '){ e.preventDefault(); rallyArmy(); }
+  if (k==='r'){ recallArmy(); showMsg('Army recalled to defend.'); }
+  if (k==='b'||k==='escape') cancelBuild();
+});
+window.addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
+
+// ═══════════════════════════════════════════════════════════
+//  GAME FLOW
+// ═══════════════════════════════════════════════════════════
+function buildWorld(){
+  generateMap(); initKingdoms(); initPlayer(); spawnCoins(85);
+}
+function startGame(){
+  document.getElementById('start-screen').classList.add('hidden');
+  gameStarted=true;
+  showMsg('Welcome, your Majesty! Go collect some gold. 🪙','good');
+}
+function restartGame(){
+  document.getElementById('modal').classList.add('hidden');
+  // clear scene
+  soldiers.forEach(s=>scene.remove(s.mesh));
+  buildings.forEach(b=>scene.remove(b.mesh));
+  kingdoms.forEach(k=>k.castle&&scene.remove(k.castle));
+  coinObjs.forEach(c=>scene.remove(c.mesh));
+  effects.forEach(e=>scene.remove(e.mesh));
+  tileMeshes.forEach(r=>r.forEach(m=>m&&scene.remove(m)));
+  if (player.mesh) scene.remove(player.mesh);
+  // remove decorations + highlight: rebuild scene fresh
+  while (scene.children.length){
+    const c=scene.children[0];
+    if (c.isLight||c===sun||c===sun.target){ break; }
+    scene.remove(c);
+  }
+  // simplest: full re-init of dynamic content
+  soldiers=[];buildings=[];kingdoms=[];coinObjs=[];effects=[];tileMap=[];tileMeshes=[];
+  // wipe all non-light children
+  for (let i=scene.children.length-1;i>=0;i--){
+    const c=scene.children[i];
+    if (!c.isLight && c!==sun.target) scene.remove(c);
+  }
+  keys={};buildMode=null;gameOver=false;
+  buildWorld();
+  gameStarted=true;
+  showMsg('A new realm awaits! 🗺️','good');
+}
+window.selectBuild=selectBuild;
+window.trainSoldier=trainSoldier;
+window.rallyArmy=rallyArmy;
+window.startGame=startGame;
+window.restartGame=restartGame;
+
+// ═══════════════════════════════════════════════════════════
+//  LOOP
+// ═══════════════════════════════════════════════════════════
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(),0.05);
+  update(dt);
+  renderer.render(scene,camera);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════════════════
+initThree();
+buildWorld();
+updateUI();
+drawMinimap();
+animate();
+</script>
+</body>
+</html>
