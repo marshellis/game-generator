@@ -13,10 +13,12 @@
     display: flex; flex-direction: column; align-items: center; gap: 12px;
     padding: 14px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
   }
-  #bar { display: flex; align-items: center; justify-content: space-between; width: min(94vw, 400px); }
-  #who { display: flex; align-items: center; gap: 8px; font-size: 14px; }
-  #who .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #fde68a; }
-  #who b { color: #f9d71c; }
+  .col { width: min(94vw, 400px); }
+  #top { display: flex; align-items: center; justify-content: space-between; }
+  #chip { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  #chip .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #fde68a; }
+  #chip b { color: #f9d71c; }
+  #logout { background: #334155; color: #cbd5e1; border: 0; border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer; }
   #bestChip { font-size: 14px; color: #cbd5e1; }
   #bestChip b { color: #f9d71c; font-size: 16px; }
   canvas {
@@ -24,7 +26,25 @@
     border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.45);
     touch-action: none; cursor: pointer;
   }
-  #board { width: min(94vw, 400px); background: #1e293b; border-radius: 12px; padding: 12px 14px; }
+  /* account form */
+  #account { background: #1e293b; border-radius: 12px; padding: 14px; }
+  #account .atitle { font-size: 14px; font-weight: 600; color: #93c5fd; margin-bottom: 10px; }
+  #account .arow { display: flex; gap: 8px; margin-bottom: 8px; }
+  #account input { flex: 1; min-width: 0; padding: 10px 11px; font-size: 15px; border: 1px solid #334155; border-radius: 9px; background: #0f172a; color: #fff; }
+  #account input::placeholder { color: #64748b; }
+  #account input:focus { outline: none; border-color: #f9d71c; }
+  #avatars { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 10px; }
+  #avatars button { width: 30px; height: 30px; border: 2px solid transparent; border-radius: 8px; background: #0f172a; font-size: 17px; cursor: pointer; line-height: 1; padding: 0; }
+  #avatars button.sel { border-color: #f9d71c; background: #2a3445; }
+  #account .btns button { flex: 1; font: inherit; font-size: 15px; border: 0; border-radius: 9px; padding: 11px; cursor: pointer; }
+  #account .btns .login { background: #334155; color: #e2e8f0; }
+  #account .btns .create { background: #f9d71c; color: #1c2530; font-weight: 600; }
+  #account button:active { transform: scale(0.98); }
+  #amsg { min-height: 17px; font-size: 13px; margin-top: 8px; }
+  #amsg.err { color: #ff8a7a; } #amsg.ok { color: #8fe388; } #amsg.busy { color: #94a3b8; }
+  .guestnote { font-size: 12px; color: #64748b; margin-top: 8px; }
+  /* leaderboard */
+  #board { background: #1e293b; border-radius: 12px; padding: 12px 14px; }
   #board h2 { margin: 0 0 8px; font-size: 14px; color: #93c5fd; font-weight: 600; display: flex; justify-content: space-between; }
   #board ol { list-style: none; margin: 0; padding: 0; }
   #board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -35,21 +55,32 @@
   #board li.me { color: #fff; }
   #board li.me .nm::after { content: " (you)"; color: #93c5fd; font-size: 12px; }
   #board .empty { color: #64748b; font-size: 13px; padding: 4px 0; }
-  #hint { width: min(94vw, 400px); font-size: 13px; color: #94a3b8; text-align: center; min-height: 18px; }
-  #hint a { color: #93c5fd; }
 </style>
 </head>
 <body>
-  <div id="bar">
-    <div id="who"><span class="av" id="avatar">🙂</span><span id="name">Guest</span></div>
+  <div id="top" class="col">
+    <div id="chip" hidden><span class="av" id="avatar">🦊</span><span id="name"></span><button id="logout">Log out</button></div>
     <div id="bestChip">Best <b id="best">0</b></div>
   </div>
 
   <canvas id="game" width="400" height="560"></canvas>
 
-  <p id="hint"></p>
+  <div id="account" class="col">
+    <div class="atitle">Create an account to join the leaderboard</div>
+    <div class="arow">
+      <input id="u" type="text" maxlength="20" placeholder="Username" autocomplete="off" autocapitalize="off" />
+      <input id="p" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 digits)" autocomplete="off" />
+    </div>
+    <div id="avatars"></div>
+    <div class="arow btns">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="create" id="createBtn">Create account</button>
+    </div>
+    <div id="amsg"></div>
+    <div class="guestnote">…or just play as a guest — your best is saved on this device.</div>
+  </div>
 
-  <div id="board">
+  <div id="board" class="col">
     <h2><span>Global leaderboard</span><span style="color:#5dcaa5">● live</span></h2>
     <ol id="rows"><li class="empty">Loading…</li></ol>
   </div>
@@ -58,21 +89,37 @@
 (function () {
   const GAME = "flappy";
   const LS_BEST = "flappy:best";
+  // Mirrors the server allowlist (avatars.ts) — off-list values collapse to default.
+  const AVATARS = ["🦊","🐼","🐯","🦁","🐸","🐵","🐙","🦄","🐶","🐱","🐧","🐝","🦖","🐢","🦉","🐳"];
+  const DEFAULT_COLOR = "#fde68a";
+  const USER_RE = /^[a-z0-9_-]{3,20}$/;
+  const PIN_RE = /^[0-9]{4,8}$/;
 
-  // ---------- account + leaderboard (talks to the marshellis API) ----------
-  // The arcade wrapper iframes this file same-origin, so these relative calls
-  // carry the player's mg_session cookie automatically.
-  let me = null;        // { username, avatar, avatarColor } when logged in
+  let me = null; // { username, avatar, avatarColor }
   let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+  let chosenAvatar = AVATARS[0];
 
-  const avatarEl = document.getElementById("avatar");
-  const nameEl = document.getElementById("name");
-  const bestEl = document.getElementById("best");
-  const hintEl = document.getElementById("hint");
-  const rowsEl = document.getElementById("rows");
+  const el = (id) => document.getElementById(id);
+  const accountEl = el("account"), chipEl = el("chip"), avatarEl = el("avatar"), nameEl = el("name");
+  const bestEl = el("best"), rowsEl = el("rows"), msgEl = el("amsg");
+  const uEl = el("u"), pEl = el("p"), loginBtn = el("loginBtn"), createBtn = el("createBtn");
 
   function showBest() { bestEl.textContent = best; }
+  function setMsg(t, k) { msgEl.textContent = t || ""; msgEl.className = k || ""; }
+  function busy(on) { loginBtn.disabled = on; createBtn.disabled = on; }
   showBest();
+
+  // avatar picker
+  AVATARS.forEach(function (a, i) {
+    const b = document.createElement("button");
+    b.textContent = a; if (i === 0) b.className = "sel";
+    b.onclick = function () {
+      chosenAvatar = a;
+      [...el("avatars").children].forEach((c) => c.classList.remove("sel"));
+      b.classList.add("sel");
+    };
+    el("avatars").appendChild(b);
+  });
 
   async function api(path, opts) {
     try {
@@ -84,24 +131,71 @@
     } catch (e) { return null; }
   }
 
-  async function loadMe() {
-    const r = await api("/api/me");
-    if (r && r.ok) {
-      me = await r.json();
-      avatarEl.textContent = me.avatar || "🙂";
-      if (me.avatarColor) avatarEl.style.background = me.avatarColor;
+  function renderAuthed() {
+    if (me) {
+      accountEl.hidden = true; chipEl.hidden = false;
+      avatarEl.textContent = me.avatar || "🦊";
+      avatarEl.style.background = me.avatarColor || DEFAULT_COLOR;
       nameEl.innerHTML = "Playing as <b>" + escapeHtml(me.username) + "</b>";
-      hintEl.textContent = "";
     } else {
-      nameEl.textContent = "Guest";
-      hintEl.innerHTML = 'Scores are saved on this device. <a href="/" target="_top">Log in on Marshellis</a> to join the leaderboard.';
+      accountEl.hidden = false; chipEl.hidden = true;
     }
   }
 
+  async function loadMe() {
+    const r = await api("/api/me");
+    me = r && r.ok ? await r.json() : null;
+    renderAuthed();
+  }
+
+  function validate() {
+    const u = uEl.value.trim().toLowerCase(), p = pEl.value.trim();
+    if (!USER_RE.test(u)) { setMsg("Username: 3–20 letters, numbers, - or _.", "err"); return null; }
+    if (!PIN_RE.test(p)) { setMsg("PIN must be 4–8 digits.", "err"); return null; }
+    return { u, p };
+  }
+
+  async function createAccount() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Creating account…", "busy");
+    const r = await api("/api/auth/signup", { method: "POST",
+      body: JSON.stringify({ username: v.u, pin: v.p, avatar: chosenAvatar, avatarColor: DEFAULT_COLOR }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 409) { setMsg("Username taken — log in or pick another.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Check your username and PIN.", "err"); busy(false); return; }
+    me = await r.json(); setMsg("Welcome, " + me.username + "!", "ok");
+    finishAuth();
+  }
+
+  async function login() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Logging in…", "busy");
+    const r = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username: v.u, pin: v.p }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 429) { setMsg("Too many tries — wait a few minutes.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Wrong username or PIN.", "err"); busy(false); return; }
+    me = await r.json();
+    finishAuth();
+  }
+
+  function finishAuth() {
+    busy(false); uEl.value = ""; pEl.value = "";
+    renderAuthed(); refreshBoard();
+  }
+
+  async function logout() {
+    await api("/api/auth/logout", { method: "POST" });
+    me = null; setMsg("", ""); renderAuthed(); refreshBoard();
+  }
+
+  loginBtn.onclick = login;
+  createBtn.onclick = createAccount;
+  el("logout").onclick = logout;
+  uEl.addEventListener("keydown", (e) => { if (e.key === "Enter") pEl.focus(); });
+  pEl.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
   async function submit(score) {
-    if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) {
-      localStorage.setItem(LS_BEST, String(score));
-    }
+    if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) localStorage.setItem(LS_BEST, String(score));
     if (!me) { best = Number(localStorage.getItem(LS_BEST) || 0) || 0; showBest(); return; }
     const r = await api("/api/scores", { method: "POST", body: JSON.stringify({ game: GAME, score: score }) });
     if (r && r.ok) { const j = await r.json(); best = j.best; showBest(); }
@@ -111,28 +205,25 @@
   async function refreshBoard() {
     const r = await api("/api/leaderboard?game=" + GAME + "&limit=10");
     if (!r || !r.ok) return;
-    const j = await r.json();
-    const top = j.top || [];
+    const top = (await r.json()).top || [];
     if (!top.length) { rowsEl.innerHTML = '<li class="empty">No scores yet — be the first!</li>'; return; }
     rowsEl.innerHTML = top.map(function (row) {
-      const mine = me && row.username === me.username ? " class=\"me\"" : "";
-      return "<li" + mine + "><span class=\"rk\">" + row.rank + "</span><span class=\"nm\">" +
-        escapeHtml(row.username) + "</span><span class=\"sc\">" + row.score + "</span></li>";
+      const mine = me && row.username === me.username ? ' class="me"' : "";
+      return "<li" + mine + '><span class="rk">' + row.rank + '</span><span class="nm">' +
+        escapeHtml(row.username) + '</span><span class="sc">' + row.score + "</span></li>";
     }).join("");
     if (me) {
-      const mineRow = top.find(function (r2) { return r2.username === me.username; });
+      const mineRow = top.find((r2) => r2.username === me.username);
       if (mineRow && mineRow.score > best) { best = mineRow.score; showBest(); }
     }
   }
 
   function escapeHtml(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   }
 
   // ============================ GAME ============================
-  const canvas = document.getElementById("game");
+  const canvas = el("game");
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
   const GRAVITY = 0.45, FLAP = -7.6;
