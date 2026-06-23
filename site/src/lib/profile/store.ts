@@ -1,5 +1,5 @@
 import { Redis } from "@upstash/redis";
-import type { Store, UserRecord } from "./types";
+import type { Store, UserRecord, ScoreEntry } from "./types";
 
 let redis: Redis | null = null;
 function client(): Redis {
@@ -40,6 +40,27 @@ export function upstashStore(): Store {
     },
     async getLockout(u) {
       return Number(await client().get(`lockout:${u}`)) || 0;
+    },
+    async bumpScore(game, u, score) {
+      const key = `leaderboard:${game}`;
+      // gt: only raise an existing entry, never lower it. Then read it back.
+      await client().zadd(key, { gt: true }, { score, member: u });
+      return Number(await client().zscore(key, u)) || score;
+    },
+    async topScores(game, limit) {
+      // rev + withScores → a flat [member, score, member, score, …] array.
+      const flat = (await client().zrange(`leaderboard:${game}`, 0, limit - 1, {
+        rev: true,
+        withScores: true,
+      })) as (string | number)[];
+      const out: ScoreEntry[] = [];
+      for (let i = 0; i < flat.length; i += 2) {
+        out.push({ username: String(flat[i]), score: Number(flat[i + 1]) });
+      }
+      return out;
+    },
+    async userBest(game, u) {
+      return Number(await client().zscore(`leaderboard:${game}`, u)) || 0;
     },
   };
 }

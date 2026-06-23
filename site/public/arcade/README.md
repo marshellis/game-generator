@@ -50,3 +50,23 @@ Rules:
 4. Open a PR. Once CI is green it auto-merges and deploys to games.marshellis.com.
 
 The `_template/` game ("Click the Dot") is a complete, working example — read it first.
+
+## Optional: a global leaderboard
+
+Most games just keep a personal best in `localStorage`. A game can instead post to a
+shared, account-backed leaderboard (the same username + PIN profiles the puzzle games
+use). Because the wrapper iframe is same-origin, relative `fetch` calls carry the
+player's session cookie automatically.
+
+1. Add your slug to `SCORE_GAMES` in `site/src/lib/profile/scores.ts` (the allowlist —
+   only listed games may post scores).
+2. From your `index.html`:
+   - `GET /api/me` → `{ username, avatar }` if logged in, else `401` (play as guest).
+   - `POST /api/scores` with `{ "game": "<slug>", "score": <int> }` → `{ best, improved }`
+     (auth required; the server keeps each player's highest).
+   - `GET /api/leaderboard?game=<slug>&limit=10` → `{ top: [{ rank, username, score }] }`
+     (public — no login needed to read it).
+
+Guests still work: fall back to `localStorage` and invite them to log in. See `flappy/`
+for a complete worked example. (`flappy` is the one exception to "don't reach out to
+shared code" — calling the site's own API is the sanctioned way to use the leaderboard.)
