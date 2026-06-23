@@ -49,6 +49,17 @@
     cursor: pointer; font-weight: bold;
   }
   #overlay button:hover { background: #e74c3c; }
+  #touchPad { position:fixed; bottom:0; left:0; right:0; display:none; justify-content:space-between;
+    align-items:flex-end; padding:8px 12px 14px; z-index:50; pointer-events:none; }
+  @media (pointer:coarse) { #touchPad { display:flex; } #controls { display:none; } canvas { touch-action:none; } }
+  .tl,.tr { display:flex; gap:5px; flex-direction:column; align-items:center; pointer-events:all; }
+  .trow { display:flex; gap:5px; }
+  .tbtn { width:56px; height:56px; border-radius:13px; background:rgba(0,0,0,0.5);
+    border:2px solid rgba(255,255,255,0.35); color:#fff; font-size:18px; font-weight:bold;
+    display:flex; align-items:center; justify-content:center;
+    touch-action:none; user-select:none; -webkit-user-select:none; }
+  .tbtn.ability { background:rgba(80,20,20,0.6); border-color:rgba(255,100,50,0.5); font-size:22px; }
+  .tbtn.pressed { background:rgba(255,255,255,0.3); border-color:#fff; }
 </style>
 </head>
 <body>
@@ -70,6 +81,18 @@
   <span><span class="ctrl">O</span> Open Door (when room cleared)</span>
 </div>
 
+<div id="touchPad">
+  <div class="tl">
+    <div class="trow"><div style="width:56px"></div><div class="tbtn" id="tb-up">↑</div><div style="width:56px"></div></div>
+    <div class="trow"><div class="tbtn" id="tb-left">←</div><div style="width:56px"></div><div class="tbtn" id="tb-right">→</div></div>
+    <div class="trow"><div style="width:56px"></div><div class="tbtn" id="tb-down">↓</div><div style="width:56px"></div></div>
+  </div>
+  <div class="tr">
+    <div class="trow"><div class="tbtn ability" id="tb-w">W<br><small style="font-size:9px">Sword</small></div><div class="tbtn ability" id="tb-a">A<br><small style="font-size:9px">Fire</small></div></div>
+    <div class="trow"><div class="tbtn ability" id="tb-s">S<br><small style="font-size:9px">Poison</small></div><div class="tbtn ability" id="tb-d">D<br><small style="font-size:9px">Blast</small></div></div>
+    <div class="trow"><div class="tbtn" id="tb-o" style="width:117px;font-size:13px">🚪 Open Door</div></div>
+  </div>
+</div>
 <div id="overlay">
   <h1 id="overlayTitle">⚔️ Dungeon Crawler</h1>
   <p id="overlayMsg">Arrow keys move. W=Sword, A=Fireball, S=Poison, D=Mega Blast</p>
@@ -1360,6 +1383,73 @@ function angleDiff(a, b) {
   while (d < -Math.PI) d += Math.PI * 2;
   return d;
 }
+
+// ── Touch controls ────────────────────────────────────────────────────────────
+(function setupTouch() {
+  function tbHold(id, k) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const dn = e => { e.preventDefault(); el.classList.add('pressed'); keys[k] = true; };
+    const up = e => { e.preventDefault(); el.classList.remove('pressed'); keys[k] = false; };
+    el.addEventListener('touchstart', dn, {passive:false});
+    el.addEventListener('touchend',   up, {passive:false});
+    el.addEventListener('touchcancel',up, {passive:false});
+  }
+  function tbTap(id, k) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('touchstart', e => {
+      e.preventDefault(); el.classList.add('pressed');
+      const ev = new KeyboardEvent('keydown', {key:k, bubbles:true});
+      document.dispatchEvent(ev);
+    }, {passive:false});
+    el.addEventListener('touchend', e => {
+      e.preventDefault(); el.classList.remove('pressed');
+      const ev = new KeyboardEvent('keyup', {key:k, bubbles:true});
+      document.dispatchEvent(ev);
+    }, {passive:false});
+  }
+  tbHold('tb-up',    'ArrowUp');
+  tbHold('tb-down',  'ArrowDown');
+  tbHold('tb-left',  'ArrowLeft');
+  tbHold('tb-right', 'ArrowRight');
+  tbTap('tb-w', 'w');
+  tbTap('tb-a', 'a');
+  tbTap('tb-s', 's');
+  tbTap('tb-d', 'd');
+  tbTap('tb-o', 'o');
+
+  // Map canvas touch to mouse events (for drag-drop inventory)
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    const r = canvas.getBoundingClientRect();
+    canvas.dispatchEvent(new MouseEvent('mousedown', {clientX:t.clientX, clientY:t.clientY, bubbles:true}));
+  }, {passive:false});
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    canvas.dispatchEvent(new MouseEvent('mousemove', {clientX:t.clientX, clientY:t.clientY, bubbles:true}));
+  }, {passive:false});
+  canvas.addEventListener('touchend', e => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    canvas.dispatchEvent(new MouseEvent('mouseup', {clientX:t.clientX, clientY:t.clientY, bubbles:true}));
+  }, {passive:false});
+
+  // Scale canvas to fit mobile
+  function resize() {
+    const avH = window.innerHeight * (window.innerWidth < 700 ? 0.65 : 1);
+    const scale = Math.min(window.innerWidth / 800, avH / 540, 1);
+    canvas.style.width  = Math.round(800 * scale) + 'px';
+    canvas.style.height = Math.round(540 * scale) + 'px';
+    const hud = document.getElementById('hud');
+    if (hud) hud.style.width = Math.round(800 * scale) + 'px';
+  }
+  window.addEventListener('resize', resize);
+  resize();
+})();
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ── Loop ──────────────────────────────────────────────────────────────────────
 function loop() {

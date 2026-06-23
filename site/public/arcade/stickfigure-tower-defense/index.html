@@ -1494,6 +1494,50 @@ document.addEventListener('fullscreenchange', () => {
 
 updateUI();
 drawStartScreen();
+
+// ── Touch support ─────────────────────────────────────────────────────────────
+// Map touch events on the canvas to mouse/click so all interactions work on mobile
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const r = canvas.getBoundingClientRect();
+  mouse.x = t.clientX - r.left;
+  mouse.y = t.clientY - r.top;
+  canvas.dispatchEvent(new MouseEvent('click', {clientX: t.clientX, clientY: t.clientY, bubbles: true}));
+}, {passive: false});
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const r = canvas.getBoundingClientRect();
+  mouse.x = t.clientX - r.left;
+  mouse.y = t.clientY - r.top;
+}, {passive: false});
+
+// Add a shoot button for mobile (Space key = shoot arrow)
+(function addMobileShootBtn() {
+  const btn = document.createElement('button');
+  btn.id = 'mobileShoot';
+  btn.textContent = '🏹 Shoot';
+  btn.style.cssText = 'display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);' +
+    'padding:16px 40px;font-size:20px;background:rgba(200,50,50,0.85);color:#fff;border:2px solid #fff;' +
+    'border-radius:16px;z-index:100;touch-action:none;user-select:none;-webkit-user-select:none;';
+  document.body.appendChild(btn);
+
+  btn.addEventListener('touchstart', e => { e.preventDefault(); shootArrow(); }, {passive:false});
+
+  // Scale canvas for mobile and show shoot button
+  function resize() {
+    const isMobile = window.innerWidth < 700 || window.innerHeight < 600;
+    const scale = Math.min(window.innerWidth / 800, window.innerHeight * 0.8 / 450, 1);
+    canvas.style.width  = Math.round(800 * scale) + 'px';
+    canvas.style.height = Math.round(450 * scale) + 'px';
+    btn.style.display = (window.matchMedia('(pointer:coarse)').matches) ? 'block' : 'none';
+  }
+  window.addEventListener('resize', resize);
+  resize();
+})();
+// ─────────────────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
