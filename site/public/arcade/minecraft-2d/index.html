@@ -28,10 +28,32 @@ canvas { display:block; image-rendering:pixelated; }
 .craftIcon { width:32px; height:32px; border:2px solid #888; display:flex; align-items:center; justify-content:center; font-size:18px; background:#333; }
 .craftResult { font-size:13px; }
 #craftClose { float:right; cursor:pointer; color:#f88; font-size:18px; pointer-events:all; }
+#touchControls { position:fixed; bottom:0; left:0; right:0; display:none; justify-content:space-between;
+  align-items:flex-end; padding:8px 12px 12px; pointer-events:none; z-index:200; }
+@media (pointer:coarse) { #touchControls { display:flex; } canvas { touch-action:none; } }
+.touch-left,.touch-right { display:flex; gap:5px; flex-direction:column; align-items:center; pointer-events:all; }
+.trow { display:flex; gap:5px; }
+.tbtn { width:58px; height:58px; border-radius:14px; background:rgba(0,0,0,0.45);
+  border:2px solid rgba(255,255,255,0.4); color:#fff; font-size:22px;
+  display:flex; align-items:center; justify-content:center;
+  touch-action:none; user-select:none; -webkit-user-select:none; cursor:pointer; }
+.tbtn:active,.tbtn.pressed { background:rgba(255,255,255,0.3); border-color:#fff; }
+.tbtn.mine { background:rgba(80,40,0,0.6); }
+.tbtn.place { background:rgba(0,80,0,0.6); }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
+<div id="touchControls">
+  <div class="touch-left">
+    <div class="trow"><div style="width:58px"></div><div class="tbtn" id="tb-up">↑</div><div style="width:58px"></div></div>
+    <div class="trow"><div class="tbtn" id="tb-left">←</div><div style="width:58px"></div><div class="tbtn" id="tb-right">→</div></div>
+  </div>
+  <div class="touch-right">
+    <div class="trow"><div class="tbtn mine" id="tb-mine">⛏️</div><div class="tbtn place" id="tb-place">🧱</div></div>
+    <div class="trow"><div class="tbtn" id="tb-punch">👊</div><div class="tbtn" id="tb-craft">⚒️</div></div>
+  </div>
+</div>
 <div id="overlay">
   <h1>⛏️ Minecraft 2D</h1>
   <p>Arrow keys or WASD to move &amp; jump</p>
@@ -894,6 +916,50 @@ function craft(r) {
   for (const [t,n] of r.need) useInv(t,n);
   addInv(r.result, r.count);
 }
+
+// ── Touch controls ──────────────────────────────────────────────────────────
+function tbHold(id, downFn, upFn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('touchstart', e=>{ e.preventDefault(); el.classList.add('pressed'); downFn(); }, {passive:false});
+  const release = e=>{ e.preventDefault(); el.classList.remove('pressed'); upFn(); };
+  el.addEventListener('touchend', release, {passive:false});
+  el.addEventListener('touchcancel', release, {passive:false});
+}
+function tbTap(id, fn) { tbHold(id, fn, ()=>{}); }
+
+tbHold('tb-left',  ()=>{ keys['ArrowLeft']=true; },  ()=>{ keys['ArrowLeft']=false; });
+tbHold('tb-right', ()=>{ keys['ArrowRight']=true; }, ()=>{ keys['ArrowRight']=false; });
+tbHold('tb-up',    ()=>{ keys['ArrowUp']=true; if(player&&player.onGround){ player.vy=JUMP_FORCE; } }, ()=>{ keys['ArrowUp']=false; });
+tbHold('tb-mine',  ()=>{ keys['z']=true; startMine(); }, ()=>{ keys['z']=false; mineTarget=null; mineProgress=0; });
+tbTap('tb-place',  ()=>{ if(placeCooldown<=0){ placeBlock(); placeCooldown=15; } });
+tbTap('tb-punch',  ()=>{ punchZombies(); });
+tbTap('tb-craft',  ()=>{ toggleCraft(); });
+
+// Tap canvas hotbar to select slot
+canvas.addEventListener('touchstart', e=>{
+  if (!gameRunning) return;
+  const r=canvas.getBoundingClientRect(), sx=canvas.width/r.width, sy=canvas.height/r.height;
+  for (const t of e.changedTouches) {
+    const mx=(t.clientX-r.left)*sx, my=(t.clientY-r.top)*sy;
+    const hbW=9*42+4, hbX=(W-hbW)/2, hbY=H-50;
+    if (my>=hbY && my<=hbY+42) {
+      const slot=Math.floor((mx-hbX)/42);
+      if (slot>=0 && slot<9) hotbarSel=slot;
+    }
+  }
+}, {passive:true});
+
+// Scale canvas to fit screen on mobile
+function resizeForMobile() {
+  const avH = window.innerHeight * (window.innerWidth < 600 ? 0.72 : 1);
+  const scale = Math.min(window.innerWidth/W, avH/H, 1);
+  canvas.style.width  = Math.round(W*scale)+'px';
+  canvas.style.height = Math.round(H*scale)+'px';
+}
+window.addEventListener('resize', resizeForMobile);
+resizeForMobile();
+// ────────────────────────────────────────────────────────────────────────────
 
 document.getElementById('craftClose').addEventListener('click',()=>{
   document.getElementById('craftUI').style.display='none';
