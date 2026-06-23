@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Flappy</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #0f172a; color: #f8fafc;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 14px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+  }
+  #bar { display: flex; align-items: center; justify-content: space-between; width: min(94vw, 400px); }
+  #who { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  #who .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #fde68a; }
+  #who b { color: #f9d71c; }
+  #bestChip { font-size: 14px; color: #cbd5e1; }
+  #bestChip b { color: #f9d71c; font-size: 16px; }
+  canvas {
+    display: block; width: min(94vw, 400px); height: auto; aspect-ratio: 400 / 560;
+    border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    touch-action: none; cursor: pointer;
+  }
+  #board { width: min(94vw, 400px); background: #1e293b; border-radius: 12px; padding: 12px 14px; }
+  #board h2 { margin: 0 0 8px; font-size: 14px; color: #93c5fd; font-weight: 600; display: flex; justify-content: space-between; }
+  #board ol { list-style: none; margin: 0; padding: 0; }
+  #board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
+  #board li:first-child { border-top: 0; }
+  #board .rk { width: 22px; color: #64748b; }
+  #board .nm { flex: 1; }
+  #board .sc { color: #f9d71c; font-weight: 700; }
+  #board li.me { color: #fff; }
+  #board li.me .nm::after { content: " (you)"; color: #93c5fd; font-size: 12px; }
+  #board .empty { color: #64748b; font-size: 13px; padding: 4px 0; }
+  #hint { width: min(94vw, 400px); font-size: 13px; color: #94a3b8; text-align: center; min-height: 18px; }
+  #hint a { color: #93c5fd; }
+</style>
+</head>
+<body>
+  <div id="bar">
+    <div id="who"><span class="av" id="avatar">🙂</span><span id="name">Guest</span></div>
+    <div id="bestChip">Best <b id="best">0</b></div>
+  </div>
+
+  <canvas id="game" width="400" height="560"></canvas>
+
+  <p id="hint"></p>
+
+  <div id="board">
+    <h2><span>Global leaderboard</span><span style="color:#5dcaa5">● live</span></h2>
+    <ol id="rows"><li class="empty">Loading…</li></ol>
+  </div>
+
+<script>
+(function () {
+  const GAME = "flappy";
+  const LS_BEST = "flappy:best";
+
+  // ---------- account + leaderboard (talks to the marshellis API) ----------
+  // The arcade wrapper iframes this file same-origin, so these relative calls
+  // carry the player's mg_session cookie automatically.
+  let me = null;        // { username, avatar, avatarColor } when logged in
+  let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+
+  const avatarEl = document.getElementById("avatar");
+  const nameEl = document.getElementById("name");
+  const bestEl = document.getElementById("best");
+  const hintEl = document.getElementById("hint");
+  const rowsEl = document.getElementById("rows");
+
+  function showBest() { bestEl.textContent = best; }
+  showBest();
+
+  async function api(path, opts) {
+    try {
+      return await fetch(path, {
+        credentials: "same-origin",
+        headers: opts && opts.body ? { "content-type": "application/json" } : undefined,
+        ...opts,
+      });
+    } catch (e) { return null; }
+  }
+
+  async function loadMe() {
+    const r = await api("/api/me");
+    if (r && r.ok) {
+      me = await r.json();
+      avatarEl.textContent = me.avatar || "🙂";
+      if (me.avatarColor) avatarEl.style.background = me.avatarColor;
+      nameEl.innerHTML = "Playing as <b>" + escapeHtml(me.username) + "</b>";
+      hintEl.textContent = "";
+    } else {
+      nameEl.textContent = "Guest";
+      hintEl.innerHTML = 'Scores are saved on this device. <a href="/" target="_top">Log in on Marshellis</a> to join the leaderboard.';
+    }
+  }
+
+  async function submit(score) {
+    if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) {
+      localStorage.setItem(LS_BEST, String(score));
+    }
+    if (!me) { best = Number(localStorage.getItem(LS_BEST) || 0) || 0; showBest(); return; }
+    const r = await api("/api/scores", { method: "POST", body: JSON.stringify({ game: GAME, score: score }) });
+    if (r && r.ok) { const j = await r.json(); best = j.best; showBest(); }
+    refreshBoard();
+  }
+
+  async function refreshBoard() {
+    const r = await api("/api/leaderboard?game=" + GAME + "&limit=10");
+    if (!r || !r.ok) return;
+    const j = await r.json();
+    const top = j.top || [];
+    if (!top.length) { rowsEl.innerHTML = '<li class="empty">No scores yet — be the first!</li>'; return; }
+    rowsEl.innerHTML = top.map(function (row) {
+      const mine = me && row.username === me.username ? " class=\"me\"" : "";
+      return "<li" + mine + "><span class=\"rk\">" + row.rank + "</span><span class=\"nm\">" +
+        escapeHtml(row.username) + "</span><span class=\"sc\">" + row.score + "</span></li>";
+    }).join("");
+    if (me) {
+      const mineRow = top.find(function (r2) { return r2.username === me.username; });
+      if (mineRow && mineRow.score > best) { best = mineRow.score; showBest(); }
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  // ============================ GAME ============================
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const GRAVITY = 0.45, FLAP = -7.6;
+  const PIPE_W = 64, GAP = 150, PIPE_SPEED = 2.4, PIPE_SPACING = 220;
+  const GROUND_H = 70, BIRD_X = 110, BIRD_R = 14;
+  let bird, pipes, score, state, frame;
+
+  function reset() {
+    bird = { y: H / 2, v: 0, rot: 0 };
+    pipes = []; score = 0; frame = 0; state = "ready";
+    spawnPipe(W + 80); spawnPipe(W + 80 + PIPE_SPACING);
+  }
+  function spawnPipe(x) {
+    const margin = 60;
+    const top = margin + Math.random() * (H - GROUND_H - GAP - margin * 2);
+    pipes.push({ x: x, top: top, scored: false });
+  }
+  function flap() {
+    if (state === "ready") { state = "playing"; bird.v = FLAP; }
+    else if (state === "playing") { bird.v = FLAP; }
+    else if (state === "dead") { reset(); }
+  }
+  function die() { state = "dead"; submit(score); }
+  function update() {
+    frame++;
+    if (state !== "playing") return;
+    bird.v += GRAVITY; bird.y += bird.v;
+    bird.rot = Math.max(-0.5, Math.min(1.2, bird.v / 12));
+    for (const p of pipes) p.x -= PIPE_SPEED;
+    if (pipes.length && pipes[pipes.length - 1].x < W - PIPE_SPACING) spawnPipe(pipes[pipes.length - 1].x + PIPE_SPACING);
+    if (pipes.length && pipes[0].x < -PIPE_W) pipes.shift();
+    for (const p of pipes) {
+      if (!p.scored && p.x + PIPE_W < BIRD_X) { p.scored = true; score++; }
+      const inX = BIRD_X + BIRD_R > p.x && BIRD_X - BIRD_R < p.x + PIPE_W;
+      const hit = bird.y - BIRD_R < p.top || bird.y + BIRD_R > p.top + GAP;
+      if (inX && hit) die();
+    }
+    if (bird.y + BIRD_R > H - GROUND_H) { bird.y = H - GROUND_H - BIRD_R; die(); }
+    if (bird.y - BIRD_R < 0) { bird.y = BIRD_R; bird.v = 0; }
+  }
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function drawBird() {
+    const beat = state === "playing" ? Math.sin(frame * 0.4) : Math.sin(frame * 0.08) * 0.4;
+    const wingAngle = (bird.v < 0 ? -0.5 : 0.2) + beat * 0.5;
+    ctx.save(); ctx.translate(BIRD_X, bird.y); ctx.rotate(bird.rot);
+    ctx.fillStyle = "#c8761b"; ctx.beginPath();
+    ctx.moveTo(-12, -2); ctx.lineTo(-26, -7); ctx.lineTo(-24, 0); ctx.lineTo(-26, 7); ctx.lineTo(-12, 4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#e8a32a"; ctx.beginPath(); ctx.ellipse(0, 1, 16, 13, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#f6d36b"; ctx.beginPath(); ctx.ellipse(2, 5, 11, 8, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(-2, -1); ctx.rotate(wingAngle * 0.7);
+    ctx.fillStyle = "#b97816"; ctx.beginPath(); ctx.ellipse(-4, 4, 13, 6, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "#e8a32a"; ctx.beginPath(); ctx.arc(12, -6, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(-1, -2); ctx.rotate(wingAngle);
+    ctx.fillStyle = "#d68f1f"; ctx.beginPath(); ctx.ellipse(-3, 3, 15, 7, -0.25, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#8a5510"; ctx.beginPath(); ctx.ellipse(-9, 4, 7, 3, -0.25, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(15, -8, 4.2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#1a1a1a"; ctx.beginPath(); ctx.arc(16.5, -8, 2.1, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(15.6, -9, 0.8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#f4922e"; ctx.beginPath(); ctx.moveTo(20, -8); ctx.lineTo(31, -5); ctx.lineTo(20, -3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#d9781c"; ctx.beginPath(); ctx.moveTo(20, -3); ctx.lineTo(31, -5); ctx.lineTo(20, -1); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function draw() {
+    ctx.fillStyle = "#4ec0ca"; ctx.fillRect(0, 0, W, H);
+    for (const p of pipes) {
+      ctx.fillStyle = "#5ca821"; ctx.fillRect(p.x, 0, PIPE_W, p.top); ctx.fillRect(p.x, p.top + GAP, PIPE_W, H - GROUND_H - (p.top + GAP));
+      ctx.fillStyle = "#74c441"; ctx.fillRect(p.x - 4, p.top - 24, PIPE_W + 8, 24); ctx.fillRect(p.x - 4, p.top + GAP, PIPE_W + 8, 24);
+      ctx.strokeStyle = "#3c7016"; ctx.lineWidth = 2; ctx.strokeRect(p.x, 0, PIPE_W, p.top); ctx.strokeRect(p.x, p.top + GAP, PIPE_W, H - GROUND_H - (p.top + GAP));
+    }
+    ctx.fillStyle = "#ded895"; ctx.fillRect(0, H - GROUND_H, W, GROUND_H);
+    ctx.fillStyle = "#83b53c"; ctx.fillRect(0, H - GROUND_H, W, 14);
+    drawBird();
+    ctx.fillStyle = "#fff"; ctx.strokeStyle = "#000"; ctx.lineWidth = 4; ctx.font = "bold 44px system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.strokeText(score, W / 2, 70); ctx.fillText(score, W / 2, 70);
+    if (state === "ready") banner("Tap to start", "Flap through the pipes");
+    else if (state === "dead") banner(score >= best && score > 0 ? "New best!" : "Game over", "Tap to retry");
+  }
+  function banner(title, sub) {
+    ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(0, 0, W, H); ctx.textAlign = "center";
+    ctx.fillStyle = "#fff"; ctx.font = "bold 36px system-ui, sans-serif"; ctx.fillText(title, W / 2, H / 2 - 60);
+    const cardW = 220, cardH = 86, cx = (W - cardW) / 2, cy = H / 2 - 30;
+    ctx.fillStyle = "rgba(255,255,255,0.12)"; roundRect(cx, cy, cardW, cardH, 14); ctx.fill();
+    ctx.textAlign = "left"; ctx.fillStyle = "#cfe9ec"; ctx.font = "16px system-ui, sans-serif";
+    ctx.fillText("This run", cx + 22, cy + 32); ctx.fillText("Best", cx + 22, cy + 66);
+    ctx.textAlign = "right"; ctx.fillStyle = "#fff"; ctx.font = "bold 26px system-ui, sans-serif";
+    ctx.fillText(state === "dead" ? score : 0, cx + cardW - 22, cy + 36);
+    ctx.fillStyle = "#f9d71c"; ctx.fillText(Math.max(best, score), cx + cardW - 22, cy + 70);
+    ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = "17px system-ui, sans-serif";
+    ctx.fillText(sub, W / 2, H / 2 + 92);
+  }
+  function loop() { update(); draw(); requestAnimationFrame(loop); }
+
+  canvas.addEventListener("mousedown", function (e) { e.preventDefault(); flap(); });
+  canvas.addEventListener("touchstart", function (e) { e.preventDefault(); flap(); }, { passive: false });
+  window.addEventListener("keydown", function (e) {
+    if (e.code === "Space" || e.key === " " || e.key === "ArrowUp") { e.preventDefault(); flap(); }
+  });
+
+  reset();
+  loop();
+  loadMe();
+  refreshBoard();
+})();
+</script>
+</body>
+</html>

@@ -18,6 +18,17 @@ class FakeStore implements Store {
   }
   async bumpLockout(u: string) { const n = (this.lockouts.get(u) ?? 0) + 1; this.lockouts.set(u, n); return n; }
   async getLockout(u: string) { return this.lockouts.get(u) ?? 0; }
+  scores = new Map<string, Map<string, number>>();
+  async bumpScore(game: string, u: string, score: number) {
+    const g = this.scores.get(game) ?? new Map<string, number>();
+    const best = Math.max(g.get(u) ?? 0, score); g.set(u, best); this.scores.set(game, g); return best;
+  }
+  async topScores(game: string, limit: number) {
+    const g = this.scores.get(game) ?? new Map<string, number>();
+    return [...g.entries()].map(([username, score]) => ({ username, score }))
+      .sort((a, b) => b.score - a.score).slice(0, limit);
+  }
+  async userBest(game: string, u: string) { return this.scores.get(game)?.get(u) ?? 0; }
 }
 
 const SECRET = "s";
