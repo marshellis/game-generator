@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Snowball Arena</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="hud-side hud-left">
+          <div class="namebar">
+            <span class="dot you"></span>
+            <span id="youName">You</span>
+          </div>
+          <div class="health"><div id="youHealth" class="health-fill you"></div></div>
+        </div>
+
+        <div class="hud-center">
+          <div id="status" class="status">vs. Frosty (bot)</div>
+          <div id="score" class="score">0&nbsp;–&nbsp;0</div>
+        </div>
+
+        <div class="hud-side hud-right">
+          <div class="namebar">
+            <span id="foeName">Frosty</span>
+            <span class="dot foe"></span>
+          </div>
+          <div class="health"><div id="foeHealth" class="health-fill foe"></div></div>
+        </div>
+      </header>
+
+      <div id="stage">
+        <canvas id="game"></canvas>
+
+        <!-- Overlays -->
+        <div id="overlay" class="overlay">
+          <div class="card" id="card">
+            <h1>❄️ Snowball Arena</h1>
+            <p class="tagline">Arc your snowballs over the bunkers and freeze your rival.</p>
+            <ul class="keys">
+              <li><b>A / D</b> or <b>← →</b> &nbsp;move</li>
+              <li><b>W</b> / <b>Space</b> / <b>↑</b> &nbsp;jump</li>
+              <li><b>S</b> / <b>↓</b> &nbsp;duck behind cover</li>
+              <li><b>Mouse</b> aim &nbsp;·&nbsp; <b>hold &amp; release</b> to throw harder</li>
+            </ul>
+
+            <div class="party">
+              <div class="party-label">Play with a friend — both type the same code</div>
+              <div class="party-row">
+                <input id="codeInput" class="code-input" placeholder="CODE" maxlength="8"
+                       autocomplete="off" autocapitalize="characters" spellcheck="false" />
+                <button id="diceBtn" class="dice" title="Random code">🎲</button>
+              </div>
+              <button id="onlineBtn" class="btn">Enter Arena</button>
+            </div>
+
+            <button id="playBtn" class="btn ghost">Play vs Bot</button>
+            <p class="hint" id="onlineHint"></p>
+          </div>
+        </div>
+
+        <div id="roundMsg" class="round-msg" hidden></div>
+
+        <!-- Touch controls (shown on touch devices) -->
+        <div id="touch" class="touch" hidden>
+          <div class="pad">
+            <button class="tbtn" data-act="left">◀</button>
+            <button class="tbtn" data-act="duck">▼</button>
+            <button class="tbtn" data-act="right">▶</button>
+          </div>
+          <div class="pad right">
+            <button class="tbtn" data-act="jump">⤒</button>
+            <button class="tbtn throw" data-act="throw">❄</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footbar">
+        <span id="aimMeterWrap" class="meter-wrap">Power <div class="meter"><div id="aimMeter"></div></div></span>
+        <span class="spacer"></span>
+        <span id="conn" class="conn">offline</span>
+      </footer>
+    </div>
+
+    <script src="./peerjs.min.js"></script>
+    <script src="./net.js"></script>
+    <script src="./game.js"></script>
+  </body>
+</html>
