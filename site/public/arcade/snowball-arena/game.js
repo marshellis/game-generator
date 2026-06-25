@@ -83,6 +83,9 @@
   let online = false;
   let conn = null;
   let mode = "bot";     // "bot" | "online"
+  let role = null;      // "host" | "guest" when online
+  let remoteInput = null;   // host: latest input received from the guest
+  let pendingEvents = [];    // host: kill/win events to send in the next snapshot
   let awaitingOpponent = false;
   let myName = "You";
   let lastCode = "";
@@ -263,9 +266,13 @@
   }
 
   // ------------------------------------------------------------- match events
+  // Runs on the authoritative side (offline, or the online host). The host also
+  // records events so the guest can flash the same messages / end screen.
   function onKill(attacker, victim) {
     updateHud();
+    if (role === "host") pendingEvents.push({ kind: "kill", attacker, victim });
     if (score[attacker] >= WIN_SCORE) {
+      if (role === "host") { pendingEvents.push({ kind: "win", winner: attacker }); sendState(); }
       endMatch(attacker === myIndex);
       return;
     }
@@ -295,8 +302,9 @@
       sub = `Final score ${score[myIndex]}–${score[1 - myIndex]}`;
     }
 
-    // Online matches: the server auto-resets the score, so we can rematch in the
-    // same arena. Offline: rematch the bot. Either way "Menu" returns to lobby.
+    // Offline: rematch the bot. Online: the host restarts a fresh match in the
+    // same arena (the guest resyncs from the host's snapshots). Either way
+    // "Back to menu" returns to the lobby.
     const stayLabel = mode === "online" && !customMsg ? "Rematch (same code)" : "Play again";
     els.card.innerHTML =
       `<h1>${title}</h1><p class="tagline">${sub}</p>` +
@@ -307,9 +315,14 @@
     const again = document.getElementById("againBtn");
     if (again) again.addEventListener("click", () => {
       if (mode === "online") {
-        // still connected; server resets score after a win — just resume
-        if (conn) { score = [0, 0]; updateHud(); els.overlay.hidden = true; running = true; }
-        else joinOnline(lastCode);
+        if (role === "host" && conn) {
+          resetMatch((players[1] && players[1].name) || "Friend");
+          els.overlay.hidden = true; running = true;
+        } else if (role === "guest" && conn) {
+          els.overlay.hidden = true; running = true; // resync to host's fresh match
+        } else {
+          joinOnline(lastCode);
+        }
       } else {
         startOffline();
       }
@@ -382,15 +395,30 @@
 
   // ------------------------------------------------------------- simulation
   function simulate() {
-    if (online) return; // server authoritative; we only render snapshots
-    // you
+    // Guest renders the host's snapshots only — it doesn't run the sim.
+    if (online && role === "guest") return;
+
+    // You (host = slot 0, offline = slot 0).
     applyInput(players[myIndex], localInput());
-    // foe (bot)
+
+    // Foe: the connected guest (online host) or the bot (offline).
     const foe = players[1 - myIndex];
-    applyInput(foe, botThink(foe, players[myIndex]));
+    if (online && role === "host") applyInput(foe, remoteAsInput());
+    else applyInput(foe, botThink(foe, players[myIndex]));
+
     // integrate
     for (const p of players) stepPlayer(p);
     balls = balls.filter(stepBall);
+  }
+
+  // Convert the guest's last received input into the shape applyInput wants.
+  function remoteAsInput() {
+    const r = remoteInput || {};
+    return {
+      left: !!r.left, right: !!r.right, jump: !!r.jump, duck: !!r.duck,
+      aim: typeof r.aimAngle === "number" ? r.aimAngle : Math.PI,
+      throwHeld: !!r.throw,
+    };
   }
 
   // ------------------------------------------------------------- collisions
@@ -681,31 +709,73 @@
     running = true;
   }
 
-  // ---- online (party code) ----
+  // ---- online (party code, peer-to-peer) ----
+  // First to enter a code HOSTS (runs the sim, slot 0); second JOINS (slot 1).
   function joinOnline(rawCode) {
     const code = window.SnowNet.cleanCode(rawCode || els.codeInput.value);
     if (!code) { els.onlineHint.textContent = "Enter a code first (or hit 🎲)."; return; }
     teardownOnline();
     lastCode = code;
     mode = "online"; online = true; running = false; awaitingOpponent = true;
+    role = null; remoteInput = null; pendingEvents = [];
     initFlakes();
     players = []; balls = []; score = [0, 0];
     showWaiting(code);
 
-    conn = window.SnowNet.connect(code, myName);
-    conn.on({
+    conn = window.SnowNet.connect(code, myName, {
       onStatus: setConn,
-      onWelcome: (m) => { myIndex = m.id != null ? m.id : 0; },
-      onState: applySnapshot,
-      onFull: () => {
-        awaitingOpponent = false;
-        showLobby("That arena is full (2 players already). Try another code.");
+      onRole: (r) => { role = r; myIndex = r === "host" ? 0 : 1; },
+      onPeerJoin: () => {
+        // Guest's channel is open — announce our name; the host starts the match.
+        if (role === "guest") conn.send({ t: "join", name: myName });
       },
-      onLeft: () => {
+      onPeerLeft: () => {
         if (running) { running = false; endMatch(null, "Your friend left the arena."); }
       },
+      onData: (msg) => {
+        if (role === "host") {
+          if (msg.t === "join") {
+            remoteInput = null;
+            startHostMatch(msg.name || "Friend");
+            conn.send({ t: "welcome", id: 1, foeName: myName });
+          } else if (msg.t === "input") {
+            remoteInput = msg.input || {};
+          }
+        } else { // guest
+          if (msg.t === "welcome") {
+            myIndex = msg.id != null ? msg.id : 1;
+            if (msg.foeName) els.foeName.textContent = msg.foeName;
+          } else if (msg.t === "state") {
+            applySnapshot(msg);
+          }
+        }
+      },
     });
-    conn.connect();
+  }
+
+  // Host: a guest just joined — set up and begin the authoritative match.
+  function startHostMatch(guestName) {
+    resetMatch(guestName);           // players[0] = you (host), players[1] = guest
+    awaitingOpponent = false;
+    els.overlay.hidden = true;
+    els.foeName.textContent = guestName;
+    els.status.textContent = "Live match · " + lastCode;
+    running = true;
+  }
+
+  // Host: broadcast a snapshot of the authoritative state to the guest.
+  function sendState() {
+    if (!conn || role !== "host") return;
+    const sp = players.filter(Boolean).map((p) => ({
+      id: p.i, name: p.name, x: Math.round(p.x), y: Math.round(p.y),
+      vx: p.vx, vy: p.vy, h: p.h, hp: p.hp, facing: p.facing,
+      duck: p.duck, alive: p.alive, aim: p.aim, charge: p.charge,
+    }));
+    const sb = balls.map((b) => ({
+      x: Math.round(b.x), y: Math.round(b.y), vx: b.vx, vy: b.vy, owner: b.owner,
+    }));
+    const ev = pendingEvents; pendingEvents = [];
+    conn.send({ t: "state", players: sp, balls: sb, score: score.slice(), events: ev });
   }
 
   function showWaiting(code) {
@@ -732,7 +802,7 @@
 
   function teardownOnline() {
     if (conn) { try { conn.close(); } catch (_) {} conn = null; }
-    awaitingOpponent = false;
+    awaitingOpponent = false; role = null; remoteInput = null; pendingEvents = [];
   }
 
   // ---- lobby ----
@@ -776,16 +846,19 @@
     if (msg) els.onlineHint.textContent = msg;
   }
 
-  // sending local input to the server while connected online
+  // Network pump: guest streams its inputs to the host; host streams snapshots.
   setInterval(() => {
-    if (online && conn) {
+    if (!online || !conn) return;
+    if (role === "guest") {
       const inp = localInput();
-      conn.sendInput(inputSeq++, {
+      conn.send({ t: "input", input: {
         left: inp.left, right: inp.right, jump: inp.jump, duck: inp.duck,
         aimAngle: inp.aim, throw: inp.throwHeld,
-      });
+      } });
+    } else if (role === "host" && running) {
+      sendState();
     }
-  }, 50);
+  }, 45);
 
   // --------------------------------------------------------------- events
   window.addEventListener("keydown", (e) => {

@@ -1,40 +1,28 @@
 /*
- * net.js — Snowball Arena networking layer
+ * net.js — Snowball Arena networking layer (WebRTC peer-to-peer via PeerJS)
  * ----------------------------------------------------------------------------
- * Live PvP runs on a PartyKit server (see ../../../realtime/). Each "party code"
- * maps to one PartyKit room: two players who enter the SAME code join the same
- * room and fight each other. The game (game.js) renders server snapshots and
- * sends local inputs.
+ * No server to deploy. Two players who type the SAME party code connect
+ * browser-to-browser:
+ *   - The FIRST to enter a code registers as that code's peer id -> becomes HOST.
+ *   - The SECOND finds the id taken -> becomes GUEST and connects to the host.
+ * The HOST runs the authoritative match sim and streams snapshots; the GUEST
+ * sends its inputs and renders. (See game.js.)
  *
- * Wire protocol:
- *   client -> { t:"join", name } | { t:"input", seq, input:{left,right,jump,duck,aimAngle,throw} }
- *   server -> { t:"welcome", id, arena } | { t:"state", players, balls, score, events } | { t:"left", id }
+ * Data-channel messages:
+ *   guest -> host: { t:"join", name } | { t:"input", input:{...} }
+ *   host -> guest: { t:"welcome", id, foeName } | { t:"state", players, balls, score, events }
  *
- * SERVER_URL is the PartyKit host. The room/party-code is appended as the path
- * /parties/main/<code>. Override the host at runtime with ?server=wss://...
+ * Signaling uses PeerJS's free public broker (just to introduce the two peers);
+ * actual game traffic is direct P2P. The peerjs library is vendored locally.
  * ----------------------------------------------------------------------------
  */
 (function () {
   "use strict";
 
-  // PartyKit host (no trailing slash, no path). Set after `npm run deploy`.
-  // e.g. "wss://snowball-arena.<your-partykit-username>.partykit.dev"
-  const SERVER_URL = "";
+  const ID_PREFIX = "snowarena-v1-"; // namespaces our codes on the shared broker
 
-  function serverHost() {
-    const q = new URLSearchParams(location.search).get("server");
-    return (q || SERVER_URL).replace(/\/+$/, "");
-  }
-
-  /** Is live online play available (a server host is configured)? */
-  function online() {
-    return !!serverHost();
-  }
-
-  /** Build the WebSocket URL for a given party code (PartyKit room). */
-  function roomUrl(code) {
-    return serverHost() + "/parties/main/" + encodeURIComponent(code);
-  }
+  /** P2P needs no configuration, so online play is always available. */
+  function online() { return typeof window.Peer === "function"; }
 
   /** Read the logged-in account name so online names match the arcade profile. */
   async function getMe() {
@@ -43,9 +31,7 @@
       if (!r.ok) return null;
       const j = await r.json();
       return j && j.username ? j : null;
-    } catch (_) {
-      return null;
-    }
+    } catch (_) { return null; }
   }
 
   function guestName() {
@@ -63,68 +49,83 @@
     return String(raw || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
   }
 
-  /** Generate a friendly, easy-to-share code (no ambiguous chars). */
+  /** Friendly, easy-to-share code (no ambiguous chars). */
   function randomCode() {
-    const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no I/O/0/1
+    const a = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
     let s = "";
-    for (let i = 0; i < 4; i++) s += alphabet[Math.floor(Math.random() * alphabet.length)];
+    for (let i = 0; i < 4; i++) s += a[Math.floor(Math.random() * a.length)];
     return s;
   }
 
-  /** Live PvP transport over WebSocket to one PartyKit room (party code). */
-  class OnlineConnection {
-    constructor(code, name) {
-      this.kind = "online";
-      this.code = code;
-      this.name = name;
-      this.handlers = {};
-      this.ws = null;
-      this.closed = false;
-    }
-    on(handlers) { this.handlers = handlers || {}; }
+  /**
+   * Connect by party code. Decides host vs guest automatically.
+   * handlers: { onStatus(state), onRole(role), onData(msg), onPeerJoin(), onPeerLeft() }
+   * Returns { role, send(msg), close() }.
+   */
+  function connect(code, name, handlers) {
+    const h = handlers || {};
+    const hostId = ID_PREFIX + cleanCode(code);
+    const ctrl = {
+      role: null, peer: null, conn: null, closed: false,
+      send(msg) { if (this.conn && this.conn.open) { try { this.conn.send(msg); } catch (_) {} } },
+      close() {
+        this.closed = true;
+        try { if (this.conn) this.conn.close(); } catch (_) {}
+        try { if (this.peer) this.peer.destroy(); } catch (_) {}
+      },
+    };
 
-    connect() {
-      const h = this.handlers;
-      h.onStatus && h.onStatus("connecting");
-      let ws;
-      try {
-        ws = new WebSocket(roomUrl(this.code));
-      } catch (_) {
+    function wireConn(c) {
+      ctrl.conn = c;
+      c.on("open", () => { if (!ctrl.closed) { h.onStatus && h.onStatus("live"); h.onPeerJoin && h.onPeerJoin(); } });
+      c.on("data", (d) => { if (!ctrl.closed) h.onData && h.onData(d); });
+      c.on("close", () => { if (!ctrl.closed) h.onPeerLeft && h.onPeerLeft(); });
+      c.on("error", () => {});
+    }
+
+    function becomeGuest() {
+      const gp = new window.Peer({ debug: 1 });
+      ctrl.peer = gp;
+      ctrl.role = "guest";
+      h.onRole && h.onRole("guest");
+      gp.on("open", () => {
+        if (ctrl.closed) return;
+        const c = gp.connect(hostId, { reliable: true, metadata: { name } });
+        wireConn(c);
+      });
+      gp.on("error", (e) => { if (!ctrl.closed) h.onStatus && h.onStatus("error"); });
+    }
+
+    // First try to claim the code as host.
+    h.onStatus && h.onStatus("connecting");
+    let peer;
+    try { peer = new window.Peer(hostId, { debug: 1 }); }
+    catch (_) { h.onStatus && h.onStatus("error"); return ctrl; }
+    ctrl.peer = peer;
+
+    peer.on("open", () => {
+      if (ctrl.closed) return;
+      ctrl.role = "host";
+      h.onRole && h.onRole("host");
+      h.onStatus && h.onStatus("waiting");
+      peer.on("connection", (c) => { if (!ctrl.conn) wireConn(c); });
+    });
+
+    peer.on("error", (err) => {
+      if (ctrl.closed) return;
+      // Code already claimed -> someone is hosting it; join as guest.
+      if (err && err.type === "unavailable-id") {
+        try { peer.destroy(); } catch (_) {}
+        becomeGuest();
+      } else if (err && (err.type === "peer-unavailable")) {
         h.onStatus && h.onStatus("error");
-        return;
+      } else {
+        h.onStatus && h.onStatus("error");
       }
-      this.ws = ws;
-      ws.onopen = () => {
-        ws.send(JSON.stringify({ t: "join", name: this.name }));
-        h.onStatus && h.onStatus("live");
-      };
-      ws.onmessage = (ev) => {
-        let msg;
-        try { msg = JSON.parse(ev.data); } catch (_) { return; }
-        switch (msg.t) {
-          case "welcome": h.onWelcome && h.onWelcome(msg); break;
-          case "state":   h.onState && h.onState(msg); break;
-          case "full":    h.onFull && h.onFull(msg); break;
-          case "left":    h.onLeft && h.onLeft(msg); break;
-        }
-      };
-      ws.onclose = () => { if (!this.closed) h.onStatus && h.onStatus("offline"); };
-      ws.onerror = () => { h.onStatus && h.onStatus("error"); };
-    }
+    });
 
-    sendInput(seq, input) {
-      if (this.ws && this.ws.readyState === 1) {
-        this.ws.send(JSON.stringify({ t: "input", seq, input }));
-      }
-    }
-    close() {
-      this.closed = true;
-      if (this.ws) try { this.ws.close(); } catch (_) {}
-    }
+    return ctrl;
   }
 
-  window.SnowNet = {
-    online, getMe, guestName, cleanCode, randomCode, serverHost,
-    connect(code, name) { return new OnlineConnection(cleanCode(code), name); },
-  };
+  window.SnowNet = { online, getMe, guestName, cleanCode, randomCode, connect };
 })();

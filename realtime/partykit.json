@@ -1,6 +1,0 @@
-{
-  "$schema": "https://www.partykit.io/schema.json",
-  "name": "snowball-arena",
-  "main": "src/server.ts",
-  "compatibilityDate": "2025-01-01"
-}
