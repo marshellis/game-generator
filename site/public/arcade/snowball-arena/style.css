@@ -1,0 +1,267 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0b1220;
+  color: #f8fafc;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- HUD ---- */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem 0.4rem;
+}
+.hud-side { flex: 1; min-width: 0; }
+.hud-right { text-align: right; }
+.hud-center { text-align: center; }
+.namebar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.hud-right .namebar { justify-content: flex-end; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.dot.you { background: #38bdf8; }
+.dot.foe { background: #f472b6; }
+
+.health {
+  margin-top: 0.35rem;
+  height: 12px;
+  border-radius: 999px;
+  background: #1e293b;
+  overflow: hidden;
+}
+.health-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  transition: width 0.12s linear;
+}
+.health-fill.you { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+.health-fill.foe { background: linear-gradient(90deg, #f472b6, #fb7185); float: right; }
+
+.status { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
+.score { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.5px; }
+
+/* ---- Stage / canvas ---- */
+#stage {
+  position: relative;
+  flex: 1;
+  margin: 0 0.6rem;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: #0f172a;
+}
+#game { display: block; width: 100%; height: 100%; touch-action: none; }
+
+/* ---- Overlay ---- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 13, 26, 0.78);
+  backdrop-filter: blur(3px);
+  z-index: 10;
+}
+.overlay[hidden] { display: none; }
+.card {
+  width: min(92%, 420px);
+  background: #111c33;
+  border: 1px solid #1e293b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.card h1 { margin: 0 0 0.25rem; font-size: 1.6rem; }
+.tagline { margin: 0 0 1rem; color: #cbd5e1; font-size: 0.95rem; }
+.keys {
+  list-style: none;
+  margin: 0 auto 1.25rem;
+  padding: 0;
+  text-align: left;
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+.keys b {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0.05rem 0.4rem;
+  margin-right: 0.2rem;
+  background: #1e293b;
+  border-radius: 0.35rem;
+  color: #e2e8f0;
+  font-size: 0.82rem;
+}
+.btn {
+  font: inherit;
+  font-weight: 800;
+  padding: 0.7rem 1.6rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+  color: #06263a;
+  cursor: pointer;
+  font-size: 1.05rem;
+}
+.btn:active { transform: translateY(1px); }
+.btn.ghost {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  margin-top: 0.6rem;
+}
+.hint { margin: 0.9rem 0 0; font-size: 0.8rem; color: #64748b; min-height: 1em; }
+
+/* ---- party code ---- */
+.party {
+  margin: 0 0 0.5rem;
+  padding: 0.9rem;
+  background: #0c1730;
+  border: 1px solid #1e293b;
+  border-radius: 0.8rem;
+}
+.party-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 0.55rem; }
+.party-row { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; }
+.code-input {
+  flex: 1;
+  font: inherit;
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: 0.35em;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 0.55rem 0.4rem 0.55rem 0.75rem;
+  border: 1px solid #334155;
+  border-radius: 0.6rem;
+  background: #0b1220;
+  color: #f8fafc;
+  min-width: 0;
+}
+.code-input::placeholder { color: #475569; letter-spacing: 0.2em; }
+.code-input:focus { outline: none; border-color: #38bdf8; }
+.dice {
+  flex: none;
+  width: 52px;
+  font-size: 1.3rem;
+  border: 1px solid #334155;
+  border-radius: 0.6rem;
+  background: #111c33;
+  cursor: pointer;
+}
+.dice:active { transform: translateY(1px); }
+.copy-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font: inherit;
+  font-size: 0.82rem;
+  color: #38bdf8;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.big-code {
+  font-weight: 900;
+  font-size: 2.4rem;
+  letter-spacing: 0.3em;
+  color: #38bdf8;
+  margin: 0.4rem 0;
+}
+.spinner {
+  margin: 1rem auto;
+  width: 28px; height: 28px;
+  border: 3px solid #1e293b;
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- Round message ---- */
+.round-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  pointer-events: none;
+  z-index: 8;
+}
+.round-msg[hidden] { display: none; }
+
+/* ---- Footer ---- */
+.footbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.9rem 0.7rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+.spacer { flex: 1; }
+.meter-wrap { display: flex; align-items: center; gap: 0.4rem; }
+.meter {
+  width: 120px;
+  height: 9px;
+  border-radius: 999px;
+  background: #1e293b;
+  overflow: hidden;
+}
+#aimMeter {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #fde047, #f97316);
+  border-radius: 999px;
+}
+.conn::before {
+  content: "●";
+  margin-right: 0.3rem;
+  color: #64748b;
+}
+.conn.live::before { color: #22c55e; }
+.conn.connecting::before { color: #fbbf24; }
+
+/* ---- Touch controls ---- */
+.touch {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem;
+  z-index: 6;
+  pointer-events: none;
+}
+.touch .pad { display: flex; gap: 0.5rem; pointer-events: auto; }
+.tbtn {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 0;
+  font-size: 1.4rem;
+  background: rgba(30, 41, 59, 0.8);
+  color: #e2e8f0;
+}
+.tbtn.throw { background: rgba(56, 189, 248, 0.85); color: #06263a; }
+.tbtn:active { background: rgba(56, 189, 248, 0.6); }
