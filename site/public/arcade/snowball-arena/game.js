@@ -354,11 +354,15 @@
     }
 
     const sol = solveAim(bot, target);
-    inp.aim = sol.angle + (Math.random() - 0.5) * 0.22; // aim wobble — bots miss some shots
     if (!bot._chargeWant) bot._chargeWant = sol.charge;
-    if (bot.cd <= 0) {
+    inp.aim = sol.angle + (Math.random() - 0.5) * 0.34; // aim wobble — bots miss plenty
+    // Only throw when the shot actually has a clear arc to the target (no
+    // throwing through bunkers/walls). Otherwise hold fire and reposition.
+    if (bot.cd <= 0 && clearShot(bot, target, sol.angle, bot._chargeWant)) {
       if (bot.charge < bot._chargeWant) inp.throwHeld = true;
       else { inp.throwHeld = false; bot._chargeWant = 0.45 + Math.random() * 0.5; }
+    } else {
+      inp.throwHeld = false;
     }
     return inp;
   }
@@ -368,6 +372,21 @@
     const dx = tx - hand.x, dy = ty - hand.y, dist = Math.hypot(dx, dy);
     const charge = Math.max(0.4, Math.min(1, dist / 520));
     return { angle: Math.atan2(dy - dist * 0.32, dx), charge };
+  }
+  // Simulate the throw the bot intends to make; true only if it reaches the
+  // target without first hitting a bunker, the ground, or flying out of bounds.
+  function clearShot(from, to, angle, charge) {
+    const speed = THROW_MIN + charge * (THROW_MAX - THROW_MIN);
+    let x = handPos(from).x + Math.cos(angle) * 14, y = handPos(from).y + Math.sin(angle) * 14;
+    let vx = Math.cos(angle) * speed, vy = Math.sin(angle) * speed;
+    const tx = to.x + to.w / 2, ty = to.y + to.h / 2;
+    for (let i = 0; i < 140; i++) {
+      vy += BALL_GRAVITY; x += vx; y += vy;
+      if (x < 0 || x > A.W || y + BALL_R >= A.groundY) return false;
+      for (const b of A.bunkers) if (x > b.x - BALL_R && x < b.x + b.w + BALL_R && y > b.y - BALL_R && y < b.y + b.h + BALL_R) return false;
+      if (Math.abs(x - tx) < 24 && Math.abs(y - ty) < 32) return true;
+    }
+    return false;
   }
 
   // ------------------------------------------------------------- simulation
