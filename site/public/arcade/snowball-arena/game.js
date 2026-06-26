@@ -647,7 +647,12 @@
             if (slot == null) { slot = nextFreeSlot(); if (slot == null) { conn.sendTo(id, { t: "full" }); return; } connSlot[id] = slot; }
             lobbyHumans[slot] = { name: String(msg.name || "Player").slice(0, 14), team: msg.team | 0, connId: id };
             conn.sendTo(id, { t: "welcome", id: slot, mode: modeKey });
-            if (!running) renderHostRoom();
+            if (!running) {
+              renderHostRoom();
+              // Once every slot is a real player, just begin — so 1v1 starts the
+              // instant your friend joins (no bot, no extra click).
+              if (Object.keys(lobbyHumans).length >= MODES[modeKey].slots - 1) hostStart();
+            }
           } else if (msg.t === "input") {
             const slot = slotOfConn(id); if (slot != null) remoteInputs[slot] = msg.input || {};
           }
@@ -704,12 +709,17 @@
       const col = MODES[modeKey].teams ? TEAM_COLOR[team] : (bot ? "#475569" : colorFor(s, s));
       rows += `<li><span class="rdot" style="background:${col}"></span>${escapeHtml(nm)}${bot ? '<span class="rbot">BOT</span>' : ""}</li>`;
     }
+    const humanGuests = Object.keys(lobbyHumans).length;
+    const waitMsg = humanGuests
+      ? `${humanGuests + 1} player${humanGuests ? "s" : ""} ready.`
+      : `Waiting for a friend to join with code <b style="color:#38bdf8">${lastCode}</b>…`;
+    const startLabel = humanGuests ? "Start match" : (total > 2 ? "Start vs Bots" : "Start vs Bot");
     els.card.innerHTML =
       `<h1>Arena <span style="color:#38bdf8">${lastCode}</span></h1>` +
-      `<p class="tagline">${MODES[modeKey].label} · share the code; empty slots become bots.</p>` +
+      `<p class="tagline">${MODES[modeKey].label} · share the code or link. ${waitMsg}</p>` +
       `<ul class="roster">${rows}</ul>` +
       `<button class="copy-link" id="copyBtn">📋 Copy invite link</button>` +
-      `<button id="startMatchBtn" class="btn">Start match</button>` +
+      `<button id="startMatchBtn" class="btn">${startLabel}</button>` +
       `<button class="btn ghost" id="cancelBtn">Cancel</button>`;
     els.overlay.hidden = false;
     const cp = document.getElementById("copyBtn");
