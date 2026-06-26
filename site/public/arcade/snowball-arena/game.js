@@ -14,6 +14,7 @@
   const P_W = 30, P_STAND = 58, P_DUCK = 36;
   const BALL_R = 7, BALL_GRAVITY = 0.42, THROW_MIN = 9.5, THROW_MAX = 21.5;
   const CHARGE_MS = 620, THROW_CD = 360, MAX_HP = 100;
+  const BOT_HP = 65; // bots are squishier than human players — easier to freeze
   const RESPAWN_MS = 1600, INVULN_MS = 1100;
 
   const MODES = {
@@ -106,10 +107,11 @@
 
   function makePlayer(slot, name, team, isBot, spawnX, color) {
     const facing = spawnX < A.W / 2 ? 1 : -1;
+    const maxHp = isBot ? BOT_HP : MAX_HP;
     return {
-      i: slot, name, team, isBot, color, dark: shade(color),
+      i: slot, name, team, isBot, color, dark: shade(color), maxHp,
       x: spawnX, y: A.groundY - P_STAND, vx: 0, vy: 0, w: P_W, h: P_STAND, spawnX,
-      onGround: false, facing, duck: false, hp: MAX_HP, alive: true,
+      onGround: false, facing, duck: false, hp: maxHp, alive: true,
       charge: 0, prevThrow: false, cd: 0, invuln: 0, respawn: 0,
       aim: facing > 0 ? 0 : Math.PI, flash: 0, _lastX: null, _wander: 0, _wdir: 0, _chargeWant: 0,
     };
@@ -156,7 +158,7 @@
 
   function respawn(p) {
     p.x = p.spawnX; p.y = A.groundY - P_STAND; p.vx = 0; p.vy = 0;
-    p.hp = MAX_HP; p.alive = true; p.duck = false; p.h = P_STAND;
+    p.hp = p.maxHp || MAX_HP; p.alive = true; p.duck = false; p.h = P_STAND;
     p.charge = 0; p.cd = 0; p.invuln = INVULN_MS; p.respawn = 0;
   }
 
