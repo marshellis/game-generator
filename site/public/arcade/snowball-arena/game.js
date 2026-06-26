@@ -354,7 +354,7 @@
     }
 
     const sol = solveAim(bot, target);
-    inp.aim = sol.angle + (Math.random() - 0.5) * 0.06;
+    inp.aim = sol.angle + (Math.random() - 0.5) * 0.22; // aim wobble — bots miss some shots
     if (!bot._chargeWant) bot._chargeWant = sol.charge;
     if (bot.cd <= 0) {
       if (bot.charge < bot._chargeWant) inp.throwHeld = true;
