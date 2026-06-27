@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Tennis Rally</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }   /* beat the #chip/#account display rules */
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 50% 25%, #133a2a 0%, #07120f 70%);
+    color: #e8f8f5;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 14px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+  }
+  .col { width: min(94vw, 440px); }
+  #top { display: flex; align-items: center; justify-content: space-between; }
+  #chip { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  #chip .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #2ee6a6; }
+  #chip b { color: #2ee6a6; }
+  #logout { background: #1b332b; color: #b8d8cf; border: 0; border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+  #bestChip { font-size: 14px; color: #b8d8cf; }
+  #bestChip b { color: #ffd166; font-size: 16px; }
+  #wrap { position: relative; width: min(94vw, 440px); }
+  canvas {
+    display: block; width: 100%; height: auto; aspect-ratio: 520 / 720;
+    background: #2e7d4f;
+    border: 2px solid rgba(46,230,166,0.35); border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    touch-action: none; cursor: pointer;
+  }
+  /* account form */
+  #account { background: #102a22; border-radius: 12px; padding: 14px; }
+  #account .atitle { font-size: 14px; font-weight: 600; color: #7fe9c4; margin-bottom: 10px; }
+  #account .arow { display: flex; gap: 8px; margin-bottom: 8px; }
+  #account input { flex: 1; min-width: 0; padding: 10px 11px; font-size: 15px; border: 1px solid #1e4035; border-radius: 9px; background: #07120f; color: #fff; }
+  #account input::placeholder { color: #5a7d72; }
+  #account input:focus { outline: none; border-color: #2ee6a6; }
+  #avatars { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 10px; }
+  #avatars button { width: 30px; height: 30px; border: 2px solid transparent; border-radius: 8px; background: #07120f; font-size: 17px; cursor: pointer; line-height: 1; padding: 0; }
+  #avatars button.sel { border-color: #2ee6a6; background: #16352b; }
+  #account .btns button { flex: 1; font: inherit; font-size: 15px; border: 0; border-radius: 9px; padding: 11px; cursor: pointer; }
+  #account .btns .login { background: #1b332b; color: #d4ece4; }
+  #account .btns .create { background: #2ee6a6; color: #07120f; font-weight: 600; }
+  #account button:active { transform: scale(0.98); }
+  #amsg { min-height: 17px; font-size: 13px; margin-top: 8px; }
+  #amsg.err { color: #ff8a7a; } #amsg.ok { color: #8fe388; } #amsg.busy { color: #94a3b8; }
+  .guestnote { font-size: 12px; color: #5a7d72; margin-top: 8px; }
+  /* leaderboard */
+  #board { background: #102a22; border-radius: 12px; padding: 12px 14px; }
+  #board h2 { margin: 0 0 8px; font-size: 14px; color: #7fe9c4; font-weight: 600; display: flex; justify-content: space-between; }
+  #board ol { list-style: none; margin: 0; padding: 0; }
+  #board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
+  #board li:first-child { border-top: 0; }
+  #board .rk { width: 22px; color: #5a7d72; }
+  #board .nm { flex: 1; }
+  #board .sc { color: #ffd166; font-weight: 700; }
+  #board li.me { color: #fff; }
+  #board li.me .nm::after { content: " (you)"; color: #7fe9c4; font-size: 12px; }
+  #board .empty { color: #5a7d72; font-size: 13px; padding: 4px 0; }
+</style>
+</head>
+<body>
+  <div id="top" class="col">
+    <div id="chip" hidden><span class="av" id="avatar">🦊</span><span id="name"></span><button id="logout">Log out</button></div>
+    <div id="bestChip">Best <b id="best">0</b></div>
+  </div>
+
+  <div id="wrap" class="col">
+    <canvas id="game" width="520" height="720"></canvas>
+  </div>
+
+  <div id="account" class="col">
+    <div class="atitle">Create an account to join the leaderboard</div>
+    <div class="arow">
+      <input id="u" type="text" maxlength="20" placeholder="Username" autocomplete="off" autocapitalize="off" />
+      <input id="p" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 digits)" autocomplete="off" />
+    </div>
+    <div id="avatars"></div>
+    <div class="arow btns">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="create" id="createBtn">Create account</button>
+    </div>
+    <div id="amsg"></div>
+    <div class="guestnote">…or just play as a guest — your best is saved on this device.</div>
+  </div>
+
+  <div id="board" class="col">
+    <h2><span>Global leaderboard</span><span style="color:#2ee6a6">● live</span></h2>
+    <ol id="rows"><li class="empty">Loading…</li></ol>
+  </div>
+
+<script>
+(function () {
+  const GAME = "tennis-rally";
+  const LS_BEST = "tennis-rally:best";
+  // Mirrors the server allowlist (avatars.ts) — off-list values collapse to default.
+  const AVATARS = ["🦊","🐼","🐯","🦁","🐸","🐵","🐙","🦄","🐶","🐱","🐧","🐝","🦖","🐢","🦉","🐳"];
+  const DEFAULT_COLOR = "#2ee6a6";
+  const USER_RE = /^[a-z0-9_-]{3,20}$/;
+  const PIN_RE = /^[0-9]{4,8}$/;
+
+  let me = null; // { username, avatar, avatarColor }
+  let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+  let chosenAvatar = AVATARS[0];
+
+  const el = (id) => document.getElementById(id);
+  const accountEl = el("account"), chipEl = el("chip"), avatarEl = el("avatar"), nameEl = el("name");
+  const bestEl = el("best"), rowsEl = el("rows"), msgEl = el("amsg");
+  const uEl = el("u"), pEl = el("p"), loginBtn = el("loginBtn"), createBtn = el("createBtn");
+
+  function showBest() { bestEl.textContent = best; }
+  function setMsg(t, k) { msgEl.textContent = t || ""; msgEl.className = k || ""; }
+  function busy(on) { loginBtn.disabled = on; createBtn.disabled = on; }
+  showBest();
+
+  // avatar picker
+  AVATARS.forEach(function (a, i) {
+    const b = document.createElement("button");
+    b.textContent = a; if (i === 0) b.className = "sel";
+    b.onclick = function () {
+      chosenAvatar = a;
+      [...el("avatars").children].forEach((c) => c.classList.remove("sel"));
+      b.classList.add("sel");
+    };
+    el("avatars").appendChild(b);
+  });
+
+  async function api(path, opts) {
+    try {
+      return await fetch(path, {
+        credentials: "same-origin",
+        headers: opts && opts.body ? { "content-type": "application/json" } : undefined,
+        ...opts,
+      });
+    } catch (e) { return null; }
+  }
+
+  function renderAuthed() {
+    if (me) {
+      accountEl.hidden = true; chipEl.hidden = false;
+      avatarEl.textContent = me.avatar || "🦊";
+      avatarEl.style.background = me.avatarColor || DEFAULT_COLOR;
+      nameEl.innerHTML = "Playing as <b>" + escapeHtml(me.username) + "</b>";
+    } else {
+      accountEl.hidden = false; chipEl.hidden = true;
+    }
+  }
+
+  async function loadMe() {
+    const r = await api("/api/me");
+    me = r && r.ok ? await r.json() : null;
+    renderAuthed();
+  }
+
+  function validate() {
+    const u = uEl.value.trim().toLowerCase(), p = pEl.value.trim();
+    if (!USER_RE.test(u)) { setMsg("Username: 3–20 letters, numbers, - or _.", "err"); return null; }
+    if (!PIN_RE.test(p)) { setMsg("PIN must be 4–8 digits.", "err"); return null; }
+    return { u, p };
+  }
+
+  async function createAccount() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Creating account…", "busy");
+    const r = await api("/api/auth/signup", { method: "POST",
+      body: JSON.stringify({ username: v.u, pin: v.p, avatar: chosenAvatar, avatarColor: DEFAULT_COLOR }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 409) { setMsg("Username taken — log in or pick another.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Check your username and PIN.", "err"); busy(false); return; }
+    me = await r.json(); setMsg("Welcome, " + me.username + "!", "ok");
+    finishAuth();
+  }
+
+  async function login() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Logging in…", "busy");
+    const r = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username: v.u, pin: v.p }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 429) { setMsg("Too many tries — wait a few minutes.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Wrong username or PIN.", "err"); busy(false); return; }
+    me = await r.json();
+    finishAuth();
+  }
+
+  function finishAuth() {
+    busy(false); uEl.value = ""; pEl.value = "";
+    renderAuthed(); refreshBoard();
+  }
+
+  async function logout() {
+    await api("/api/auth/logout", { method: "POST" });
+    me = null; setMsg("", ""); renderAuthed(); refreshBoard();
+  }
+
+  loginBtn.onclick = login;
+  createBtn.onclick = createAccount;
+  el("logout").onclick = logout;
+  uEl.addEventListener("keydown", (e) => { if (e.key === "Enter") pEl.focus(); });
+  pEl.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
+  async function submit(score) {
+    if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) localStorage.setItem(LS_BEST, String(score));
+    if (!me) { best = Number(localStorage.getItem(LS_BEST) || 0) || 0; showBest(); return; }
+    const r = await api("/api/scores", { method: "POST", body: JSON.stringify({ game: GAME, score: score }) });
+    if (r && r.ok) { const j = await r.json(); best = j.best; showBest(); }
+    refreshBoard();
+  }
+
+  async function refreshBoard() {
+    const r = await api("/api/leaderboard?game=" + GAME + "&limit=10");
+    if (!r || !r.ok) return;
+    const top = (await r.json()).top || [];
+    if (!top.length) { rowsEl.innerHTML = '<li class="empty">No scores yet — be the first!</li>'; return; }
+    rowsEl.innerHTML = top.map(function (row) {
+      const mine = me && row.username === me.username ? ' class="me"' : "";
+      return "<li" + mine + '><span class="rk">' + row.rank + '</span><span class="nm">' +
+        escapeHtml(row.username) + '</span><span class="sc">' + row.score + "</span></li>";
+    }).join("");
+    if (me) {
+      const mineRow = top.find((r2) => r2.username === me.username);
+      if (mineRow && mineRow.score > best) { best = mineRow.score; showBest(); }
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  // ========================== SOUND ==========================
+  let actx = null;
+  function initAudio() {
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+    if (actx && actx.state === "suspended") actx.resume();
+  }
+  function tone(freq, dur, type, vol) {
+    if (!actx) return;
+    const t = actx.currentTime;
+    const osc = actx.createOscillator(), gain = actx.createGain();
+    osc.type = type || "square";
+    osc.frequency.setValueAtTime(freq, t);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(vol || 0.18, t + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.08));
+    osc.connect(gain).connect(actx.destination);
+    osc.start(t); osc.stop(t + (dur || 0.08) + 0.02);
+  }
+  function sndHit() { tone(280 + Math.min(score, 40) * 14, 0.09, "square", 0.2); } // pitch rises with rally
+  function sndOpp() { tone(440, 0.06, "triangle", 0.13); }
+  function sndWall() { tone(180, 0.05, "sine", 0.12); }
+  function sndNet() { tone(150, 0.18, "sawtooth", 0.22); setTimeout(() => tone(90, 0.22, "sawtooth", 0.18), 90); }
+  function sndOver() {
+    if (!actx) return;
+    tone(300, 0.18, "sawtooth", 0.2);
+    setTimeout(() => tone(200, 0.22, "sawtooth", 0.2), 110);
+    setTimeout(() => tone(120, 0.34, "sawtooth", 0.2), 240);
+  }
+
+  // ========================== GAME ==========================
+  const canvas = el("game");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height; // 520 x 720
+  const SIDE = 22;                 // inner court walls
+  const NET_Y = H / 2, NET_H = 18;
+  const NET_FAIL = 0.9;            // hit beyond this on the racket → clips the net
+  const BASE = 6.2;
+
+  const player = { x: W / 2, y: H - 60, w: 96, h: 14, vx: 0, targetX: W / 2 };
+  const opp = { x: W / 2, y: 60, w: 96, h: 14 };
+  let ball, score, state, particles, deathReason, shake;
+  // state: "ready" | "playing" | "dead"
+  let pointerX = null;
+  const keys = {};
+
+  function clampPaddle(x, w) { return Math.max(SIDE + w / 2, Math.min(W - SIDE - w / 2, x)); }
+
+  function serve(toPlayer) {
+    const a = Math.random() * 0.5 - 0.25;
+    ball = {
+      x: W / 2, y: H / 2, r: 9,
+      vx: Math.sin(a) * BASE,
+      vy: (toPlayer ? 1 : -1) * Math.cos(a) * BASE,
+      trail: [], fromPlayer: false, netRisk: 0, crossedNet: true,
+    };
+  }
+
+  function reset() {
+    player.x = W / 2; player.targetX = W / 2; player.w = 96; player.vx = 0;
+    opp.x = W / 2;
+    score = 0; particles = []; shake = 0; deathReason = null; state = "ready";
+    serve(true);
+  }
+
+  function startOrRestart() {
+    initAudio();
+    if (state === "ready") state = "playing";
+    else if (state === "dead") { reset(); state = "playing"; }
+  }
+
+  function spawn(x, y, color, n) {
+    for (let i = 0; i < (n || 12); i++) {
+      const a = Math.random() * Math.PI * 2, s = Math.random() * 3.5 + 1;
+      particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, color });
+    }
+  }
+
+  function speedScale() { return 1 + Math.min(score * 0.035, 1.2); }
+
+  function die(reason) {
+    if (state !== "playing") return;
+    state = "dead"; deathReason = reason;
+    if (reason === "net") sndNet(); else sndOver();
+    shake = reason === "net" ? 14 : 14;
+    submit(score);
+  }
+
+  function update() {
+    // paddle tracks input even when idle, so the court feels alive
+    let kdir = 0;
+    if (keys["arrowleft"] || keys["a"]) kdir -= 1;
+    if (keys["arrowright"] || keys["d"]) kdir += 1;
+    if (kdir !== 0) player.targetX += kdir * 9;
+    if (pointerX !== null) player.targetX = pointerX;
+    player.targetX = clampPaddle(player.targetX, player.w);
+    const prevX = player.x;
+    player.x += (player.targetX - player.x) * 0.4;
+    player.vx = player.x - prevX;
+
+    if (state !== "playing") { if (shake > 0.5) shake *= 0.85; return; }
+
+    // opponent AI — tracks the ball, imperfectly so it stays beatable
+    const ease = 0.08 + Math.min(score * 0.004, 0.07);
+    opp.x += (clampPaddle(ball.x + Math.sin(score * 1.3) * 18, opp.w) - opp.x) * ease;
+
+    const ss = speedScale();
+    ball.x += ball.vx * ss;
+    ball.y += ball.vy * ss;
+
+    ball.trail.push({ x: ball.x, y: ball.y });
+    if (ball.trail.length > 10) ball.trail.shift();
+
+    // NET — when the player's return reaches mid-court, see if it cleared
+    if (ball.fromPlayer && !ball.crossedNet && ball.y <= NET_Y) {
+      ball.crossedNet = true;
+      if (ball.netRisk > NET_FAIL) {
+        ball.x = clampPaddle(ball.x, 0); ball.y = NET_Y; ball.vx = 0; ball.vy = 0;
+        spawn(ball.x, NET_Y, "#ffffff", 10); spawn(ball.x, NET_Y, "#ff5b5b", 10);
+        die("net"); return;
+      } else {
+        score++;
+        if (score > best) { best = score; showBest(); }
+        player.w = Math.max(64, 96 - score * 0.4); // racket shrinks as the rally grows
+      }
+    }
+
+    // side walls
+    if (ball.x - ball.r < SIDE) { ball.x = SIDE + ball.r; ball.vx = Math.abs(ball.vx); spawn(ball.x, ball.y, "#cfe8d8", 5); sndWall(); }
+    if (ball.x + ball.r > W - SIDE) { ball.x = W - SIDE - ball.r; ball.vx = -Math.abs(ball.vx); spawn(ball.x, ball.y, "#cfe8d8", 5); sndWall(); }
+
+    // player return
+    if (ball.vy > 0 && ball.y + ball.r >= player.y - player.h / 2 && ball.y - ball.r <= player.y + player.h / 2 &&
+        ball.x >= player.x - player.w / 2 - ball.r && ball.x <= player.x + player.w / 2 + ball.r) {
+      ball.y = player.y - player.h / 2 - ball.r;
+      const hit = (ball.x - player.x) / (player.w / 2);
+      ball.vy = -BASE;
+      ball.vx = hit * 5.0 + player.vx * 0.35;
+      ball.fromPlayer = true;
+      ball.netRisk = Math.abs(hit);
+      ball.crossedNet = false;
+      spawn(ball.x, ball.y, ball.netRisk > NET_FAIL ? "#ff5b5b" : "#ffd54a");
+      shake = 6; sndHit();
+    }
+
+    // opponent return
+    if (ball.vy < 0 && ball.y - ball.r <= opp.y + opp.h / 2 && ball.y + ball.r >= opp.y - opp.h / 2 &&
+        ball.x >= opp.x - opp.w / 2 - ball.r && ball.x <= opp.x + opp.w / 2 + ball.r) {
+      ball.y = opp.y + opp.h / 2 + ball.r;
+      const hit = (ball.x - opp.x) / (opp.w / 2);
+      ball.vy = BASE;
+      ball.vx = hit * 4.6;
+      ball.fromPlayer = false; ball.crossedNet = true;
+      spawn(ball.x, ball.y, "#7fd0ff");
+      sndOpp();
+    }
+
+    // you missed — ball went past your baseline
+    if (ball.y - ball.r > H) { spawn(ball.x, H - 6, "#ff5b5b", 16); die("miss"); return; }
+    // opponent missed — bounce it back off the top so your rally keeps going
+    if (ball.y + ball.r < 0) { ball.y = 2; ball.vy = Math.abs(ball.vy); }
+
+    particles.forEach((p) => { p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.life -= 0.03; });
+    particles = particles.filter((p) => p.life > 0);
+    if (shake > 0.5) shake *= 0.85;
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function drawCourt() {
+    ctx.fillStyle = "#2e7d4f"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(255,255,255,0.025)";
+    for (let i = 0; i < H; i += 80) ctx.fillRect(0, i, W, 40);
+
+    ctx.strokeStyle = "rgba(243,243,243,0.85)"; ctx.lineWidth = 3;
+    ctx.strokeRect(SIDE, 18, W - SIDE * 2, H - 36);
+    ctx.beginPath(); ctx.moveTo(W / 2, NET_Y - 110); ctx.lineTo(W / 2, NET_Y + 110); ctx.stroke();
+
+    // net — a real obstacle: mesh, white tape, posts
+    const nx0 = SIDE - 6, nx1 = W - SIDE + 6;
+    ctx.fillStyle = "rgba(20,30,24,0.30)";
+    ctx.fillRect(nx0, NET_Y - NET_H / 2, nx1 - nx0, NET_H);
+    ctx.strokeStyle = "rgba(255,255,255,0.22)"; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = nx0; x <= nx1; x += 7) { ctx.moveTo(x, NET_Y - NET_H / 2); ctx.lineTo(x, NET_Y + NET_H / 2); }
+    for (let y = NET_Y - NET_H / 2; y <= NET_Y + NET_H / 2; y += 6) { ctx.moveTo(nx0, y); ctx.lineTo(nx1, y); }
+    ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,0.92)"; ctx.fillRect(nx0, NET_Y - NET_H / 2 - 2, nx1 - nx0, 4);
+    ctx.fillStyle = "#dfe7e2";
+    ctx.fillRect(nx0 - 3, NET_Y - NET_H / 2 - 4, 5, NET_H + 8);
+    ctx.fillRect(nx1 - 2, NET_Y - NET_H / 2 - 4, 5, NET_H + 8);
+  }
+
+  function drawPaddle(p, color) {
+    ctx.fillStyle = color;
+    roundRect(p.x - p.w / 2, p.y - p.h / 2, p.w, p.h, 7); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.25)";
+    roundRect(p.x - p.w / 2, p.y - p.h / 2, p.w, 4, 4); ctx.fill();
+  }
+
+  function draw() {
+    ctx.save();
+    if (shake > 0.5) ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
+
+    drawCourt();
+
+    // rally count, big and faint in the player's half
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(255,255,255,0.16)";
+    ctx.font = "700 120px system-ui, sans-serif";
+    ctx.fillText(score, W / 2, H * 0.72);
+
+    // ball trail
+    for (let i = 0; i < ball.trail.length; i++) {
+      const t = ball.trail[i];
+      ctx.globalAlpha = (i / ball.trail.length) * 0.35;
+      ctx.fillStyle = "#d7f205";
+      ctx.beginPath(); ctx.arc(t.x, t.y, ball.r * (i / ball.trail.length), 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    drawPaddle(opp, "#5aa0ff");
+    drawPaddle(player, "#ffe27a");
+
+    // ball — glow turns red while a too-edgy shot is heading for the net
+    const risky = ball.fromPlayer && !ball.crossedNet && ball.netRisk > NET_FAIL;
+    ctx.save();
+    ctx.shadowColor = risky ? "rgba(255,91,91,0.85)" : "rgba(215,242,5,0.6)";
+    ctx.shadowBlur = risky ? 20 : 14;
+    ctx.fillStyle = risky ? "#ff7a5b" : "#d7f205";
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    particles.forEach((p) => { ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color; ctx.fillRect(p.x - 2, p.y - 2, 4, 4); });
+    ctx.globalAlpha = 1;
+
+    if (state === "ready") banner("TENNIS RALLY", "Move: mouse · touch · ← → / A D", "Tap or press Space to serve");
+    else if (state === "dead") {
+      const title = deathReason === "net" ? "Into the net!" : (score > 0 && score >= best ? "New best!" : "Rally over");
+      const sub = deathReason === "net" ? "Hit nearer the racket's center to clear it." : "Tap or press Space to play again";
+      banner(title, "Rally: " + score + "   ·   Best: " + Math.max(best, score), sub);
+    }
+
+    ctx.restore();
+  }
+
+  function banner(title, line, sub) {
+    ctx.fillStyle = "rgba(6,18,13,0.62)"; ctx.fillRect(0, 0, W, H);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffd54a"; ctx.font = "800 40px system-ui, sans-serif";
+    ctx.fillText(title, W / 2, H / 2 - 24);
+    ctx.fillStyle = "#e8f8f5"; ctx.font = "19px system-ui, sans-serif";
+    ctx.fillText(line, W / 2, H / 2 + 12);
+    ctx.fillStyle = "#b8d8cf"; ctx.font = "16px system-ui, sans-serif";
+    ctx.fillText(sub, W / 2, H / 2 + 48);
+  }
+
+  function loop() { update(); draw(); requestAnimationFrame(loop); }
+
+  // input — pointer moves the racket along X; tap/click serves or retries
+  function localX(clientX) {
+    const rect = canvas.getBoundingClientRect();
+    return (clientX - rect.left) * (W / rect.width);
+  }
+  canvas.addEventListener("mousemove", (e) => { pointerX = localX(e.clientX); });
+  canvas.addEventListener("mousedown", (e) => { e.preventDefault(); pointerX = localX(e.clientX); startOrRestart(); });
+  canvas.addEventListener("touchmove", (e) => { e.preventDefault(); pointerX = localX(e.touches[0].clientX); }, { passive: false });
+  canvas.addEventListener("touchstart", (e) => { e.preventDefault(); pointerX = localX(e.touches[0].clientX); startOrRestart(); }, { passive: false });
+  window.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    keys[k] = true;
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); startOrRestart(); }
+  });
+  window.addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; });
+
+  reset();
+  loop();
+  loadMe();
+  refreshBoard();
+})();
+</script>
+</body>
+</html>
