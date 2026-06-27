@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Bounce</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }   /* beat the #chip/#account display rules */
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 50% 25%, #0d2620 0%, #07120f 70%);
+    color: #e8f8f5;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 14px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+  }
+  .col { width: min(94vw, 560px); }
+  #top { display: flex; align-items: center; justify-content: space-between; }
+  #chip { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  #chip .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #2ee6a6; }
+  #chip b { color: #2ee6a6; }
+  #logout { background: #1b332b; color: #b8d8cf; border: 0; border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+  #bestChip { font-size: 14px; color: #b8d8cf; }
+  #bestChip b { color: #ffd166; font-size: 16px; }
+  #wrap { position: relative; width: min(94vw, 560px); }
+  canvas {
+    display: block; width: 100%; height: auto; aspect-ratio: 800 / 500;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(46,230,166,0.35); border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45), inset 0 0 60px rgba(0,0,0,0.4);
+    touch-action: none; cursor: pointer;
+  }
+  /* account form */
+  #account { background: #102a22; border-radius: 12px; padding: 14px; }
+  #account .atitle { font-size: 14px; font-weight: 600; color: #7fe9c4; margin-bottom: 10px; }
+  #account .arow { display: flex; gap: 8px; margin-bottom: 8px; }
+  #account input { flex: 1; min-width: 0; padding: 10px 11px; font-size: 15px; border: 1px solid #1e4035; border-radius: 9px; background: #07120f; color: #fff; }
+  #account input::placeholder { color: #5a7d72; }
+  #account input:focus { outline: none; border-color: #2ee6a6; }
+  #avatars { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 10px; }
+  #avatars button { width: 30px; height: 30px; border: 2px solid transparent; border-radius: 8px; background: #07120f; font-size: 17px; cursor: pointer; line-height: 1; padding: 0; }
+  #avatars button.sel { border-color: #2ee6a6; background: #16352b; }
+  #account .btns button { flex: 1; font: inherit; font-size: 15px; border: 0; border-radius: 9px; padding: 11px; cursor: pointer; }
+  #account .btns .login { background: #1b332b; color: #d4ece4; }
+  #account .btns .create { background: #2ee6a6; color: #07120f; font-weight: 600; }
+  #account button:active { transform: scale(0.98); }
+  #amsg { min-height: 17px; font-size: 13px; margin-top: 8px; }
+  #amsg.err { color: #ff8a7a; } #amsg.ok { color: #8fe388; } #amsg.busy { color: #94a3b8; }
+  .guestnote { font-size: 12px; color: #5a7d72; margin-top: 8px; }
+  /* leaderboard */
+  #board { background: #102a22; border-radius: 12px; padding: 12px 14px; }
+  #board h2 { margin: 0 0 8px; font-size: 14px; color: #7fe9c4; font-weight: 600; display: flex; justify-content: space-between; }
+  #board ol { list-style: none; margin: 0; padding: 0; }
+  #board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
+  #board li:first-child { border-top: 0; }
+  #board .rk { width: 22px; color: #5a7d72; }
+  #board .nm { flex: 1; }
+  #board .sc { color: #ffd166; font-weight: 700; }
+  #board li.me { color: #fff; }
+  #board li.me .nm::after { content: " (you)"; color: #7fe9c4; font-size: 12px; }
+  #board .empty { color: #5a7d72; font-size: 13px; padding: 4px 0; }
+</style>
+</head>
+<body>
+  <div id="top" class="col">
+    <div id="chip" hidden><span class="av" id="avatar">🦊</span><span id="name"></span><button id="logout">Log out</button></div>
+    <div id="bestChip">Best <b id="best">0</b></div>
+  </div>
+
+  <div id="wrap" class="col">
+    <canvas id="game" width="800" height="500"></canvas>
+  </div>
+
+  <div id="account" class="col">
+    <div class="atitle">Create an account to join the leaderboard</div>
+    <div class="arow">
+      <input id="u" type="text" maxlength="20" placeholder="Username" autocomplete="off" autocapitalize="off" />
+      <input id="p" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 digits)" autocomplete="off" />
+    </div>
+    <div id="avatars"></div>
+    <div class="arow btns">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="create" id="createBtn">Create account</button>
+    </div>
+    <div id="amsg"></div>
+    <div class="guestnote">…or just play as a guest — your best is saved on this device.</div>
+  </div>
+
+  <div id="board" class="col">
+    <h2><span>Global leaderboard</span><span style="color:#2ee6a6">● live</span></h2>
+    <ol id="rows"><li class="empty">Loading…</li></ol>
+  </div>
+
+<script>
+(function () {
+  const GAME = "bounce";
+  const LS_BEST = "bounce:best";
+  // Mirrors the server allowlist (avatars.ts) — off-list values collapse to default.
+  const AVATARS = ["🦊","🐼","🐯","🦁","🐸","🐵","🐙","🦄","🐶","🐱","🐧","🐝","🦖","🐢","🦉","🐳"];
+  const DEFAULT_COLOR = "#2ee6a6";
+  const USER_RE = /^[a-z0-9_-]{3,20}$/;
+  const PIN_RE = /^[0-9]{4,8}$/;
+
+  let me = null; // { username, avatar, avatarColor }
+  let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+  let chosenAvatar = AVATARS[0];
+
+  const el = (id) => document.getElementById(id);
+  const accountEl = el("account"), chipEl = el("chip"), avatarEl = el("avatar"), nameEl = el("name");
+  const bestEl = el("best"), rowsEl = el("rows"), msgEl = el("amsg");
+  const uEl = el("u"), pEl = el("p"), loginBtn = el("loginBtn"), createBtn = el("createBtn");
+
+  function showBest() { bestEl.textContent = best; }
+  function setMsg(t, k) { msgEl.textContent = t || ""; msgEl.className = k || ""; }
+  function busy(on) { loginBtn.disabled = on; createBtn.disabled = on; }
+  showBest();
+
+  // avatar picker
+  AVATARS.forEach(function (a, i) {
+    const b = document.createElement("button");
+    b.textContent = a; if (i === 0) b.className = "sel";
+    b.onclick = function () {
+      chosenAvatar = a;
+      [...el("avatars").children].forEach((c) => c.classList.remove("sel"));
+      b.classList.add("sel");
+    };
+    el("avatars").appendChild(b);
+  });
+
+  async function api(path, opts) {
+    try {
+      return await fetch(path, {
+        credentials: "same-origin",
+        headers: opts && opts.body ? { "content-type": "application/json" } : undefined,
+        ...opts,
+      });
+    } catch (e) { return null; }
+  }
+
+  function renderAuthed() {
+    if (me) {
+      accountEl.hidden = true; chipEl.hidden = false;
+      avatarEl.textContent = me.avatar || "🦊";
+      avatarEl.style.background = me.avatarColor || DEFAULT_COLOR;
+      nameEl.innerHTML = "Playing as <b>" + escapeHtml(me.username) + "</b>";
+    } else {
+      accountEl.hidden = false; chipEl.hidden = true;
+    }
+  }
+
+  async function loadMe() {
+    const r = await api("/api/me");
+    me = r && r.ok ? await r.json() : null;
+    renderAuthed();
+  }
+
+  function validate() {
+    const u = uEl.value.trim().toLowerCase(), p = pEl.value.trim();
+    if (!USER_RE.test(u)) { setMsg("Username: 3–20 letters, numbers, - or _.", "err"); return null; }
+    if (!PIN_RE.test(p)) { setMsg("PIN must be 4–8 digits.", "err"); return null; }
+    return { u, p };
+  }
+
+  async function createAccount() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Creating account…", "busy");
+    const r = await api("/api/auth/signup", { method: "POST",
+      body: JSON.stringify({ username: v.u, pin: v.p, avatar: chosenAvatar, avatarColor: DEFAULT_COLOR }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 409) { setMsg("Username taken — log in or pick another.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Check your username and PIN.", "err"); busy(false); return; }
+    me = await r.json(); setMsg("Welcome, " + me.username + "!", "ok");
+    finishAuth();
+  }
+
+  async function login() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Logging in…", "busy");
+    const r = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username: v.u, pin: v.p }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 429) { setMsg("Too many tries — wait a few minutes.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Wrong username or PIN.", "err"); busy(false); return; }
+    me = await r.json();
+    finishAuth();
+  }
+
+  function finishAuth() {
+    busy(false); uEl.value = ""; pEl.value = "";
+    renderAuthed(); refreshBoard();
+  }
+
+  async function logout() {
+    await api("/api/auth/logout", { method: "POST" });
+    me = null; setMsg("", ""); renderAuthed(); refreshBoard();
+  }
+
+  loginBtn.onclick = login;
+  createBtn.onclick = createAccount;
+  el("logout").onclick = logout;
+  uEl.addEventListener("keydown", (e) => { if (e.key === "Enter") pEl.focus(); });
+  pEl.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
+  async function submit(score) {
+    if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) localStorage.setItem(LS_BEST, String(score));
+    if (!me) { best = Number(localStorage.getItem(LS_BEST) || 0) || 0; showBest(); return; }
+    const r = await api("/api/scores", { method: "POST", body: JSON.stringify({ game: GAME, score: score }) });
+    if (r && r.ok) { const j = await r.json(); best = j.best; showBest(); }
+    refreshBoard();
+  }
+
+  async function refreshBoard() {
+    const r = await api("/api/leaderboard?game=" + GAME + "&limit=10");
+    if (!r || !r.ok) return;
+    const top = (await r.json()).top || [];
+    if (!top.length) { rowsEl.innerHTML = '<li class="empty">No scores yet — be the first!</li>'; return; }
+    rowsEl.innerHTML = top.map(function (row) {
+      const mine = me && row.username === me.username ? ' class="me"' : "";
+      return "<li" + mine + '><span class="rk">' + row.rank + '</span><span class="nm">' +
+        escapeHtml(row.username) + '</span><span class="sc">' + row.score + "</span></li>";
+    }).join("");
+    if (me) {
+      const mineRow = top.find((r2) => r2.username === me.username);
+      if (mineRow && mineRow.score > best) { best = mineRow.score; showBest(); }
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  // ========================== SOUND ==========================
+  let actx = null;
+  function initAudio() {
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+    if (actx && actx.state === "suspended") actx.resume();
+  }
+  function tone(freq, dur, type, vol) {
+    if (!actx) return;
+    const t = actx.currentTime;
+    const osc = actx.createOscillator(), gain = actx.createGain();
+    osc.type = type || "square";
+    osc.frequency.setValueAtTime(freq, t);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(vol || 0.18, t + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.08));
+    osc.connect(gain).connect(actx.destination);
+    osc.start(t); osc.stop(t + (dur || 0.08) + 0.02);
+  }
+  function sndReturn() {
+    const ratio = (ball.speed - START_SPEED) / Math.max(0.001, MAX_SPEED - START_SPEED); // 0..1
+    tone(280 + ratio * 720, 0.09, "square", 0.2);  // pitch rises with speed
+  }
+  function sndWall() { tone(180, 0.05, "sine", 0.12); }
+  function sndOver() {
+    if (!actx) return;
+    tone(300, 0.18, "sawtooth", 0.2);
+    setTimeout(() => tone(200, 0.22, "sawtooth", 0.2), 110);
+    setTimeout(() => tone(120, 0.34, "sawtooth", 0.2), 240);
+  }
+
+  // ========================== GAME ==========================
+  const canvas = el("game");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const PADDLE_W = 14, PADDLE_H = 90, MARGIN = 24;
+  const START_SPEED = 6.5, RAMP = 0.30, MAX_SPEED = 14;
+
+  let player, ball, score, state, particles; // state: "ready" | "playing" | "dead"
+  let mouseY = null;
+  const keys = {};
+
+  function reset() {
+    player = { x: MARGIN, y: H / 2 - PADDLE_H / 2 };
+    score = 0; particles = []; state = "ready";
+    serveBall();
+  }
+  function serveBall() {
+    const angle = (Math.random() * 0.5 - 0.25);
+    ball = { x: W / 2, y: H / 2, vx: -Math.cos(angle) * START_SPEED, vy: Math.sin(angle) * START_SPEED, r: 8, speed: START_SPEED };
+  }
+  function spawnParticles(x, y, color, n) {
+    for (let i = 0; i < (n || 14); i++) {
+      const a = Math.random() * Math.PI * 2, s = Math.random() * 4 + 1;
+      particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, color });
+    }
+  }
+  function startOrRestart() {
+    initAudio();
+    if (state === "ready") { state = "playing"; }
+    else if (state === "dead") { reset(); state = "playing"; }
+  }
+  function bounce() {
+    const rel = (ball.y - (player.y + PADDLE_H / 2)) / (PADDLE_H / 2);
+    const angle = rel * (Math.PI * 0.42);
+    ball.speed = Math.min(ball.speed + RAMP, MAX_SPEED);
+    ball.vx = Math.cos(angle) * ball.speed;
+    ball.vy = Math.sin(angle) * ball.speed;
+    ball.x = player.x + PADDLE_W + ball.r;
+    spawnParticles(ball.x, ball.y, "#2ee6a6");
+    sndReturn();
+  }
+  function die() { state = "dead"; sndOver(); submit(score); }
+
+  function update() {
+    // paddle follows input even on the ready/dead screens so it feels alive
+    if (keys["w"] || keys["arrowup"]) player.y -= 8;
+    if (keys["s"] || keys["arrowdown"]) player.y += 8;
+    if (mouseY !== null) player.y += (mouseY - (player.y + PADDLE_H / 2)) * 0.3;
+    player.y = Math.max(0, Math.min(H - PADDLE_H, player.y));
+
+    if (state !== "playing") return;
+
+    ball.x += ball.vx; ball.y += ball.vy;
+    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.vy *= -1; spawnParticles(ball.x, 0, "#2ee6a6", 6); sndWall(); }
+    if (ball.y + ball.r > H) { ball.y = H - ball.r; ball.vy *= -1; spawnParticles(ball.x, H, "#2ee6a6", 6); sndWall(); }
+    if (ball.x + ball.r > W) { ball.x = W - ball.r; ball.vx *= -1; spawnParticles(W, ball.y, "#ffd166", 6); sndWall(); }
+
+    if (ball.vx < 0 && ball.x - ball.r < player.x + PADDLE_W && ball.x - ball.r > player.x - 4 &&
+        ball.y > player.y && ball.y < player.y + PADDLE_H) {
+      bounce();
+      score++;
+      if (score > best) { best = score; showBest(); }
+    }
+    if (ball.x < -20) { die(); return; }
+
+    particles.forEach((p) => { p.x += p.vx; p.y += p.vy; p.life -= 0.04; });
+    particles = particles.filter((p) => p.life > 0);
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // danger zone behind the paddle
+    const grad = ctx.createLinearGradient(0, 0, 90, 0);
+    grad.addColorStop(0, "rgba(255,93,115,0.18)"); grad.addColorStop(1, "rgba(255,93,115,0)");
+    ctx.fillStyle = grad; ctx.fillRect(0, 0, 90, H);
+
+    // score
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(255,209,102,0.95)"; ctx.font = '60px system-ui, sans-serif';
+    ctx.fillText(score, W / 2, 76);
+
+    particles.forEach((p) => { ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color; ctx.fillRect(p.x - 2, p.y - 2, 4, 4); });
+    ctx.globalAlpha = 1;
+
+    // paddle
+    ctx.fillStyle = "#2ee6a6"; ctx.shadowColor = "#2ee6a6"; ctx.shadowBlur = 14;
+    roundRect(player.x, player.y, PADDLE_W, PADDLE_H, 6); ctx.fill(); ctx.shadowBlur = 0;
+
+    // ball
+    ctx.fillStyle = "#fff"; ctx.shadowColor = "#ffd166"; ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+
+    if (state === "ready") banner("BOUNCE", "Move with mouse / touch / W·S — tap to start");
+    else if (state === "dead") banner(score > 0 && score >= best ? "New best!" : "Game over", "Tap or press Space to retry");
+  }
+  function banner(title, sub) {
+    ctx.fillStyle = "rgba(7,18,15,0.6)"; ctx.fillRect(0, 0, W, H);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#2ee6a6"; ctx.font = "bold 40px system-ui, sans-serif"; ctx.fillText(title, W / 2, H / 2 - 26);
+    if (state === "dead") {
+      ctx.fillStyle = "#e8f8f5"; ctx.font = "20px system-ui, sans-serif";
+      ctx.fillText("This run: " + score + "   ·   Best: " + Math.max(best, score), W / 2, H / 2 + 14);
+    }
+    ctx.fillStyle = "#b8d8cf"; ctx.font = "17px system-ui, sans-serif"; ctx.fillText(sub, W / 2, H / 2 + 54);
+  }
+  function loop() { update(); draw(); requestAnimationFrame(loop); }
+
+  // input — pointer moves the paddle; tap/click starts or retries
+  function localY(clientY) {
+    const rect = canvas.getBoundingClientRect();
+    return (clientY - rect.top) * (H / rect.height);
+  }
+  canvas.addEventListener("mousemove", (e) => { mouseY = localY(e.clientY); });
+  canvas.addEventListener("mousedown", (e) => { e.preventDefault(); startOrRestart(); });
+  canvas.addEventListener("touchmove", (e) => { e.preventDefault(); mouseY = localY(e.touches[0].clientY); }, { passive: false });
+  canvas.addEventListener("touchstart", (e) => { e.preventDefault(); mouseY = localY(e.touches[0].clientY); startOrRestart(); }, { passive: false });
+  window.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    keys[k] = true;
+    if (e.key === " " || e.key === "Enter" || e.key === "ArrowUp") { e.preventDefault(); startOrRestart(); }
+  });
+  window.addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; });
+
+  reset();
+  loop();
+  loadMe();
+  refreshBoard();
+})();
+</script>
+</body>
+</html>
