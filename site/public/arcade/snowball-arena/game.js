@@ -300,27 +300,31 @@
   }
 
   function endMatch(youWon, customMsg) {
+    if (!running && !els.overlay.hidden) return; // already ended — don't double-fire
     running = false;
     els.roundMsg.hidden = true;
-    if (online) submitScore(frags[myIndex] || 0);
+    // Show the end screen FIRST so it always appears, even if something below hiccups.
     const title = customMsg ? "Match over" : (youWon ? "🏆 Victory!" : "💧 Defeated");
-    const sub = customMsg || scoreLine();
+    let sub; try { sub = customMsg || scoreLine(); } catch (_) { sub = ""; }
     const stay = online ? (role === "host" ? "Rematch" : "Wait for host") : "Play again";
     els.card.innerHTML =
       `<h1>${title}</h1><p class="tagline">${sub}</p>` +
       (online && customMsg ? "" : `<button id="againBtn" class="btn">${stay}</button>`) +
       `<button id="menuBtn" class="btn ghost">Back to menu</button>`;
     els.overlay.hidden = false;
-    const again = document.getElementById("againBtn");
-    if (again) again.addEventListener("click", () => {
-      if (!online) startOffline(selMode);
-      else if (role === "host") hostStart();
-      else { els.card.innerHTML = `<h1>Waiting…</h1><p class="tagline">Waiting for the host to start a rematch.</p>` +
-        `<button id="menuBtn" class="btn ghost">Back to menu</button>`;
-        document.getElementById("menuBtn").addEventListener("click", () => { teardownOnline(); showLobby(""); }); }
-    });
-    const menu = document.getElementById("menuBtn");
-    if (menu) menu.addEventListener("click", () => { teardownOnline(); showLobby(""); });
+    try {
+      const again = document.getElementById("againBtn");
+      if (again) again.addEventListener("click", () => {
+        if (!online) startOffline(selMode);
+        else if (role === "host") hostStart();
+        else { els.card.innerHTML = `<h1>Waiting…</h1><p class="tagline">Waiting for the host to start a rematch.</p>` +
+          `<button id="menuBtn" class="btn ghost">Back to menu</button>`;
+          document.getElementById("menuBtn").addEventListener("click", () => { teardownOnline(); showLobby(""); }); }
+      });
+      const menu = document.getElementById("menuBtn");
+      if (menu) menu.addEventListener("click", () => { teardownOnline(); showLobby(""); });
+    } catch (e) { if (window.console && console.error) console.error("[snowball] endMatch wiring", e); }
+    if (online) submitScore(frags[myIndex] || 0); // fire-and-forget, last
   }
 
   function scoreLine() {
@@ -545,12 +549,17 @@
 
   // ------------------------------------------------------------- loop
   function frame(t) {
-    if (!lastT) lastT = t;
-    let dt = t - lastT; lastT = t;
-    if (dt > 100) dt = 100;
-    acc += dt;
-    while (acc >= STEP) { if (running) simulate(); acc -= STEP; }
-    fit(); render();
+    // Never let one bad frame kill the loop (that would look like a freeze).
+    try {
+      if (!lastT) lastT = t;
+      let dt = t - lastT; lastT = t;
+      if (dt > 100) dt = 100;
+      acc += dt;
+      while (acc >= STEP) { if (running) simulate(); acc -= STEP; }
+      fit(); render();
+    } catch (e) {
+      if (window.console && console.error) console.error("[snowball] frame error", e);
+    }
     requestAnimationFrame(frame);
   }
 
@@ -567,6 +576,7 @@
     conn.broadcast({ t: "state", players: sp, balls: sb, frags: frags.slice(), teamScore: teamScore.slice(), events: ev });
   }
   function applySnapshot(msg) {
+   try {
     if (Array.isArray(msg.players)) {
       const arr = [];
       msg.players.forEach((s) => {
@@ -588,6 +598,7 @@
         endMatch(e.team != null ? e.team === myTeam : e.attacker === myIndex);
       }
     });
+   } catch (e) { if (window.console && console.error) console.error("[snowball] applySnapshot error", e); }
   }
 
   // ------------------------------------------------------------- match start
