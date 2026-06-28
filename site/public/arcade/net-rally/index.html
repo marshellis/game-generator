@@ -441,8 +441,8 @@
       net = NetRally.join(code, me.username, {
         onStatus(s) {
           if (s === "connecting") lobbyStatus = "Connecting to your friend…";
-          else if (s === "notfound") return coopError("No game found with code " + code + ". Check it and try again.");
-          else if (s === "error") return coopError("Couldn't reach the matchmaking service. Try again.");
+          else if (s === "notfound") return backToJoin("Couldn't reach your friend with code " + code + ". Make sure they tapped “Host a game” first — then try again.");
+          else if (s === "error") return backToJoin("Couldn't reach the connection service. Give it another go in a moment.");
           if (screen === "connecting") renderMenu();
         },
         onJoin() { net.send({ t: "hello", name: me.username }); }, // host sends start
@@ -456,6 +456,8 @@
       else if (screen !== "over") coopError("Your friend disconnected.");
     }
     function coopError(text) { teardownNet(); mode = null; role = null; state = "menu"; screen = "home"; renderHome(text); }
+    // a failed join drops back to the code box (code kept) so retry is one tap
+    function backToJoin(msg) { teardownNet(); mode = "coop"; role = null; state = "menu"; screen = "joining"; renderJoinInput(msg); }
 
     function handleNet(msg) {
       if (!msg || !msg.t) return;
@@ -609,7 +611,7 @@
         "<button class='big-btn ghost' id='backHome'>Back</button>"
       );
       el("hostBtn").onclick = () => doHost(NetRally.randomCode());
-      el("joinBtn").onclick = () => { screen = "joining"; renderMenu(); };
+      el("joinBtn").onclick = () => { currentCode = null; screen = "joining"; renderMenu(); };
       el("backHome").onclick = goHome;
     }
     function renderHosting() {
@@ -631,7 +633,7 @@
         "<div class='btnrow'><button class='big-btn' id='goJoin'>Join rally</button>" +
         "<button class='big-btn ghost' id='backLobby'>Back</button></div>"
       );
-      const inp = el("codeInput"); inp.focus();
+      const inp = el("codeInput"); if (currentCode) inp.value = currentCode; inp.focus();
       function submit() { const c = NetRally.cleanCode(inp.value); if (c.length < 3) { inp.style.borderColor = "#ff5b5b"; return; } doJoin(c); }
       inp.addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
       el("goJoin").onclick = submit;
