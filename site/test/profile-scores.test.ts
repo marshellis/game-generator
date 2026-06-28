@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Store, UserRecord, CompletionValue, ScoreEntry, Deps } from "../src/lib/profile/types";
-import { signup, submitScore, leaderboard } from "../src/lib/profile/handlers";
-import { MAX_SCORE } from "../src/lib/profile/scores";
+import { signup, submitScore, submitPairScore, leaderboard } from "../src/lib/profile/handlers";
+import { MAX_SCORE, canonicalPair } from "../src/lib/profile/scores";
 
 class FakeStore implements Store {
   users = new Map<string, UserRecord>();
@@ -61,6 +61,59 @@ describe("submitScore", () => {
     for (const bad of [-1, 1.5, Number.NaN, MAX_SCORE + 1, "5", undefined]) {
       expect((await submitScore(t, { game: "flappy", score: bad }, deps)).status).toBe(400);
     }
+  });
+});
+
+describe("submitPairScore", () => {
+  it("requires auth (401)", async () => {
+    expect((await submitPairScore(undefined, { game: "net-rally-duo", score: 5, partner: "bob" }, deps)).status).toBe(401);
+  });
+  it("records a pair score under the canonical key and reports the best", async () => {
+    await tokenFor("bob"); // partner must exist
+    const res = (await submitPairScore(await tokenFor("alice"), { game: "net-rally-duo", score: 9, partner: "bob" }, deps)) as any;
+    expect(res.status).toBe(200);
+    expect(res.json).toMatchObject({ game: "net-rally-duo", pair: "alice&bob", score: 9, best: 9, improved: true });
+  });
+  it("is order-independent — both partners post to the same row", async () => {
+    const ta = await tokenFor("alice");
+    const tb = await tokenFor("bob");
+    await submitPairScore(ta, { game: "net-rally-duo", score: 12, partner: "bob" }, deps);
+    const res = (await submitPairScore(tb, { game: "net-rally-duo", score: 12, partner: "alice" }, deps)) as any;
+    expect(res.json).toMatchObject({ pair: "alice&bob", best: 12, improved: false });
+    expect(canonicalPair("bob", "alice")).toBe("alice&bob");
+  });
+  it("keeps the highest pair score", async () => {
+    await tokenFor("bob");
+    const ta = await tokenFor("alice");
+    await submitPairScore(ta, { game: "net-rally-duo", score: 20, partner: "bob" }, deps);
+    const res = (await submitPairScore(ta, { game: "net-rally-duo", score: 7, partner: "bob" }, deps)) as any;
+    expect(res.json).toMatchObject({ best: 20, improved: false });
+  });
+  it("rejects a non-coop or unknown game (400)", async () => {
+    await tokenFor("bob");
+    const t = await tokenFor("alice");
+    expect((await submitPairScore(t, { game: "net-rally", score: 5, partner: "bob" }, deps)).status).toBe(400);
+    expect((await submitPairScore(t, { game: "nope", score: 5, partner: "bob" }, deps)).status).toBe(400);
+  });
+  it("rejects invalid scores (400)", async () => {
+    await tokenFor("bob");
+    const t = await tokenFor("alice");
+    for (const bad of [-1, 1.5, Number.NaN, MAX_SCORE + 1, "5", undefined]) {
+      expect((await submitPairScore(t, { game: "net-rally-duo", score: bad, partner: "bob" }, deps)).status).toBe(400);
+    }
+  });
+  it("rejects a partner that doesn't exist (400)", async () => {
+    expect((await submitPairScore(await tokenFor("alice"), { game: "net-rally-duo", score: 5, partner: "ghost" }, deps)).status).toBe(400);
+  });
+  it("rejects pairing with yourself (400)", async () => {
+    expect((await submitPairScore(await tokenFor("alice"), { game: "net-rally-duo", score: 5, partner: "alice" }, deps)).status).toBe(400);
+  });
+  it("surfaces on the duo leaderboard as the pair key", async () => {
+    await tokenFor("bob");
+    await submitPairScore(await tokenFor("alice"), { game: "net-rally-duo", score: 15, partner: "bob" }, deps);
+    const res = (await leaderboard({ game: "net-rally-duo" }, deps)) as any;
+    expect(res.status).toBe(200);
+    expect(res.json.top).toEqual([{ rank: 1, username: "alice&bob", score: 15 }]);
   });
 });
 

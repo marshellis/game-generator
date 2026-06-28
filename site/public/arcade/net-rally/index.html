@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Net Rally</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 50% 18%, #11314e 0%, #081320 70%);
+    color: #eaf4ff;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 14px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+  }
+  .col { width: min(94vw, 720px); }
+  #top { display: flex; align-items: center; justify-content: space-between; }
+  #chip { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  #chip .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #ffd54a; }
+  #chip b { color: #ffd54a; }
+  #logout { background: #1b2f44; color: #b8cfe0; border: 0; border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+  #bestChip { font-size: 14px; color: #b8cfe0; }
+  #bestChip b { color: #ffd54a; font-size: 16px; }
+
+  #wrap { position: relative; width: min(94vw, 720px); }
+  canvas {
+    display: block; width: 100%; height: auto; aspect-ratio: 960 / 540;
+    background: #0d2236;
+    border: 2px solid rgba(255,213,74,0.32); border-radius: 12px;
+    box-shadow: 0 12px 34px rgba(0,0,0,0.5), inset 0 0 60px rgba(0,0,0,0.35);
+    touch-action: none; cursor: pointer;
+  }
+
+  /* overlay menus on top of the canvas */
+  #menu {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px; text-align: center;
+    background: rgba(6,14,24,0.74); border-radius: 12px; padding: 18px; backdrop-filter: blur(2px);
+  }
+  #menu h1 { margin: 0; font-size: clamp(28px, 6vw, 46px); font-weight: 800; letter-spacing: -1px; }
+  #menu h1 span { color: #ffd54a; }
+  #menu p { margin: 0; font-size: 14px; opacity: .85; max-width: 460px; line-height: 1.5; }
+  #menu .big { font-size: clamp(48px, 12vw, 76px); font-weight: 800; color: #d7f205; line-height: 1; }
+  #menu .sub { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; opacity: .7; }
+  .btnrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  button.big-btn {
+    padding: 13px 26px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
+    color: #08131f; background: #ffd54a; border: 0; border-radius: 30px;
+    box-shadow: 0 8px 18px rgba(255,213,74,.3);
+  }
+  button.big-btn.alt { background: #2ee6a6; box-shadow: 0 8px 18px rgba(46,230,166,.3); }
+  button.big-btn.ghost { background: #1b2f44; color: #eaf4ff; box-shadow: none; }
+  button.big-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  button.big-btn:active:not(:disabled) { transform: scale(.97); }
+  .code-box { font-size: 40px; font-weight: 800; letter-spacing: 8px; color: #ffd54a; background: #08131f; border-radius: 10px; padding: 8px 16px; }
+  #codeInput {
+    width: 160px; text-align: center; text-transform: uppercase; letter-spacing: 8px;
+    font-size: 26px; font-weight: 800; padding: 10px; border-radius: 10px;
+    border: 1px solid #284a66; background: #08131f; color: #fff;
+  }
+  #codeInput:focus { outline: none; border-color: #ffd54a; }
+  .menu-note { font-size: 12px; color: #8fb0c8; }
+  .menu-err { color: #ff9a86; }
+
+  /* account form */
+  #account { background: #102a40; border-radius: 12px; padding: 14px; }
+  #account .atitle { font-size: 14px; font-weight: 600; color: #8fd4ff; margin-bottom: 10px; }
+  #account .arow { display: flex; gap: 8px; margin-bottom: 8px; }
+  #account input { flex: 1; min-width: 0; padding: 10px 11px; font-size: 15px; border: 1px solid #284a66; border-radius: 9px; background: #08131f; color: #fff; }
+  #account input::placeholder { color: #5d7e96; }
+  #account input:focus { outline: none; border-color: #ffd54a; }
+  #avatars { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 10px; }
+  #avatars button { width: 30px; height: 30px; border: 2px solid transparent; border-radius: 8px; background: #08131f; font-size: 17px; cursor: pointer; line-height: 1; padding: 0; }
+  #avatars button.sel { border-color: #ffd54a; background: #16304a; }
+  #account .btns button { flex: 1; font: inherit; font-size: 15px; border: 0; border-radius: 9px; padding: 11px; cursor: pointer; }
+  #account .btns .login { background: #1b2f44; color: #d4e8f4; }
+  #account .btns .create { background: #ffd54a; color: #08131f; font-weight: 600; }
+  #amsg { min-height: 17px; font-size: 13px; margin-top: 8px; }
+  #amsg.err { color: #ff9a86; } #amsg.ok { color: #8fe388; } #amsg.busy { color: #94a3b8; }
+  .guestnote { font-size: 12px; color: #5d7e96; margin-top: 8px; }
+
+  /* leaderboards */
+  #boards { background: #102a40; border-radius: 12px; padding: 12px 14px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .tabs button { flex: 1; font: inherit; font-size: 14px; font-weight: 600; padding: 9px; border: 0; border-radius: 8px; cursor: pointer; background: #08131f; color: #8fb0c8; }
+  .tabs button.on { background: #ffd54a; color: #08131f; }
+  #board h2 { margin: 0 0 8px; font-size: 13px; color: #8fd4ff; font-weight: 600; display: flex; justify-content: space-between; }
+  #board ol { list-style: none; margin: 0; padding: 0; }
+  #board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
+  #board li:first-child { border-top: 0; }
+  #board .rk { width: 22px; color: #5d7e96; }
+  #board .nm { flex: 1; }
+  #board .sc { color: #ffd54a; font-weight: 700; }
+  #board li.me { color: #fff; }
+  #board li.me .nm::after { content: " (you)"; color: #8fd4ff; font-size: 12px; }
+  #board .empty { color: #5d7e96; font-size: 13px; padding: 4px 0; }
+</style>
+</head>
+<body>
+  <div id="top" class="col">
+    <div id="chip" hidden><span class="av" id="avatar">🦊</span><span id="name"></span><button id="logout">Log out</button></div>
+    <div id="bestChip">Solo best <b id="best">0</b></div>
+  </div>
+
+  <div id="wrap" class="col">
+    <canvas id="game" width="960" height="540"></canvas>
+    <div id="menu"></div>
+  </div>
+
+  <div id="account" class="col">
+    <div class="atitle">Create an account for the leaderboards &amp; to play with friends</div>
+    <div class="arow">
+      <input id="u" type="text" maxlength="20" placeholder="Username" autocomplete="off" autocapitalize="off" />
+      <input id="p" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 digits)" autocomplete="off" />
+    </div>
+    <div id="avatars"></div>
+    <div class="arow btns">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="create" id="createBtn">Create account</button>
+    </div>
+    <div id="amsg"></div>
+    <div class="guestnote">…or just play solo as a guest — your best is saved on this device.</div>
+  </div>
+
+  <div id="boards" class="col">
+    <div class="tabs">
+      <button id="tabSolo" class="on">Solo</button>
+      <button id="tabDuo">Duos 🤝</button>
+    </div>
+    <div id="board">
+      <h2><span id="boardTitle">Solo leaderboard</span><span style="color:#2ee6a6">● live</span></h2>
+      <ol id="rows"><li class="empty">Loading…</li></ol>
+    </div>
+  </div>
+
+  <script src="./peerjs.min.js"></script>
+  <script src="./net.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    const SOLO_GAME = "net-rally", DUO_GAME = "net-rally-duo";
+    const LS_BEST = "net-rally:best";
+    const AVATARS = ["🦊","🐼","🐯","🦁","🐸","🐵","🐙","🦄","🐶","🐱","🐧","🐝","🦖","🐢","🦉","🐳"];
+    const DEFAULT_COLOR = "#ffd54a";
+    const USER_RE = /^[a-z0-9_-]{3,20}$/, PIN_RE = /^[0-9]{4,8}$/;
+    const el = (id) => document.getElementById(id);
+    const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+
+    let me = null; // { username, avatar, avatarColor }
+    let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+    let chosenAvatar = AVATARS[0];
+
+    // ===================== ACCOUNTS =====================
+    const accountEl = el("account"), chipEl = el("chip"), avatarEl = el("avatar"), nameEl = el("name");
+    const bestEl = el("best"), msgEl = el("amsg");
+    const uEl = el("u"), pEl = el("p");
+    function showBest() { bestEl.textContent = best; }
+    function setMsg(t, k) { msgEl.textContent = t || ""; msgEl.className = k || ""; }
+    function busy(on) { el("loginBtn").disabled = on; el("createBtn").disabled = on; }
+    showBest();
+
+    AVATARS.forEach((a, i) => {
+      const b = document.createElement("button");
+      b.textContent = a; if (i === 0) b.className = "sel";
+      b.onclick = () => { chosenAvatar = a; [...el("avatars").children].forEach((c) => c.classList.remove("sel")); b.classList.add("sel"); };
+      el("avatars").appendChild(b);
+    });
+
+    async function api(path, opts) {
+      try {
+        return await fetch(path, { credentials: "same-origin",
+          headers: opts && opts.body ? { "content-type": "application/json" } : undefined, ...opts });
+      } catch (e) { return null; }
+    }
+    function renderAuthed() {
+      if (me) {
+        accountEl.hidden = true; chipEl.hidden = false;
+        avatarEl.textContent = me.avatar || "🦊";
+        avatarEl.style.background = me.avatarColor || DEFAULT_COLOR;
+        nameEl.innerHTML = "Playing as <b>" + escapeHtml(me.username) + "</b>";
+      } else { accountEl.hidden = false; chipEl.hidden = true; }
+      if (screen === "home") renderHome();
+    }
+    async function loadMe() { const r = await api("/api/me"); me = r && r.ok ? await r.json() : null; renderAuthed(); }
+    function validate() {
+      const u = uEl.value.trim().toLowerCase(), p = pEl.value.trim();
+      if (!USER_RE.test(u)) { setMsg("Username: 3–20 letters, numbers, - or _.", "err"); return null; }
+      if (!PIN_RE.test(p)) { setMsg("PIN must be 4–8 digits.", "err"); return null; }
+      return { u, p };
+    }
+    async function createAccount() {
+      const v = validate(); if (!v) return;
+      busy(true); setMsg("Creating account…", "busy");
+      const r = await api("/api/auth/signup", { method: "POST",
+        body: JSON.stringify({ username: v.u, pin: v.p, avatar: chosenAvatar, avatarColor: DEFAULT_COLOR }) });
+      if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+      if (r.status === 409) { setMsg("Username taken — log in or pick another.", "err"); busy(false); return; }
+      if (!r.ok) { setMsg("Check your username and PIN.", "err"); busy(false); return; }
+      me = await r.json(); setMsg("Welcome, " + me.username + "!", "ok"); finishAuth();
+    }
+    async function login() {
+      const v = validate(); if (!v) return;
+      busy(true); setMsg("Logging in…", "busy");
+      const r = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username: v.u, pin: v.p }) });
+      if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+      if (r.status === 429) { setMsg("Too many tries — wait a few minutes.", "err"); busy(false); return; }
+      if (!r.ok) { setMsg("Wrong username or PIN.", "err"); busy(false); return; }
+      me = await r.json(); finishAuth();
+    }
+    function finishAuth() { busy(false); uEl.value = ""; pEl.value = ""; renderAuthed(); refreshBoard(); }
+    async function logout() { await api("/api/auth/logout", { method: "POST" }); me = null; setMsg("", ""); renderAuthed(); refreshBoard(); }
+    el("loginBtn").onclick = login; el("createBtn").onclick = createAccount; el("logout").onclick = logout;
+    uEl.addEventListener("keydown", (e) => { if (e.key === "Enter") pEl.focus(); });
+    pEl.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
+    // ===================== LEADERBOARDS =====================
+    let boardGame = SOLO_GAME;
+    function setTab(g) {
+      boardGame = g;
+      el("tabSolo").classList.toggle("on", g === SOLO_GAME);
+      el("tabDuo").classList.toggle("on", g === DUO_GAME);
+      el("boardTitle").textContent = g === SOLO_GAME ? "Solo leaderboard" : "Duos leaderboard";
+      refreshBoard();
+    }
+    el("tabSolo").onclick = () => setTab(SOLO_GAME);
+    el("tabDuo").onclick = () => setTab(DUO_GAME);
+
+    async function refreshBoard() {
+      const r = await api("/api/leaderboard?game=" + boardGame + "&limit=10");
+      const rowsEl = el("rows");
+      if (!r || !r.ok) { rowsEl.innerHTML = '<li class="empty">Leaderboard unavailable.</li>'; return; }
+      const top = (await r.json()).top || [];
+      if (!top.length) { rowsEl.innerHTML = '<li class="empty">No scores yet — be the first!</li>'; return; }
+      rowsEl.innerHTML = top.map((row) => {
+        let name, mine = false;
+        if (boardGame === DUO_GAME) {
+          const pair = String(row.username).split("&");
+          mine = me && pair.includes(me.username);
+          name = pair.map(escapeHtml).join(" &amp; ");
+        } else { name = escapeHtml(row.username); mine = me && row.username === me.username; }
+        return "<li" + (mine ? ' class="me"' : "") + '><span class="rk">' + row.rank +
+          '</span><span class="nm">' + name + '</span><span class="sc">' + row.score + "</span></li>";
+      }).join("");
+    }
+
+    async function submitSolo(score) {
+      if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) localStorage.setItem(LS_BEST, String(score));
+      if (!me) { best = Number(localStorage.getItem(LS_BEST) || 0) || 0; showBest(); return; }
+      const r = await api("/api/scores", { method: "POST", body: JSON.stringify({ game: SOLO_GAME, score }) });
+      if (r && r.ok) { best = (await r.json()).best; showBest(); }
+      if (boardGame === SOLO_GAME) refreshBoard();
+    }
+    async function submitDuo(score, partner) {
+      if (!me || !partner) return;
+      await api("/api/scores", { method: "POST", body: JSON.stringify({ game: DUO_GAME, score, partner }) });
+      if (boardGame === DUO_GAME) refreshBoard();
+    }
+
+    // ===================== GAME CONSTANTS =====================
+    const canvas = el("game"), ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    const GROUND = H - 74, NET_X = W / 2, NET_TOP = GROUND - 104, WALL = 30;
+    const G = 0.5, REST = 0.62, REACH = 62, HIT_CEIL = GROUND - 175, PADDLE_SPEED = 8.2;
+
+    // mode/role/screen
+    let mode = null;        // 'solo' | 'coop'
+    let role = null;        // 'host' | 'guest' (coop only)
+    let screen = "home";    // 'home' | 'lobby-create' | 'lobby-join' | 'connecting' | 'waiting' | 'play' | 'over'
+    let state = "menu";     // 'menu' | 'play' | 'over' (sim state once a rally is going)
+    let partnerName = null;
+
+    const player = { x: W * 0.27, target: W * 0.27 }; // left racket (yellow)
+    const opp = { x: W * 0.73, target: W * 0.73 };    // right racket (blue)
+    const ball = { x: NET_X, y: 120, px: NET_X, py: 120, vx: 0, vy: 0, r: 8, owner: "opp", bounces: 0, cool: 0, trail: [], netRisk: false };
+    let score = 0, particles = [], shake = 0, scoreFlash = 0, overReason = "";
+
+    function humanSide(side) { return mode === "coop" ? true : side === "player"; }
+
+    function aimShot(b, x0, y0, xT, T) { b.x = x0; b.y = y0; b.vx = (xT - x0) / T; b.vy = (GROUND - y0 - 0.5 * G * T * T) / T; }
+    const diff = () => 1 + Math.min(score * 0.03, 1.1);
+
+    function serve() {
+      // host (or solo) serves: drop the ball in from the right, arc it to the left
+      ball.x = W * 0.78; ball.y = GROUND - 150; ball.owner = "opp"; ball.bounces = 0; ball.cool = 10; ball.trail = []; ball.netRisk = false;
+      aimShot(ball, ball.x, ball.y, W * 0.27, 72); ball.px = ball.x; ball.py = ball.y;
+    }
+
+    function resetRally() {
+      score = 0; particles = []; shake = 0; scoreFlash = 0; overReason = "";
+      player.x = player.target = W * 0.27; opp.x = opp.target = W * 0.73;
+      if (mode === "solo" || role === "host") serve();
+    }
+
+    function beginPlay() { state = "play"; screen = "play"; renderMenu(); resetRally(); }
+
+    function endRally(reason) {
+      if (state !== "play") return;
+      state = "over"; screen = "over"; overReason = reason;
+      if (mode === "coop" && role === "host") net && net.broadcast({ t: "over", score, reason });
+      if (mode === "solo") submitSolo(score);
+      else submitDuo(score, partnerName);
+      renderMenu();
+    }
+
+    function burst(x, y, color, n) {
+      for (let i = 0; i < (n || 12); i++) { const a = Math.random() * Math.PI * 2, sp = Math.random() * 3 + 1;
+        particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 1, life: 1, color }); }
+    }
+
+    function playerHits() {
+      const contact = Math.max(0, GROUND - ball.y), high = Math.min(1, contact / 150);
+      let T = Math.max(34, (54 + high * 26) / diff());
+      const depth = NET_X + 80 + Math.random() * (W - WALL - (NET_X + 80)) * 0.85;
+      aimShot(ball, ball.x, ball.y, depth, T);
+      ball.owner = "player"; ball.bounces = 0; ball.cool = 10; burst(ball.x, ball.y, "#ffd54a", 10); shake = 5;
+    }
+    function oppHitsAI() {
+      const T = Math.max(40, 60 / diff());
+      const corners = Math.min(0.9, 0.25 + score * 0.02), lo = WALL + 20, hi = NET_X - 40;
+      const t = 0.5 + (Math.random() * 2 - 1) * corners;
+      const depth = lo + Math.max(0, Math.min(1, t)) * (hi - lo);
+      aimShot(ball, ball.x, ball.y, depth, T);
+      ball.owner = "opp"; ball.bounces = 0; ball.cool = 10; burst(ball.x, ball.y, "#5aa0ff", 8);
+    }
+    function oppHitsHuman() {
+      // co-op: the guest's racket return — mirror of playerHits, aimed back to the left side
+      const contact = Math.max(0, GROUND - ball.y), high = Math.min(1, contact / 150);
+      let T = Math.max(34, (54 + high * 26) / diff());
+      const depth = WALL + 60 + Math.random() * (NET_X - 80 - (WALL + 60)) * 0.85;
+      aimShot(ball, ball.x, ball.y, depth, T);
+      ball.owner = "opp"; ball.bounces = 0; ball.cool = 10; burst(ball.x, ball.y, "#5aa0ff", 10); shake = 5;
+    }
+
+    function predictLanding() {
+      if (ball.vx <= 0) return null;
+      let x = ball.x, y = ball.y, vy = ball.vy;
+      for (let i = 0; i < 200; i++) { vy += G; x += ball.vx; y += vy; if (y + ball.r >= GROUND) return x; }
+      return null;
+    }
+
+    // I control: solo/host -> left racket (player); guest -> right racket (opp)
+    function myRacket() { return role === "guest" ? opp : player; }
+    function clampMyRacket(x) {
+      return role === "guest" ? Math.max(NET_X + 26, Math.min(W - WALL, x)) : Math.max(WALL, Math.min(NET_X - 26, x));
+    }
+
+    function simulate() {
+      // physics owner: solo and coop-host. Guest never simulates.
+      const ss = diff();
+      // opponent control
+      if (mode === "solo") {
+        const land = predictLanding();
+        if (land !== null && ball.vx > 0) {
+          const tgt = Math.max(NET_X + 30, Math.min(W - WALL, land)), sp = 6.5 + Math.min(score * 0.08, 5);
+          opp.x += Math.max(-sp, Math.min(sp, tgt - opp.x));
+        } else opp.x += (W * 0.73 - opp.x) * 0.04;
+      } else { // coop host: opp follows the guest's last input
+        opp.x += Math.max(-PADDLE_SPEED * 1.6, Math.min(PADDLE_SPEED * 1.6, opp.target - opp.x));
+      }
+
+      ball.px = ball.x; ball.py = ball.y; ball.vy += G; ball.x += ball.vx; ball.y += ball.vy;
+      if (ball.cool > 0) ball.cool--;
+      ball.trail.push({ x: ball.x, y: ball.y }); if (ball.trail.length > 12) ball.trail.shift();
+
+      if (ball.y + ball.r > GROUND) {
+        ball.y = GROUND - ball.r; ball.vy = -ball.vy * REST; ball.vx *= 0.82; ball.bounces++;
+        burst(ball.x, GROUND, "rgba(255,255,255,0.5)", 5);
+        if (ball.bounces >= 2) {
+          const side = ball.x < NET_X ? "player" : "opp";
+          if (humanSide(side)) return endRally(side === "player" ? "miss-left" : "miss-right");
+        }
+      }
+
+      const crossed = (ball.px - NET_X) * (ball.x - NET_X) < 0;
+      if (crossed) {
+        const f = (NET_X - ball.px) / (ball.x - ball.px), yCross = ball.py + (ball.y - ball.py) * f;
+        if (yCross > NET_TOP - ball.r) {
+          if (humanSide(ball.owner === "player" ? "player" : "opp")) {
+            ball.x = NET_X; ball.y = yCross; ball.vx = 0; ball.vy = 2;
+            burst(NET_X, yCross, "#ff5b5b", 16); burst(NET_X, yCross, "#fff", 8); shake = 14;
+            return endRally("net");
+          }
+        } else if (humanSide(ball.owner === "player" ? "player" : "opp")) {
+          score++; scoreFlash = 1; burst(NET_X, NET_TOP, "#d7f205", 10);
+        }
+      }
+
+      // net-risk warning (only meaningful for a shot heading to the net)
+      ball.netRisk = false;
+      const goingToNet = (ball.owner === "player" && ball.vx > 0 && ball.x < NET_X) || (ball.owner === "opp" && ball.vx < 0 && ball.x > NET_X);
+      if (goingToNet) {
+        const tNet = (NET_X - ball.x) / ball.vx;
+        if (tNet > 0) { const yAt = ball.y + ball.vy * tNet + 0.5 * G * tNet * tNet; if (yAt > NET_TOP - ball.r) ball.netRisk = true; }
+      }
+
+      // returns
+      if (ball.cool === 0 && ball.x < NET_X && Math.abs(ball.x - player.x) < REACH && ball.y > HIT_CEIL && ball.y < GROUND + 4 && ball.owner !== "player") playerHits();
+      if (ball.cool === 0 && ball.x > NET_X && Math.abs(ball.x - opp.x) < REACH && ball.y > HIT_CEIL && ball.y < GROUND + 4 && ball.owner !== "opp") {
+        mode === "solo" ? oppHitsAI() : oppHitsHuman();
+      }
+
+      if (ball.x < WALL - 12 && ball.owner !== "player" && humanSide("player")) return endRally("miss-left");
+      if (ball.x > W - WALL + 12 && ball.owner !== "opp" && humanSide("opp")) return endRally("miss-right");
+
+      particles.forEach((p) => { p.x += p.vx; p.y += p.vy; p.vy += 0.14; p.life -= 0.03; });
+      particles = particles.filter((p) => p.life > 0);
+    }
+
+    // ===================== NET (co-op) =====================
+    let net = null, helloSent = false;
+    function teardownNet() { if (net) { try { net.close(); } catch (e) {} net = null; } partnerName = null; helloSent = false; }
+
+    function startCoop(code) {
+      teardownNet();
+      role = null; mode = "coop"; screen = "connecting"; state = "menu"; renderMenu();
+      net = NetRally.connect(code, me ? me.username : "guest", {
+        onRole(r) { role = r; },
+        onStatus(s) {
+          if (s === "error") { coopError("Connection failed. Check the code and try again."); }
+          else if (s === "waiting" && role === "host") { screen = "waiting"; renderMenu(); }
+        },
+        onPeerJoin() {
+          // a connection is open — say hello so we exchange usernames
+          if (!helloSent && net) { net.role === "guest" ? net.send({ t: "hello", name: me.username }) : net.broadcast({ t: "hello", name: me.username }); helloSent = true; }
+        },
+        onPeerLeft() {
+          if (state === "play") { overReason = "left"; state = "over"; screen = "over"; renderMenu(); }
+          else if (screen !== "over") { coopError("Your friend disconnected."); }
+        },
+        onData(msg) { handleNet(msg); },
+      });
+    }
+    function coopError(text) { teardownNet(); mode = null; role = null; screen = "home"; renderHome(text); }
+
+    function handleNet(msg) {
+      if (!msg || !msg.t) return;
+      if (msg.t === "hello") {
+        partnerName = msg.name;
+        // both sides have said hello -> host kicks off the rally
+        if (role === "host" && state !== "play") { net.broadcast({ t: "start" }); beginPlay(); }
+      } else if (msg.t === "start") {
+        if (role === "guest") beginPlay();
+      } else if (msg.t === "input") {
+        if (role === "host") opp.target = msg.x; // guest's racket
+      } else if (msg.t === "state") {
+        if (role === "guest") applyState(msg);
+      } else if (msg.t === "over") {
+        if (role === "guest") { score = msg.score; overReason = msg.reason; state = "over"; screen = "over"; submitDuo(score, partnerName); renderMenu(); }
+      }
+    }
+    function applyState(s) {
+      ball.x = s.bx; ball.y = s.by; ball.trail.push({ x: ball.x, y: ball.y }); if (ball.trail.length > 12) ball.trail.shift();
+      ball.netRisk = !!s.risk; player.x = s.ph; score = s.score; // guest keeps its OWN opp.x (local control)
+      if (s.sf) scoreFlash = 1;
+    }
+
+    // ===================== INPUT =====================
+    function worldX(clientX) { const rect = canvas.getBoundingClientRect(); return (clientX - rect.left) * (W / rect.width); }
+    function pointTo(clientX) {
+      if (state !== "play") return;
+      myRacket().target = clampMyRacket(worldX(clientX));
+    }
+    canvas.addEventListener("mousemove", (e) => pointTo(e.clientX));
+    canvas.addEventListener("touchmove", (e) => { e.preventDefault(); pointTo(e.touches[0].clientX); }, { passive: false });
+    canvas.addEventListener("touchstart", (e) => { e.preventDefault(); pointTo(e.touches[0].clientX); }, { passive: false });
+    const keys = {};
+    window.addEventListener("keydown", (e) => { keys[e.key.toLowerCase()] = true; });
+    window.addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; });
+
+    function applyMyInput() {
+      const r = myRacket();
+      let kd = 0;
+      if (keys["arrowleft"] || keys["a"]) kd -= 1;
+      if (keys["arrowright"] || keys["d"]) kd += 1;
+      if (kd) r.target = clampMyRacket(r.target + kd * PADDLE_SPEED);
+      const dx = r.target - r.x; r.x += Math.max(-PADDLE_SPEED, Math.min(PADDLE_SPEED, dx));
+      r.x = clampMyRacket(r.x);
+    }
+
+    // ===================== MAIN LOOP =====================
+    let frame = 0;
+    function tick() {
+      frame++;
+      if (state === "play") {
+        applyMyInput();
+        if (role === "guest") {
+          if (net && frame % 1 === 0) net.send({ t: "input", x: opp.x });
+        } else {
+          simulate();
+          if (state === "play" && role === "host" && net) {
+            net.broadcast({ t: "state", bx: ball.x, by: ball.y, ph: player.x, score, risk: ball.netRisk, sf: scoreFlash > 0.9 ? 1 : 0 });
+          }
+        }
+      }
+      if (scoreFlash > 0) scoreFlash *= 0.88;
+      if (shake > 0.4) shake *= 0.85; else shake = 0;
+      draw();
+      requestAnimationFrame(tick);
+    }
+
+    // ===================== RENDER =====================
+    function rr(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+    function drawScene() {
+      const sky = ctx.createLinearGradient(0, 0, 0, GROUND); sky.addColorStop(0, "#0f2a44"); sky.addColorStop(1, "#16456b");
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, GROUND);
+      ctx.fillStyle = "rgba(255,255,255,0.03)"; for (let i = 0; i < W; i += 14) ctx.fillRect(i, GROUND - 150, 7, 60);
+      const court = ctx.createLinearGradient(0, GROUND, 0, H); court.addColorStop(0, "#2e7d4f"); court.addColorStop(1, "#1f5d39");
+      ctx.fillStyle = court; ctx.fillRect(0, GROUND, W, H - GROUND);
+      ctx.strokeStyle = "rgba(255,255,255,0.5)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(W, GROUND); ctx.stroke();
+      ctx.strokeStyle = "rgba(255,255,255,0.16)"; ctx.lineWidth = 2;
+      for (const sx of [WALL + 40, NET_X - 150, NET_X + 150, W - WALL - 40]) { ctx.beginPath(); ctx.moveTo(sx, GROUND + 6); ctx.lineTo(sx, H - 8); ctx.stroke(); }
+      // net
+      const nw = 7;
+      ctx.fillStyle = "#e9eef2"; ctx.fillRect(NET_X - nw / 2 - 3, NET_TOP - 6, nw + 6, 6);
+      ctx.save(); ctx.beginPath(); ctx.rect(NET_X - nw / 2, NET_TOP, nw, GROUND - NET_TOP); ctx.clip();
+      ctx.fillStyle = "rgba(20,30,24,0.25)"; ctx.fillRect(NET_X - nw / 2, NET_TOP, nw, GROUND - NET_TOP);
+      ctx.strokeStyle = "rgba(255,255,255,0.5)"; ctx.lineWidth = 1; ctx.beginPath();
+      for (let y = NET_TOP; y < GROUND; y += 6) { ctx.moveTo(NET_X - 5, y); ctx.lineTo(NET_X + 5, y); }
+      for (let x = NET_X - 4; x <= NET_X + 4; x += 4) { ctx.moveTo(x, NET_TOP); ctx.lineTo(x, GROUND); }
+      ctx.stroke(); ctx.restore();
+      ctx.fillStyle = "#cdd6dc"; ctx.fillRect(NET_X - nw / 2 - 4, NET_TOP - 8, 4, GROUND - NET_TOP + 8); ctx.fillRect(NET_X + nw / 2, NET_TOP - 8, 4, GROUND - NET_TOP + 8);
+    }
+    function drawPlayer(p, color, faceRight, label) {
+      const fy = GROUND;
+      ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(p.x, fy + 2, 26, 7, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = color; rr(p.x - 11, fy - 54, 22, 46, 9); ctx.fill();
+      ctx.fillStyle = "#f4d9b8"; ctx.beginPath(); ctx.arc(p.x, fy - 64, 11, 0, Math.PI * 2); ctx.fill();
+      const dir = faceRight ? 1 : -1;
+      ctx.strokeStyle = color; ctx.lineWidth = 5; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(p.x, fy - 44); ctx.lineTo(p.x + dir * 26, fy - 58); ctx.stroke();
+      ctx.strokeStyle = "#e9eef2"; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(p.x + dir * 33, fy - 64, 9, 13, dir * 0.5, 0, Math.PI * 2); ctx.stroke();
+      if (label) { ctx.fillStyle = "rgba(255,255,255,0.8)"; ctx.font = "12px system-ui, sans-serif"; ctx.textAlign = "center"; ctx.fillText(label, p.x, fy - 84); }
+    }
+    function draw() {
+      ctx.save();
+      if (shake) ctx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
+      drawScene();
+      let lLabel = "", rLabel = "";
+      if (mode === "coop") { lLabel = role === "guest" ? (partnerName || "Friend") : "You"; rLabel = role === "guest" ? "You" : (partnerName || "Friend"); }
+      drawPlayer(player, "#ffe27a", true, lLabel);
+      drawPlayer(opp, "#5aa0ff", false, rLabel);
+      for (let i = 0; i < ball.trail.length; i++) { const t = ball.trail[i]; ctx.globalAlpha = (i / ball.trail.length) * 0.35; ctx.fillStyle = "#d7f205"; ctx.beginPath(); ctx.arc(t.x, t.y, ball.r * (i / ball.trail.length), 0, Math.PI * 2); ctx.fill(); }
+      ctx.globalAlpha = 1;
+      if (state === "play") {
+        ctx.save(); ctx.shadowColor = ball.netRisk ? "rgba(255,91,91,0.9)" : "rgba(215,242,5,0.6)"; ctx.shadowBlur = ball.netRisk ? 20 : 14;
+        ctx.fillStyle = ball.netRisk ? "#ff7a5b" : "#d7f205"; ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
+      particles.forEach((p) => { ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color; ctx.fillRect(p.x - 2, p.y - 2, 4, 4); });
+      ctx.globalAlpha = 1;
+      // live rally counter
+      if (state === "play") { ctx.fillStyle = "rgba(255,213,74,0.95)"; ctx.font = "700 46px system-ui, sans-serif"; ctx.textAlign = "center"; ctx.fillText(score, NET_X, 64); }
+      if (scoreFlash > 0.05) { ctx.globalAlpha = scoreFlash; ctx.fillStyle = "#d7f205"; ctx.font = '800 30px system-ui, sans-serif'; ctx.textAlign = "center"; ctx.fillText("+1", NET_X, NET_TOP - 18 - (1 - scoreFlash) * 20); ctx.globalAlpha = 1; }
+      ctx.restore();
+    }
+
+    // ===================== MENUS (HTML overlay) =====================
+    const menuEl = el("menu");
+    function renderMenu() {
+      if (screen === "play") { menuEl.hidden = true; return; }
+      menuEl.hidden = false;
+      if (screen === "home") return renderHome();
+      if (screen === "lobby-create") return renderCreate();
+      if (screen === "lobby-join") return renderJoin();
+      if (screen === "connecting") return setMenu("<div class='sub'>Connecting…</div><p>Reaching your friend over the line.</p>");
+      if (screen === "waiting") return renderWaiting();
+      if (screen === "over") return renderOver();
+    }
+    function setMenu(html) { menuEl.innerHTML = html; }
+
+    function renderHome(err) {
+      const loggedIn = !!me;
+      setMenu(
+        "<h1>NET <span>RALLY</span></h1>" +
+        "<p>Send the ball back <b>over the net</b> — every clear scores. Play solo, or rally with a friend and keep one alive together.</p>" +
+        (err ? "<p class='menu-err'>" + escapeHtml(err) + "</p>" : "") +
+        "<div class='btnrow'>" +
+          "<button class='big-btn' id='mSolo'>Play Solo</button>" +
+          "<button class='big-btn alt' id='mFriend'" + (loggedIn ? "" : " disabled") + ">Play with a Friend 🤝</button>" +
+        "</div>" +
+        (loggedIn ? "" : "<div class='menu-note'>Log in below to play with a friend.</div>")
+      );
+      el("mSolo").onclick = startSolo;
+      if (loggedIn) el("mFriend").onclick = () => { screen = "lobby-create"; renderMenu(); };
+    }
+    function renderCreate() {
+      const code = currentCode || (currentCode = NetRally.randomCode());
+      setMenu(
+        "<div class='sub'>Play with a friend</div>" +
+        "<p>Share this code with your friend — they tap <b>Join</b> and type it in.</p>" +
+        "<div class='code-box'>" + code + "</div>" +
+        "<div class='btnrow'>" +
+          "<button class='big-btn' id='hostBtn'>Start hosting</button>" +
+          "<button class='big-btn ghost' id='joinInstead'>Join instead</button>" +
+        "</div>" +
+        "<button class='big-btn ghost' id='backHome' style='margin-top:4px'>Back</button>"
+      );
+      el("hostBtn").onclick = () => startCoop(code);
+      el("joinInstead").onclick = () => { screen = "lobby-join"; renderMenu(); };
+      el("backHome").onclick = goHome;
+    }
+    function renderJoin() {
+      setMenu(
+        "<div class='sub'>Join a friend</div>" +
+        "<p>Type the 4-letter code your friend is hosting.</p>" +
+        "<input id='codeInput' maxlength='6' autocomplete='off' autocapitalize='characters' spellcheck='false' placeholder='CODE' />" +
+        "<div class='btnrow'><button class='big-btn' id='joinBtn'>Join rally</button>" +
+        "<button class='big-btn ghost' id='backHome'>Back</button></div>"
+      );
+      const inp = el("codeInput"); inp.focus();
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") doJoin(); });
+      el("joinBtn").onclick = doJoin;
+      el("backHome").onclick = goHome;
+      function doJoin() { const c = NetRally.cleanCode(inp.value); if (c.length < 3) { inp.style.borderColor = "#ff5b5b"; return; } currentCode = c; startCoop(c); }
+    }
+    function renderWaiting() {
+      setMenu(
+        "<div class='sub'>Waiting for your friend</div>" +
+        "<div class='code-box'>" + (currentCode || "") + "</div>" +
+        "<p>They tap <b>Play with a Friend → Join</b> and enter this code.</p>" +
+        "<button class='big-btn ghost' id='cancelHost'>Cancel</button>"
+      );
+      el("cancelHost").onclick = goHome;
+    }
+    function renderOver() {
+      let title = "Rally Over", note = "";
+      if (overReason === "net") { title = "Into The Net"; note = "Meet the ball earlier so your shot clears the net."; }
+      else if (overReason === "left" || overReason === "right") { title = "Friend Left"; note = "Your friend disconnected."; }
+      else if (overReason === "miss-left" || overReason === "miss-right") { title = "Missed It"; }
+      const duo = mode === "coop";
+      setMenu(
+        "<div class='sub'>" + title + "</div>" +
+        "<div class='big'>" + score + "</div>" +
+        "<div class='sub'>" + (duo ? "rally with " + escapeHtml(partnerName || "your friend") : "rally") + "</div>" +
+        (note ? "<p>" + note + "</p>" : "<p>" + praise(score) + "</p>") +
+        "<div class='btnrow'>" +
+          (duo
+            ? "<button class='big-btn alt' id='againCoop'>Rally again</button><button class='big-btn ghost' id='leaveCoop'>Leave</button>"
+            : "<button class='big-btn' id='againSolo'>Play again</button><button class='big-btn ghost' id='toFriend'" + (me ? "" : " disabled") + ">Play with a friend</button>") +
+        "</div>"
+      );
+      if (duo) {
+        el("againCoop").onclick = () => {
+          if (role === "host") { if (net) net.broadcast({ t: "start" }); beginPlay(); }
+          // guest waits for host's start; show a gentle note
+          else setMenu("<div class='sub'>Waiting for host…</div><p>Your friend restarts the rally.</p><button class='big-btn ghost' id='leaveCoop'>Leave</button>"), el("leaveCoop") && (el("leaveCoop").onclick = goHome);
+        };
+        if (el("leaveCoop")) el("leaveCoop").onclick = goHome;
+      } else {
+        el("againSolo").onclick = startSolo;
+        if (me) el("toFriend").onclick = () => { teardownNet(); mode = "coop"; screen = "lobby-create"; renderMenu(); };
+      }
+      // refresh the relevant board
+      setTab(duo ? DUO_GAME : SOLO_GAME);
+    }
+
+    let currentCode = null;
+    function startSolo() { teardownNet(); mode = "solo"; role = null; partnerName = null; beginPlay(); }
+    function goHome() { teardownNet(); mode = null; role = null; state = "menu"; screen = "home"; currentCode = null; renderMenu(); }
+
+    function praise(s) {
+      if (s === 0) return "Whiffed the first one — everybody starts at zero.";
+      if (s < 5) return "Warming up. Watch the bounce.";
+      if (s < 12) return "Nice rally! Reading the ball well.";
+      if (s < 25) return "Great court coverage.";
+      if (s < 50) return "Championship form.";
+      return "Are you even human? Incredible.";
+    }
+
+    // ===================== BOOT =====================
+    screen = "home"; renderMenu();
+    tick();
+    loadMe();
+    refreshBoard();
+  })();
+  </script>
+</body>
+</html>
