@@ -3,7 +3,7 @@ import { normalizeUsername, validateUsername, validatePin, hashPin, verifyPin } 
 import { signSession, verifySession, SESSION_MAX_AGE_SEC } from "./session";
 import { parseCompletions, groupByGame, completionField } from "./completions";
 import { sanitizeAvatar, sanitizeColor } from "./avatars";
-import { scoreGameAllowed, validateScore, clampLimit } from "./scores";
+import { scoreGameAllowed, coopScoreGameAllowed, canonicalPair, validateScore, clampLimit } from "./scores";
 
 const LOCKOUT_MAX = 8;
 const LOCKOUT_TTL_SEC = 15 * 60;
@@ -101,13 +101,39 @@ export async function submitScore(
   return { status: 200, json: { game, score: input.score, best, improved: input.score > prev } };
 }
 
+/**
+ * Co-op leaderboard: a score belongs to the *pair* (caller + partner), stored
+ * under one canonical member so ("alice","bob") and ("bob","alice") share a row.
+ * Both players post the same pair + score independently; the highest is kept.
+ * The partner must be a real existing user, which bounds the pair key space.
+ */
+export async function submitPairScore(
+  token: string | undefined,
+  input: { game?: string; score?: unknown; partner?: string },
+  deps: Deps,
+): Promise<HandlerResult> {
+  const username = authed(token, deps);
+  if (!username) return { status: 401, json: { error: "unauthenticated" } };
+  const game = String(input.game ?? "");
+  if (!coopScoreGameAllowed(game) || !validateScore(input.score)) {
+    return { status: 400, json: { error: "invalid" } };
+  }
+  const partner = normalizeUsername(input.partner ?? "");
+  if (!validateUsername(partner) || partner === username) return { status: 400, json: { error: "invalid-partner" } };
+  if (!(await deps.store.getUser(partner))) return { status: 400, json: { error: "no-partner" } };
+  const pair = canonicalPair(username, partner);
+  const prev = await deps.store.userBest(game, pair);
+  const best = await deps.store.bumpScore(game, pair, input.score);
+  return { status: 200, json: { game, pair, score: input.score, best, improved: input.score > prev } };
+}
+
 /** Public — no auth. Anyone can read a game's leaderboard. */
 export async function leaderboard(
   input: { game?: string; limit?: unknown },
   deps: Deps,
 ): Promise<HandlerResult> {
   const game = String(input.game ?? "");
-  if (!scoreGameAllowed(game)) return { status: 400, json: { error: "invalid" } };
+  if (!scoreGameAllowed(game) && !coopScoreGameAllowed(game)) return { status: 400, json: { error: "invalid" } };
   const rows = await deps.store.topScores(game, clampLimit(input.limit));
   const top = rows.map((row, i) => ({ rank: i + 1, ...row }));
   return { status: 200, json: { game, top } };
