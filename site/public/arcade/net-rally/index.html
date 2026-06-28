@@ -267,7 +267,7 @@
     // mode/role/screen
     let mode = null;        // 'solo' | 'coop'
     let role = null;        // 'host' | 'guest' (coop only)
-    let screen = "home";    // 'home' | 'lobby-create' | 'lobby-join' | 'connecting' | 'waiting' | 'play' | 'over'
+    let screen = "home";    // 'home' | 'lobby' | 'hosting' | 'joining' | 'connecting' | 'play' | 'over'
     let state = "menu";     // 'menu' | 'play' | 'over' (sim state once a rally is going)
     let partnerName = null;
 
@@ -409,46 +409,61 @@
     }
 
     // ===================== NET (co-op) =====================
-    let net = null, helloSent = false;
-    function teardownNet() { if (net) { try { net.close(); } catch (e) {} net = null; } partnerName = null; helloSent = false; }
+    let net = null, lobbyStatus = "";
+    function teardownNet() { if (net) { try { net.close(); } catch (e) {} net = null; } partnerName = null; }
 
-    function startCoop(code) {
-      teardownNet();
-      role = null; mode = "coop"; screen = "connecting"; state = "menu"; renderMenu();
-      net = NetRally.connect(code, me ? me.username : "guest", {
-        onRole(r) { role = r; },
+    // HOST: claim the code right away and wait for a friend.
+    function doHost(code) {
+      teardownNet(); mode = "coop"; role = "host"; currentCode = code; lobbyStatus = "Getting your court ready…";
+      screen = "hosting"; renderMenu();
+      net = NetRally.host(code, me.username, {
         onStatus(s) {
-          if (s === "error") { coopError("Connection failed. Check the code and try again."); }
-          else if (s === "waiting" && role === "host") { screen = "waiting"; renderMenu(); }
+          if (s === "connecting") lobbyStatus = "Getting your court ready…";
+          else if (s === "waiting") lobbyStatus = "Waiting for your friend to join…";
+          else if (s === "taken") { currentCode = NetRally.randomCode(); return doHost(currentCode); } // code clash — pick another
+          else if (s === "error") return coopError("Couldn't reach the matchmaking service. Try again.");
+          if (screen === "hosting") renderMenu();
         },
-        onPeerJoin() {
-          // a connection is open — say hello so we exchange usernames
-          if (!helloSent && net) { net.role === "guest" ? net.send({ t: "hello", name: me.username }) : net.broadcast({ t: "hello", name: me.username }); helloSent = true; }
-        },
-        onPeerLeft() {
-          if (state === "play") { overReason = "left"; state = "over"; screen = "over"; renderMenu(); }
-          else if (screen !== "over") { coopError("Your friend disconnected."); }
+        onJoin() { // friend's data channel is open — kick the rally off
+          net.broadcast({ t: "hello", name: me.username });
+          net.broadcast({ t: "start" });
+          beginPlay();
         },
         onData(msg) { handleNet(msg); },
+        onLeft() { onFriendLeft(); },
       });
     }
-    function coopError(text) { teardownNet(); mode = null; role = null; screen = "home"; renderHome(text); }
+
+    // JOIN: connect to a friend's code (net.js retries through the host-not-ready race).
+    function doJoin(code) {
+      teardownNet(); mode = "coop"; role = "guest"; currentCode = code; lobbyStatus = "Connecting to your friend…";
+      screen = "connecting"; renderMenu();
+      net = NetRally.join(code, me.username, {
+        onStatus(s) {
+          if (s === "connecting") lobbyStatus = "Connecting to your friend…";
+          else if (s === "notfound") return coopError("No game found with code " + code + ". Check it and try again.");
+          else if (s === "error") return coopError("Couldn't reach the matchmaking service. Try again.");
+          if (screen === "connecting") renderMenu();
+        },
+        onJoin() { net.send({ t: "hello", name: me.username }); }, // host sends start
+        onData(msg) { handleNet(msg); },
+        onLeft() { onFriendLeft(); },
+      });
+    }
+
+    function onFriendLeft() {
+      if (state === "play") { overReason = "left"; state = "over"; screen = "over"; renderMenu(); }
+      else if (screen !== "over") coopError("Your friend disconnected.");
+    }
+    function coopError(text) { teardownNet(); mode = null; role = null; state = "menu"; screen = "home"; renderHome(text); }
 
     function handleNet(msg) {
       if (!msg || !msg.t) return;
-      if (msg.t === "hello") {
-        partnerName = msg.name;
-        // both sides have said hello -> host kicks off the rally
-        if (role === "host" && state !== "play") { net.broadcast({ t: "start" }); beginPlay(); }
-      } else if (msg.t === "start") {
-        if (role === "guest") beginPlay();
-      } else if (msg.t === "input") {
-        if (role === "host") opp.target = msg.x; // guest's racket
-      } else if (msg.t === "state") {
-        if (role === "guest") applyState(msg);
-      } else if (msg.t === "over") {
-        if (role === "guest") { score = msg.score; overReason = msg.reason; state = "over"; screen = "over"; submitDuo(score, partnerName); renderMenu(); }
-      }
+      if (msg.t === "hello") { partnerName = msg.name; }
+      else if (msg.t === "start") { if (role === "guest" && state !== "play") beginPlay(); }
+      else if (msg.t === "input") { if (role === "host") opp.target = msg.x; }
+      else if (msg.t === "state") { if (role === "guest") { if (state !== "play") beginPlay(); applyState(msg); } }
+      else if (msg.t === "over") { if (role === "guest") { score = msg.score; overReason = msg.reason; state = "over"; screen = "over"; submitDuo(score, partnerName); renderMenu(); } }
     }
     function applyState(s) {
       ball.x = s.bx; ball.y = s.by; ball.trail.push({ x: ball.x, y: ball.y }); if (ball.trail.length > 12) ball.trail.shift();
@@ -560,10 +575,10 @@
       if (screen === "play") { menuEl.hidden = true; return; }
       menuEl.hidden = false;
       if (screen === "home") return renderHome();
-      if (screen === "lobby-create") return renderCreate();
-      if (screen === "lobby-join") return renderJoin();
-      if (screen === "connecting") return setMenu("<div class='sub'>Connecting…</div><p>Reaching your friend over the line.</p>");
-      if (screen === "waiting") return renderWaiting();
+      if (screen === "lobby") return renderLobby();
+      if (screen === "hosting") return renderHosting();
+      if (screen === "joining") return renderJoinInput();
+      if (screen === "connecting") return setMenu("<div class='sub'>" + escapeHtml(lobbyStatus || "Connecting…") + "</div><p>Linking you up with your friend…</p><button class='big-btn ghost' id='cancelConn'>Cancel</button>"), el("cancelConn").onclick = goHome;
       if (screen === "over") return renderOver();
     }
     function setMenu(html) { menuEl.innerHTML = html; }
@@ -581,46 +596,46 @@
         (loggedIn ? "" : "<div class='menu-note'>Log in below to play with a friend.</div>")
       );
       el("mSolo").onclick = startSolo;
-      if (loggedIn) el("mFriend").onclick = () => { screen = "lobby-create"; renderMenu(); };
+      if (loggedIn) el("mFriend").onclick = () => { screen = "lobby"; renderMenu(); };
     }
-    function renderCreate() {
-      const code = currentCode || (currentCode = NetRally.randomCode());
+    function renderLobby() {
       setMenu(
         "<div class='sub'>Play with a friend</div>" +
-        "<p>Share this code with your friend — they tap <b>Join</b> and type it in.</p>" +
-        "<div class='code-box'>" + code + "</div>" +
+        "<p>One of you hosts and shares the code — the other joins with it.</p>" +
         "<div class='btnrow'>" +
-          "<button class='big-btn' id='hostBtn'>Start hosting</button>" +
-          "<button class='big-btn ghost' id='joinInstead'>Join instead</button>" +
+          "<button class='big-btn' id='hostBtn'>Host a game</button>" +
+          "<button class='big-btn alt' id='joinBtn'>Join with a code</button>" +
         "</div>" +
-        "<button class='big-btn ghost' id='backHome' style='margin-top:4px'>Back</button>"
+        "<button class='big-btn ghost' id='backHome'>Back</button>"
       );
-      el("hostBtn").onclick = () => startCoop(code);
-      el("joinInstead").onclick = () => { screen = "lobby-join"; renderMenu(); };
+      el("hostBtn").onclick = () => doHost(NetRally.randomCode());
+      el("joinBtn").onclick = () => { screen = "joining"; renderMenu(); };
       el("backHome").onclick = goHome;
     }
-    function renderJoin() {
+    function renderHosting() {
       setMenu(
-        "<div class='sub'>Join a friend</div>" +
-        "<p>Type the 4-letter code your friend is hosting.</p>" +
-        "<input id='codeInput' maxlength='6' autocomplete='off' autocapitalize='characters' spellcheck='false' placeholder='CODE' />" +
-        "<div class='btnrow'><button class='big-btn' id='joinBtn'>Join rally</button>" +
-        "<button class='big-btn ghost' id='backHome'>Back</button></div>"
-      );
-      const inp = el("codeInput"); inp.focus();
-      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") doJoin(); });
-      el("joinBtn").onclick = doJoin;
-      el("backHome").onclick = goHome;
-      function doJoin() { const c = NetRally.cleanCode(inp.value); if (c.length < 3) { inp.style.borderColor = "#ff5b5b"; return; } currentCode = c; startCoop(c); }
-    }
-    function renderWaiting() {
-      setMenu(
-        "<div class='sub'>Waiting for your friend</div>" +
+        "<div class='sub'>Your code — share it with your friend</div>" +
         "<div class='code-box'>" + (currentCode || "") + "</div>" +
-        "<p>They tap <b>Play with a Friend → Join</b> and enter this code.</p>" +
+        "<p class='menu-note'>" + escapeHtml(lobbyStatus || "") + "</p>" +
+        "<p>They tap <b>Play with a Friend → Join with a code</b> and type it in. The rally starts the moment they connect.</p>" +
         "<button class='big-btn ghost' id='cancelHost'>Cancel</button>"
       );
       el("cancelHost").onclick = goHome;
+    }
+    function renderJoinInput(err) {
+      setMenu(
+        "<div class='sub'>Join your friend</div>" +
+        "<p>Type the code your friend is hosting.</p>" +
+        "<input id='codeInput' maxlength='6' autocomplete='off' autocapitalize='characters' spellcheck='false' placeholder='CODE' />" +
+        (err ? "<p class='menu-err'>" + escapeHtml(err) + "</p>" : "") +
+        "<div class='btnrow'><button class='big-btn' id='goJoin'>Join rally</button>" +
+        "<button class='big-btn ghost' id='backLobby'>Back</button></div>"
+      );
+      const inp = el("codeInput"); inp.focus();
+      function submit() { const c = NetRally.cleanCode(inp.value); if (c.length < 3) { inp.style.borderColor = "#ff5b5b"; return; } doJoin(c); }
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
+      el("goJoin").onclick = submit;
+      el("backLobby").onclick = () => { screen = "lobby"; renderMenu(); };
     }
     function renderOver() {
       let title = "Rally Over", note = "";
@@ -648,7 +663,7 @@
         if (el("leaveCoop")) el("leaveCoop").onclick = goHome;
       } else {
         el("againSolo").onclick = startSolo;
-        if (me) el("toFriend").onclick = () => { teardownNet(); mode = "coop"; screen = "lobby-create"; renderMenu(); };
+        if (me) el("toFriend").onclick = () => { teardownNet(); mode = "coop"; screen = "lobby"; renderMenu(); };
       }
       // refresh the relevant board
       setTab(duo ? DUO_GAME : SOLO_GAME);
