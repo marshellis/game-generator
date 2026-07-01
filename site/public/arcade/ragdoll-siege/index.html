@@ -10,20 +10,18 @@
   <div id="stage">
     <canvas id="game"></canvas>
 
-    <div id="hud" hidden></div>
-
-    <!-- Main menu -->
-    <div id="menu" class="panel">
+    <!-- Hub: overlays the live arena. Play, co-op, and the skull upgrade shop. -->
+    <div id="hub" class="panel wide">
       <h1>🏹 Ragdoll Siege</h1>
-      <p class="tag"><b>Click, hold and drag</b> to draw your bow — hold longer for power, but it drains
-        <b>stamina</b>. Release to loose a gravity-arced arrow. <b>Headshots kill.</b> Shoot flying
-        <b>apples</b> to heal, earn <b>skulls</b> to upgrade, and survive the endless archers.</p>
-      <button id="soloBtn" class="btn primary">Play solo</button>
+      <p class="tag"><b>Drag back and release</b> to sling arrows — pull farther for power.
+        <b>Headshots hit 3×.</b> Hits knock bodies flat; stand back up and keep fighting.
+        Shoot drifting apples to recover. Skulls are yours to keep — spend them below.</p>
+      <p class="skull-line">💀 <span id="hubSkulls">0</span></p>
+      <div id="upGrid" class="shop-grid"></div>
+      <button id="playBtn" class="btn primary">Play solo</button>
       <button id="coopBtn" class="btn">Co-op with a friend</button>
       <p id="coopHint" class="muted small"></p>
-      <div class="controls small muted">
-        Aim &amp; draw: hold + move · Fire: release · 🍎 red = health · 🟢 green = stamina · 🟡 gold = both
-      </div>
+      <div class="controls small muted">Drag anywhere: aim &amp; power · Release: fire · Jump / stand up: button or Space</div>
     </div>
 
     <!-- Co-op lobby -->
@@ -39,23 +37,11 @@
       <button id="lobbyBack" class="btn ghost">← Back</button>
     </div>
 
-    <!-- Upgrade shop (between waves) -->
-    <div id="shop" class="panel wide" hidden>
-      <h2>Upgrade</h2>
-      <p class="tag">Spend skulls between waves. <span id="shopSkulls" class="skulls">💀 0</span></p>
-      <div id="shopGrid" class="shop-grid"></div>
-      <p id="shopWaitMsg" class="muted small" hidden>Waiting for host to start…</p>
-      <button id="startWaveBtn" class="btn primary">Start next wave →</button>
-    </div>
-
-    <!-- Game over -->
-    <div id="over" class="panel" hidden>
-      <h2>You fell</h2>
-      <p class="tag" id="overMsg"></p>
-      <div class="stat"><span>Reached</span><b>Wave <span id="overWave">0</span></b></div>
-      <div class="stat"><span>Skulls earned</span><b id="overScore">0</b></div>
-      <button id="againBtn" class="btn primary">Play again</button>
-      <button id="menuBtn" class="btn ghost">Menu</button>
+    <!-- Pause (solo only) -->
+    <div id="pause" class="panel" hidden>
+      <h2>Paused</h2>
+      <button id="resumeBtn" class="btn primary">Resume</button>
+      <button id="quitBtn" class="btn ghost">Back to menu</button>
     </div>
   </div>
 
