@@ -72,3 +72,24 @@ body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; colo
 .stat span { color: #8494ab; font-size: 13px; }
 .stat b { font-size: 18px; }
 .stat b#overScore { color: #ffd76b; }
+
+/* ---- upgrade shop ---- */
+.panel.wide { width: min(600px, 94vw); }
+.skulls { color: #ffd76b; font-weight: 700; }
+.shop-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+  margin: 14px 0 16px; text-align: left;
+}
+@media (max-width: 460px) { .shop-grid { grid-template-columns: 1fr; } }
+.up-btn {
+  display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 4px 8px;
+  padding: 9px 11px; border: 1px solid rgba(120, 150, 200, .28); border-radius: 10px;
+  background: #1a2740; color: #eef2f8; cursor: pointer; text-align: left; transition: background .12s;
+}
+.up-btn:hover:not(.off) { background: #223357; }
+.up-btn.off { opacity: .5; cursor: not-allowed; }
+.up-ic { grid-row: 1 / 3; font-size: 20px; text-align: center; }
+.up-name { font-weight: 600; font-size: 14px; }
+.up-name em { color: #8fd0ff; font-style: normal; font-size: 11px; font-weight: 700; }
+.up-desc { grid-column: 2; color: #93a3ba; font-size: 11px; }
+.up-cost { grid-row: 1 / 3; grid-column: 3; color: #ffd76b; font-weight: 700; font-size: 13px; white-space: nowrap; }
