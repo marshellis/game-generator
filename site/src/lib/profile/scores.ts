@@ -2,7 +2,7 @@
 // only games on this allowlist may post to the shared leaderboard — so a random
 // or hostile slug can't create unbounded Redis keys. Add a slug here when a new
 // arcade game should keep a global leaderboard.
-export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally"]);
+export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege"]);
 
 export function scoreGameAllowed(game: string): boolean {
   return SCORE_GAMES.has(game);
@@ -11,7 +11,7 @@ export function scoreGameAllowed(game: string): boolean {
 // Co-op leaderboards are keyed by a *pair* of players, not a single user. A
 // separate allowlist keeps these slugs distinct from the solo boards so a pair
 // score can never be posted to (or read from) a single-player board.
-export const COOP_SCORE_GAMES = new Set<string>(["net-rally-duo"]);
+export const COOP_SCORE_GAMES = new Set<string>(["net-rally-duo", "ragdoll-siege-coop"]);
 
 export function coopScoreGameAllowed(game: string): boolean {
   return COOP_SCORE_GAMES.has(game);

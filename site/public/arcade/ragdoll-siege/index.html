@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Ragdoll Siege</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game"></canvas>
+
+    <!-- In-game HUD is drawn on the canvas; this holds only overlay panels -->
+    <div id="hud" hidden></div>
+
+    <!-- Main menu -->
+    <div id="menu" class="panel">
+      <h1>🏹 Ragdoll Siege</h1>
+      <p class="tag">Hold to draw your bow, aim at the cursor, release to loose an arrow.
+        <b>Headshots kill instantly.</b> Survive the endless waves.</p>
+      <button id="soloBtn" class="btn primary">Play solo</button>
+      <button id="coopBtn" class="btn">Co-op with a friend</button>
+      <p id="coopHint" class="muted small"></p>
+      <div class="controls small muted">
+        Aim: move cursor · Charge: hold · Fire: release
+      </div>
+    </div>
+
+    <!-- Co-op lobby -->
+    <div id="lobby" class="panel" hidden>
+      <h2>Co-op — same team</h2>
+      <p id="lobbyStatus" class="tag">Host a room or join a friend's code.</p>
+      <div class="code">Room code: <span id="lobbyCode">----</span></div>
+      <button id="hostBtn" class="btn primary">Host a room</button>
+      <div class="join-row">
+        <input id="codeInput" maxlength="6" placeholder="CODE" autocomplete="off" spellcheck="false" />
+        <button id="joinBtn" class="btn">Join</button>
+      </div>
+      <button id="lobbyBack" class="btn ghost">← Back</button>
+    </div>
+
+    <!-- Game over -->
+    <div id="over" class="panel" hidden>
+      <h2>You were overrun</h2>
+      <p class="tag" id="overMsg"></p>
+      <div class="stat"><span>Reached</span><b>Wave <span id="overWave">0</span></b></div>
+      <div class="stat"><span>Score</span><b id="overScore">0</b></div>
+      <button id="againBtn" class="btn primary">Play again</button>
+      <button id="menuBtn" class="btn ghost">Menu</button>
+    </div>
+  </div>
+
+  <script src="./peerjs.min.js"></script>
+  <script src="./net.js"></script>
+  <script src="./game.js"></script>
+</body>
+</html>
