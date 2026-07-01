@@ -74,8 +74,11 @@ body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; colo
 .stat b#overScore { color: #ffd76b; }
 
 /* ---- upgrade shop ---- */
-.panel.wide { width: min(600px, 94vw); }
+.panel.wide { width: min(620px, 94vw); max-height: 92vh; overflow-y: auto; }
 .skulls { color: #ffd76b; font-weight: 700; }
+.skull-line { color: #ffd76b; font-weight: 800; font-size: 20px; margin-bottom: 6px; }
+.panel h1 { font-size: 26px; margin-bottom: 8px; }
+.panel .tag { margin-bottom: 10px; }
 .shop-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
   margin: 14px 0 16px; text-align: left;
