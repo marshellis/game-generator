@@ -218,6 +218,18 @@
       blockCollide(0, SHELF_Y, GOAL_D, GROUND);
       blockCollide(W - GOAL_D, SHELF_Y, W, GROUND);
     }
+
+    // no dead resting spots: a ball parked somewhere unreachable — on the
+    // crossbar, on a goal-block ledge, or on the ground tight against a
+    // block face — deadlocks the match (nobody can touch it). If the ball
+    // sits truly still for half a second in such a spot, drift it gently
+    // back toward midfield until it rolls free.
+    const moved = Math.hypot(ball.x - (ball.px ?? ball.x), ball.y - (ball.py ?? ball.y));
+    ball.px = ball.x; ball.py = ball.y;
+    ball.restT = moved < 0.7 ? (ball.restT || 0) + 1 : 0;
+    const offGround = ball.y < GROUND - BALL_R - 4;
+    const nearBlock = ball.x < GOAL_D + 70 || ball.x > W - GOAL_D - 70;
+    if (ball.restT > 30 && (offGround || nearBlock)) ball.vx += ball.x < W / 2 ? 0.35 : -0.35;
   }
 
   function barCollide(x0, x1, y) {
