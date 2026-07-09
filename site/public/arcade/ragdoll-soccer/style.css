@@ -1,0 +1,69 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; } /* beat the #chip/#account display rules */
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(180deg, #7ec3e8 0%, #a9dcf2 45%, #3f9e46 100%);
+  color: #123;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 14px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+}
+.col { width: min(96vw, 760px); }
+#top { display: flex; align-items: center; justify-content: space-between; }
+#chip { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #08301c; }
+#chip .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; background: #ffd166; }
+#chip b { color: #0b5c2e; }
+#logout { background: rgba(255,255,255,0.75); color: #245; border: 0; border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+#bestChip { font-size: 14px; color: #08301c; }
+#bestChip b { color: #b3541e; font-size: 16px; }
+
+#wrap { position: relative; width: min(96vw, 760px); }
+canvas {
+  display: block; width: 100%; height: auto; aspect-ratio: 960 / 600;
+  background: #a9dcf2;
+  border: 3px solid rgba(255,255,255,0.8); border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,40,20,0.35);
+  touch-action: none;
+}
+
+/* touch controls */
+#touch { position: absolute; inset: auto 0 8px 0; display: none; justify-content: space-between; padding: 0 10px; pointer-events: none; }
+body.touch #touch { display: flex; }
+#touch .grp { display: flex; gap: 10px; pointer-events: auto; }
+#touch button {
+  width: 58px; height: 58px; border-radius: 50%; border: 0; font-size: 22px; font-weight: 700;
+  background: rgba(255,255,255,0.55); color: #123; box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  touch-action: none;
+}
+#touch button:active { background: rgba(255,255,255,0.85); }
+
+/* account form */
+#account { background: rgba(255,255,255,0.85); border-radius: 12px; padding: 14px; }
+#account .atitle { font-size: 14px; font-weight: 700; color: #0b5c2e; margin-bottom: 10px; }
+#account .arow { display: flex; gap: 8px; margin-bottom: 8px; }
+#account input { flex: 1; min-width: 0; padding: 10px 11px; font-size: 15px; border: 1px solid #b6d9c4; border-radius: 9px; background: #fff; color: #123; }
+#account input::placeholder { color: #8aa; }
+#account input:focus { outline: none; border-color: #2e9e57; }
+#avatars { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 10px; }
+#avatars button { width: 30px; height: 30px; border: 2px solid transparent; border-radius: 8px; background: #eef7f1; font-size: 17px; cursor: pointer; line-height: 1; padding: 0; }
+#avatars button.sel { border-color: #2e9e57; background: #d8efe1; }
+#account .btns button { flex: 1; font: inherit; font-size: 15px; border: 0; border-radius: 9px; padding: 11px; cursor: pointer; }
+#account .btns .login { background: #dfeee5; color: #245; }
+#account .btns .create { background: #2e9e57; color: #fff; font-weight: 700; }
+#account button:active { transform: scale(0.98); }
+#amsg { min-height: 17px; font-size: 13px; margin-top: 8px; }
+#amsg.err { color: #c0392b; } #amsg.ok { color: #1e8f4d; } #amsg.busy { color: #567; }
+.guestnote { font-size: 12px; color: #567; margin-top: 8px; }
+
+/* leaderboard */
+#board { background: rgba(255,255,255,0.85); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+#board h2 { margin: 0 0 8px; font-size: 14px; color: #0b5c2e; font-weight: 700; display: flex; justify-content: space-between; }
+#board ol { list-style: none; margin: 0; padding: 0; }
+#board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(0,0,0,0.07); }
+#board li:first-child { border-top: 0; }
+#board .rk { width: 22px; color: #789; }
+#board .nm { flex: 1; }
+#board .sc { color: #b3541e; font-weight: 700; }
+#board li.me { color: #000; }
+#board li.me .nm::after { content: " (you)"; color: #1e8f4d; font-size: 12px; }
+#board .empty { color: #789; font-size: 13px; padding: 4px 0; }
