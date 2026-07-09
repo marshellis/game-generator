@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Ragdoll Soccer</title>
+<link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="top" class="col">
+    <div id="chip" hidden><span class="av" id="avatar">🦊</span><span id="name"></span><button id="logout">Log out</button></div>
+    <div id="bestChip">Best win streak <b id="best">0</b></div>
+  </div>
+
+  <div id="wrap" class="col">
+    <canvas id="game" width="960" height="600"></canvas>
+    <div id="touch">
+      <div class="grp">
+        <button id="tLeft">◀</button>
+        <button id="tRight">▶</button>
+      </div>
+      <div class="grp">
+        <button id="tJump">⤒</button>
+        <button id="tKick">⚽</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="account" class="col">
+    <div class="atitle">Create an account to join the leaderboard</div>
+    <div class="arow">
+      <input id="u" type="text" maxlength="20" placeholder="Username" autocomplete="off" autocapitalize="off" />
+      <input id="p" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 digits)" autocomplete="off" />
+    </div>
+    <div id="avatars"></div>
+    <div class="arow btns">
+      <button class="login" id="loginBtn">Log in</button>
+      <button class="create" id="createBtn">Create account</button>
+    </div>
+    <div id="amsg"></div>
+    <div class="guestnote">…or just play as a guest — your best streak is saved on this device.</div>
+  </div>
+
+  <div id="board" class="col">
+    <h2><span>Longest win streaks vs the Bot</span><span style="color:#2e9e57">● live</span></h2>
+    <ol id="rows"><li class="empty">Loading…</li></ol>
+  </div>
+
+<script>
+// ======================= ACCOUNT + LEADERBOARD SHELL =======================
+// Same pattern as bounce/flappy: /api/me for identity, /api/scores to post,
+// /api/leaderboard to read. Guests fall back to localStorage.
+(function () {
+  const GAME = "ragdoll-soccer";
+  const LS_BEST = "ragdoll-soccer:best";
+  // Mirrors the server allowlist (avatars.ts) — off-list values collapse to default.
+  const AVATARS = ["🦊","🐼","🐯","🦁","🐸","🐵","🐙","🦄","🐶","🐱","🐧","🐝","🦖","🐢","🦉","🐳"];
+  const DEFAULT_COLOR = "#2e9e57";
+  const USER_RE = /^[a-z0-9_-]{3,20}$/;
+  const PIN_RE = /^[0-9]{4,8}$/;
+
+  let me = null;
+  let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+  let chosenAvatar = AVATARS[0];
+
+  const el = (id) => document.getElementById(id);
+  const accountEl = el("account"), chipEl = el("chip"), avatarEl = el("avatar"), nameEl = el("name");
+  const bestEl = el("best"), rowsEl = el("rows"), msgEl = el("amsg");
+  const uEl = el("u"), pEl = el("p"), loginBtn = el("loginBtn"), createBtn = el("createBtn");
+
+  function showBest() { bestEl.textContent = best; }
+  function setMsg(t, k) { msgEl.textContent = t || ""; msgEl.className = k || ""; }
+  function busy(on) { loginBtn.disabled = on; createBtn.disabled = on; }
+  showBest();
+
+  AVATARS.forEach(function (a, i) {
+    const b = document.createElement("button");
+    b.textContent = a; if (i === 0) b.className = "sel";
+    b.onclick = function () {
+      chosenAvatar = a;
+      [...el("avatars").children].forEach((c) => c.classList.remove("sel"));
+      b.classList.add("sel");
+    };
+    el("avatars").appendChild(b);
+  });
+
+  async function api(path, opts) {
+    try {
+      return await fetch(path, {
+        credentials: "same-origin",
+        headers: opts && opts.body ? { "content-type": "application/json" } : undefined,
+        ...opts,
+      });
+    } catch (e) { return null; }
+  }
+
+  function renderAuthed() {
+    if (me) {
+      accountEl.hidden = true; chipEl.hidden = false;
+      avatarEl.textContent = me.avatar || "🦊";
+      avatarEl.style.background = me.avatarColor || DEFAULT_COLOR;
+      nameEl.innerHTML = "Playing as <b>" + escapeHtml(me.username) + "</b>";
+    } else {
+      accountEl.hidden = false; chipEl.hidden = true;
+    }
+    window.SoccerShell.playerName = me ? me.username : "Player";
+  }
+
+  async function loadMe() {
+    const r = await api("/api/me");
+    me = r && r.ok ? await r.json() : null;
+    renderAuthed();
+  }
+
+  function validate() {
+    const u = uEl.value.trim().toLowerCase(), p = pEl.value.trim();
+    if (!USER_RE.test(u)) { setMsg("Username: 3–20 letters, numbers, - or _.", "err"); return null; }
+    if (!PIN_RE.test(p)) { setMsg("PIN must be 4–8 digits.", "err"); return null; }
+    return { u, p };
+  }
+
+  async function createAccount() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Creating account…", "busy");
+    const r = await api("/api/auth/signup", { method: "POST",
+      body: JSON.stringify({ username: v.u, pin: v.p, avatar: chosenAvatar, avatarColor: DEFAULT_COLOR }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 409) { setMsg("Username taken — log in or pick another.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Check your username and PIN.", "err"); busy(false); return; }
+    me = await r.json(); setMsg("Welcome, " + me.username + "!", "ok");
+    finishAuth();
+  }
+
+  async function login() {
+    const v = validate(); if (!v) return;
+    busy(true); setMsg("Logging in…", "busy");
+    const r = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username: v.u, pin: v.p }) });
+    if (!r) { setMsg("Network error — try again.", "err"); busy(false); return; }
+    if (r.status === 429) { setMsg("Too many tries — wait a few minutes.", "err"); busy(false); return; }
+    if (!r.ok) { setMsg("Wrong username or PIN.", "err"); busy(false); return; }
+    me = await r.json();
+    finishAuth();
+  }
+
+  function finishAuth() {
+    busy(false); uEl.value = ""; pEl.value = "";
+    renderAuthed(); refreshBoard();
+  }
+
+  async function logout() {
+    await api("/api/auth/logout", { method: "POST" });
+    me = null; setMsg("", ""); renderAuthed(); refreshBoard();
+  }
+
+  loginBtn.onclick = login;
+  createBtn.onclick = createAccount;
+  el("logout").onclick = logout;
+  uEl.addEventListener("keydown", (e) => { if (e.key === "Enter") pEl.focus(); });
+  pEl.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
+  async function submit(score) {
+    if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) localStorage.setItem(LS_BEST, String(score));
+    if (score > best) { best = score; showBest(); }
+    if (!me) return;
+    const r = await api("/api/scores", { method: "POST", body: JSON.stringify({ game: GAME, score: score }) });
+    if (r && r.ok) { const j = await r.json(); if (j.best > best) { best = j.best; showBest(); } }
+    refreshBoard();
+  }
+
+  async function refreshBoard() {
+    const r = await api("/api/leaderboard?game=" + GAME + "&limit=10");
+    if (!r || !r.ok) return;
+    const top = (await r.json()).top || [];
+    if (!top.length) { rowsEl.innerHTML = '<li class="empty">No streaks yet — beat the Bot to be first!</li>'; return; }
+    rowsEl.innerHTML = top.map(function (row) {
+      const mine = me && row.username === me.username ? ' class="me"' : "";
+      return "<li" + mine + '><span class="rk">' + row.rank + '</span><span class="nm">' +
+        escapeHtml(row.username) + '</span><span class="sc">' + row.score + "</span></li>";
+    }).join("");
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  // Bridge the game ↔ shell: the game reads playerName for the HUD chip and
+  // calls submitStreak(n) whenever a vs-bot win streak grows or ends.
+  window.SoccerShell = { playerName: "Player", submitStreak: submit };
+
+  loadMe();
+  refreshBoard();
+})();
+</script>
+<script src="./game.js"></script>
+</body>
+</html>
