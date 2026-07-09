@@ -20,7 +20,7 @@
   // ---- physics constants ----
   const GRAV = 0.55, P_GRAV = 0.65;
   const BALL_R = 15, MAX_BALL_SPEED = 17;
-  const P_SPEED = 5.2, BOT_SPEED = 4.6, JUMP_V = -13.5;
+  const P_SPEED = 5.2, BOT_SPEED = 3.9, JUMP_V = -13.5;
 
   const LS_STREAK = "ragdoll-soccer:streak";
 
@@ -44,7 +44,7 @@
       side, x: side === 0 ? 240 : W - 240, y: GROUND, vx: 0, vy: 0,
       onGround: true, facing: side === 0 ? 1 : -1,
       kickT: -1, kicked: false, legPhase: 0, jumpHeld: false,
-      botKickCd: 0, botJumpCd: 0,
+      botKickCd: 0, botJumpCd: 0, botErr: 0, botErrT: 0,
     };
   }
   let players = [makePlayer(0), makePlayer(1)];
@@ -163,42 +163,50 @@
     ball.vx *= 0.999;
     const sp = Math.hypot(ball.vx, ball.vy);
     if (sp > MAX_BALL_SPEED) { ball.vx *= MAX_BALL_SPEED / sp; ball.vy *= MAX_BALL_SPEED / sp; }
-    ball.x += ball.vx; ball.y += ball.vy;
     ball.rot += ball.vx * 0.02;
 
-    // ground
-    if (ball.y + BALL_R > GROUND) {
-      ball.y = GROUND - BALL_R;
-      if (Math.abs(ball.vy) > 1.2) { ball.vy *= -0.72; sndBounce(); } else ball.vy = 0;
-      ball.vx *= 0.985;
-    }
-    // ceiling + side walls (above the goal mouths the walls are solid)
-    if (ball.y - BALL_R < 0) { ball.y = BALL_R; ball.vy *= -0.8; sndBounce(); }
-    if (ball.x - BALL_R < 0) { ball.x = BALL_R; ball.vx *= -0.8; sndBounce(); }
-    if (ball.x + BALL_R > W) { ball.x = W - BALL_R; ball.vx *= -0.8; sndBounce(); }
+    // substep the motion so a fast ball can never tunnel through a player,
+    // the crossbar, or a wall between two collision checks
+    const steps = Math.max(1, Math.ceil(Math.hypot(ball.vx, ball.vy) / 6));
+    const groundFriction = Math.pow(0.985, 1 / steps);
+    for (let i = 0; i < steps; i++) {
+      ball.x += ball.vx / steps; ball.y += ball.vy / steps;
 
-    // crossbars (solid tops of both goals)
-    barCollide(0, GOAL_D + 4);
-    barCollide(W - GOAL_D - 4, W);
+      // ground
+      if (ball.y + BALL_R > GROUND) {
+        ball.y = GROUND - BALL_R;
+        if (Math.abs(ball.vy) > 1.2) { ball.vy *= -0.72; sndBounce(); } else ball.vy = 0;
+        ball.vx *= groundFriction;
+      }
+      // ceiling + side walls (above the goal mouths the walls are solid)
+      if (ball.y - BALL_R < 0) { ball.y = BALL_R; ball.vy *= -0.8; sndBounce(); }
+      if (ball.x - BALL_R < 0) { ball.x = BALL_R; ball.vx *= -0.8; sndBounce(); }
+      if (ball.x + BALL_R > W) { ball.x = W - BALL_R; ball.vx *= -0.8; sndBounce(); }
 
-    // players: head (bouncy, headers!), body (soft), kick foot (impulse)
-    for (const p of players) {
-      circleHit(p.x, p.y - 80, 20, 1.05, p, true);   // head
-      circleHit(p.x, p.y - 42, 17, 0.6, p, false);   // body
-      if (p.kickT >= 2 && p.kickT <= 10 && !p.kicked) {
-        const f = footPos(p);
-        if (Math.hypot(ball.x - f.x, ball.y - f.y) < BALL_R + 18) {
-          ball.vx = p.facing * (11 + Math.abs(p.vx) * 0.6);
-          ball.vy = -7.5 - (p.onGround ? 0 : 2);
-          p.kicked = true; shake = 5; sndKick();
-          burst(ball.x, ball.y, "#ffffff", 8);
+      // crossbars (solid tops of both goals)
+      barCollide(0, GOAL_D + 4);
+      barCollide(W - GOAL_D - 4, W);
+
+      // players: head (bouncy, headers!), body + legs (soft), kick foot (impulse)
+      for (const p of players) {
+        circleHit(p.x, p.y - 80, 20, 1.05, p, true);   // head
+        circleHit(p.x, p.y - 42, 17, 0.6, p, false);   // body
+        circleHit(p.x, p.y - 16, 15, 0.6, p, false);   // legs — ground balls can't roll through
+        if (p.kickT >= 2 && p.kickT <= 10 && !p.kicked) {
+          const f = footPos(p);
+          if (Math.hypot(ball.x - f.x, ball.y - f.y) < BALL_R + 18) {
+            ball.vx = p.facing * (11 + Math.abs(p.vx) * 0.6);
+            ball.vy = -7.5 - (p.onGround ? 0 : 2);
+            p.kicked = true; shake = 5; sndKick();
+            burst(ball.x, ball.y, "#ffffff", 8);
+          }
         }
       }
-    }
 
-    // goals — ball fully inside the mouth, under the bar
-    if (ball.x < GOAL_D - 8 && ball.y > BAR_Y + 10) scoreGoal(1);
-    else if (ball.x > W - GOAL_D + 8 && ball.y > BAR_Y + 10) scoreGoal(0);
+      // goals — ball fully inside the mouth, under the bar
+      if (ball.x < GOAL_D - 8 && ball.y > BAR_Y + 10) { scoreGoal(1); return; }
+      if (ball.x > W - GOAL_D + 8 && ball.y > BAR_Y + 10) { scoreGoal(0); return; }
+    }
   }
 
   function barCollide(x0, x1) {
@@ -288,26 +296,44 @@
     p.botKickCd = Math.max(0, p.botKickCd - 1);
     p.botJumpCd = Math.max(0, p.botJumpCd - 1);
 
-    // predict where the ball is drifting
-    const bx = ball.x + ball.vx * 8;
+    // aim error drifts every second so the bot leaves exploitable gaps —
+    // wide enough that a well-placed shot finds a lane past its body
+    if (--p.botErrT <= 0) { p.botErr = (Math.random() - 0.5) * 110; p.botErrT = 60; }
+
+    // predict where the ball is drifting (short horizon — the bot reads slow)
+    const bx = ball.x + ball.vx * 5;
     let target;
-    if (bx > p.x + 10) target = bx + 30;      // ball behind → get goal-side of it
-    else target = bx + 26;                    // stand just right of the ball to hit left
+    if (ball.x < W / 2 - 80) target = W * 0.66;   // ball deep in player's half → hold midfield, don't press
+    else if (bx > p.x + 10) target = bx + 30;     // ball behind → get goal-side of it
+    else target = bx + 26;                        // stand just right of the ball to hit left
+    target += p.botErr;
     target = Math.max(GOAL_D + 60, Math.min(W - GOAL_D - 26, target));
 
     if (Math.abs(target - p.x) > 12) { if (target < p.x) inp.left = true; else inp.right = true; }
 
-    const dx = ball.x - p.x, dy = ball.y - (p.y - 60);
-    // jump for high balls dropping nearby
-    if (p.onGround && p.botJumpCd === 0 && Math.abs(dx) < 90 && ball.y < GROUND - 110 && ball.vy > -2) {
-      inp.jump = true; p.botJumpCd = 40;
+    // a hard-struck ball flying at the bot's goal beats its reactions: it
+    // stops slide-tracking, and often panic-jumps — which lets low shots
+    // roll right under its feet
+    const dx = ball.x - p.x;
+    const shotIncoming = ball.vx > 8 && ball.x < p.x && ball.x > W * 0.42;
+    if (shotIncoming) {
+      inp.left = inp.right = false;
+      if (p.onGround && p.botJumpCd === 0) {
+        if (Math.random() < 0.4) inp.jump = true;
+        p.botJumpCd = 50; // one committed reaction per shot — no re-rolling
+      }
+    } else if (p.onGround && p.botJumpCd === 0 && Math.abs(dx) < 65 && ball.y < GROUND - 110 && ball.vy > -2) {
+      // high ball dropping nearby: one judgement per opportunity — a failed
+      // roll means it misjudged this lob and stays down
+      const jumps = Math.random() < 0.45;
+      if (jumps) inp.jump = true;
+      p.botJumpCd = jumps ? 60 : 45;
     }
     // kick when the ball sits in front of the boot
     const f = { x: p.x + p.facing * 34, y: p.y - 16 };
     if (p.botKickCd === 0 && Math.hypot(ball.x - f.x, ball.y - f.y) < 60 && ball.x < p.x + 20) {
-      inp.kick = true; p.botKickCd = 26;
+      inp.kick = true; p.botKickCd = 42;
     }
-    void dy;
   }
 
   // ========================== DRAW ==========================
