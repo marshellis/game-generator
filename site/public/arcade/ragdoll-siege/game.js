@@ -26,7 +26,8 @@
 
   // ---- world ----
   const W = 960, H = 540;
-  const FLOOR = 522;                  // invisible safety floor (void below towers)
+  const FLOOR = 522;                  // physics clamp for corpses (below the kill line)
+  const VOID_Y = 500;                 // fall past this and you're dead — platforms only
   const G = 0.42;                     // gravity px/frame² (frame = 1/60s)
   const MAXPULL = 150;                // drag length for full power
   const HEAD = 0, CHEST = 1, PELVIS = 2, HBOW = 3, HDRAW = 4, FOOTL = 5, FOOTR = 6;
@@ -152,20 +153,24 @@
       }
     }
 
-    // landing after a jump → stand back up where we are
+    // landing after a jump → stand back up, but ONLY on a real support (no
+    // standing in the void, no re-standing mid-air = no flying)
     if (b.mode === "air" && b.airT > 0.35) {
-      const fy = Math.max(P[FOOTL].y, P[FOOTR].y);
       const vy = P[PELVIS].y - P[PELVIS].py;
-      if (Math.abs(vy) < 1.2 && (onSupport(P[FOOTL], rects) || onSupport(P[FOOTR], rects) || fy >= FLOOR - 2)) reanchor(b, rects);
+      if (Math.abs(vy) < 1.2 && (onSupport(P[FOOTL], rects) || onSupport(P[FOOTR], rects))) reanchor(b, rects);
     }
   }
   function spring(p, tx, ty, k) { p.x += (tx - p.x) * k; p.y += (ty - p.y) * k; }
   function onSupport(p, rects) { for (const r of rects) if (p.x > r.x - 4 && p.x < r.x + r.w + 4 && Math.abs(p.y - r.y) < 5) return true; return false; }
   function reanchor(b, rects) {
-    const px = b.pts[PELVIS].x;
-    let top = FLOOR;
-    for (const r of rects) if (px > r.x - 6 && px < r.x + r.w + 6 && r.y >= b.pts[PELVIS].y - 20 && r.y < top) top = r.y;
+    // stand up only if a platform is under the pelvis and within reach —
+    // over the void (or launched high in the air) there is nothing to stand on
+    const px = b.pts[PELVIS].x, py = b.pts[PELVIS].y;
+    let top = null;
+    for (const r of rects) if (px > r.x - 6 && px < r.x + r.w + 6 && r.y >= py - 20 && r.y - py < 90 && (top == null || r.y < top)) top = r.y;
+    if (top == null) return false;
     b.ax = px; b.top = top; b.mode = "stand";
+    return true;
   }
   function knockdown(b) { if (b.mode !== "dead") { b.mode = "down"; b.downT = 0; } }
   function jumpBody(b) { if (b.mode !== "stand") return false; b.mode = "air"; b.airT = 0; for (const p of b.pts) addVel(p, 0, -6.2); return true; }
@@ -414,10 +419,16 @@
         p.stam = Math.min(p.maxStam, p.stam + p.regen * dt);
       }
       stepBody(p.body, dt, p.alive ? p.drag : null, rects);
+      // knocked off your platform → the void kills you
+      if (p.alive && p.body.pts[PELVIS].y > VOID_Y) { floatText(p.body.pts[HEAD].x, VOID_Y - 24, "FELL!", "#ff6a5e"); killPlayer(p); }
     }
 
     // enemies
-    for (const e of S.enemies) { stepEnemy(e, dt); stepBody(e.body, dt, e.draw, rects); }
+    for (const e of S.enemies) {
+      stepEnemy(e, dt); stepBody(e.body, dt, e.draw, rects);
+      // knock an enemy off its platform and the fall finishes the job
+      if (e.body.mode !== "dead" && e.body.pts[PELVIS].y > VOID_Y) killEnemy(e, e.lastHit != null ? e.lastHit : -1, 0);
+    }
 
     // spawn flow — one duelist at a time
     if (S.inRun && !S.enemies.some((e) => e.body.mode !== "dead")) {
@@ -470,30 +481,35 @@
     S.texts = S.texts.filter((t) => t.t < 1.1);
   }
 
+  function killEnemy(e, slot, bonus) {
+    if (e.body.mode === "dead") return;
+    e.body.mode = "dead"; e.deadT = 0;
+    dropBow(e.body, "#e8a33d");
+    const earn = e.def.skulls + (bonus || 0);
+    awardSkulls(slot, earn);
+    floatText(e.body.pts[HEAD].x, Math.min(e.body.pts[HEAD].y, VOID_Y) - 14, "💀 +" + earn, "#ffd76b");
+    S.streak++; if (S.streak > S.best) S.best = S.streak;
+  }
   function damageEnemy(e, a, h) {
     const dmg = a.dmg * (h.head ? 3 : 1);
     e.hp -= dmg;
+    e.lastHit = a.slot;              // credit knock-off falls to the shooter
     hitBody(e, a, h.qx, h.qy, h.head);
-    if (e.hp <= 0 && e.body.mode !== "dead") {
-      e.body.mode = "dead"; e.deadT = 0;
-      dropBow(e.body, "#e8a33d");
-      const earn = e.def.skulls + (h.head ? 2 : 0);
-      awardSkulls(a.slot, earn);
-      floatText(e.body.pts[HEAD].x, e.body.pts[HEAD].y - 14, "💀 +" + earn, "#ffd76b");
-      S.streak++; if (S.streak > S.best) S.best = S.streak;
-    }
+    if (e.hp <= 0) killEnemy(e, a.slot, h.head ? 2 : 0);
+  }
+  function killPlayer(p) {
+    if (!p.alive) return;
+    p.hp = 0; p.alive = false; p.deadT = 1.7; p.body.mode = "dead";
+    dropBow(p.body, "#e8a33d");
+    p.respawnKeep = p.lives > 0;
+    if (p.respawnKeep) { p.lives--; floatText(p.body.pts[HEAD].x, Math.min(p.body.pts[HEAD].y, VOID_Y) - 14, "LIFE USED", "#8dff8d"); }
+    else endStreak();
   }
   function damagePlayer(p, a, h) {
     const dmg = a.dmg * (h.head ? 3 : 1) * (1 - p.armor);
     p.hp -= dmg;
     hitBody(p, a, h.qx, h.qy, h.head);
-    if (p.hp <= 0) {
-      p.hp = 0; p.alive = false; p.deadT = 1.7; p.body.mode = "dead";
-      dropBow(p.body, "#e8a33d");
-      p.respawnKeep = p.lives > 0;
-      if (p.respawnKeep) { p.lives--; floatText(p.body.pts[HEAD].x, p.body.pts[HEAD].y - 14, "LIFE USED", "#8dff8d"); }
-      else endStreak();
-    }
+    if (p.hp <= 0) killPlayer(p);
   }
   function endStreak() {
     if (S.streak > 0) { postScore(S.streak); }
