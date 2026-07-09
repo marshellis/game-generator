@@ -12,9 +12,11 @@
   const GROUND = 430;            // y of the play surface
   const BAND_BOT = 515;          // bottom of the bleacher/platform band
   const TRAP = 150;              // green corner-triangle width on the band
-  const GOAL_H = 150;            // goal mouth height
+  const GOAL_LIFT = 60;          // goals float this high off the pitch —
+                                 // ground rolls can't score, you have to loft it
   const GOAL_D = 80;             // goal depth from the side wall
-  const BAR_Y = GROUND - GOAL_H; // crossbar y
+  const BAR_Y = GROUND - 150;    // crossbar y
+  const SHELF_Y = GROUND - GOAL_LIFT; // solid bottom shelf of the floating goal
   const TARGET = 5;              // goals to win a match
 
   // ---- physics constants ----
@@ -172,6 +174,12 @@
     for (let i = 0; i < steps; i++) {
       ball.x += ball.vx / steps; ball.y += ball.vy / steps;
 
+      // goals first — a ball whose center is truly inside the mouth counts,
+      // even if it grazes the shelf lip on the way in
+      const inMouth = ball.y > BAR_Y + 10 && ball.y < SHELF_Y - 6;
+      if (inMouth && ball.x < GOAL_D - 8) { scoreGoal(1); return; }
+      if (inMouth && ball.x > W - GOAL_D + 8) { scoreGoal(0); return; }
+
       // ground
       if (ball.y + BALL_R > GROUND) {
         ball.y = GROUND - BALL_R;
@@ -183,9 +191,14 @@
       if (ball.x - BALL_R < 0) { ball.x = BALL_R; ball.vx *= -0.8; sndBounce(); }
       if (ball.x + BALL_R > W) { ball.x = W - BALL_R; ball.vx *= -0.8; sndBounce(); }
 
-      // crossbars (solid tops of both goals)
-      barCollide(0, GOAL_D + 4);
-      barCollide(W - GOAL_D - 4, W);
+      // goal frames: crossbar on top, solid shelf underneath (the goals float
+      // above the pitch — the ball bounces off the shelf's top AND underside)
+      barCollide(0, GOAL_D + 4, BAR_Y);
+      barCollide(W - GOAL_D - 4, W, BAR_Y);
+      // shelf collider is recessed behind the goal line so its rounded lip
+      // doesn't swat away shots arriving low in the mouth
+      barCollide(0, GOAL_D - 10, SHELF_Y);
+      barCollide(W - GOAL_D + 10, W, SHELF_Y);
 
       // players: head (bouncy, headers!), body + legs (soft), kick foot (impulse)
       for (const p of players) {
@@ -196,27 +209,24 @@
           const f = footPos(p);
           if (Math.hypot(ball.x - f.x, ball.y - f.y) < BALL_R + 18) {
             ball.vx = p.facing * (11 + Math.abs(p.vx) * 0.6);
-            ball.vy = -7.5 - (p.onGround ? 0 : 2);
+            ball.vy = -9.5 - (p.onGround ? 0 : 2); // enough loft to reach the raised mouth
             p.kicked = true; shake = 5; sndKick();
             burst(ball.x, ball.y, "#ffffff", 8);
           }
         }
       }
 
-      // goals — ball fully inside the mouth, under the bar
-      if (ball.x < GOAL_D - 8 && ball.y > BAR_Y + 10) { scoreGoal(1); return; }
-      if (ball.x > W - GOAL_D + 8 && ball.y > BAR_Y + 10) { scoreGoal(0); return; }
     }
   }
 
-  function barCollide(x0, x1) {
-    // crossbar = thin horizontal capsule at BAR_Y spanning [x0, x1]
+  function barCollide(x0, x1, y) {
+    // a goal bar = thin horizontal capsule at y spanning [x0, x1]
     const cx = Math.max(x0, Math.min(x1, ball.x));
-    const dx = ball.x - cx, dy = ball.y - BAR_Y;
+    const dx = ball.x - cx, dy = ball.y - y;
     const d = Math.hypot(dx, dy);
     if (d < BALL_R + 5 && d > 0.001) {
       const nx = dx / d, ny = dy / d;
-      ball.x = cx + nx * (BALL_R + 5); ball.y = BAR_Y + ny * (BALL_R + 5);
+      ball.x = cx + nx * (BALL_R + 5); ball.y = y + ny * (BALL_R + 5);
       const dot = ball.vx * nx + ball.vy * ny;
       if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vy -= 1.7 * dot * ny; sndBounce(); }
     }
@@ -412,18 +422,20 @@
     const x0 = side === 0 ? 0 : W - GOAL_D;   // back edge at the wall
     const x1 = side === 0 ? GOAL_D : W;
     ctx.save();
-    // net
+    // net (the goal is a box floating GOAL_LIFT above the pitch)
     ctx.strokeStyle = color; ctx.globalAlpha = 0.45; ctx.lineWidth = 1.5;
-    for (let x = x0 + 8; x < x1; x += 12) { ctx.beginPath(); ctx.moveTo(x, BAR_Y + 4); ctx.lineTo(x, GROUND); ctx.stroke(); }
-    for (let y = BAR_Y + 10; y < GROUND; y += 12) { ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke(); }
+    for (let x = x0 + 8; x < x1; x += 12) { ctx.beginPath(); ctx.moveTo(x, BAR_Y + 4); ctx.lineTo(x, SHELF_Y); ctx.stroke(); }
+    for (let y = BAR_Y + 10; y < SHELF_Y; y += 12) { ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke(); }
     ctx.globalAlpha = 1;
-    // frame: crossbar + back post + front stub
+    // frame: crossbar + bottom shelf + back post + front stubs
     ctx.strokeStyle = color; ctx.lineWidth = 7; ctx.lineCap = "round";
     ctx.beginPath(); ctx.moveTo(x0, BAR_Y); ctx.lineTo(x1, BAR_Y); ctx.stroke();           // crossbar
+    ctx.beginPath(); ctx.moveTo(x0, SHELF_Y); ctx.lineTo(x1, SHELF_Y); ctx.stroke();       // bottom shelf
     const backX = side === 0 ? 3 : W - 3;
-    ctx.beginPath(); ctx.moveTo(backX, BAR_Y); ctx.lineTo(backX, GROUND); ctx.stroke();    // back post
+    ctx.beginPath(); ctx.moveTo(backX, BAR_Y); ctx.lineTo(backX, SHELF_Y); ctx.stroke();   // back post
     const frontX = side === 0 ? GOAL_D : W - GOAL_D;
-    ctx.beginPath(); ctx.moveTo(frontX, BAR_Y); ctx.lineTo(frontX, BAR_Y + 16); ctx.stroke(); // front stub
+    ctx.beginPath(); ctx.moveTo(frontX, BAR_Y); ctx.lineTo(frontX, BAR_Y + 16); ctx.stroke();   // front stub, top
+    ctx.beginPath(); ctx.moveTo(frontX, SHELF_Y); ctx.lineTo(frontX, SHELF_Y - 16); ctx.stroke(); // front stub, bottom
     ctx.restore();
   }
 
