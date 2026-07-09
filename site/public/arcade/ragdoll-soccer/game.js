@@ -140,7 +140,9 @@
     p.vy += P_GRAV;
     p.x += p.vx; p.y += p.vy;
     if (p.y >= GROUND) { p.y = GROUND; p.vy = 0; p.onGround = true; }
-    p.x = Math.max(GOAL_D + 22, Math.min(W - GOAL_D - 22, p.x));
+    // keep players far enough from the goal blocks that a ball resting
+    // against a block face can never be pinched between block and body
+    p.x = Math.max(GOAL_D + 45, Math.min(W - GOAL_D - 45, p.x));
     if (p.onGround) p.legPhase += Math.abs(p.vx) * 0.16;
   }
 
@@ -191,14 +193,9 @@
       if (ball.x - BALL_R < 0) { ball.x = BALL_R; ball.vx *= -0.8; sndBounce(); }
       if (ball.x + BALL_R > W) { ball.x = W - BALL_R; ball.vx *= -0.8; sndBounce(); }
 
-      // goal frames: crossbar on top, solid shelf underneath (the goals float
-      // above the pitch — the ball bounces off the shelf's top AND underside)
+      // crossbars
       barCollide(0, GOAL_D + 4, BAR_Y);
       barCollide(W - GOAL_D - 4, W, BAR_Y);
-      // solid base pillars fill the space under each goal mouth — the ball
-      // bounces off their face, so nothing can get trapped under the net
-      postCollide(GOAL_D, SHELF_Y, GROUND);
-      postCollide(W - GOAL_D, SHELF_Y, GROUND);
 
       // players: head (bouncy, headers!), body + legs (soft), kick foot (impulse)
       for (const p of players) {
@@ -216,6 +213,10 @@
         }
       }
 
+      // solid base blocks under each goal mouth — resolved LAST so no other
+      // collision response can leave the ball embedded in a wall at frame end
+      blockCollide(0, SHELF_Y, GOAL_D, GROUND);
+      blockCollide(W - GOAL_D, SHELF_Y, W, GROUND);
     }
   }
 
@@ -232,17 +233,27 @@
     }
   }
 
-  function postCollide(x, y0, y1) {
-    // a pillar face = thin vertical capsule at x spanning [y0, y1]
+  function blockCollide(x0, y0, x1, y1) {
+    // solid axis-aligned block: push the ball out of the nearest surface
+    const cx = Math.max(x0, Math.min(x1, ball.x));
     const cy = Math.max(y0, Math.min(y1, ball.y));
-    const dx = ball.x - x, dy = ball.y - cy;
+    const dx = ball.x - cx, dy = ball.y - cy;
     const d = Math.hypot(dx, dy);
-    if (d < BALL_R + 5 && d > 0.001) {
-      const nx = dx / d, ny = dy / d;
-      ball.x = x + nx * (BALL_R + 5); ball.y = cy + ny * (BALL_R + 5);
-      const dot = ball.vx * nx + ball.vy * ny;
-      if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vy -= 1.7 * dot * ny; sndBounce(); }
+    if (d >= BALL_R) return;
+    if (d < 0.001) {
+      // center is inside the block — eject along the shallowest escape route
+      // (never downward: these blocks sit on the ground)
+      const up = ball.y - y0, left = ball.x - x0, right = x1 - ball.x;
+      if (up <= left && up <= right) { ball.y = y0 - BALL_R; if (ball.vy > 0) ball.vy *= -0.72; }
+      else if (left < right) { ball.x = x0 - BALL_R; if (ball.vx > 0) ball.vx *= -0.8; }
+      else { ball.x = x1 + BALL_R; if (ball.vx < 0) ball.vx *= -0.8; }
+      sndBounce();
+      return;
     }
+    const nx = dx / d, ny = dy / d;
+    ball.x = cx + nx * BALL_R; ball.y = cy + ny * BALL_R;
+    const dot = ball.vx * nx + ball.vy * ny;
+    if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vy -= 1.7 * dot * ny; sndBounce(); }
   }
 
   function circleHit(cx, cy, r, rest, p, isHead) {
