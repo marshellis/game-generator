@@ -253,6 +253,26 @@
     return bestA;
   }
 
+  // like solveAim, but pick the angle whose CLOSEST APPROACH to the target is
+  // nearest `missBy` px — a guaranteed near-miss that still looks aimed (an
+  // offset target point doesn't work: the arc can pass through the player on
+  // its way to an overshot target)
+  function solveMiss(ox, oy, tx, ty, spd, missBy) {
+    const base = Math.atan2(ty - oy, tx - ox);
+    let bestA = base, bestScore = 1e9;
+    for (let a = base - 1.2; a <= base + 0.45; a += 0.045) {
+      let x = ox, y = oy, vx = Math.cos(a) * spd, vy = Math.sin(a) * spd, d = 1e9;
+      for (let i = 0; i < 110; i++) {
+        vy += G; x += vx; y += vy;
+        const dd = Math.hypot(x - tx, y - ty); if (dd < d) d = dd;
+        if (y > FLOOR || x < 0 || x > W + 100) break;
+      }
+      const score = Math.abs(d - missBy);
+      if (score < bestScore) { bestScore = score; bestA = a; }
+    }
+    return bestA;
+  }
+
   function stepEnemy(e, dt) {
     if (e.body.mode === "dead") { e.deadT += dt; e.body.fade = clamp(1 - (e.deadT - 1.6) / 0.6, 0, 1); return; }
     // recover after being knocked flat
@@ -264,13 +284,22 @@
     e.fireT -= dt;
     if (e.fireT <= 0.55 && !e.draw) {
       const c = e.body.pts[CHEST], t = tgt.body.pts[CHEST];
-      e.aimAng = solveAim(c.x, c.y, t.x + rnd(-30, 30), t.y + rnd(-25, 15), e.def.spd) + rnd(-0.045, 0.045);
+      // ballistic max range is spd²/G — make sure far spawns can actually reach
+      const dist = Math.hypot(t.x - c.x, t.y - c.y);
+      e.aimSpd = Math.max(e.def.spd, Math.sqrt(dist * G) * 1.12);
+      // sloppy marksmen by design: ~1 in 10 shots aims true; the rest are
+      // engineered near-misses that whiff close by instead of spraying wildly
+      const sniped = Math.random() < 0.08;
+      e.aimAng = sniped
+        ? solveAim(c.x, c.y, t.x + rnd(-15, 15), t.y + rnd(-12, 8), e.aimSpd) + rnd(-0.015, 0.015)
+        : solveMiss(c.x, c.y, t.x, t.y, e.aimSpd, rnd(65, 175)) + rnd(-0.01, 0.01);
       e.draw = { ang: e.aimAng, pow: 0 };
     }
     if (e.draw) e.draw.pow = clamp(e.draw.pow + dt / 0.55, 0, 1);
     if (e.fireT <= 0) {
       const hb = e.body.pts[HBOW];
-      S.arrows.push({ x: hb.x, y: hb.y, vx: Math.cos(e.aimAng) * e.def.spd, vy: Math.sin(e.aimAng) * e.def.spd, team: "e", slot: -1, dmg: e.def.dmg, life: 7 });
+      const spd = e.aimSpd || e.def.spd;
+      S.arrows.push({ x: hb.x, y: hb.y, vx: Math.cos(e.aimAng) * spd, vy: Math.sin(e.aimAng) * spd, team: "e", slot: -1, dmg: e.def.dmg, life: 7 });
       addVel(e.body.pts[HBOW], -Math.cos(e.aimAng) * 2, -Math.sin(e.aimAng) * 2);
       e.draw = null; e.fireT = rnd(e.def.fire[0], e.def.fire[1]);
     }
