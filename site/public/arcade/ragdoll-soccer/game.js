@@ -195,10 +195,10 @@
       // above the pitch — the ball bounces off the shelf's top AND underside)
       barCollide(0, GOAL_D + 4, BAR_Y);
       barCollide(W - GOAL_D - 4, W, BAR_Y);
-      // shelf collider is recessed behind the goal line so its rounded lip
-      // doesn't swat away shots arriving low in the mouth
-      barCollide(0, GOAL_D - 10, SHELF_Y);
-      barCollide(W - GOAL_D + 10, W, SHELF_Y);
+      // solid base pillars fill the space under each goal mouth — the ball
+      // bounces off their face, so nothing can get trapped under the net
+      postCollide(GOAL_D, SHELF_Y, GROUND);
+      postCollide(W - GOAL_D, SHELF_Y, GROUND);
 
       // players: head (bouncy, headers!), body + legs (soft), kick foot (impulse)
       for (const p of players) {
@@ -227,6 +227,19 @@
     if (d < BALL_R + 5 && d > 0.001) {
       const nx = dx / d, ny = dy / d;
       ball.x = cx + nx * (BALL_R + 5); ball.y = y + ny * (BALL_R + 5);
+      const dot = ball.vx * nx + ball.vy * ny;
+      if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vy -= 1.7 * dot * ny; sndBounce(); }
+    }
+  }
+
+  function postCollide(x, y0, y1) {
+    // a pillar face = thin vertical capsule at x spanning [y0, y1]
+    const cy = Math.max(y0, Math.min(y1, ball.y));
+    const dx = ball.x - x, dy = ball.y - cy;
+    const d = Math.hypot(dx, dy);
+    if (d < BALL_R + 5 && d > 0.001) {
+      const nx = dx / d, ny = dy / d;
+      ball.x = x + nx * (BALL_R + 5); ball.y = cy + ny * (BALL_R + 5);
       const dot = ball.vx * nx + ball.vy * ny;
       if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vy -= 1.7 * dot * ny; sndBounce(); }
     }
@@ -422,6 +435,13 @@
     const x0 = side === 0 ? 0 : W - GOAL_D;   // back edge at the wall
     const x1 = side === 0 ? GOAL_D : W;
     ctx.save();
+    // solid base pillar under the mouth — flush with the screen edge, so
+    // there is no gap for the ball to get stuck in
+    ctx.fillStyle = "#7fb3c7";
+    ctx.fillRect(x0, SHELF_Y, x1 - x0, GROUND - SHELF_Y);
+    ctx.strokeStyle = "rgba(60, 105, 130, 0.7)"; ctx.lineWidth = 2;
+    ctx.strokeRect(x0 + 1, SHELF_Y + 1, x1 - x0 - 2, GROUND - SHELF_Y - 2);
+    ctx.beginPath(); ctx.moveTo(x0, (SHELF_Y + GROUND) / 2); ctx.lineTo(x1, (SHELF_Y + GROUND) / 2); ctx.stroke();
     // net (the goal is a box floating GOAL_LIFT above the pitch)
     ctx.strokeStyle = color; ctx.globalAlpha = 0.45; ctx.lineWidth = 1.5;
     for (let x = x0 + 8; x < x1; x += 12) { ctx.beginPath(); ctx.moveTo(x, BAR_Y + 4); ctx.lineTo(x, SHELF_Y); ctx.stroke(); }
