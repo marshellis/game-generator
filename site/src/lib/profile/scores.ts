@@ -2,7 +2,7 @@
 // only games on this allowlist may post to the shared leaderboard — so a random
 // or hostile slug can't create unbounded Redis keys. Add a slug here when a new
 // arcade game should keep a global leaderboard.
-export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege", "ragdoll-soccer"]);
+export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege", "ragdoll-soccer", "glass-bridge"]);
 
 export function scoreGameAllowed(game: string): boolean {
   return SCORE_GAMES.has(game);
