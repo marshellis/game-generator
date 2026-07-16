@@ -48,18 +48,36 @@
   #amsg { min-height: 17px; font-size: 13px; margin-top: 8px; }
   #amsg.err { color: #ff8a7a; } #amsg.ok { color: #8fe388; } #amsg.busy { color: #94a3b8; }
   .guestnote { font-size: 12px; color: #7a6a9c; margin-top: 8px; }
-  /* leaderboard */
-  #board { background: #1d1433; border-radius: 12px; padding: 12px 14px; }
-  #board h2 { margin: 0 0 8px; font-size: 14px; color: #ff8fb3; font-weight: 600; display: flex; justify-content: space-between; }
-  #board ol { list-style: none; margin: 0; padding: 0; }
-  #board li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
-  #board li:first-child { border-top: 0; }
-  #board .rk { width: 22px; color: #7a6a9c; }
-  #board .nm { flex: 1; }
-  #board .sc { color: #ffd166; font-weight: 700; }
-  #board li.me { color: #fff; }
-  #board li.me .nm::after { content: " (you)"; color: #ff8fb3; font-size: 12px; }
-  #board .empty { color: #7a6a9c; font-size: 13px; padding: 4px 0; }
+  /* leaderboard — an overlay on the game screen itself */
+  #lb {
+    position: absolute; top: 10px; right: 10px; width: 31%; min-width: 128px; max-width: 170px;
+    background: linear-gradient(180deg, rgba(26,16,48,0.82), rgba(12,7,26,0.82));
+    border: 1px solid rgba(255,209,102,0.45); border-radius: 10px;
+    padding: 7px 9px 8px; pointer-events: none;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.5), inset 0 0 22px rgba(255,209,102,0.06);
+  }
+  #lb h2 {
+    margin: 0 0 5px; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-align: center;
+    background: linear-gradient(180deg, #fff3c4 0%, #ffd166 45%, #e0a82e 75%, #ffe9a3 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7)) drop-shadow(0 0 6px rgba(255,209,102,0.35));
+  }
+  #lb ol { list-style: none; margin: 0; padding: 0; }
+  #lb li { display: flex; align-items: center; gap: 6px; padding: 2.5px 0; font-size: 11px; border-top: 1px solid rgba(255,209,102,0.12); }
+  #lb li:first-child { border-top: 0; }
+  #lb .rk { width: 17px; color: #b89b4e; text-align: center; flex: none; }
+  #lb .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e8ddfa; }
+  #lb .sc { color: #ffd166; font-weight: 700; }
+  #lb li.me .nm { color: #fff; font-weight: 700; }
+  #lb .empty { color: #9c8ec2; font-size: 11px; padding: 2px 0; text-align: center; }
+  /* camera angle button */
+  #camBtn {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(26,16,48,0.82); color: #e8ddfa;
+    border: 1px solid rgba(255,93,143,0.45); border-radius: 999px;
+    padding: 6px 12px; font: inherit; font-size: 12px; cursor: pointer;
+  }
+  #camBtn:active { transform: scale(0.96); }
 </style>
 </head>
 <body>
@@ -70,6 +88,11 @@
 
   <div id="wrap" class="col">
     <canvas id="game" width="800" height="500"></canvas>
+    <div id="lb">
+      <h2>🏆 BEST RUNS EVER 🏆</h2>
+      <ol id="rows"><li class="empty">Loading…</li></ol>
+    </div>
+    <button id="camBtn" title="Change camera angle (C, fine-tilt Q/E)">📷 Classic</button>
   </div>
 
   <div id="account" class="col">
@@ -85,11 +108,6 @@
     </div>
     <div id="amsg"></div>
     <div class="guestnote">…or just play as a guest — your best is saved on this device.</div>
-  </div>
-
-  <div id="board" class="col">
-    <h2><span>Global leaderboard — farthest row</span><span style="color:#ff5d8f">● live</span></h2>
-    <ol id="rows"><li class="empty">Loading…</li></ol>
   </div>
 
 <script>
@@ -213,10 +231,12 @@
     const r = await api("/api/leaderboard?game=" + GAME + "&limit=10");
     if (!r || !r.ok) return;
     const top = (await r.json()).top || [];
-    if (!top.length) { rowsEl.innerHTML = '<li class="empty">No scores yet — be the first!</li>'; return; }
+    if (!top.length) { rowsEl.innerHTML = '<li class="empty">No runs yet — be the first!</li>'; return; }
+    const MEDALS = ["🥇", "🥈", "🥉"];
     rowsEl.innerHTML = top.map(function (row) {
       const mine = me && row.username === me.username ? ' class="me"' : "";
-      return "<li" + mine + '><span class="rk">' + row.rank + '</span><span class="nm">' +
+      const rk = MEDALS[row.rank - 1] || row.rank;
+      return "<li" + mine + '><span class="rk">' + rk + '</span><span class="nm">' +
         escapeHtml(row.username) + '</span><span class="sc">' + row.score + "</span></li>";
     }).join("");
     if (me) {
@@ -268,8 +288,51 @@
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
 
-  // Perspective camera looking down the bridge (z = depth, x = lateral, h = up)
-  const FOCAL = 420, HORIZON = 104, CAMH = 2.2, CAM_BACK = 3.2, LAT = 1.35;
+  // Perspective camera looking down the bridge (z = depth, x = lateral, h = up).
+  // The camera orbits vertically around the character: pitch is adjustable, from a
+  // low cinematic angle up to a near-top-down view for precise aiming.
+  const FOCAL = 420, LAT = 1.35, SCREEN_CY = 250;
+  const CAM_PRESETS = [
+    { name: "Low", pitch: 16 },
+    { name: "Classic", pitch: 32 },
+    { name: "High", pitch: 52 },
+    { name: "Top", pitch: 72 },
+  ];
+  const LS_CAM = "glass-bridge:cam";
+  let camPreset = 1, pitchTarget = CAM_PRESETS[1].pitch;
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_CAM));
+    if (saved && typeof saved.p === "number") {
+      pitchTarget = Math.max(12, Math.min(80, saved.p));
+      camPreset = typeof saved.i === "number" ? saved.i : -1;
+    }
+  } catch (e) {}
+  let camPitch = pitchTarget;   // smoothed
+  let followZ = 0;              // smoothed camera anchor along the bridge
+  // per-frame camera basis, rebuilt by computeCam()
+  const cam = { cy: 0, cz: 0, fy: 0, fz: 0, charZC: 3.5, nearZ: -10, horizonY: 100 };
+
+  function computeCam() {
+    const phi = (camPitch * Math.PI) / 180;
+    const R = 3.4 + (camPitch / 80) * 2.2;      // back off a bit as the view goes overhead
+    cam.cy = R * Math.sin(phi) + 0.5;
+    cam.cz = followZ - R * Math.cos(phi);
+    // look at a point on the bridge a little ahead of the character
+    let fy = 0.3 - cam.cy, fz = followZ + 1.5 - cam.cz;
+    const n = Math.hypot(fy, fz); fy /= n; fz /= n;
+    cam.fy = fy; cam.fz = fz;
+    cam.charZC = Math.max(0.3, -cam.cy * fy + (ch.z - cam.cz) * fz);
+    cam.nearZ = cam.cz + (0.3 + cam.cy * fy) / fz;              // world z where zc hits the clip plane
+    const far = projRaw(0, followZ + 90, 0);                    // where the bridge vanishes
+    cam.horizonY = Math.max(10, Math.min(H * 0.6, far.y));
+  }
+  function projRaw(x, z, h) {
+    const vy = h - cam.cy, vz = z - cam.cz;
+    const zc = Math.max(0.3, vy * cam.fy + vz * cam.fz);
+    const yc = vy * cam.fz - vz * cam.fy;      // camera-space "up"
+    const s = FOCAL / zc;
+    return { x: W / 2 + x * LAT * s, y: SCREEN_CY - yc * s, s: s, d: zc };
+  }
   // Panel geometry: two glass panels per row, centered at ±PANEL_CX
   const PANEL_CX = 0.52, PANEL_HW = 0.40, PANEL_HD = 0.36; // half-width (lateral), half-depth
   const DECK_HW = 1.06;               // the solid starting deck
@@ -292,14 +355,14 @@
   }
 
   // state: "ready" | "playing" | "jumping" | "falling" | "dead"
-  let state, ch, score, camZ, shards, shakeT, deathCause;
+  let state, ch, score, shards, shakeT, deathCause;
   let pointerX = null, lastInput = "keys";
   const keys = {};
 
   function respawn() { // back to the start deck — the bridge is NOT regenerated
     ch = { x: 0, z: 0, h: 0, row: 0, jumpT: 0, jumpFromX: 0, vh: 0, spin: 0 };
     score = 0; shards = []; shakeT = 0; deathCause = "";
-    camZ = ch.z - CAM_BACK;
+    followZ = ch.z;
     pointerX = null;
     ensureRows(14);
   }
@@ -391,8 +454,13 @@
       if (ch.h < -3) { state = "dead"; submit(score); }
     }
 
-    // camera eases along behind the character
-    camZ += (ch.z - CAM_BACK - camZ) * Math.min(1, 6 * dt);
+    // camera eases along behind the character; pitch eases toward the chosen angle
+    followZ += (ch.z - followZ) * Math.min(1, 6 * dt);
+    if (keys["q"] || keys["e"]) {
+      pitchTarget = Math.max(12, Math.min(80, pitchTarget + (keys["e"] ? 40 : -40) * dt));
+      camPreset = -1; saveCam();
+    }
+    camPitch += (pitchTarget - camPitch) * Math.min(1, 8 * dt);
     if (shakeT > 0) shakeT -= dt;
 
     for (const s of shards) {
@@ -405,11 +473,7 @@
   }
 
   // ---- projection ----
-  function proj(x, z, h) {
-    const d = Math.max(0.25, z - camZ);
-    const s = FOCAL / d;
-    return { x: W / 2 + x * LAT * s, y: HORIZON + (CAMH - h) * s, s: s, d: d };
-  }
+  const proj = projRaw;
   function quad(x0, z0, x1, z1) { // fill path for a flat rect on the bridge plane
     const a = proj(x0, z0, 0), b = proj(x1, z0, 0), c = proj(x1, z1, 0), d = proj(x0, z1, 0);
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.closePath();
@@ -469,7 +533,7 @@
   }
 
   function drawRails() {
-    const zNear = camZ + 0.3, zFar = camZ + 18;
+    const zNear = Math.max(followZ - 4, cam.nearZ + 0.1), zFar = followZ + 16;
     for (const rx of [-DECK_HW - 0.06, DECK_HW + 0.06]) {
       const a = proj(rx, zNear, 0.55), b = proj(rx, zFar, 0.55), c = proj(rx, zFar, 0.62), d = proj(rx, zNear, 0.62);
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.closePath();
@@ -539,20 +603,22 @@
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
+    computeCam();
     ctx.save();
     if (shakeT > 0) ctx.translate((Math.random() - 0.5) * shakeT * 30, (Math.random() - 0.5) * shakeT * 30);
 
     // abyss glow under the bridge
-    const grad = ctx.createLinearGradient(0, HORIZON, 0, H);
+    const gy = cam.horizonY;
+    const grad = ctx.createLinearGradient(0, gy, 0, H);
     grad.addColorStop(0, "rgba(255,93,143,0.06)");
     grad.addColorStop(1, "rgba(255,93,143,0)");
-    ctx.fillStyle = grad; ctx.fillRect(0, HORIZON, W, H - HORIZON);
+    ctx.fillStyle = grad; ctx.fillRect(0, gy, W, H - gy);
 
     drawRails();
 
     // start deck (solid) — visible until you're a few rows in
-    if (camZ < 1.5) {
-      quad(-DECK_HW, camZ + 0.3, DECK_HW, 0.5, 0);
+    if (followZ < 5) {
+      quad(-DECK_HW, Math.max(followZ - 5, cam.nearZ + 0.05), DECK_HW, 0.5, 0);
       ctx.fillStyle = "#2b2248"; ctx.fill();
       ctx.strokeStyle = "rgba(255,93,143,0.5)"; ctx.lineWidth = 2;
       const e0 = proj(-DECK_HW, 0.5, 0), e1 = proj(DECK_HW, 0.5, 0);
@@ -560,8 +626,8 @@
     }
 
     // rows far → near so nearer glass overlaps
-    const first = Math.max(1, Math.floor(camZ + 0.5));
-    const last = Math.floor(camZ + 16);
+    const first = Math.max(1, Math.floor(Math.max(followZ - 4, cam.nearZ) + 0.5));
+    const last = Math.floor(followZ + 16);
     ensureRows(last);
     for (let row = last; row >= first; row--) drawRow(row);
 
@@ -608,9 +674,22 @@
   function localX(clientX) {
     const rect = canvas.getBoundingClientRect();
     const sx = (clientX - rect.left) * (W / rect.width);
-    const d = ch.z - camZ;
-    return (sx - W / 2) / (LAT * FOCAL / Math.max(0.25, d));
+    return (sx - W / 2) * cam.charZC / (LAT * FOCAL);
   }
+  // camera angle: button / C cycles presets, Q/E fine-tilts
+  const camBtn = el("camBtn");
+  function saveCam() {
+    camBtn.textContent = "📷 " + (camPreset >= 0 ? CAM_PRESETS[camPreset].name : Math.round(pitchTarget) + "°");
+    try { localStorage.setItem(LS_CAM, JSON.stringify({ p: pitchTarget, i: camPreset })); } catch (e) {}
+  }
+  function cycleCam() {
+    camPreset = (camPreset + 1 + CAM_PRESETS.length) % CAM_PRESETS.length;
+    pitchTarget = CAM_PRESETS[camPreset].pitch;
+    saveCam();
+  }
+  camBtn.addEventListener("click", (e) => { e.stopPropagation(); cycleCam(); });
+  saveCam();
+
   canvas.addEventListener("mousemove", (e) => { pointerX = localX(e.clientX); lastInput = "pointer"; });
   canvas.addEventListener("mousedown", (e) => { e.preventDefault(); startOrRestart(); });
   canvas.addEventListener("touchmove", (e) => { e.preventDefault(); pointerX = localX(e.touches[0].clientX); lastInput = "pointer"; }, { passive: false });
@@ -619,6 +698,7 @@
     const k = e.key.toLowerCase();
     keys[k] = true;
     if (k === "arrowleft" || k === "arrowright" || k === "a" || k === "d") lastInput = "keys";
+    if (k === "c") cycleCam();
     if (e.key === " " || e.key === "Enter" || e.key === "ArrowUp" || k === "w") { e.preventDefault(); startOrRestart(); }
   });
   window.addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; });
