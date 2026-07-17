@@ -187,7 +187,11 @@
   #trollTargetRow input:focus { outline: none; border-color: #ff5d8f; }
   #trollMsg { font-size: 11px; min-height: 14px; color: #ff8a7a; }
   /* the secret box — a decently big invisible click zone under the camera button */
-  #secretBox { position: absolute; top: 44px; left: 0; width: 150px; height: 110px; background: transparent; cursor: default; }
+  #secretBox {
+    position: absolute; top: 40px; left: 0;
+    width: 38%; max-width: 230px; height: 52%; max-height: 260px;
+    background: transparent; cursor: default;
+  }
   #keypad {
     position: absolute; top: 48px; left: 10px; width: 132px; z-index: 25;
     background: rgba(12,7,26,0.95); border: 1px solid rgba(122,106,156,0.5); border-radius: 10px;
@@ -1390,6 +1394,13 @@
     keypadEl.hidden = !keypadEl.hidden;
     kpBuf = ""; kpDisplay.innerHTML = "&nbsp;";
   });
+  // the box is big now, so pass steering through it — hovering over it must
+  // keep moving the character exactly like hovering over the canvas
+  el("secretBox").addEventListener("mousemove", (e) => { pointerX = localX(e.clientX); lastInput = "pointer"; });
+  el("secretBox").addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    pointerX = localX(e.touches[0].clientX); lastInput = "pointer";
+  }, { passive: false });
   function kpEval() {
     const code = kpBuf;
     kpBuf = ""; kpDisplay.innerHTML = "&nbsp;";
