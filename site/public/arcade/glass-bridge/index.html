@@ -204,6 +204,8 @@
   </div>
 
 <script src="./colyseus.js"></script>
+<script src="./peerjs.min.js"></script>
+<script src="./p2p.js"></script>
 <script>
 (function () {
   const GAME = "glass-bridge";
@@ -988,13 +990,18 @@
   killNameEl.addEventListener("keydown", (e) => { if (e.key === "Enter") killGo.click(); });
 
   // ========================== PUBLIC LOBBY ==========================
-  // Everyone in the room shares ONE bridge (the server owns which sides are
-  // safe). Breaks, reveals, and falls are broadcast live to every player.
+  // Everyone in the room shares ONE bridge; whoever runs it owns which sides
+  // are safe. Breaks, reveals, and falls are broadcast live to every player.
+  // Two transports, same protocol: the dedicated Colyseus room is preferred,
+  // and when it isn't reachable we fall back to a peer-to-peer public room
+  // (p2p.js) so the lobby works with no server at all.
   const NET_URL = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
     ? "ws://" + location.hostname + ":2567"
     : "wss://galaga-server.fly.dev";
-  let room = null, lobbyPhase = "off"; // off | joining | on | leaving
+  let room = null, p2p = null, lobbyPhase = "off"; // off | joining | on | leaving
+  let wantLobby = false; // auto-rejoin after hiccups until the player taps leave
   let ghosts = new Map(), posAcc = 0;
+  const guestName = "guest-" + Math.floor(1000 + Math.random() * 9000);
   const lobbyBtn = el("lobbyBtn"), feedEl = el("feed");
 
   function addFeed(text) {
@@ -1004,28 +1011,28 @@
     while (feedEl.children.length > 5) feedEl.lastChild.remove();
     setTimeout(() => d.remove(), 10100);
   }
-  function netSend(type, data) { if (online && room) { try { room.send(type, data); } catch (e) {} } }
+  function netSend(type, data) {
+    if (!online) return;
+    try {
+      if (room) room.send(type, data);
+      else if (p2p) p2p.send(type, data);
+    } catch (e) {}
+  }
   function setLobbyBtn() {
     lobbyBtn.classList.toggle("live", lobbyPhase === "on");
     lobbyBtn.textContent = lobbyPhase === "joining" ? "🌐 Connecting…"
       : lobbyPhase === "on" ? "🌐 LIVE · " + (ghosts.size + 1) + " here — tap to leave"
       : "🌐 Public Lobby";
   }
+  function myName() { return me && me.username ? me.username : guestName; }
+  function revealedRows() {
+    const out = [];
+    bridge.forEach((b, i) => { if (b.broken || b.proven) out.push({ row: i + 1, safe: b.safe, broken: b.broken, proven: b.proven }); });
+    return out;
+  }
 
-  async function joinLobby() {
-    if (lobbyPhase !== "off") return;
-    initAudio();
-    lobbyPhase = "joining"; setLobbyBtn();
-    let r;
-    try {
-      r = await new Colyseus.Client(NET_URL).joinOrCreate("glass-bridge");
-    } catch (e) {
-      lobbyPhase = "off"; setLobbyBtn();
-      addFeed("⚠️ Couldn't reach the lobby — try again");
-      return;
-    }
-    room = r;
-    room.onMessage("welcome", (m) => {
+  const lobbyHandlers = {};
+  lobbyHandlers.welcome = (m) => {
       online = true; lobbyPhase = "on";
       ghosts = new Map();
       m.players.forEach((p) => ghosts.set(p.id, { name: p.name, x: p.x, z: p.z, h: p.h, st: p.st, tx: p.x, tz: p.z, th: p.h }));
@@ -1042,78 +1049,118 @@
       state = "playing";
       setLobbyBtn();
       updateShopUI();
-      addFeed("🌐 You're on the shared bridge");
-    });
-    room.onMessage("join", (m) => {
-      ghosts.set(m.id, { name: m.name, x: 0, z: 0, h: 0, st: "ready", tx: 0, tz: 0, th: 0 });
-      addFeed("👋 " + m.name + " joined");
-      setLobbyBtn();
-    });
-    room.onMessage("leave", (m) => { ghosts.delete(m.id); addFeed(m.name + " left"); setLobbyBtn(); });
-    room.onMessage("pos", (m) => {
-      const g = ghosts.get(m.id);
-      if (!g) return;
-      g.tx = m.x; g.tz = m.z; g.th = m.h; g.st = m.st;
-    });
-    room.onMessage("verdict", (m) => {
-      if (!pendingLand || m.row !== pendingLand.row || state !== "resolving") return;
-      const pl = pendingLand; pendingLand = null;
-      applyVerdict(pl.row, pl.side, !!m.ok, true);
-    });
-    room.onMessage("proven", (m) => {
-      ensureRows(m.row + 14);
-      const b = bridge[m.row - 1];
-      if (b.proven) return;
-      b.safe = m.side; b.proven = true;
-      addFeed("✅ " + m.by + " cleared row " + m.row);
-    });
-    room.onMessage("break", (m) => {
-      ensureRows(m.row + 14);
-      const b = bridge[m.row - 1];
-      if (b.broken) return;
-      b.safe = 1 - m.side; b.broken = true;
-      spawnShards(m.side === 0 ? -PANEL_CX : PANEL_CX, m.row);
-      sndShatter();
-    });
-    room.onMessage("fell", (m) => addFeed("💀 " + m.name + " fell at row " + m.row));
-    room.onMessage("skipOk", (m) => {
-      if (!skipPending) return;
-      skipPending = false;
-      setRowTo(m.row, m.side);
-      addFeed("🚀 Leap of faith! Row " + m.row);
-    });
-    room.onMessage("assassinateResult", (m) => {
-      if (!killContract) return;
-      if (m.ok) {
-        killContract = false;
-        killNameEl.value = ""; killMsg.textContent = "";
-        addFeed("🗡️ Contract fulfilled — " + m.target + " is gone");
-      } else {
-        killMsg.style.color = "#ff8a7a";
-        killMsg.textContent = "No player with that username here — contract kept.";
-      }
-      updateShopUI();
-    });
-    room.onMessage("assassinated", (m) => addFeed("🗡️ " + m.by + " assassinated " + m.target + "!"));
-    room.onMessage("killed", (m) => {
-      farthest = 0; // your progress dies with you
-      killedBy = m.by;
-      if (state !== "falling" && state !== "dead") { pendingLand = null; die("killed", ch.row); }
-      updateShopUI();
-    });
-    room.onLeave(() => goSolo(lobbyPhase === "leaving" ? "Left the lobby" : "⚠️ Lost the lobby — back to solo"));
-    room.onError(() => {});
-    room.send("hello", { name: me && me.username ? me.username : "guest-" + Math.floor(1000 + Math.random() * 9000) });
+      addFeed(p2p ? "🌐 Shared bridge (peer-to-peer)" : "🌐 You're on the shared bridge");
+  };
+  lobbyHandlers.join = (m) => {
+    ghosts.set(m.id, { name: m.name, x: 0, z: 0, h: 0, st: "ready", tx: 0, tz: 0, th: 0 });
+    addFeed("👋 " + m.name + " joined");
+    setLobbyBtn();
+  };
+  lobbyHandlers.leave = (m) => { ghosts.delete(m.id); addFeed(m.name + " left"); setLobbyBtn(); };
+  lobbyHandlers.pos = (m) => {
+    const g = ghosts.get(m.id);
+    if (!g) return;
+    g.tx = m.x; g.tz = m.z; g.th = m.h; g.st = m.st;
+  };
+  lobbyHandlers.verdict = (m) => {
+    if (!pendingLand || m.row !== pendingLand.row || state !== "resolving") return;
+    const pl = pendingLand; pendingLand = null;
+    applyVerdict(pl.row, pl.side, !!m.ok, true);
+  };
+  lobbyHandlers.proven = (m) => {
+    ensureRows(m.row + 14);
+    const b = bridge[m.row - 1];
+    if (b.proven) return;
+    b.safe = m.side; b.proven = true;
+    addFeed("✅ " + m.by + " cleared row " + m.row);
+  };
+  lobbyHandlers.break = (m) => {
+    ensureRows(m.row + 14);
+    const b = bridge[m.row - 1];
+    if (b.broken) return;
+    b.safe = 1 - m.side; b.broken = true;
+    spawnShards(m.side === 0 ? -PANEL_CX : PANEL_CX, m.row);
+    sndShatter();
+  };
+  lobbyHandlers.fell = (m) => addFeed("💀 " + m.name + " fell at row " + m.row);
+  lobbyHandlers.skipOk = (m) => {
+    if (!skipPending) return;
+    skipPending = false;
+    setRowTo(m.row, m.side);
+    addFeed("🚀 Leap of faith! Row " + m.row);
+  };
+  lobbyHandlers.assassinateResult = (m) => {
+    if (!killContract) return;
+    if (m.ok) {
+      killContract = false;
+      killNameEl.value = ""; killMsg.textContent = "";
+      addFeed("🗡️ Contract fulfilled — " + m.target + " is gone");
+    } else {
+      killMsg.style.color = "#ff8a7a";
+      killMsg.textContent = "No player with that username here — contract kept.";
+    }
+    updateShopUI();
+  };
+  lobbyHandlers.assassinated = (m) => addFeed("🗡️ " + m.by + " assassinated " + m.target + "!");
+  lobbyHandlers.killed = (m) => {
+    farthest = 0; // your progress dies with you
+    killedBy = m.by;
+    if (state !== "falling" && state !== "dead") { pendingLand = null; die("killed", ch.row); }
+    updateShopUI();
+  };
+  lobbyHandlers.full = () => {}; // resolved via onClose("full")
+
+  async function joinLobby() {
+    if (lobbyPhase !== "off") return;
+    initAudio();
+    wantLobby = true;
+    lobbyPhase = "joining"; setLobbyBtn();
+    // 1) preferred: the dedicated lobby server
+    try {
+      const r = await new Colyseus.Client(NET_URL).joinOrCreate("glass-bridge");
+      room = r;
+      Object.keys(lobbyHandlers).forEach((t) => r.onMessage(t, lobbyHandlers[t]));
+      r.onLeave(() => onLobbyClosed(lobbyPhase === "leaving" ? "left" : "lost"));
+      r.onError(() => {});
+      r.send("hello", { name: myName() });
+      return;
+    } catch (e) { /* server missing or unreachable — fall back to P2P */ }
+    // 2) fallback: serverless peer-to-peer public room
+    try {
+      p2p = await GBP2P.join({
+        name: myName(),
+        revealed: revealedRows(),
+        onMessage: (t, d) => { if (lobbyHandlers[t]) lobbyHandlers[t](d || {}); },
+        onClose: (reason) => onLobbyClosed(reason),
+      });
+    } catch (e) {
+      lobbyPhase = "off"; wantLobby = false; setLobbyBtn();
+      addFeed("⚠️ Couldn't reach the lobby — try again");
+    }
   }
 
   function leaveLobby() {
-    if (!room) return;
-    lobbyPhase = "leaving";
-    try { room.leave(); } catch (e) { goSolo("Left the lobby"); }
+    wantLobby = false;
+    if (room) {
+      lobbyPhase = "leaving";
+      try { room.leave(); } catch (e) { goSolo("Left the lobby"); }
+    } else if (p2p) {
+      lobbyPhase = "leaving";
+      p2p.leave(); // fires onClose("left")
+    }
+  }
+
+  function onLobbyClosed(reason) {
+    const rejoin = wantLobby && reason !== "left" && reason !== "full";
+    goSolo(reason === "left" ? "Left the lobby"
+      : reason === "full" ? "⚠️ The lobby is full — try again in a bit"
+      : rejoin ? "⚠️ Lobby hiccup — reconnecting…"
+      : "⚠️ Lost the lobby — back to solo");
+    if (rejoin) setTimeout(() => { if (wantLobby && lobbyPhase === "off") joinLobby(); }, 400 + Math.random() * 1200);
   }
 
   function goSolo(msg) {
-    room = null; online = false; lobbyPhase = "off";
+    room = null; p2p = null; online = false; lobbyPhase = "off";
     ghosts.clear();
     // roll anything the lobby never revealed so solo play continues seamlessly
     bridge.forEach((b) => { if (b.safe === null) b.safe = Math.random() < 0.5 ? 0 : 1; });
