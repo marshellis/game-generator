@@ -62,5 +62,8 @@ export function upstashStore(): Store {
     async userBest(game, u) {
       return Number(await client().zscore(`leaderboard:${game}`, u)) || 0;
     },
+    async removeScore(game, u) {
+      await client().zrem(`leaderboard:${game}`, u);
+    },
   };
 }
