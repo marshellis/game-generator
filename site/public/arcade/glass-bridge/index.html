@@ -98,6 +98,47 @@
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   @keyframes feedout { 0% { opacity: 0; transform: translateX(-6px); } 6% { opacity: 1; transform: none; } 80% { opacity: 1; } 100% { opacity: 0; } }
+  /* shop */
+  #shopBtn {
+    position: absolute; bottom: 10px; right: 10px;
+    background: rgba(26,16,48,0.85); color: #ffd166;
+    border: 1px solid rgba(255,209,102,0.5); border-radius: 999px;
+    padding: 6px 12px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+  #shopBtn:active { transform: scale(0.96); }
+  #shop {
+    position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+    width: 88%; max-width: 420px; max-height: 84%; overflow-y: auto;
+    background: linear-gradient(180deg, rgba(26,16,48,0.96), rgba(12,7,26,0.96));
+    border: 1px solid rgba(255,209,102,0.5); border-radius: 14px;
+    padding: 12px 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+  }
+  #shop h2 {
+    margin: 0 0 2px; font-size: 16px; font-weight: 800; letter-spacing: 0.05em; text-align: center;
+    background: linear-gradient(180deg, #fff3c4, #ffd166 45%, #e0a82e 75%, #ffe9a3);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopCoins { text-align: center; font-size: 12px; color: #ffd166; margin-bottom: 8px; }
+  #shopClose { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: #cfc2e8; font-size: 16px; cursor: pointer; padding: 4px; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,209,102,0.14); }
+  .item .ic { font-size: 22px; width: 30px; text-align: center; flex: none; }
+  .item .tx { flex: 1; min-width: 0; }
+  .item .tx b { display: block; font-size: 13px; color: #f3eefc; }
+  .item .tx span { font-size: 11px; color: #9c8ec2; }
+  .item button {
+    flex: none; background: #ffd166; color: #241505; border: 0; border-radius: 8px;
+    padding: 7px 10px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; min-width: 74px;
+  }
+  .item button:disabled { background: #3a2b5e; color: #7a6a9c; cursor: default; }
+  .item button.owned { background: #2ee6a6; color: #06281d; }
+  #killRow { display: none; gap: 6px; margin-top: 6px; }
+  #killRow.show { display: flex; }
+  #killRow input {
+    flex: 1; min-width: 0; padding: 8px 10px; font-size: 13px; border: 1px solid #3a2b5e;
+    border-radius: 8px; background: #0a0716; color: #fff;
+  }
+  #killRow button { background: #ff5d8f; color: #2b0714; border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+  #killMsg { font-size: 11px; min-height: 14px; margin-top: 4px; color: #ff8a7a; }
 </style>
 </head>
 <body>
@@ -115,6 +156,36 @@
     <button id="camBtn" title="Change camera angle (C, fine-tilt Q/E)">📷 Classic</button>
     <button id="lobbyBtn" title="Play on a shared bridge with other people">🌐 Public Lobby</button>
     <div id="feed"></div>
+    <button id="shopBtn" title="Spend coins earned by landing jumps">🛒 0 🪙</button>
+    <div id="shop" hidden>
+      <button id="shopClose">✕</button>
+      <h2>THE GLASS SHOP</h2>
+      <div id="shopCoins">🪙 0 coins — earn 1 for every jump you land</div>
+      <div class="item">
+        <div class="ic">🌀</div>
+        <div class="tx"><b>Return Teleport</b><span>Warp back to the farthest row you've reached on this bridge.</span></div>
+        <button id="buyTp">50 🪙</button>
+      </div>
+      <div class="item">
+        <div class="ic">🧪</div>
+        <div class="tx"><b>Double-Jump Potion</b><span>Every jump clears TWO rows instead of one. Lasts until you die.</span></div>
+        <button id="buyDj">50 🪙</button>
+      </div>
+      <div class="item">
+        <div class="ic">🚀</div>
+        <div class="tx"><b>Leap of Faith</b><span>Skip to TEN rows past your farthest — landing safely, panel revealed.</span></div>
+        <button id="buySkip">100 🪙</button>
+      </div>
+      <div class="item" style="display:block">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="ic">🗡️</div>
+          <div class="tx"><b>Assassination Contract</b><span>Lobby only. Kill a player by username and erase their progress.</span></div>
+          <button id="buyKill">150 🪙</button>
+        </div>
+        <div id="killRow"><input id="killName" type="text" maxlength="20" placeholder="Their username…" autocomplete="off" autocapitalize="off" /><button id="killGo">Strike</button></div>
+        <div id="killMsg"></div>
+      </div>
+    </div>
   </div>
 
   <div id="account" class="col">
@@ -386,8 +457,18 @@
   let pendingLand = null, resolvingT = 0; // lobby mode: waiting on the server's verdict
   const keys = {};
 
+  // ---- shop economy ----
+  const LS_COINS = "glass-bridge:coins";
+  let coins = Math.max(0, Math.floor(Number(localStorage.getItem(LS_COINS)) || 0));
+  let farthest = 0;        // farthest row reached on THIS bridge — the teleport anchor
+  let doubleJump = false;  // 🧪 potion: every jump spans 2 rows, expires on death
+  let killContract = false;
+  let skipPending = false, killedBy = "";
+  function saveCoins() { try { localStorage.setItem(LS_COINS, String(coins)); } catch (e) {} }
+  function addCoins(n) { coins += n; saveCoins(); updateShopUI(); }
+
   function respawn() { // back to the start deck — the bridge is NOT regenerated
-    ch = { x: 0, z: 0, h: 0, row: 0, jumpT: 0, jumpFromX: 0, vh: 0, spin: 0 };
+    ch = { x: 0, z: 0, h: 0, row: 0, jumpT: 0, jumpFrom: 0, jumpSpan: 1, jumpDur: JUMP_DUR, jumpH: JUMP_H, vh: 0, spin: 0 };
     score = 0; shards = []; shakeT = 0; deathCause = "";
     pendingLand = null; resolvingT = 0;
     followZ = ch.z;
@@ -401,11 +482,14 @@
     state = "jumping";
     ch.jumpT = 0;
     ch.jumpFrom = ch.z;
+    ch.jumpSpan = doubleJump ? 2 : 1;        // 🧪 potion clears two rows at once
+    ch.jumpDur = JUMP_DUR * (ch.jumpSpan === 2 ? 1.35 : 1);
+    ch.jumpH = JUMP_H * (ch.jumpSpan === 2 ? 1.5 : 1);
     sndJump();
   }
 
   function land() {
-    const row = ch.row + 1;         // rows are 1-indexed; bridge[row-1] holds its layout
+    const row = ch.row + ch.jumpSpan; // rows are 1-indexed; bridge[row-1] holds its layout
     const side = panelAt(ch.x);
     ch.z = row; ch.h = 0;
     if (side === -1) { die("gap", row); return; }
@@ -428,6 +512,8 @@
       ch.row = row; score = row;
       if (!r.proven && !fromServer) netSend("land", { row, side }); // tell the lobby about progress
       r.proven = true;
+      addCoins(1); sndCoin(); // every landed jump pays — known panel or not
+      if (row > farthest) farthest = row;
       if (score > best) { best = score; showBest(); }
       ensureRows(row + 14);
       sndLand();
@@ -445,10 +531,12 @@
     deathCause = cause;
     ch.vh = cause === "glass" ? -0.5 : -1.2; // glass gives way, gaps you just drop into
     ch.spin = (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 2);
+    doubleJump = false; // the potion doesn't survive death
+    updateShopUI();
     sndFall();
-    // glass deaths are announced by the server (it resolved them); local physics
-    // deaths (gap/edge/old hole) are ours to report
-    if (cause !== "glass") netSend("fell", { row: row, cause: cause });
+    // glass deaths are announced by the server (it resolved them), assassinations
+    // by the broadcast; local physics deaths (gap/edge/old hole) are ours to report
+    if (cause !== "glass" && cause !== "killed") netSend("fell", { row: row, cause: cause });
   }
 
   function spawnShards(cx, z) {
@@ -484,11 +572,11 @@
     }
 
     if (state === "jumping") {
-      ch.jumpT += dt / JUMP_DUR;
+      ch.jumpT += dt / ch.jumpDur;
       if (ch.jumpT >= 1) { land(); }
       else {
-        ch.z = ch.jumpFrom + ch.jumpT;
-        ch.h = 4 * JUMP_H * ch.jumpT * (1 - ch.jumpT);
+        ch.z = ch.jumpFrom + ch.jumpT * ch.jumpSpan;
+        ch.h = 4 * ch.jumpH * ch.jumpT * (1 - ch.jumpT);
       }
     }
 
@@ -754,8 +842,15 @@
     if (state === "ready") {
       banner("GLASS BRIDGE", "Tap / Space to jump · steer with ← → or mouse · 🌐 join the public lobby to share the bridge");
     } else if (state === "dead") {
-      const why = deathCause === "glass" ? "The glass gave way" : deathCause === "hole" ? "You jumped into the hole" : "You missed the panels";
-      banner(score > 0 && score >= best ? "New best!" : why, "Tap or press Space to retry — the bridge remembers");
+      const why = deathCause === "killed" ? "ASSASSINATED by " + killedBy
+        : deathCause === "glass" ? "The glass gave way"
+        : deathCause === "hole" ? "You jumped into the hole" : "You missed the panels";
+      banner(deathCause !== "killed" && score > 0 && score >= best ? "New best!" : why, "Tap or press Space to retry — the bridge remembers");
+    }
+    if (doubleJump) {
+      ctx.textAlign = "left";
+      ctx.fillStyle = "rgba(46,230,166,0.9)"; ctx.font = "15px system-ui, sans-serif";
+      ctx.fillText("🧪 double jump", 14, H - 44);
     }
   }
 
@@ -785,6 +880,113 @@
     const sx = (clientX - rect.left) * (W / rect.width);
     return (sx - W / 2) * cam.charZC / (LAT * FOCAL);
   }
+  // ========================== SHOP ==========================
+  const shopEl = el("shop"), shopBtn = el("shopBtn"), shopCoinsEl = el("shopCoins");
+  const buyTp = el("buyTp"), buyDj = el("buyDj"), buySkip = el("buySkip"), buyKill = el("buyKill");
+  const killRow = el("killRow"), killNameEl = el("killName"), killGo = el("killGo"), killMsg = el("killMsg");
+
+  function canShopAct() { return state === "playing" || state === "ready"; }
+  function updateShopUI() {
+    shopBtn.textContent = "🛒 " + coins + " 🪙";
+    shopCoinsEl.textContent = "🪙 " + coins + " coins — earn 1 for every jump you land";
+    buyTp.disabled = coins < 50 || farthest < 1 || (ch && ch.row >= farthest) || !canShopAct();
+    buyDj.disabled = doubleJump || coins < 50;
+    buyDj.textContent = doubleJump ? "ACTIVE 🧪" : "50 🪙";
+    buyDj.classList.toggle("owned", doubleJump);
+    buySkip.disabled = coins < 100 || !canShopAct() || skipPending;
+    buyKill.disabled = killContract || !online || coins < 150;
+    buyKill.textContent = killContract ? "OWNED 🗡️" : "150 🪙";
+    buyKill.classList.toggle("owned", killContract);
+    killRow.classList.toggle("show", killContract && online);
+  }
+
+  function sndTeleport() {
+    tone(330, 0.1, "sine", 0.15, 660);
+    setTimeout(() => tone(660, 0.14, "sine", 0.15, 1320), 80);
+  }
+  function sndCoin() { tone(1200, 0.06, "square", 0.06, 1800); }
+
+  // Put the character safely on `row`, standing on `side` — teleports & skips.
+  function setRowTo(row, side) {
+    ensureRows(row + 14);
+    const r = bridge[row - 1];
+    r.safe = side; r.proven = true;
+    ch.row = row; ch.z = row; ch.h = 0; ch.jumpSpan = 1;
+    ch.x = side === 0 ? -PANEL_CX : PANEL_CX;
+    pointerX = null; lastInput = "keys";
+    if (row > farthest) farthest = row;
+    if (row > score) score = row;
+    if (score > best) { best = score; showBest(); }
+    state = "playing";
+    sndTeleport();
+    updateShopUI();
+  }
+
+  shopBtn.addEventListener("click", (e) => { e.stopPropagation(); initAudio(); shopEl.hidden = !shopEl.hidden; updateShopUI(); });
+  el("shopClose").addEventListener("click", () => { shopEl.hidden = true; });
+
+  buyTp.addEventListener("click", () => {
+    if (buyTp.disabled || coins < 50 || farthest < 1 || !canShopAct()) return;
+    initAudio();
+    addCoins(-50);
+    setRowTo(farthest, bridge[farthest - 1].safe);
+    addFeed("🌀 Teleported back to row " + farthest);
+  });
+
+  buyDj.addEventListener("click", () => {
+    if (buyDj.disabled || coins < 50 || doubleJump) return;
+    initAudio();
+    addCoins(-50);
+    doubleJump = true;
+    addFeed("🧪 Double-jump potion active — until you die");
+    updateShopUI();
+  });
+
+  buySkip.addEventListener("click", () => {
+    if (buySkip.disabled || coins < 100 || !canShopAct() || skipPending) return;
+    initAudio();
+    const target = farthest + 10;
+    addCoins(-100);
+    if (online) {
+      skipPending = true; updateShopUI();
+      netSend("skip", { row: target });
+      setTimeout(() => {
+        if (!skipPending) return;
+        skipPending = false;
+        addCoins(100); // no answer — refund
+        addFeed("⚠️ The leap fizzled — 100 🪙 refunded");
+      }, 4000);
+    } else {
+      ensureRows(target + 14);
+      setRowTo(target, bridge[target - 1].safe);
+      addFeed("🚀 Leap of faith! Row " + target);
+    }
+  });
+
+  buyKill.addEventListener("click", () => {
+    if (buyKill.disabled || coins < 150 || killContract || !online) return;
+    initAudio();
+    addCoins(-150);
+    killContract = true;
+    killMsg.textContent = "";
+    updateShopUI();
+    killNameEl.focus();
+  });
+
+  killGo.addEventListener("click", () => {
+    const t = killNameEl.value.trim();
+    if (!t || !killContract) return;
+    if (!online) { killMsg.textContent = "You're not in a lobby — the contract waits."; return; }
+    killMsg.style.color = "#9c8ec2"; killMsg.textContent = "Sending the assassin…";
+    netSend("assassinate", { target: t });
+    setTimeout(() => {
+      if (killContract && killMsg.textContent === "Sending the assassin…") {
+        killMsg.style.color = "#ff8a7a"; killMsg.textContent = "No response from the lobby — contract kept.";
+      }
+    }, 4000);
+  });
+  killNameEl.addEventListener("keydown", (e) => { if (e.key === "Enter") killGo.click(); });
+
   // ========================== PUBLIC LOBBY ==========================
   // Everyone in the room shares ONE bridge (the server owns which sides are
   // safe). Breaks, reveals, and falls are broadcast live to every player.
@@ -835,9 +1037,11 @@
         const b = bridge[rv.row - 1];
         b.safe = rv.safe; b.broken = rv.broken; b.proven = rv.proven;
       });
+      farthest = 0; skipPending = false; // fresh shared bridge, fresh anchor
       respawn();
       state = "playing";
       setLobbyBtn();
+      updateShopUI();
       addFeed("🌐 You're on the shared bridge");
     });
     room.onMessage("join", (m) => {
@@ -872,6 +1076,31 @@
       sndShatter();
     });
     room.onMessage("fell", (m) => addFeed("💀 " + m.name + " fell at row " + m.row));
+    room.onMessage("skipOk", (m) => {
+      if (!skipPending) return;
+      skipPending = false;
+      setRowTo(m.row, m.side);
+      addFeed("🚀 Leap of faith! Row " + m.row);
+    });
+    room.onMessage("assassinateResult", (m) => {
+      if (!killContract) return;
+      if (m.ok) {
+        killContract = false;
+        killNameEl.value = ""; killMsg.textContent = "";
+        addFeed("🗡️ Contract fulfilled — " + m.target + " is gone");
+      } else {
+        killMsg.style.color = "#ff8a7a";
+        killMsg.textContent = "No player with that username here — contract kept.";
+      }
+      updateShopUI();
+    });
+    room.onMessage("assassinated", (m) => addFeed("🗡️ " + m.by + " assassinated " + m.target + "!"));
+    room.onMessage("killed", (m) => {
+      farthest = 0; // your progress dies with you
+      killedBy = m.by;
+      if (state !== "falling" && state !== "dead") { pendingLand = null; die("killed", ch.row); }
+      updateShopUI();
+    });
     room.onLeave(() => goSolo(lobbyPhase === "leaving" ? "Left the lobby" : "⚠️ Lost the lobby — back to solo"));
     room.onError(() => {});
     room.send("hello", { name: me && me.username ? me.username : "guest-" + Math.floor(1000 + Math.random() * 9000) });
@@ -892,7 +1121,9 @@
       const pl = pendingLand; pendingLand = null;
       if (state === "resolving") applyVerdict(pl.row, pl.side, pl.side === bridge[pl.row - 1].safe, true);
     }
+    if (skipPending) { skipPending = false; addCoins(100); addFeed("⚠️ The leap fizzled — 100 🪙 refunded"); }
     setLobbyBtn();
+    updateShopUI();
     if (msg) addFeed(msg);
   }
 
@@ -921,6 +1152,7 @@
   canvas.addEventListener("touchmove", (e) => { e.preventDefault(); pointerX = localX(e.touches[0].clientX); lastInput = "pointer"; }, { passive: false });
   canvas.addEventListener("touchstart", (e) => { e.preventDefault(); startOrRestart(); }, { passive: false });
   window.addEventListener("keydown", (e) => {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return; // typing ≠ playing
     const k = e.key.toLowerCase();
     keys[k] = true;
     if (k === "arrowleft" || k === "arrowright" || k === "a" || k === "d") lastInput = "keys";
@@ -929,6 +1161,7 @@
   });
   window.addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; });
 
+  updateShopUI();
   requestAnimationFrame(loop);
   loadMe();
   refreshBoard();
