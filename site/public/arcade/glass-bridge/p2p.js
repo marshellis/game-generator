@@ -26,7 +26,9 @@
 window.GBP2P = (function () {
   "use strict";
 
-  const ROOM_ID = "mg-glassbridge-pub-v1";
+  // ?p2proom=<name> joins an alternate room — used for testing without
+  // disturbing the real public room. Players never see this.
+  const ROOM_ID = (new URLSearchParams(location.search).get("p2proom") || "mg-glassbridge-pub-v1").slice(0, 40);
   const MAX_PLAYERS = 12;
   const MAX_ROW = 5000;
   const STUN_FALLBACK = [
@@ -79,6 +81,15 @@ window.GBP2P = (function () {
       r.proven = true;
       return { side: r.safe, provedNow };
     }
+    function peek(from, to) { // x-ray: private read, reveals nothing
+      const a = Math.max(1, Math.trunc(from));
+      const b = Math.min(MAX_ROW, Math.trunc(to), a + 120);
+      if (!Number.isFinite(a) || !Number.isFinite(b) || b < a) return [];
+      ensureRows(b + 10);
+      const out = [];
+      for (let row = a; row <= b; row++) out.push({ row: row, safe: rows[row - 1].safe });
+      return out;
+    }
     function merge(list) { // adopt the revealed knowledge a joining player carries
       (list || []).forEach(function (rv) {
         const row = Math.trunc(Number(rv && rv.row));
@@ -91,7 +102,7 @@ window.GBP2P = (function () {
       });
     }
     ensureRows(40);
-    return { ensureRows, revealed, land, prove, merge };
+    return { ensureRows, revealed, land, prove, peek, merge };
   }
 
   // ---- host: runs the room, is also a player ("host" id) ----
@@ -132,6 +143,9 @@ window.GBP2P = (function () {
         sendTo(p, "skipOk", { row: row, side: res.side });
         p.row = Math.max(p.row, row);
         if (res.provedNow) broadcast("proven", { row: row, side: res.side, by: p.name });
+      } else if (t === "xray") {
+        const rows = bridge.peek(Number(d && d.from), Number(d && d.to));
+        if (rows.length) sendTo(p, "xrayData", { rows: rows });
       } else if (t === "fell") {
         const cause = d && d.cause === "hole" ? "hole" : "gap";
         broadcast("fell", { id: id, name: p.name, row: Math.max(0, Math.trunc(Number(d && d.row) || 0)), cause: cause }, id);
@@ -235,36 +249,38 @@ window.GBP2P = (function () {
     });
   }
 
-  function tryJoin(cfg) {
+  function tryJoin(cfg, timeoutMs) {
     return new Promise(function (resolve, reject) {
       const p = new Peer(cfg);
       let settled = false;
       function fail(why) { if (!settled) { settled = true; clearTimeout(to); try { p.destroy(); } catch (e) {} reject(new Error(why)); } }
-      const to = setTimeout(function () { fail("connect timeout"); }, 9000);
+      const to = setTimeout(function () { fail("connect timeout"); }, timeoutMs || 9000);
       p.on("open", function () {
         const conn = p.connect(ROOM_ID, { reliable: true });
         conn.on("open", function () { if (!settled) { settled = true; clearTimeout(to); resolve({ peer: p, conn: conn }); } });
         conn.on("error", function () { fail("connect failed"); });
       });
-      p.on("error", function () { fail("peer error"); });
+      // "peer-unavailable" fires fast when nobody holds the room id
+      p.on("error", function (e) { fail(e && e.type === "peer-unavailable" ? "no host" : "peer error"); });
     });
   }
 
   // join(opts): opts = { name, revealed, onMessage(t, d), onClose(reason) }
+  // Guest-FIRST: probing for an existing host before claiming the room id
+  // narrows the double-host race window on the shared public broker.
   async function join(opts) {
     const ice = await getIce();
     const cfg = { debug: 1, config: { iceServers: ice } };
+    try {
+      const g = await tryJoin(cfg, 6500);
+      return guestRun(g.peer, g.conn, opts);
+    } catch (e) { /* nobody home (or unreachable) — try to host */ }
     const hostPeer = await tryHost(cfg);
     if (hostPeer && hostPeer !== "taken") return hostRun(hostPeer, opts);
     if (hostPeer === null) throw new Error("broker unreachable");
-    // someone else already hosts — join them (retry once for claim races)
-    try {
-      const g = await tryJoin(cfg);
-      return guestRun(g.peer, g.conn, opts);
-    } catch (e) {
-      const g = await tryJoin(cfg);
-      return guestRun(g.peer, g.conn, opts);
-    }
+    // claim raced — someone else just became host; join them
+    const g2 = await tryJoin(cfg, 9000);
+    return guestRun(g2.peer, g2.conn, opts);
   }
 
   return { join: join };
