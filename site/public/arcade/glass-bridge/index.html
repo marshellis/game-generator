@@ -164,6 +164,28 @@
   .acmd span { font-size: 11px; color: #cbb27a; }
   .acmd.on { background: rgba(46,230,166,0.14); border-color: rgba(46,230,166,0.6); }
   .acmd:disabled { opacity: 0.45; cursor: default; }
+  /* troll panel — same bones as admin, clown-red */
+  #troll {
+    position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+    width: 88%; max-width: 420px; max-height: 84%; overflow-y: auto;
+    background: linear-gradient(180deg, rgba(48,12,26,0.97), rgba(24,6,14,0.97));
+    border: 1px solid rgba(255,93,143,0.7); border-radius: 14px;
+    padding: 12px 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 30px rgba(255,93,143,0.18);
+  }
+  #troll h2 {
+    margin: 0 0 10px; font-size: 16px; font-weight: 800; letter-spacing: 0.05em; text-align: center;
+    background: linear-gradient(180deg, #ffc4d6, #ff5d8f 45%, #c2185b 75%, #ffb0c8);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #trollClose { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: #e8ddfa; font-size: 16px; cursor: pointer; padding: 4px; }
+  #troll .acmd { background: rgba(255,93,143,0.08); border-color: rgba(255,93,143,0.4); }
+  #troll .acmd span { color: #d19aae; }
+  #trollTargetRow input {
+    width: 100%; padding: 9px 11px; font-size: 13px; border: 1px solid #5e2b3f;
+    border-radius: 9px; background: #12060c; color: #fff;
+  }
+  #trollTargetRow input:focus { outline: none; border-color: #ff5d8f; }
+  #trollMsg { font-size: 11px; min-height: 14px; color: #ff8a7a; }
 </style>
 </head>
 <body>
@@ -223,12 +245,28 @@
       <div class="item">
         <div class="ic">♾️</div>
         <div class="tx"><b>Infinite Assassinations</b><span>The strike panel stays forever — unlimited kills, no contracts needed.</span></div>
-        <button id="buyInfKill">1000 🪙</button>
+        <button id="buyInfKill">500 🪙</button>
+      </div>
+      <div class="item">
+        <div class="ic">🤡</div>
+        <div class="tx"><b>Troll Panel</b><span>Yours forever: random assassinations, a 25%-speed curse, and the choke — their next jump shatters EVERY panel.</span></div>
+        <button id="buyTroll">700 🪙</button>
       </div>
       <div class="item">
         <div class="ic">👑</div>
         <div class="tx"><b>Admin Panel</b><span>The keys to the bridge: one-click admin commands, yours forever.</span></div>
         <button id="buyAdmin">10000 🪙</button>
+      </div>
+    </div>
+    <div id="troll" hidden>
+      <button id="trollClose">✕</button>
+      <h2>🤡 TROLL PANEL</h2>
+      <div class="acmds">
+        <button class="acmd" id="trRandom"><b>🎲 Assassinate at random</b><span>Kills one random player in your lobby — no name needed</span></button>
+        <div id="trollTargetRow"><input id="trollName" type="text" maxlength="20" placeholder="Victim's username…" autocomplete="off" autocapitalize="off" /></div>
+        <button class="acmd" id="trSlow"><b>🐌 Slow them down</b><span>That player moves at 25% speed for 20 seconds</span></button>
+        <button class="acmd" id="trChoke"><b>🫳 Choke their next jump</b><span>BOTH panels shatter on their next jump — even the safe one — then back to normal</span></button>
+        <div id="trollMsg"></div>
       </div>
     </div>
     <div id="admin" hidden>
@@ -519,15 +557,21 @@
   // ---- shop economy ----
   const LS_COINS = "glass-bridge:coins";
   const LS_PERMDJ = "glass-bridge:permdj", LS_INFKILL = "glass-bridge:infkill", LS_ADMIN = "glass-bridge:admin";
+  const LS_TROLL = "glass-bridge:troll";
   let coins = Math.max(0, Math.floor(Number(localStorage.getItem(LS_COINS)) || 0));
   let farthest = 0;        // farthest row reached on THIS bridge — the teleport anchor
   let permDJ = localStorage.getItem(LS_PERMDJ) === "1";   // ⚗️ eternal double-jump, owned forever
   let infKill = localStorage.getItem(LS_INFKILL) === "1"; // ♾️ unlimited assassinations
   let adminOwned = localStorage.getItem(LS_ADMIN) === "1"; // 👑 admin panel
+  let trollOwned = localStorage.getItem(LS_TROLL) === "1"; // 🤡 troll panel
   let doubleJump = permDJ; // 🧪 potion: every jump spans 2 rows; expires on death unless eternal/admin
   let adminDj = false, adminXray = false, adminGod = false; // 👑 session toggles
   let killContract = false;
   let skipPending = false, skipCost = 0, killedBy = "";
+  // 🤡 curses inflicted on YOU by other players' troll panels
+  let slowT = 0;                 // 🐌 moving at 25% speed while > 0
+  let chokeNext = false, chokedBy = ""; // 🫳 next jump shatters whatever you land on
+  function slowFactor() { return slowT > 0 ? 0.25 : 1; }
   // 🔮 x-ray: timed peek at safe sides. In the lobby the data comes from the
   // host via "xray"→"xrayData" and lives ONLY in xrayMap (never written into
   // bridge[], so it can't be used to auto-resolve landings after it expires).
@@ -544,7 +588,7 @@
   function respawn() { // back to the start deck — the bridge is NOT regenerated
     ch = { x: 0, z: 0, h: 0, row: 0, jumpT: 0, jumpFrom: 0, jumpSpan: 1, jumpDur: JUMP_DUR, jumpH: JUMP_H, vh: 0, spin: 0 };
     score = 0; shards = []; shakeT = 0; deathCause = "";
-    pendingLand = null; resolvingT = 0;
+    pendingLand = null; resolvingT = 0; chokeNext = false;
     followZ = ch.z;
     pointerX = null;
     ensureRows(14);
@@ -557,7 +601,7 @@
     ch.jumpT = 0;
     ch.jumpFrom = ch.z;
     ch.jumpSpan = doubleJump ? 2 : 1;        // 🧪 potion clears two rows at once
-    ch.jumpDur = JUMP_DUR * (ch.jumpSpan === 2 ? 1.35 : 1);
+    ch.jumpDur = JUMP_DUR * (ch.jumpSpan === 2 ? 1.35 : 1) / slowFactor(); // 🐌 slow-motion misery
     ch.jumpH = JUMP_H * (ch.jumpSpan === 2 ? 1.5 : 1);
     sndJump();
   }
@@ -566,7 +610,18 @@
     const row = ch.row + ch.jumpSpan; // rows are 1-indexed; bridge[row-1] holds its layout
     const side = panelAt(ch.x);
     ch.z = row; ch.h = 0;
-    if (side === -1) { die("gap", row); return; }
+    if (side === -1) { chokeNext = false; die("gap", row); return; }
+    if (chokeNext) {
+      // 🫳 the choke: EVERY panel is fatal for this one landing — even the safe
+      // one. Your panel shatters under you (visually only — the real bridge is
+      // untouched for everyone else), then the curse is spent.
+      chokeNext = false;
+      spawnShards(side === 0 ? -PANEL_CX : PANEL_CX, row);
+      shakeT = 0.3;
+      sndShatter();
+      die("choked", row);
+      return;
+    }
     const r = bridge[row - 1];
     if (r.broken && side !== r.safe) { die("hole", row); return; } // jumped into an old hole
     if (r.safe === null) {
@@ -644,10 +699,11 @@
   function update(dt) {
     // lateral steering works on the ground and mid-air
     if (state === "playing" || state === "jumping" || state === "ready") {
-      if (keys["arrowleft"] || keys["a"]) { ch.x -= KEY_SPEED * dt; lastInput = "keys"; }
-      if (keys["arrowright"] || keys["d"]) { ch.x += KEY_SPEED * dt; lastInput = "keys"; }
+      const sf = slowFactor(); // 🐌 25% crawl while cursed
+      if (keys["arrowleft"] || keys["a"]) { ch.x -= KEY_SPEED * sf * dt; lastInput = "keys"; }
+      if (keys["arrowright"] || keys["d"]) { ch.x += KEY_SPEED * sf * dt; lastInput = "keys"; }
       if (lastInput === "pointer" && pointerX !== null) {
-        ch.x += (pointerX - ch.x) * Math.min(1, 12 * dt);
+        ch.x += (pointerX - ch.x) * Math.min(1, 12 * sf * dt);
       }
       ch.x = Math.max(-X_CLAMP, Math.min(X_CLAMP, ch.x));
     }
@@ -680,6 +736,7 @@
 
     // 🔮 x-ray timer + keeping the peeked window ahead of the player
     if (xrayT > 0) xrayT = Math.max(0, xrayT - dt);
+    if (slowT > 0) slowT = Math.max(0, slowT - dt); // 🐌 the crawl wears off
     if (xrayOn() && online) {
       xrayReqAcc += dt;
       if (xrayReqAcc > 2 && xrayMaxTo < ch.row + 50) {
@@ -947,9 +1004,11 @@
       banner("GLASS BRIDGE", "Tap / Space to jump · steer with ← → or mouse · 🌐 join the public lobby to share the bridge");
     } else if (state === "dead") {
       const why = deathCause === "killed" ? "ASSASSINATED by " + killedBy
+        : deathCause === "choked" ? "CHOKED by " + chokedBy + " — the glass betrayed you"
         : deathCause === "glass" ? "The glass gave way"
         : deathCause === "hole" ? "You jumped into the hole" : "You missed the panels";
-      banner(deathCause !== "killed" && score > 0 && score >= best ? "New best!" : why, "Tap or press Space to retry — the bridge remembers");
+      const noGlory = deathCause === "killed" || deathCause === "choked";
+      banner(!noGlory && score > 0 && score >= best ? "New best!" : why, "Tap or press Space to retry — the bridge remembers");
     }
     // active-power indicators, stacked above the lobby button
     ctx.textAlign = "left";
@@ -966,6 +1025,14 @@
     if (adminGod) {
       ctx.fillStyle = "rgba(255,209,102,0.95)";
       ctx.fillText("🛡️ immortal", 14, hudY); hudY -= 20;
+    }
+    if (slowT > 0) {
+      ctx.fillStyle = "rgba(255,138,122,0.95)";
+      ctx.fillText("🐌 slowed " + Math.ceil(slowT) + "s", 14, hudY); hudY -= 20;
+    }
+    if (chokeNext) {
+      ctx.fillStyle = "rgba(255,70,86,0.95)";
+      ctx.fillText("🫳 CHOKED — next jump is doomed", 14, hudY); hudY -= 20;
     }
   }
 
@@ -1001,6 +1068,7 @@
   const buyPermDj = el("buyPermDj"), buyXray = el("buyXray"), buyInfKill = el("buyInfKill"), buyAdmin = el("buyAdmin");
   const killRow = el("killRow"), killNameEl = el("killName"), killGo = el("killGo"), killMsg = el("killMsg");
   const adminEl = el("admin");
+  const buyTroll = el("buyTroll"), trollEl = el("troll"), trollNameEl = el("trollName"), trollMsg = el("trollMsg");
 
   function canShopAct() { return state === "playing" || state === "ready"; }
   function updateShopUI() {
@@ -1019,9 +1087,12 @@
     buyPermDj.textContent = permDJ ? "OWNED ⚗️" : "200 🪙";
     buyPermDj.classList.toggle("owned", permDJ);
     buyXray.disabled = coins < 300;
-    buyInfKill.disabled = infKill || coins < 1000;
-    buyInfKill.textContent = infKill ? "OWNED ♾️" : "1000 🪙";
+    buyInfKill.disabled = infKill || coins < 500;
+    buyInfKill.textContent = infKill ? "OWNED ♾️" : "500 🪙";
     buyInfKill.classList.toggle("owned", infKill);
+    buyTroll.disabled = !trollOwned && coins < 700;
+    buyTroll.textContent = trollOwned ? "OPEN 🤡" : "700 🪙";
+    buyTroll.classList.toggle("owned", trollOwned);
     buyAdmin.disabled = !adminOwned && coins < 10000;
     buyAdmin.textContent = adminOwned ? "OPEN 👑" : "10000 🪙";
     buyAdmin.classList.toggle("owned", adminOwned);
@@ -1154,9 +1225,9 @@
   });
 
   buyInfKill.addEventListener("click", () => {
-    if (buyInfKill.disabled || infKill || coins < 1000) return;
+    if (buyInfKill.disabled || infKill || coins < 500) return;
     initAudio();
-    addCoins(-1000);
+    addCoins(-500);
     infKill = true;
     try { localStorage.setItem(LS_INFKILL, "1"); } catch (e) {}
     addFeed("♾️ Unlimited assassinations unlocked");
@@ -1174,6 +1245,40 @@
     updateShopUI();
     shopEl.hidden = true; adminEl.hidden = false; updateAdminUI();
   });
+
+  // ---- 🤡 troll panel: bought once, annoy forever ----
+  buyTroll.addEventListener("click", () => {
+    initAudio();
+    if (trollOwned) { shopEl.hidden = true; trollEl.hidden = false; trollMsg.textContent = ""; return; }
+    if (buyTroll.disabled || coins < 700) return;
+    addCoins(-700);
+    trollOwned = true;
+    try { localStorage.setItem(LS_TROLL, "1"); } catch (e) {}
+    addFeed("🤡 TROLL PANEL unlocked");
+    updateShopUI();
+    shopEl.hidden = true; trollEl.hidden = false; trollMsg.textContent = "";
+  });
+  el("trollClose").addEventListener("click", () => { trollEl.hidden = true; });
+
+  function trollSay(t, bad) { trollMsg.style.color = bad ? "#ff8a7a" : "#8fe388"; trollMsg.textContent = t; }
+  el("trRandom").addEventListener("click", () => {
+    if (!online) { trollSay("Join the lobby first — nobody to torment.", true); return; }
+    const names = [...ghosts.values()].map((g) => g.name);
+    if (!names.length) { trollSay("Nobody else on the bridge…", true); return; }
+    const pick = names[Math.floor(Math.random() * names.length)];
+    netSend("assassinate", { target: pick });
+    trollSay("🎲 The dice chose " + pick + "…", false);
+  });
+  function sendTroll(kind) {
+    const t = trollNameEl.value.trim();
+    if (!t) { trollSay("Type a victim's username first.", true); return; }
+    if (!online) { trollSay("Join the lobby first — nobody to torment.", true); return; }
+    netSend("troll", { target: t, kind: kind });
+    trollSay("Sending the curse…", false);
+    setTimeout(() => { if (trollMsg.textContent === "Sending the curse…") trollSay("No response — is anyone there?", true); }, 4000);
+  }
+  el("trSlow").addEventListener("click", () => sendTroll("slow"));
+  el("trChoke").addEventListener("click", () => sendTroll("choke"));
 
   // ---- 👑 admin commands: one click each, labels say what they do ----
   el("adminClose").addEventListener("click", () => { adminEl.hidden = true; });
@@ -1323,6 +1428,23 @@
     updateShopUI();
   };
   lobbyHandlers.assassinated = (m) => addFeed("🗡️ " + m.by + " assassinated " + m.target + "!");
+  lobbyHandlers.trolled = (m) => {
+    if (m.kind === "slow") {
+      slowT = Math.max(slowT, Number(m.dur) || 20);
+      addFeed("🐌 " + m.by + " slowed you to a crawl!");
+    } else if (m.kind === "choke") {
+      chokeNext = true; chokedBy = m.by;
+      addFeed("🫳 " + m.by + " choked you — your next jump is DOOMED");
+    }
+  };
+  lobbyHandlers.trollResult = (m) => {
+    if (m.ok) trollSay((m.kind === "slow" ? "🐌 " : "🫳 ") + m.target + " is cursed 😈", false);
+    else trollSay("No player with that username here.", true);
+  };
+  lobbyHandlers.trollcast = (m) => {
+    if (m.target === myName()) return; // the victim gets the personal version
+    addFeed((m.kind === "slow" ? "🐌 " : "🫳 ") + m.by + (m.kind === "slow" ? " slowed " : " choked ") + m.target + "!");
+  };
   lobbyHandlers.killed = (m) => {
     farthest = 0; // your progress dies with you
     killedBy = m.by;

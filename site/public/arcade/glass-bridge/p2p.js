@@ -157,6 +157,16 @@ window.GBP2P = (function () {
         sendTo(hitP, "killed", { by: p.name });
         sendTo(p, "assassinateResult", { ok: true, target: hitP.name });
         broadcast("assassinated", { by: p.name, target: hitP.name });
+      } else if (t === "troll") {
+        // 🤡 slow / choke — a targeted curse relayed to its victim
+        const kind = d && (d.kind === "slow" || d.kind === "choke") ? d.kind : null;
+        const wanted2 = String((d && d.target) || "").trim().toLowerCase();
+        let vId = null, vP = null;
+        players.forEach(function (q, qid) { if (vId === null && qid !== id && q.name.toLowerCase() === wanted2) { vId = qid; vP = q; } });
+        if (!kind || !wanted2 || vId === null) { sendTo(p, "trollResult", { ok: false, kind: kind }); return; }
+        sendTo(vP, "trolled", { kind: kind, by: p.name, dur: 20 });
+        sendTo(p, "trollResult", { ok: true, target: vP.name, kind: kind });
+        broadcast("trollcast", { by: p.name, target: vP.name, kind: kind });
       }
     }
 
