@@ -139,6 +139,31 @@
   }
   #killRow button { background: #ff5d8f; color: #2b0714; border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
   #killMsg { font-size: 11px; min-height: 14px; margin-top: 4px; color: #ff8a7a; }
+  /* admin panel */
+  #admin {
+    position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+    width: 88%; max-width: 420px; max-height: 84%; overflow-y: auto;
+    background: linear-gradient(180deg, rgba(48,26,16,0.97), rgba(26,10,7,0.97));
+    border: 1px solid rgba(255,209,102,0.7); border-radius: 14px;
+    padding: 12px 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 30px rgba(255,209,102,0.15);
+  }
+  #admin h2 {
+    margin: 0 0 10px; font-size: 16px; font-weight: 800; letter-spacing: 0.05em; text-align: center;
+    background: linear-gradient(180deg, #fff3c4, #ffd166 45%, #e0a82e 75%, #ffe9a3);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #adminClose { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: #e8ddfa; font-size: 16px; cursor: pointer; padding: 4px; }
+  .acmds { display: flex; flex-direction: column; gap: 7px; }
+  .acmd {
+    text-align: left; background: rgba(255,209,102,0.08); color: #f3eefc;
+    border: 1px solid rgba(255,209,102,0.35); border-radius: 10px;
+    padding: 9px 12px; font: inherit; cursor: pointer;
+  }
+  .acmd:active { transform: scale(0.985); }
+  .acmd b { display: block; font-size: 13px; }
+  .acmd span { font-size: 11px; color: #cbb27a; }
+  .acmd.on { background: rgba(46,230,166,0.14); border-color: rgba(46,230,166,0.6); }
+  .acmd:disabled { opacity: 0.45; cursor: default; }
 </style>
 </head>
 <body>
@@ -184,6 +209,38 @@
         </div>
         <div id="killRow"><input id="killName" type="text" maxlength="20" placeholder="Their username…" autocomplete="off" autocapitalize="off" /><button id="killGo">Strike</button></div>
         <div id="killMsg"></div>
+      </div>
+      <div class="item">
+        <div class="ic">⚗️</div>
+        <div class="tx"><b>Eternal Double-Jump</b><span>Double-jump FOREVER — it survives death, saved to this device.</span></div>
+        <button id="buyPermDj">200 🪙</button>
+      </div>
+      <div class="item">
+        <div class="ic">🔮</div>
+        <div class="tx"><b>X-Ray Potion</b><span>For 30 seconds, see which panel holds and which shatters — even rows you've never reached.</span></div>
+        <button id="buyXray">300 🪙</button>
+      </div>
+      <div class="item">
+        <div class="ic">♾️</div>
+        <div class="tx"><b>Infinite Assassinations</b><span>The strike panel stays forever — unlimited kills, no contracts needed.</span></div>
+        <button id="buyInfKill">1000 🪙</button>
+      </div>
+      <div class="item">
+        <div class="ic">👑</div>
+        <div class="tx"><b>Admin Panel</b><span>The keys to the bridge: one-click admin commands, yours forever.</span></div>
+        <button id="buyAdmin">10000 🪙</button>
+      </div>
+    </div>
+    <div id="admin" hidden>
+      <button id="adminClose">✕</button>
+      <h2>👑 ADMIN PANEL</h2>
+      <div class="acmds">
+        <button class="acmd" id="adCoins"><b>💰 Give 1,000 coins</b><span>Adds 1,000 coins to your wallet instantly</span></button>
+        <button class="acmd" id="adWarp"><b>🚀 Warp +50</b><span>Teleport 50 rows past your farthest, free</span></button>
+        <button class="acmd" id="adDj"><b>🧪 Double-Jump: OFF</b><span>Toggle permanent double-jump on or off</span></button>
+        <button class="acmd" id="adXray"><b>🔮 Endless X-Ray: OFF</b><span>Always see safe and fake panels, no timer</span></button>
+        <button class="acmd" id="adGod"><b>🛡️ Immortality: OFF</b><span>Falls can't kill you — you bounce back to your row</span></button>
+        <button class="acmd" id="adKillAll"><b>🗡️ Kill everyone</b><span>Assassinate every player in your lobby at once</span></button>
       </div>
     </div>
   </div>
@@ -461,11 +518,26 @@
 
   // ---- shop economy ----
   const LS_COINS = "glass-bridge:coins";
+  const LS_PERMDJ = "glass-bridge:permdj", LS_INFKILL = "glass-bridge:infkill", LS_ADMIN = "glass-bridge:admin";
   let coins = Math.max(0, Math.floor(Number(localStorage.getItem(LS_COINS)) || 0));
   let farthest = 0;        // farthest row reached on THIS bridge — the teleport anchor
-  let doubleJump = false;  // 🧪 potion: every jump spans 2 rows, expires on death
+  let permDJ = localStorage.getItem(LS_PERMDJ) === "1";   // ⚗️ eternal double-jump, owned forever
+  let infKill = localStorage.getItem(LS_INFKILL) === "1"; // ♾️ unlimited assassinations
+  let adminOwned = localStorage.getItem(LS_ADMIN) === "1"; // 👑 admin panel
+  let doubleJump = permDJ; // 🧪 potion: every jump spans 2 rows; expires on death unless eternal/admin
+  let adminDj = false, adminXray = false, adminGod = false; // 👑 session toggles
   let killContract = false;
-  let skipPending = false, killedBy = "";
+  let skipPending = false, skipCost = 0, killedBy = "";
+  // 🔮 x-ray: timed peek at safe sides. In the lobby the data comes from the
+  // host via "xray"→"xrayData" and lives ONLY in xrayMap (never written into
+  // bridge[], so it can't be used to auto-resolve landings after it expires).
+  let xrayT = 0, xrayMap = new Map(), xrayMaxTo = 0, xrayReqAcc = 99;
+  function xrayOn() { return adminXray || xrayT > 0; }
+  function peekSafe(row) {
+    if (!online) { const r = bridge[row - 1]; return r ? r.safe : null; }
+    const v = xrayMap.get(row);
+    return v === undefined ? null : v;
+  }
   function saveCoins() { try { localStorage.setItem(LS_COINS, String(coins)); } catch (e) {} }
   function addCoins(n) { coins += n; saveCoins(); updateShopUI(); }
 
@@ -529,11 +601,18 @@
   }
 
   function die(cause, row) {
+    // 👑 immortality bounces you back to your last safe row (assassins still get you)
+    if (adminGod && cause !== "killed") {
+      addFeed("🛡️ Immortality saved you");
+      if (ch.row >= 1 && bridge[ch.row - 1].safe !== null) setRowTo(ch.row, bridge[ch.row - 1].safe);
+      else { ch.x = 0; ch.z = 0; ch.h = 0; ch.jumpSpan = 1; state = "playing"; }
+      return;
+    }
     state = "falling";
     deathCause = cause;
     ch.vh = cause === "glass" ? -0.5 : -1.2; // glass gives way, gaps you just drop into
     ch.spin = (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 2);
-    doubleJump = false; // the potion doesn't survive death
+    if (!permDJ && !adminDj) doubleJump = false; // the basic potion doesn't survive death
     updateShopUI();
     sndFall();
     // glass deaths are announced by the server (it resolved them), assassinations
@@ -599,13 +678,23 @@
       if (ch.h < -3) { state = "dead"; submit(score); }
     }
 
+    // 🔮 x-ray timer + keeping the peeked window ahead of the player
+    if (xrayT > 0) xrayT = Math.max(0, xrayT - dt);
+    if (xrayOn() && online) {
+      xrayReqAcc += dt;
+      if (xrayReqAcc > 2 && xrayMaxTo < ch.row + 50) {
+        xrayReqAcc = 0; xrayMaxTo = ch.row + 80;
+        netSend("xray", { from: Math.max(1, ch.row - 4), to: ch.row + 80 });
+      }
+    }
+
     // lobby ghosts drift toward their latest reported position
     ghosts.forEach((g) => {
       if (Math.abs(g.tz - g.z) > 3) { g.z = g.tz; g.x = g.tx; g.h = g.th; } // respawn teleport — snap
       const k = Math.min(1, 12 * dt);
       g.x += (g.tx - g.x) * k; g.z += (g.tz - g.z) * k; g.h += (g.th - g.h) * k;
     });
-    if (online && room) {
+    if (online && (room || p2p)) {
       posAcc += dt;
       if (posAcc >= 0.1) {
         posAcc = 0;
@@ -640,7 +729,7 @@
   // deterministic per-row jitter so broken holes keep their jagged shape
   function jag(seed) { const t = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return t - Math.floor(t); }
 
-  function drawPanel(cx, z, row, r, isFake) {
+  function drawPanel(cx, z, row, r, isFake, xraySafe) {
     const x0 = cx - PANEL_HW, x1 = cx + PANEL_HW, z0 = z - PANEL_HD, z1 = z + PANEL_HD;
     if (isFake && r.broken) {
       // a permanent hole: dark void + jagged glass teeth around the frame
@@ -669,6 +758,18 @@
       ctx.strokeStyle = "rgba(185,225,255,0.45)";
     }
     ctx.fill(); ctx.lineWidth = 1.5; ctx.stroke();
+    // 🔮 x-ray: paint the truth over any intact panel while the potion runs
+    if (xraySafe !== null && xraySafe !== undefined && !(r.broken && isFake)) {
+      const side = cx < 0 ? 0 : 1;
+      quad(x0, z0, x1, z1);
+      if (side === xraySafe) {
+        ctx.fillStyle = "rgba(46,230,166,0.28)"; ctx.fill();
+        ctx.strokeStyle = "rgba(46,230,166,0.8)"; ctx.lineWidth = 2; ctx.stroke();
+      } else {
+        ctx.fillStyle = "rgba(255,70,86,0.26)"; ctx.fill();
+        ctx.strokeStyle = "rgba(255,70,86,0.7)"; ctx.lineWidth = 2; ctx.stroke();
+      }
+    }
     // glare streak
     const g0 = proj(cx - PANEL_HW * 0.5, z - PANEL_HD * 0.4, 0), g1 = proj(cx + PANEL_HW * 0.1, z + PANEL_HD * 0.5, 0);
     ctx.strokeStyle = "rgba(255,255,255,0.10)"; ctx.lineWidth = Math.max(1, g0.s * 0.05);
@@ -681,8 +782,9 @@
     // steel frame under the row
     quad(-DECK_HW, z - PANEL_HD - 0.06, DECK_HW, z - PANEL_HD, 0); ctx.fillStyle = "#241c3a"; ctx.fill();
     quad(-DECK_HW, z + PANEL_HD, DECK_HW, z + PANEL_HD + 0.06, 0); ctx.fillStyle = "#241c3a"; ctx.fill();
-    drawPanel(-PANEL_CX, z, row, r, r.safe !== 0);
-    drawPanel(PANEL_CX, z, row, r, r.safe !== 1);
+    const xr = xrayOn() ? peekSafe(row) : null;
+    drawPanel(-PANEL_CX, z, row, r, r.safe !== 0, xr);
+    drawPanel(PANEL_CX, z, row, r, r.safe !== 1, xr);
     // faint row number on the frame between the panels
     const p = proj(0, z, 0);
     ctx.fillStyle = "rgba(243,238,252,0.28)";
@@ -849,10 +951,21 @@
         : deathCause === "hole" ? "You jumped into the hole" : "You missed the panels";
       banner(deathCause !== "killed" && score > 0 && score >= best ? "New best!" : why, "Tap or press Space to retry — the bridge remembers");
     }
+    // active-power indicators, stacked above the lobby button
+    ctx.textAlign = "left";
+    ctx.font = "15px system-ui, sans-serif";
+    let hudY = H - 78; // clear of the lobby button + feed
     if (doubleJump) {
-      ctx.textAlign = "left";
-      ctx.fillStyle = "rgba(46,230,166,0.9)"; ctx.font = "15px system-ui, sans-serif";
-      ctx.fillText("🧪 double jump", 14, H - 44);
+      ctx.fillStyle = "rgba(46,230,166,0.9)";
+      ctx.fillText(permDJ || adminDj ? "⚗️ double jump ∞" : "🧪 double jump", 14, hudY); hudY -= 20;
+    }
+    if (xrayOn()) {
+      ctx.fillStyle = "rgba(200,150,255,0.95)";
+      ctx.fillText("🔮 x-ray " + (adminXray ? "∞" : Math.ceil(xrayT) + "s"), 14, hudY); hudY -= 20;
+    }
+    if (adminGod) {
+      ctx.fillStyle = "rgba(255,209,102,0.95)";
+      ctx.fillText("🛡️ immortal", 14, hudY); hudY -= 20;
     }
   }
 
@@ -885,7 +998,9 @@
   // ========================== SHOP ==========================
   const shopEl = el("shop"), shopBtn = el("shopBtn"), shopCoinsEl = el("shopCoins");
   const buyTp = el("buyTp"), buyDj = el("buyDj"), buySkip = el("buySkip"), buyKill = el("buyKill");
+  const buyPermDj = el("buyPermDj"), buyXray = el("buyXray"), buyInfKill = el("buyInfKill"), buyAdmin = el("buyAdmin");
   const killRow = el("killRow"), killNameEl = el("killName"), killGo = el("killGo"), killMsg = el("killMsg");
+  const adminEl = el("admin");
 
   function canShopAct() { return state === "playing" || state === "ready"; }
   function updateShopUI() {
@@ -896,10 +1011,31 @@
     buyDj.textContent = doubleJump ? "ACTIVE 🧪" : "50 🪙";
     buyDj.classList.toggle("owned", doubleJump);
     buySkip.disabled = coins < 100 || !canShopAct() || skipPending;
-    buyKill.disabled = killContract || !online || coins < 150;
-    buyKill.textContent = killContract ? "OWNED 🗡️" : "150 🪙";
-    buyKill.classList.toggle("owned", killContract);
-    killRow.classList.toggle("show", killContract && online);
+    buyKill.disabled = infKill || killContract || !online || coins < 150;
+    buyKill.textContent = infKill ? "∞" : killContract ? "OWNED 🗡️" : "150 🪙";
+    buyKill.classList.toggle("owned", killContract || infKill);
+    killRow.classList.toggle("show", (killContract || infKill) && online);
+    buyPermDj.disabled = permDJ || coins < 200;
+    buyPermDj.textContent = permDJ ? "OWNED ⚗️" : "200 🪙";
+    buyPermDj.classList.toggle("owned", permDJ);
+    buyXray.disabled = coins < 300;
+    buyInfKill.disabled = infKill || coins < 1000;
+    buyInfKill.textContent = infKill ? "OWNED ♾️" : "1000 🪙";
+    buyInfKill.classList.toggle("owned", infKill);
+    buyAdmin.disabled = !adminOwned && coins < 10000;
+    buyAdmin.textContent = adminOwned ? "OPEN 👑" : "10000 🪙";
+    buyAdmin.classList.toggle("owned", adminOwned);
+  }
+
+  function updateAdminUI() {
+    el("adDj").querySelector("b").textContent = "🧪 Double-Jump: " + (adminDj ? "ON" : "OFF");
+    el("adDj").classList.toggle("on", adminDj);
+    el("adXray").querySelector("b").textContent = "🔮 Endless X-Ray: " + (adminXray ? "ON" : "OFF");
+    el("adXray").classList.toggle("on", adminXray);
+    el("adGod").querySelector("b").textContent = "🛡️ Immortality: " + (adminGod ? "ON" : "OFF");
+    el("adGod").classList.toggle("on", adminGod);
+    el("adKillAll").disabled = !online;
+    el("adWarp").disabled = skipPending || !canShopAct();
   }
 
   function sndTeleport() {
@@ -944,25 +1080,31 @@
     updateShopUI();
   });
 
-  buySkip.addEventListener("click", () => {
-    if (buySkip.disabled || coins < 100 || !canShopAct() || skipPending) return;
-    initAudio();
-    const target = farthest + 10;
-    addCoins(-100);
+  // shared by Leap of Faith (paid, +10) and the admin Warp (free, +50)
+  function leapTo(target, cost) {
+    if (skipPending || !canShopAct()) return;
+    if (cost) addCoins(-cost);
     if (online) {
-      skipPending = true; updateShopUI();
+      skipPending = true; skipCost = cost; updateShopUI();
       netSend("skip", { row: target });
       setTimeout(() => {
         if (!skipPending) return;
         skipPending = false;
-        addCoins(100); // no answer — refund
-        addFeed("⚠️ The leap fizzled — 100 🪙 refunded");
+        if (skipCost) { addCoins(skipCost); addFeed("⚠️ The leap fizzled — " + skipCost + " 🪙 refunded"); }
+        else addFeed("⚠️ The warp fizzled — try again");
+        updateShopUI();
       }, 4000);
     } else {
       ensureRows(target + 14);
       setRowTo(target, bridge[target - 1].safe);
       addFeed("🚀 Leap of faith! Row " + target);
     }
+  }
+
+  buySkip.addEventListener("click", () => {
+    if (buySkip.disabled || coins < 100 || !canShopAct() || skipPending) return;
+    initAudio();
+    leapTo(farthest + 10, 100);
   });
 
   buyKill.addEventListener("click", () => {
@@ -977,17 +1119,87 @@
 
   killGo.addEventListener("click", () => {
     const t = killNameEl.value.trim();
-    if (!t || !killContract) return;
+    if (!t || (!killContract && !infKill)) return;
     if (!online) { killMsg.textContent = "You're not in a lobby — the contract waits."; return; }
     killMsg.style.color = "#9c8ec2"; killMsg.textContent = "Sending the assassin…";
     netSend("assassinate", { target: t });
     setTimeout(() => {
-      if (killContract && killMsg.textContent === "Sending the assassin…") {
-        killMsg.style.color = "#ff8a7a"; killMsg.textContent = "No response from the lobby — contract kept.";
+      if ((killContract || infKill) && killMsg.textContent === "Sending the assassin…") {
+        killMsg.style.color = "#ff8a7a"; killMsg.textContent = "No response from the lobby — try again.";
       }
     }, 4000);
   });
   killNameEl.addEventListener("keydown", (e) => { if (e.key === "Enter") killGo.click(); });
+
+  // ---- the premium shelf ----
+  buyPermDj.addEventListener("click", () => {
+    if (buyPermDj.disabled || permDJ || coins < 200) return;
+    initAudio();
+    addCoins(-200);
+    permDJ = true; doubleJump = true;
+    try { localStorage.setItem(LS_PERMDJ, "1"); } catch (e) {}
+    addFeed("⚗️ Double-jump is now ETERNAL");
+    updateShopUI();
+  });
+
+  buyXray.addEventListener("click", () => {
+    if (buyXray.disabled || coins < 300) return;
+    initAudio();
+    addCoins(-300);
+    xrayT = Math.min(xrayT + 30, 120);
+    xrayReqAcc = 99; xrayMaxTo = 0; // request the window right away in a lobby
+    sndTeleport();
+    addFeed("🔮 X-ray vision — " + Math.ceil(xrayT) + "s");
+    updateShopUI();
+  });
+
+  buyInfKill.addEventListener("click", () => {
+    if (buyInfKill.disabled || infKill || coins < 1000) return;
+    initAudio();
+    addCoins(-1000);
+    infKill = true;
+    try { localStorage.setItem(LS_INFKILL, "1"); } catch (e) {}
+    addFeed("♾️ Unlimited assassinations unlocked");
+    updateShopUI();
+  });
+
+  buyAdmin.addEventListener("click", () => {
+    initAudio();
+    if (adminOwned) { shopEl.hidden = true; adminEl.hidden = false; updateAdminUI(); return; }
+    if (buyAdmin.disabled || coins < 10000) return;
+    addCoins(-10000);
+    adminOwned = true;
+    try { localStorage.setItem(LS_ADMIN, "1"); } catch (e) {}
+    addFeed("👑 ADMIN PANEL unlocked");
+    updateShopUI();
+    shopEl.hidden = true; adminEl.hidden = false; updateAdminUI();
+  });
+
+  // ---- 👑 admin commands: one click each, labels say what they do ----
+  el("adminClose").addEventListener("click", () => { adminEl.hidden = true; });
+  el("adCoins").addEventListener("click", () => { addCoins(1000); sndCoin(); addFeed("💰 +1,000 coins"); });
+  el("adWarp").addEventListener("click", () => {
+    if (skipPending || !canShopAct()) return;
+    leapTo(farthest + 50, 0);
+    updateAdminUI();
+  });
+  el("adDj").addEventListener("click", () => {
+    adminDj = !adminDj;
+    doubleJump = adminDj || permDJ; // off falls back to the eternal potion if owned
+    updateAdminUI(); updateShopUI();
+  });
+  el("adXray").addEventListener("click", () => {
+    adminXray = !adminXray;
+    if (adminXray) { xrayReqAcc = 99; xrayMaxTo = 0; }
+    updateAdminUI();
+  });
+  el("adGod").addEventListener("click", () => { adminGod = !adminGod; updateAdminUI(); });
+  el("adKillAll").addEventListener("click", () => {
+    if (!online) return;
+    let n = 0;
+    ghosts.forEach((g) => { netSend("assassinate", { target: g.name }); n++; });
+    addFeed(n ? "👑 Ordered " + n + " assassination" + (n > 1 ? "s" : "") : "👑 Nobody else on the bridge…");
+  });
 
   // ========================== PUBLIC LOBBY ==========================
   // Everyone in the room shares ONE bridge; whoever runs it owns which sides
@@ -1045,6 +1257,7 @@
         b.safe = rv.safe; b.broken = rv.broken; b.proven = rv.proven;
       });
       farthest = 0; skipPending = false; // fresh shared bridge, fresh anchor
+      xrayMap.clear(); xrayMaxTo = 0; xrayReqAcc = 99; // stale peeks belong to the old bridge
       respawn();
       state = "playing";
       setLobbyBtn();
@@ -1083,6 +1296,14 @@
     sndShatter();
   };
   lobbyHandlers.fell = (m) => addFeed("💀 " + m.name + " fell at row " + m.row);
+  lobbyHandlers.xrayData = (m) => {
+    (m.rows || []).forEach((rv) => {
+      if ((rv.safe === 0 || rv.safe === 1) && rv.row >= 1) {
+        xrayMap.set(rv.row, rv.safe);
+        if (rv.row > xrayMaxTo) xrayMaxTo = rv.row;
+      }
+    });
+  };
   lobbyHandlers.skipOk = (m) => {
     if (!skipPending) return;
     skipPending = false;
@@ -1168,7 +1389,8 @@
       const pl = pendingLand; pendingLand = null;
       if (state === "resolving") applyVerdict(pl.row, pl.side, pl.side === bridge[pl.row - 1].safe, true);
     }
-    if (skipPending) { skipPending = false; addCoins(100); addFeed("⚠️ The leap fizzled — 100 🪙 refunded"); }
+    if (skipPending) { skipPending = false; if (skipCost) { addCoins(skipCost); addFeed("⚠️ The leap fizzled — " + skipCost + " 🪙 refunded"); } }
+    xrayMap.clear(); xrayMaxTo = 0; // solo x-ray reads the local bridge directly
     setLobbyBtn();
     updateShopUI();
     if (msg) addFeed(msg);
