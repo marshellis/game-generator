@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Store, UserRecord, CompletionValue, ScoreEntry, Deps } from "../src/lib/profile/types";
-import { signup, submitScore, submitPairScore, leaderboard } from "../src/lib/profile/handlers";
+import { signup, submitScore, submitPairScore, deleteScore, leaderboard } from "../src/lib/profile/handlers";
 import { MAX_SCORE, canonicalPair } from "../src/lib/profile/scores";
 
 class FakeStore implements Store {
@@ -24,6 +24,7 @@ class FakeStore implements Store {
       .sort((a, b) => b.score - a.score).slice(0, limit);
   }
   async userBest(game: string, u: string) { return this.scores.get(game)?.get(u) ?? 0; }
+  async removeScore(game: string, u: string) { this.scores.get(game)?.delete(u); }
 }
 
 const SECRET = "s";
@@ -61,6 +62,27 @@ describe("submitScore", () => {
     for (const bad of [-1, 1.5, Number.NaN, MAX_SCORE + 1, "5", undefined]) {
       expect((await submitScore(t, { game: "flappy", score: bad }, deps)).status).toBe(400);
     }
+  });
+});
+
+describe("deleteScore", () => {
+  it("requires auth (401)", async () => {
+    expect((await deleteScore(undefined, { game: "flappy" }, deps)).status).toBe(401);
+  });
+  it("removes only the caller's own entry", async () => {
+    const alice = await tokenFor("alice");
+    const bob = await tokenFor("bob");
+    await submitScore(alice, { game: "flappy", score: 12 }, deps);
+    await submitScore(bob, { game: "flappy", score: 9 }, deps);
+    expect((await deleteScore(alice, { game: "flappy" }, deps)).status).toBe(200);
+    expect(await store.userBest("flappy", "alice")).toBe(0);
+    expect(await store.userBest("flappy", "bob")).toBe(9); // untouched
+  });
+  it("rejects a game that isn't score-enabled (400)", async () => {
+    expect((await deleteScore(await tokenFor("alice"), { game: "maze" }, deps)).status).toBe(400);
+  });
+  it("is a no-op when the caller has no entry", async () => {
+    expect((await deleteScore(await tokenFor("alice"), { game: "flappy" }, deps)).status).toBe(200);
   });
 });
 

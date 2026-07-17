@@ -186,6 +186,51 @@
   }
   #trollTargetRow input:focus { outline: none; border-color: #ff5d8f; }
   #trollMsg { font-size: 11px; min-height: 14px; color: #ff8a7a; }
+  /* the secret box — a decently big invisible click zone under the camera button */
+  #secretBox { position: absolute; top: 44px; left: 0; width: 150px; height: 110px; background: transparent; cursor: default; }
+  #keypad {
+    position: absolute; top: 48px; left: 10px; width: 132px; z-index: 25;
+    background: rgba(12,7,26,0.95); border: 1px solid rgba(122,106,156,0.5); border-radius: 10px;
+    padding: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+  #kpDisplay { font-size: 14px; letter-spacing: 0.2em; color: #e8ddfa; text-align: center; min-height: 18px; margin-bottom: 6px; }
+  .kpGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .kp {
+    background: #241c3a; color: #e8ddfa; border: 0; border-radius: 7px;
+    padding: 8px 0; font: inherit; font-size: 14px; cursor: pointer;
+  }
+  .kp:active { background: #3a2b5e; }
+  #kpZero { grid-column: 2; }
+  /* 🎡 the wheel of misfortune — you HAVE to spin */
+  #wheel {
+    position: absolute; inset: 0; z-index: 30;
+    background: rgba(8,5,18,0.93); border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    text-align: center;
+  }
+  #wheel h2 {
+    margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 0.04em;
+    background: linear-gradient(180deg, #fff3c4, #ffd166 45%, #e0a82e 75%, #ffe9a3);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #wheelSub { font-size: 13px; color: #cfc2e8; }
+  #wheelBox { position: relative; width: 46%; max-width: 210px; aspect-ratio: 1; }
+  #wheelDisc {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: conic-gradient(#2ee6a6 0deg 288deg, #ff4656 288deg 360deg);
+    border: 5px solid #ffd166; box-shadow: 0 0 30px rgba(255,209,102,0.25), inset 0 0 24px rgba(0,0,0,0.35);
+    transition: transform 4s cubic-bezier(0.12, 0.8, 0.16, 1);
+  }
+  #wheelPin { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 22px; color: #ffd166; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+  #wheelSpinBtn {
+    background: linear-gradient(180deg, #ffd166, #e0a82e); color: #241505;
+    border: 0; border-radius: 999px; padding: 10px 34px;
+    font: inherit; font-size: 18px; font-weight: 900; letter-spacing: 0.06em; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255,209,102,0.35);
+  }
+  #wheelSpinBtn:active { transform: scale(0.97); }
+  #wheelOut { font-size: 18px; font-weight: 800; min-height: 24px; color: #fff; }
+  #wheelClose { background: #241c3a; color: #e8ddfa; border: 0; border-radius: 8px; padding: 8px 18px; font: inherit; font-size: 13px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -257,6 +302,24 @@
         <div class="tx"><b>Admin Panel</b><span>The keys to the bridge: one-click admin commands, yours forever.</span></div>
         <button id="buyAdmin">10000 🪙</button>
       </div>
+    </div>
+    <div id="secretBox"></div>
+    <div id="keypad" hidden>
+      <div id="kpDisplay">&nbsp;</div>
+      <div class="kpGrid">
+        <button class="kp">1</button><button class="kp">2</button><button class="kp">3</button>
+        <button class="kp">4</button><button class="kp">5</button><button class="kp">6</button>
+        <button class="kp">7</button><button class="kp">8</button><button class="kp">9</button>
+        <button class="kp" id="kpZero">0</button>
+      </div>
+    </div>
+    <div id="wheel" hidden>
+      <h2>🎡 YOU HAVE TO SPIN</h2>
+      <div id="wheelSub">80% green, 20% red — you'll probably be fine 🙂</div>
+      <div id="wheelBox"><div id="wheelDisc"></div><div id="wheelPin">▼</div></div>
+      <button id="wheelSpinBtn">SPIN</button>
+      <div id="wheelOut"></div>
+      <button id="wheelClose" hidden>Continue…</button>
     </div>
     <div id="troll" hidden>
       <button id="trollClose">✕</button>
@@ -572,6 +635,9 @@
   let slowT = 0;                 // 🐌 moving at 25% speed while > 0
   let chokeNext = false, chokedBy = ""; // 🫳 next jump shatters whatever you land on
   function slowFactor() { return slowT > 0 ? 0.25 : 1; }
+  // 🤫 the secret counter-system (invisible box → keypad codes)
+  let reflectT = 0;      // 🪞 code 123: incoming curses bounce back for 20s
+  let lastAttacker = ""; // whoever last trolled/killed/wheeled you — 1234's target
   // 🔮 x-ray: timed peek at safe sides. In the lobby the data comes from the
   // host via "xray"→"xrayData" and lives ONLY in xrayMap (never written into
   // bridge[], so it can't be used to auto-resolve landings after it expires).
@@ -737,6 +803,7 @@
     // 🔮 x-ray timer + keeping the peeked window ahead of the player
     if (xrayT > 0) xrayT = Math.max(0, xrayT - dt);
     if (slowT > 0) slowT = Math.max(0, slowT - dt); // 🐌 the crawl wears off
+    if (reflectT > 0) reflectT = Math.max(0, reflectT - dt); // 🪞 the shield fades
     if (xrayOn() && online) {
       xrayReqAcc += dt;
       if (xrayReqAcc > 2 && xrayMaxTo < ch.row + 50) {
@@ -1034,6 +1101,10 @@
       ctx.fillStyle = "rgba(255,70,86,0.95)";
       ctx.fillText("🫳 CHOKED — next jump is doomed", 14, hudY); hudY -= 20;
     }
+    if (reflectT > 0) {
+      ctx.fillStyle = "rgba(180,220,255,0.95)";
+      ctx.fillText("🪞 " + Math.ceil(reflectT) + "s", 14, hudY); hudY -= 20;
+    }
   }
 
   function banner(title, sub) {
@@ -1306,6 +1377,107 @@
     addFeed(n ? "👑 Ordered " + n + " assassination" + (n > 1 ? "s" : "") : "👑 Nobody else on the bridge…");
   });
 
+  // ========================== 🤫 THE SECRET SYSTEM ==========================
+  // An invisible box under the camera button. Click it and a little keypad
+  // appears. Codes:
+  //   123  → 🪞 reflect shield: for 20s, whoever curses you gets it instead
+  //   1234 → 🎡 send the wheel of misfortune to whoever attacked you last
+  const keypadEl = el("keypad"), kpDisplay = el("kpDisplay");
+  let kpBuf = "", kpTimer = null;
+
+  el("secretBox").addEventListener("click", (e) => {
+    e.stopPropagation();
+    keypadEl.hidden = !keypadEl.hidden;
+    kpBuf = ""; kpDisplay.innerHTML = "&nbsp;";
+  });
+  function kpEval() {
+    const code = kpBuf;
+    kpBuf = ""; kpDisplay.innerHTML = "&nbsp;";
+    if (code === "123") {
+      reflectT = 20;
+      keypadEl.hidden = true;
+      addFeed("🪞 Shield up — 20s");
+    } else if (code === "1234") {
+      keypadEl.hidden = true;
+      if (!online) { addFeed("🎡 Join the lobby first"); return; }
+      if (!lastAttacker) { addFeed("🎡 Nobody has attacked you yet"); return; }
+      netSend("wheel", { target: lastAttacker });
+    }
+  }
+  document.querySelectorAll(".kp").forEach((b) => {
+    b.addEventListener("click", (e) => {
+      e.stopPropagation();
+      initAudio();
+      kpBuf = (kpBuf + b.textContent).slice(-8);
+      kpDisplay.textContent = kpBuf;
+      clearTimeout(kpTimer);
+      kpTimer = setTimeout(kpEval, 900);
+    });
+  });
+
+  // 🎡 the wheel: claims 80% green — the disc is painted that way — but the
+  // real roll is 80% RED. Losing wipes your local best, your farthest anchor,
+  // and (when logged in) your global leaderboard record.
+  const wheelEl = el("wheel"), wheelDisc = el("wheelDisc"), wheelOut = el("wheelOut");
+  const wheelSpinBtn = el("wheelSpinBtn"), wheelCloseBtn = el("wheelClose");
+  let wheelSpinning = false;
+
+  function showWheel(by) {
+    wheelEl.hidden = false;
+    wheelSpinning = false;
+    wheelOut.textContent = by ? by + " demands it. No way out." : "";
+    wheelDisc.style.transition = "none";
+    wheelDisc.style.transform = "rotate(0deg)";
+    wheelSpinBtn.hidden = false;
+    wheelCloseBtn.hidden = true;
+  }
+
+  async function wipeRecord() {
+    best = 0;
+    try { localStorage.removeItem(LS_BEST); } catch (e) {}
+    showBest();
+    farthest = 0; score = 0;
+    if (me) await api("/api/scores", { method: "DELETE", body: JSON.stringify({ game: GAME }) });
+    refreshBoard();
+    updateShopUI();
+  }
+
+  wheelSpinBtn.addEventListener("click", () => {
+    if (wheelSpinning) return;
+    wheelSpinning = true;
+    initAudio();
+    wheelSpinBtn.hidden = true;
+    const red = Math.random() < 0.8; // "20% red", the wheel lies
+    // pointer sits at the top (0deg). Land inside the segment that matches fate:
+    // green paint spans 0–288deg, red 288–360. Rotation is negative-clockwise
+    // relative to the pointer, so pick the angle that ends up under the pin.
+    const landing = red ? 288 + 6 + Math.random() * 60 : 10 + Math.random() * 268;
+    const turns = 5 * 360;
+    wheelDisc.style.transition = "transform 4s cubic-bezier(0.12, 0.8, 0.16, 1)";
+    // force a style flush so the transition actually animates from 0
+    void wheelDisc.offsetWidth;
+    wheelDisc.style.transform = "rotate(" + (turns + (360 - landing)) + "deg)";
+    tone(220, 0.15, "sawtooth", 0.12, 90);
+    setTimeout(() => {
+      if (red) {
+        wheelOut.textContent = "💀 BETTER LUCK NEXT TIME";
+        wheelOut.style.color = "#ff4656";
+        sndFall();
+        wipeRecord();
+        netSend("wheelOutcome", { red: true });
+        addFeed("🎡💀 The wheel took everything");
+      } else {
+        wheelOut.textContent = "🍀 YOU GOT LUCKY";
+        wheelOut.style.color = "#2ee6a6";
+        sndTeleport();
+        netSend("wheelOutcome", { red: false });
+        addFeed("🎡🍀 The wheel spared you");
+      }
+      wheelCloseBtn.hidden = false;
+    }, 4300);
+  });
+  wheelCloseBtn.addEventListener("click", () => { wheelEl.hidden = true; });
+
   // ========================== PUBLIC LOBBY ==========================
   // Everyone in the room shares ONE bridge; whoever runs it owns which sides
   // are safe. Breaks, reveals, and falls are broadcast live to every player.
@@ -1429,6 +1601,12 @@
   };
   lobbyHandlers.assassinated = (m) => addFeed("🗡️ " + m.by + " assassinated " + m.target + "!");
   lobbyHandlers.trolled = (m) => {
+    lastAttacker = m.by || lastAttacker;
+    if (reflectT > 0 && !m.r) { // 🪞 right back at them (r marks it non-reflectable)
+      netSend("troll", { target: m.by, kind: m.kind, r: 1 });
+      addFeed("🪞 Reflected " + m.by + "'s " + (m.kind === "slow" ? "slow" : "choke") + "!");
+      return;
+    }
     if (m.kind === "slow") {
       slowT = Math.max(slowT, Number(m.dur) || 20);
       addFeed("🐌 " + m.by + " slowed you to a crawl!");
@@ -1446,10 +1624,33 @@
     addFeed((m.kind === "slow" ? "🐌 " : "🫳 ") + m.by + (m.kind === "slow" ? " slowed " : " choked ") + m.target + "!");
   };
   lobbyHandlers.killed = (m) => {
+    lastAttacker = m.by || lastAttacker;
+    if (reflectT > 0 && !m.r) { // 🪞 the assassin trips on their own blade
+      netSend("assassinate", { target: m.by, r: 1 });
+      addFeed("🪞 Reflected the assassin back at " + m.by + "!");
+      return;
+    }
     farthest = 0; // your progress dies with you
     killedBy = m.by;
     if (state !== "falling" && state !== "dead") { pendingLand = null; die("killed", ch.row); }
     updateShopUI();
+  };
+  lobbyHandlers.wheelSpin = (m) => {
+    lastAttacker = m.by || lastAttacker;
+    if (reflectT > 0 && !m.r) { // 🪞 spin it yourself
+      netSend("wheel", { target: m.by, r: 1 });
+      addFeed("🪞 Reflected the wheel back at " + m.by + "!");
+      return;
+    }
+    showWheel(m.by);
+  };
+  lobbyHandlers.wheelResult = (m) => {
+    if (m.ok) addFeed("🎡 The wheel is spinning for " + m.target + "…");
+    else addFeed("🎡 The wheel found nobody by that name");
+  };
+  lobbyHandlers.wheelNews = (m) => {
+    if (m.name === myName()) return; // you lived it
+    addFeed(m.red ? "🎡💀 " + m.name + " lost their record to the wheel!" : "🎡🍀 " + m.name + " survived the wheel");
   };
   lobbyHandlers.full = () => {}; // resolved via onClose("full")
 

@@ -29,6 +29,7 @@ class FakeStore implements Store {
       .sort((a, b) => b.score - a.score).slice(0, limit);
   }
   async userBest(game: string, u: string) { return this.scores.get(game)?.get(u) ?? 0; }
+  async removeScore(game: string, u: string) { this.scores.get(game)?.delete(u); }
 }
 
 const SECRET = "s";

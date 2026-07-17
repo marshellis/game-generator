@@ -102,6 +102,24 @@ export async function submitScore(
 }
 
 /**
+ * Delete the caller's OWN leaderboard entry for a game. Auth-scoped to the
+ * session user, so nobody can wipe anyone else's record server-side — in
+ * Glass Bridge the wheel of misfortune makes the LOSER's client call this.
+ */
+export async function deleteScore(
+  token: string | undefined,
+  input: { game?: string },
+  deps: Deps,
+): Promise<HandlerResult> {
+  const username = authed(token, deps);
+  if (!username) return { status: 401, json: { error: "unauthenticated" } };
+  const game = String(input.game ?? "");
+  if (!scoreGameAllowed(game)) return { status: 400, json: { error: "invalid" } };
+  await deps.store.removeScore(game, username);
+  return { status: 200, json: { ok: true, game } };
+}
+
+/**
  * Co-op leaderboard: a score belongs to the *pair* (caller + partner), stored
  * under one canonical member so ("alice","bob") and ("bob","alice") share a row.
  * Both players post the same pair + score independently; the highest is kept.

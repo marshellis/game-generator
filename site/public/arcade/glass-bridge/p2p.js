@@ -154,7 +154,7 @@ window.GBP2P = (function () {
         let hitId = null, hitP = null;
         players.forEach(function (q, qid) { if (hitId === null && qid !== id && q.name.toLowerCase() === wanted) { hitId = qid; hitP = q; } });
         if (!wanted || hitId === null) { sendTo(p, "assassinateResult", { ok: false }); return; }
-        sendTo(hitP, "killed", { by: p.name });
+        sendTo(hitP, "killed", { by: p.name, r: d && d.r ? 1 : 0 });
         sendTo(p, "assassinateResult", { ok: true, target: hitP.name });
         broadcast("assassinated", { by: p.name, target: hitP.name });
       } else if (t === "troll") {
@@ -164,9 +164,20 @@ window.GBP2P = (function () {
         let vId = null, vP = null;
         players.forEach(function (q, qid) { if (vId === null && qid !== id && q.name.toLowerCase() === wanted2) { vId = qid; vP = q; } });
         if (!kind || !wanted2 || vId === null) { sendTo(p, "trollResult", { ok: false, kind: kind }); return; }
-        sendTo(vP, "trolled", { kind: kind, by: p.name, dur: 20 });
+        sendTo(vP, "trolled", { kind: kind, by: p.name, dur: 20, r: d && d.r ? 1 : 0 });
         sendTo(p, "trollResult", { ok: true, target: vP.name, kind: kind });
         broadcast("trollcast", { by: p.name, target: vP.name, kind: kind });
+      } else if (t === "wheel") {
+        // 🎡 wheel of misfortune — forced onto a named victim's screen
+        const wanted3 = String((d && d.target) || "").trim().toLowerCase();
+        let wId = null, wP = null;
+        players.forEach(function (q, qid) { if (wId === null && qid !== id && q.name.toLowerCase() === wanted3) { wId = qid; wP = q; } });
+        if (!wanted3 || wId === null) { sendTo(p, "wheelResult", { ok: false }); return; }
+        sendTo(wP, "wheelSpin", { by: p.name, r: d && d.r ? 1 : 0 });
+        sendTo(p, "wheelResult", { ok: true, target: wP.name });
+      } else if (t === "wheelOutcome") {
+        // the victim reports how their spin went — everyone gets the news
+        broadcast("wheelNews", { name: p.name, red: !(d && d.red === false) });
       }
     }
 

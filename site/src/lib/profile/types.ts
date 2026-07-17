@@ -48,6 +48,8 @@ export interface Store {
   topScores(game: string, limit: number): Promise<ScoreEntry[]>;
   /** A single player's best for a game (0 if none recorded). */
   userBest(game: string, username: string): Promise<number>;
+  /** Remove a player's leaderboard entry for a game (their own record only). */
+  removeScore(game: string, username: string): Promise<void>;
 }
 
 export type Cookie = { value: string; maxAgeSec: number } | { clear: true };
