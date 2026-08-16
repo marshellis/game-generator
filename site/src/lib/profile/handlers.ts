@@ -3,7 +3,7 @@ import { normalizeUsername, validateUsername, validatePin, hashPin, verifyPin } 
 import { signSession, verifySession, SESSION_MAX_AGE_SEC } from "./session";
 import { parseCompletions, groupByGame, completionField } from "./completions";
 import { sanitizeAvatar, sanitizeColor } from "./avatars";
-import { scoreGameAllowed, coopScoreGameAllowed, canonicalPair, validateScore, clampLimit } from "./scores";
+import { SCORE_GAMES, scoreGameAllowed, coopScoreGameAllowed, canonicalPair, validateScore, clampLimit } from "./scores";
 
 const LOCKOUT_MAX = 8;
 const LOCKOUT_TTL_SEC = 15 * 60;
@@ -143,6 +143,56 @@ export async function submitPairScore(
   const prev = await deps.store.userBest(game, pair);
   const best = await deps.store.bumpScore(game, pair, input.score);
   return { status: 200, json: { game, pair, score: input.score, best, improved: input.score > prev } };
+}
+
+/** One arcade board the caller has an entry on. */
+export interface TrophyRow {
+  game: string;
+  score: number;
+  /** 1-based standing on the board. */
+  rank: number;
+  /** How many players are on this board. */
+  total: number;
+  /** True when nobody has beaten this score — ties share the crown. */
+  first: boolean;
+  /** Who to beat. Null when the caller is already first. */
+  leader: { username: string; score: number } | null;
+}
+
+/**
+ * The caller's trophy case: every arcade board they hold a score on, with the
+ * ones they lead flagged. Powers the 🏆 button on /arcade.
+ *
+ * Only boards with an entry are returned — `userRank` (not `userBest`) decides
+ * that, so a legitimate score of 0 still counts as "played". A tie for the top
+ * score counts as first place for everyone tied, and their reported rank is 1:
+ * Redis breaks score ties by member name, and telling a co-champion they're
+ * "2nd" would be the more misleading of the two answers.
+ */
+export async function myTrophies(token: string | undefined, deps: Deps): Promise<HandlerResult> {
+  const username = authed(token, deps);
+  if (!username) return { status: 401, json: { error: "unauthenticated" } };
+
+  const rows = await Promise.all(
+    [...SCORE_GAMES].map(async (game): Promise<TrophyRow | null> => {
+      const rank = await deps.store.userRank(game, username);
+      if (rank === null) return null;
+      const [score, total, top] = await Promise.all([
+        deps.store.userBest(game, username),
+        deps.store.playerCount(game),
+        deps.store.topScores(game, 1),
+      ]);
+      const best = top[0];
+      const first = !best || score >= best.score;
+      return { game, score, rank: first ? 1 : rank, total, first, leader: first ? null : best };
+    }),
+  );
+
+  // Trophies first, then the near-misses by how close they are to the top.
+  const games = (rows.filter(Boolean) as TrophyRow[]).sort(
+    (a, b) => Number(b.first) - Number(a.first) || a.rank - b.rank || a.game.localeCompare(b.game),
+  );
+  return { status: 200, json: { username, games, firsts: games.filter((g) => g.first).length } };
 }
 
 /** Public — no auth. Anyone can read a game's leaderboard. */

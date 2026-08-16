@@ -62,6 +62,14 @@ export function upstashStore(): Store {
     async userBest(game, u) {
       return Number(await client().zscore(`leaderboard:${game}`, u)) || 0;
     },
+    async userRank(game, u) {
+      // zrevrank is 0-based and null for a member that isn't on the board.
+      const i = await client().zrevrank(`leaderboard:${game}`, u);
+      return i === null || i === undefined ? null : Number(i) + 1;
+    },
+    async playerCount(game) {
+      return Number(await client().zcard(`leaderboard:${game}`)) || 0;
+    },
     async removeScore(game, u) {
       await client().zrem(`leaderboard:${game}`, u);
     },

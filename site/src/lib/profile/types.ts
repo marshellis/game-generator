@@ -48,6 +48,14 @@ export interface Store {
   topScores(game: string, limit: number): Promise<ScoreEntry[]>;
   /** A single player's best for a game (0 if none recorded). */
   userBest(game: string, username: string): Promise<number>;
+  /**
+   * A player's 1-based standing on a game's board (1 = top), or null when they
+   * have no entry at all — which is how the trophy case tells "never played"
+   * apart from "played and scored 0".
+   */
+  userRank(game: string, username: string): Promise<number | null>;
+  /** How many players hold an entry on a game's board. */
+  playerCount(game: string): Promise<number>;
   /** Remove a player's leaderboard entry for a game (their own record only). */
   removeScore(game: string, username: string): Promise<void>;
 }

@@ -4,8 +4,39 @@ import { loadArcadeGames, isNew, playUrl } from "../../lib/arcade";
 
 const games = loadArcadeGames();
 const now = new Date();
+
+// Slug → card metadata for the trophy case, which only knows leaderboard slugs.
+const trophyMeta = Object.fromEntries(
+  games.map((g) => [g.slug, { title: g.title, emoji: g.emoji, url: playUrl(g.slug) }]),
+);
 ---
 <Base title="Arcade · Marshellis Games">
+  <!-- Trophy case: every arcade leaderboard you're on, first places up top. -->
+  <button id="trophy-btn" type="button" aria-haspopup="dialog" aria-expanded="false"
+          aria-label="Your trophy case"
+          class="fixed right-4 top-20 z-50 grid h-12 w-12 place-items-center rounded-full border border-amber-300 bg-gradient-to-b from-amber-50 to-amber-200 text-2xl shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl sm:h-14 sm:w-14 sm:text-3xl">
+    <span aria-hidden="true">🏆</span>
+    <span id="trophy-count"
+          class="absolute -right-1 -top-1 min-w-5 rounded-full bg-amber-500 px-1 text-xs font-extrabold leading-5 text-white shadow"
+          style="display:none"></span>
+  </button>
+  <div id="trophy-scrim" class="fixed inset-0 z-40" style="display:none"></div>
+  <div id="trophy-panel" role="dialog" aria-label="Your trophy case"
+       class="fixed right-4 top-36 z-40 w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-amber-200 bg-white shadow-2xl"
+       style="display:none">
+    <div class="flex items-center gap-2 border-b border-amber-100 bg-gradient-to-r from-amber-50 to-white px-4 py-3">
+      <span class="text-xl" aria-hidden="true">🏆</span>
+      <div>
+        <div class="text-sm font-extrabold text-slate-900">Your Trophy Case</div>
+        <div id="trophy-sub" class="text-xs text-slate-500">Checking the leaderboards…</div>
+      </div>
+      <button id="trophy-close" type="button" aria-label="Close"
+              class="ml-auto rounded-lg px-2 py-1 text-lg leading-none text-slate-400 hover:bg-slate-100 hover:text-slate-700">×</button>
+    </div>
+    <div id="trophy-body" class="max-h-[60vh] overflow-y-auto p-3"></div>
+  </div>
+  <script type="application/json" id="trophy-meta" set:html={JSON.stringify(trophyMeta)}></script>
+
   <nav class="mb-4 text-sm text-slate-500">
     <a href="/" class="text-slate-500 no-underline hover:underline">Home</a>
     <span class="px-1">/</span>
@@ -44,4 +75,128 @@ const now = new Date();
       ))}
     </ul>
   )}
+
+  <script>
+    // Trophy case: 🏆 button, top right. Lists every arcade leaderboard you hold
+    // a score on, with the ones you're leading crowned at the top. Everything
+    // degrades silently — a failed fetch just leaves the panel empty-handed.
+    type Row = {
+      game: string; score: number; rank: number; total: number;
+      first: boolean; leader: { username: string; score: number } | null;
+    };
+    type Card = { title: string; emoji: string; url: string };
+
+    const btn = document.getElementById("trophy-btn")!;
+    const panel = document.getElementById("trophy-panel")!;
+    const scrim = document.getElementById("trophy-scrim")!;
+    const body = document.getElementById("trophy-body")!;
+    const sub = document.getElementById("trophy-sub")!;
+    const count = document.getElementById("trophy-count")!;
+
+    const cards: Record<string, Card> = JSON.parse(
+      document.getElementById("trophy-meta")?.textContent || "{}",
+    );
+
+    function card(slug: string): Card {
+      return cards[slug] ?? {
+        title: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+        emoji: "🎮",
+        url: `/arcade/${slug}/play`,
+      };
+    }
+
+    const esc = (s: unknown) =>
+      String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
+
+    const ROW =
+      "display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;" +
+      "text-decoration:none;margin-bottom:8px;";
+    const HEAD = "margin:2px 0 8px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;";
+    const NOTE = "margin:0;padding:14px 6px;font-size:13px;line-height:1.5;color:#64748b;text-align:center;";
+
+    function rowHtml(r: Row): string {
+      const c = card(r.game);
+      const box = r.first
+        ? ROW + "background:linear-gradient(135deg,#fffbeb,#fde68a);border:1px solid #fcd34d;"
+        : ROW + "background:#fff;border:1px solid #e2e8f0;";
+      const line = r.first
+        ? `🥇 1st place${r.total > 1 ? ` of ${r.total} players` : ""}`
+        : `#${r.rank} of ${r.total}` + (r.leader ? ` · ${esc(r.leader.username)} leads with ${r.leader.score}` : "");
+      return (
+        `<a href="${esc(c.url)}" style="${box}">` +
+        `<span style="font-size:26px;line-height:1;flex:none;">${esc(c.emoji)}</span>` +
+        `<span style="flex:1;min-width:0;">` +
+        `<span style="display:block;font-weight:800;font-size:14px;color:#0f172a;">${esc(c.title)}</span>` +
+        `<span style="display:block;font-size:12px;font-weight:600;color:${r.first ? "#92400e" : "#64748b"};` +
+        `overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${line}</span></span>` +
+        `<span style="flex:none;font-weight:800;font-size:15px;color:${r.first ? "#b45309" : "#475569"};">${r.score}</span></a>`
+      );
+    }
+
+    function renderRows(rows: Row[]): void {
+      const won = rows.filter((r) => r.first);
+      const rest = rows.filter((r) => !r.first);
+      sub.textContent = won.length
+        ? `${won.length} first place${won.length === 1 ? "" : "s"} 🥇`
+        : "No first places yet — go get one!";
+      count.textContent = String(won.length);
+      count.style.display = won.length ? "block" : "none";
+
+      if (!rows.length) {
+        body.innerHTML = `<p style="${NOTE}">You haven't posted an arcade score yet.<br>Play a game and land on a leaderboard — your trophies show up here.</p>`;
+        return;
+      }
+      body.innerHTML =
+        (won.length ? `<p style="${HEAD}color:#b45309;">🥇 In the lead</p>` + won.map(rowHtml).join("") : "") +
+        (rest.length ? `<p style="${HEAD}color:#94a3b8;${won.length ? "margin-top:14px;" : ""}">Also on the board</p>` + rest.map(rowHtml).join("") : "");
+    }
+
+    function renderSignedOut(): void {
+      sub.textContent = "Sign in to collect trophies";
+      count.style.display = "none";
+      body.innerHTML =
+        `<p style="${NOTE}">Log in and your arcade high scores follow you around — this panel shows every board you're on, and crowns the ones you lead.</p>`;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = "Sign in";
+      b.style.cssText =
+        "display:block;width:100%;box-sizing:border-box;padding:10px 16px;border-radius:10px;font-size:14px;" +
+        "font-weight:700;cursor:pointer;border:1px solid #fcd34d;background:#fffbeb;color:#b45309;";
+      b.addEventListener("click", () => window.mgSignIn?.());
+      body.appendChild(b);
+    }
+
+    let loading: Promise<void> | null = null;
+    function load(): Promise<void> {
+      if (loading) return loading;
+      loading = (async () => {
+        try {
+          const r = await fetch("/api/me/trophies", { credentials: "same-origin" });
+          if (r.status === 401) return renderSignedOut();
+          if (!r.ok) throw new Error(String(r.status));
+          renderRows(((await r.json()) as { games: Row[] }).games ?? []);
+        } catch {
+          sub.textContent = "Couldn't reach the leaderboards";
+          body.innerHTML = `<p style="${NOTE}">Something went wrong. Try again in a moment.</p>`;
+          loading = null; // let a retry re-fetch
+        }
+      })();
+      return loading;
+    }
+
+    function setOpen(open: boolean): void {
+      panel.style.display = open ? "block" : "none";
+      scrim.style.display = open ? "block" : "none";
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) void load();
+    }
+
+    btn.addEventListener("click", () => setOpen(panel.style.display !== "block"));
+    scrim.addEventListener("click", () => setOpen(false));
+    document.getElementById("trophy-close")!.addEventListener("click", () => setOpen(false));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+
+    // Fetch once up front so the gold count badge is right before anyone clicks.
+    void load();
+  </script>
 </Base>
