@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Store, UserRecord, CompletionValue, ScoreEntry, Deps } from "../src/lib/profile/types";
-import { signup, submitScore, submitPairScore, deleteScore, leaderboard } from "../src/lib/profile/handlers";
+import { signup, submitScore, submitPairScore, deleteScore, leaderboard, myTrophies } from "../src/lib/profile/handlers";
 import { MAX_SCORE, canonicalPair } from "../src/lib/profile/scores";
 
 class FakeStore implements Store {
@@ -24,6 +24,11 @@ class FakeStore implements Store {
       .sort((a, b) => b.score - a.score).slice(0, limit);
   }
   async userBest(game: string, u: string) { return this.scores.get(game)?.get(u) ?? 0; }
+  async userRank(game: string, u: string) {
+    if (!this.scores.get(game)?.has(u)) return null;
+    return (await this.topScores(game, Infinity)).findIndex((r) => r.username === u) + 1;
+  }
+  async playerCount(game: string) { return this.scores.get(game)?.size ?? 0; }
   async removeScore(game: string, u: string) { this.scores.get(game)?.delete(u); }
 }
 
@@ -161,5 +166,81 @@ describe("leaderboard", () => {
   });
   it("rejects an unknown game (400)", async () => {
     expect((await leaderboard({ game: "nope" }, deps)).status).toBe(400);
+  });
+});
+
+describe("myTrophies", () => {
+  it("requires auth (401)", async () => {
+    expect((await myTrophies(undefined, deps)).status).toBe(401);
+  });
+
+  it("returns only the boards the caller is actually on", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(alice, { game: "flappy", score: 5 }, deps);
+    await submitScore(alice, { game: "bounce", score: 3 }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.status).toBe(200);
+    expect(res.json.username).toBe("alice");
+    expect(res.json.games.map((g: any) => g.game).sort()).toEqual(["bounce", "flappy"]);
+  });
+
+  it("counts a score of 0 as played (rank, not best, decides membership)", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(alice, { game: "flappy", score: 0 }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.json.games).toEqual([
+      { game: "flappy", score: 0, rank: 1, total: 1, first: true, leader: null },
+    ]);
+    expect(res.json.firsts).toBe(1);
+  });
+
+  it("flags first place and hides the leader when you ARE the leader", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(alice, { game: "flappy", score: 12 }, deps);
+    await submitScore(await tokenFor("bob"), { game: "flappy", score: 5 }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.json.games[0]).toEqual({
+      game: "flappy", score: 12, rank: 1, total: 2, first: true, leader: null,
+    });
+    expect(res.json.firsts).toBe(1);
+  });
+
+  it("reports rank, field size and who to beat when you are not first", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(alice, { game: "flappy", score: 5 }, deps);
+    await submitScore(await tokenFor("bob"), { game: "flappy", score: 12 }, deps);
+    await submitScore(await tokenFor("cara"), { game: "flappy", score: 9 }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.json.games[0]).toEqual({
+      game: "flappy", score: 5, rank: 3, total: 3, first: false,
+      leader: { username: "bob", score: 12 },
+    });
+    expect(res.json.firsts).toBe(0);
+  });
+
+  it("shares the crown on a tie for the top score", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(await tokenFor("bob"), { game: "flappy", score: 12 }, deps);
+    await submitScore(alice, { game: "flappy", score: 12 }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.json.games[0]).toMatchObject({ rank: 1, first: true, leader: null });
+  });
+
+  it("sorts first-place boards ahead of the rest", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(alice, { game: "flappy", score: 1 }, deps);
+    await submitScore(await tokenFor("bob"), { game: "flappy", score: 99 }, deps);
+    await submitScore(alice, { game: "bounce", score: 7 }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.json.games.map((g: any) => g.game)).toEqual(["bounce", "flappy"]);
+    expect(res.json.firsts).toBe(1);
+  });
+
+  it("ignores co-op pair boards", async () => {
+    const alice = await tokenFor("alice");
+    await tokenFor("bob");
+    await submitPairScore(alice, { game: "net-rally-duo", score: 20, partner: "bob" }, deps);
+    const res = (await myTrophies(alice, deps)) as any;
+    expect(res.json.games).toEqual([]);
   });
 });

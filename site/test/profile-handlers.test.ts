@@ -29,6 +29,11 @@ class FakeStore implements Store {
       .sort((a, b) => b.score - a.score).slice(0, limit);
   }
   async userBest(game: string, u: string) { return this.scores.get(game)?.get(u) ?? 0; }
+  async userRank(game: string, u: string) {
+    if (!this.scores.get(game)?.has(u)) return null;
+    return (await this.topScores(game, Infinity)).findIndex((r) => r.username === u) + 1;
+  }
+  async playerCount(game: string) { return this.scores.get(game)?.size ?? 0; }
   async removeScore(game: string, u: string) { this.scores.get(game)?.delete(u); }
 }
 

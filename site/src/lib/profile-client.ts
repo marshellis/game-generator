@@ -500,7 +500,15 @@ async function renderProfile(me: Me): Promise<void> {
 }
 
 // ---- bootstrap ------------------------------------------------------------
+declare global {
+  interface Window {
+    /** Open the shared login/signup modal — used by other islands (arcade trophy case). */
+    mgSignIn?: () => void;
+  }
+}
+
 async function init(): Promise<void> {
+  window.mgSignIn = () => openAuthModal();
   wireSolveRecording();
   currentMe = await fetchMe();
   renderChip(currentMe);
