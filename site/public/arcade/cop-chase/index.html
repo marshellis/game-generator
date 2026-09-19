@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Cop Chase</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <div id="hud">
+    <div id="hud-top">
+      <div id="score-box">
+        <div class="label">DISTANCE</div>
+        <div id="score-val">0</div>
+      </div>
+      <div id="wanted-box">
+        <div class="label">WANTED</div>
+        <div id="stars"></div>
+      </div>
+      <div id="best-box">
+        <div class="label">BEST</div>
+        <div id="best-val">0</div>
+      </div>
+    </div>
+
+    <canvas id="mirror" width="110" height="110"></canvas>
+
+    <div id="hud-bottom">
+      <div id="health-pips"></div>
+      <div id="meters-row">
+        <div id="speed-wrap">
+          <div id="speed-fill"></div>
+          <div id="speed-label"><span id="speed-val">0</span> MPH</div>
+        </div>
+        <div id="nitro-wrap">
+          <div id="nitro-fill"></div>
+          <div id="nitro-label">NITRO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="start-screen" class="overlay">
+    <div class="panel">
+      <h1>COP CHASE</h1>
+      <p class="tag">Outrun the law. Forever, if you can.</p>
+      <div class="howto">
+        <div><kbd>&larr;</kbd><kbd>&rarr;</kbd> or <kbd>A</kbd><kbd>D</kbd> &mdash; steer</div>
+        <div><kbd>&uarr;</kbd>/<kbd>W</kbd> &mdash; nitro boost</div>
+        <div><kbd>&darr;</kbd>/<kbd>S</kbd> &mdash; brake</div>
+        <div class="mobile-only">hold left / right side of the screen to steer</div>
+      </div>
+      <button id="start-btn">START ENGINE</button>
+    </div>
+  </div>
+
+  <div id="gameover-screen" class="overlay hidden">
+    <div class="panel">
+      <h1 id="busted-title">BUSTED</h1>
+      <p id="gameover-reason" class="tag">The cops caught up with you.</p>
+      <div class="stat-row"><span>Distance</span><span id="final-score">0</span></div>
+      <div class="stat-row"><span>Best</span><span id="final-best">0</span></div>
+      <div id="new-best" class="new-best hidden">NEW BEST!</div>
+      <button id="restart-btn">GET BACK IN THE CAR</button>
+    </div>
+  </div>
+
+  <div id="touch-controls">
+    <div id="touch-left" class="touch-zone"></div>
+    <div id="touch-right" class="touch-zone"></div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
