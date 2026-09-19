@@ -174,7 +174,8 @@ const state = {
   flash: 0,
 };
 
-const HEALTH_MAX = 5;
+const HEALTH_MAX = 100;
+const MAX_HIT_DAMAGE = 20;
 
 const player = {
   z: 0,
@@ -187,10 +188,18 @@ const player = {
   braking: false,
   boosting: false,
   lean: 0,
+  impactSpin: 0, // extra rotation kicked in by a hit, decays back to 0 — the "little physics" wobble
   wobble: 0,
   invuln: 0,
   health: HEALTH_MAX,
 };
+
+// A hit's damage scales with how hard it was (the input is a speed-like quantity —
+// player speed for a plain collision, a cop's ram power for a ram), clamped to a
+// 3-20 range so a light graze and a full-speed slam feel meaningfully different.
+function impactDamage(speedLike, divisor) {
+  return clamp(Math.round(speedLike / divisor), 3, MAX_HIT_DAMAGE);
+}
 
 let bestScore = Number(localStorage.getItem('cop-chase:best') || 0);
 document.getElementById('best-val').textContent = Math.floor(bestScore);
@@ -225,6 +234,7 @@ function resetGame() {
   player.braking = false;
   player.boosting = false;
   player.lean = 0;
+  player.impactSpin = 0;
   player.wobble = 0;
   player.invuln = 2.2;
   player.health = HEALTH_MAX;
@@ -295,16 +305,31 @@ function showGameOver() {
 
 // One of the player's 5 hearts. Busted (boxed in by cops) bypasses this and ends
 // the run directly — being arrested isn't a "hit" you can shrug off.
-function takeHit(reason) {
+// damage: 3-20 (see impactDamage) — how much of the 100 HP bar this hit costs.
+// lateralImpulse: world-units/sec to kick into player.lateralVel; omit for a hit with
+// no clear "push direction" (a straight rear-end), which gets a small random shove
+// instead — a graze deflects you a little sideways rather than launching you straight.
+function takeHit(reason, damage, lateralImpulse) {
   if (state.mode !== 'playing' || player.invuln > 0) return;
-  player.health = Math.max(0, player.health - 1);
+  damage = damage == null ? 10 : damage;
+  player.health = Math.max(0, player.health - damage);
   player.invuln = 1.5;
   player.lateral = clamp(player.lateral, -OFFROAD_LIMIT - 100, OFFROAD_LIMIT + 100);
-  player.lateralVel *= -0.35;
-  state.shake = Math.max(state.shake, 15);
-  state.flash = Math.max(state.flash, 0.4);
+
+  const impulse = lateralImpulse != null ? lateralImpulse : (Math.random() < 0.5 ? -1 : 1) * (260 + damage * 26);
+  player.lateralVel = player.lateralVel * -0.3 + impulse;
+  // a spin that fights the steering lean for a moment, then decays away in updatePlayer —
+  // the "little physics" of a hit knocking the car briefly sideways
+  player.impactSpin += Math.sign(impulse || 1) * clamp(damage * 0.022, 0.05, 0.55);
+  // a hard hit visibly costs speed too, not just a lateral shove; it recovers on its own
+  // via the normal speed lerp toward baseSpeed over the following second or so
+  player.speed *= 1 - clamp(damage / 40, 0, 0.5);
+
+  const mag = 0.3 + (damage / MAX_HIT_DAMAGE) * 0.9;
+  state.shake = Math.max(state.shake, 8 + damage * 0.9);
+  state.flash = Math.max(state.flash, 0.15 + damage * 0.025);
   playRam();
-  spawnHitParticles(0.55);
+  spawnHitParticles(mag);
   if (player.health <= 0) endGame(reason);
 }
 
@@ -598,11 +623,12 @@ function updatePlayer(dt) {
   player.lateralVel = lerp(player.lateralVel, steer * 1900, dt * 6);
   player.lateral += player.lateralVel * dt;
   player.lean = lerp(player.lean, steer * 0.24 + clamp(player.lateralVel / 4200, -0.18, 0.18), dt * 8);
+  player.impactSpin = lerp(player.impactSpin, 0, dt * 5); // the hit-spin settles back out over ~0.3-0.5s
 
   const hardLimit = OFFROAD_LIMIT + 260;
   if (player.lateral > hardLimit || player.lateral < -hardLimit) {
-    player.lateralVel *= -0.4;
-    takeHit('You slammed into a storefront.');
+    const dmg = impactDamage(player.speed, 480);
+    takeHit('You slammed into a storefront.', dmg, -Math.sign(player.lateral) * (300 + dmg * 24));
   }
   if (Math.abs(player.lateral) > OFFROAD_LIMIT) {
     player.speed *= 0.985; // sidewalk drag
@@ -634,7 +660,7 @@ function updateTraffic(dt) {
     t.z += (t.speed - player.speed) * dt;
     if (Math.abs(t.z - player.z) < COLLIDE_Z &&
         rectsOverlapLateral(player.lateral, CAR_W * 0.9, t.lateral, t.w * 0.9)) {
-      takeHit('You rear-ended traffic.');
+      takeHit('You rear-ended traffic.', impactDamage(Math.abs(player.speed - t.speed), 420));
     }
   }
 }
@@ -644,7 +670,7 @@ function updateHazards(dt) {
     h.z -= player.speed * dt;
     if (Math.abs(h.z - player.z) < COLLIDE_Z * 0.8) {
       const inGap = Math.abs(player.lateral - h.gapCenter) < h.gapWidth / 2 - CAR_W * 0.45;
-      if (!inGap) takeHit('You hit a police roadblock.');
+      if (!inGap) takeHit('You hit a police roadblock.', impactDamage(player.speed, 460));
     }
   }
 }
@@ -656,7 +682,7 @@ function updateJaywalkers(dt) {
     if (!j.warned && Math.abs(j.z - player.z) < COLLIDE_Z * 3.2) j.warned = true;
     if (Math.abs(j.z - player.z) < COLLIDE_Z * 0.7 &&
         rectsOverlapLateral(player.lateral, CAR_W * 0.8, j.lateral, 90)) {
-      takeHit('You couldn\'t swerve in time.');
+      takeHit('You couldn\'t swerve in time.', impactDamage(player.speed, 550));
     }
   }
 }
@@ -697,8 +723,7 @@ function updateCops(dt) {
       c.ramCooldown -= dt;
       if (c.ramCooldown <= 0 && Math.random() < info.ramChance && player.invuln <= 0) {
         const dir = c.lateral < player.lateral ? 1 : -1;
-        takeHit(`Rammed by a ${info.name.toLowerCase()}.`);
-        player.lateralVel += dir * info.ramPower;
+        takeHit(`Rammed by a ${info.name.toLowerCase()}.`, impactDamage(info.ramPower, 60), dir * info.ramPower);
         c.ramCooldown = rand(1.6, 2.8);
       } else if (c.ramCooldown <= 0) {
         c.ramCooldown = rand(0.6, 1.2);
@@ -1085,7 +1110,7 @@ function drawPlayerCar() {
   const flicker = player.invuln > 0 ? (Math.sin(state.runTime * 30) > 0 ? 0.4 : 1) : 1;
   ctx.save();
   ctx.globalAlpha = flicker;
-  drawCarTopDown(px, py, { color: '#1f6fe0', braking: player.braking, rot: player.lean * 0.5 });
+  drawCarTopDown(px, py, { color: '#1f6fe0', braking: player.braking, rot: player.lean * 0.5 + player.impactSpin });
   if (player.boosting) {
     const w = CAR_W * WORLD_PX, len = CAR_LEN * WORLD_PX;
     const fy = py + len * 0.5;
@@ -1200,16 +1225,9 @@ const el = {
   speed: document.getElementById('speed-val'),
   speedFill: document.getElementById('speed-fill'),
   nitroFill: document.getElementById('nitro-fill'),
-  healthPips: document.getElementById('health-pips'),
+  healthFill: document.getElementById('health-fill'),
+  healthVal: document.getElementById('health-val'),
 };
-const pipEls = [];
-for (let i = 0; i < HEALTH_MAX; i++) {
-  const pip = document.createElement('div');
-  pip.className = 'pip';
-  pip.textContent = '🚓';
-  el.healthPips.appendChild(pip);
-  pipEls.push(pip);
-}
 function updateHud() {
   el.score.textContent = Math.floor(player.z / 10);
   const mph = Math.round(player.speed / 68);
@@ -1217,7 +1235,15 @@ function updateHud() {
   el.speedFill.style.width = `${clamp(player.speed / player.maxSpeed, 0, 1) * 100}%`;
   el.nitroFill.style.width = `${player.nitro * 100}%`;
   el.stars.textContent = '★'.repeat(director.wanted) + '☆'.repeat(5 - director.wanted);
-  for (let i = 0; i < HEALTH_MAX; i++) pipEls[i].classList.toggle('lost', i >= player.health);
+
+  const hpRatio = clamp(player.health / HEALTH_MAX, 0, 1);
+  el.healthFill.style.width = `${hpRatio * 100}%`;
+  el.healthFill.style.background = hpRatio > 0.5
+    ? 'linear-gradient(90deg, #3fe07f, #8dff9f)'
+    : hpRatio > 0.25
+      ? 'linear-gradient(90deg, #e0a83f, #ffd166)'
+      : 'linear-gradient(90deg, #e03f3f, #ff6b6b)';
+  el.healthVal.textContent = Math.ceil(player.health);
 }
 
 // ============================================================
