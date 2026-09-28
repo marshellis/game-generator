@@ -1,0 +1,8 @@
+{
+  "title": "Reverse Zelda",
+  "description": "You're a boko. Your only job is to kill Link — a real autonomous agent who wanders, fights, gears up, and gets harder to deal with the longer he survives. Open 3D world, hundreds of weapons and armor, a bow, a shield, real physics.",
+  "emoji": "🗡️",
+  "author": "Marshall",
+  "createdAt": "2026-09-28",
+  "tags": ["arcade", "3d", "open-world", "action", "godot"]
+}

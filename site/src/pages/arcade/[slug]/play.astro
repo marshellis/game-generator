@@ -27,12 +27,15 @@ const src = gameUrl(game.slug);
 
   <div class="mt-5">
     {/* The game runs in a sandboxed iframe so its code can't touch the site
-        chrome. allow-same-origin is kept so games can use localStorage. */}
+        chrome. allow-same-origin is kept so games can use localStorage.
+        allow-pointer-lock / pointer-lock added for reverse-zelda (needs
+        mouse capture for camera look) — purely additive, existing games
+        that don't request pointer lock are unaffected. */}
     <iframe
       src={src}
       title={game.title}
-      sandbox="allow-scripts allow-same-origin"
-      allow="fullscreen; autoplay; gamepad"
+      sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+      allow="fullscreen; autoplay; gamepad; pointer-lock"
       class="h-[78vh] w-full rounded-2xl border border-slate-200 bg-white shadow-sm"
       loading="lazy"
     ></iframe>
