@@ -77,6 +77,16 @@ jobs:
         if: steps.check.outputs.ready == 'true'
         run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
 
+      # @astrojs/vercel@7 hard-codes the function runtime from the build-time Node major
+      # (20 -> nodejs20.x), and Vercel has discontinued nodejs20.x, which made every deploy
+      # fail. Keep building on Node 20 (the only major v7 maps cleanly) but point the built
+      # functions at a supported runtime.
+      - name: Point functions at a supported Node runtime
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          find .vercel/output/functions -name .vc-config.json -exec sed -i -E 's/"runtime": *"nodejs[0-9]+\.x"/"runtime": "nodejs22.x"/' {} +
+          grep -rh '"runtime"' .vercel/output/functions
+
       - name: Deploy to production
         if: steps.check.outputs.ready == 'true'
         run: vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
