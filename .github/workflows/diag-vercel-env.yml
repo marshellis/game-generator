@@ -15,7 +15,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: List production env var NAMES (values are never printed)
+      - name: Ping the leaderboard database (prints status only, never values)
         run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then echo "no token"; exit 0; fi
-          npx --yes vercel@latest env ls production --token="${{ secrets.VERCEL_TOKEN }}" 2>&1 | sed -E 's/[A-Za-z0-9_\-]{40,}/<redacted>/g'
+          npx --yes vercel@latest env pull .env.diag --environment=production --yes --token="${{ secrets.VERCEL_TOKEN }}" >/dev/null 2>&1
+          set -a; . ./.env.diag; set +a
+          echo "url host: $(echo "$KV_REST_API_URL" | sed -E 's#https?://([^/]*).*#\1#' | sed -E 's/^[^.]{4}/****/')"
+          echo "--- PING"
+          curl -s -m 20 -o /tmp/ping.txt -w "http %{http_code}\n" "$KV_REST_API_URL/ping" -H "Authorization: Bearer $KV_REST_API_TOKEN"
+          head -c 300 /tmp/ping.txt | sed -E 's/[A-Za-z0-9_\-]{30,}/<redacted>/g'; echo
+          echo "--- ZREVRANGE flappy (count only)"
+          curl -s -m 20 -o /tmp/z.txt -w "http %{http_code}\n" "$KV_REST_API_URL" -H "Authorization: Bearer $KV_REST_API_TOKEN" -H "Content-Type: application/json" -d '["ZCARD","lb:flappy"]'
+          head -c 200 /tmp/z.txt | sed -E 's/[A-Za-z0-9_\-]{30,}/<redacted>/g'; echo
+          rm -f .env.diag
