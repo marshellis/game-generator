@@ -1,0 +1,21 @@
+name: Diagnose Vercel env (temporary)
+on:
+  workflow_dispatch:
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: List production env var NAMES (values are never printed)
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then echo "no token"; exit 0; fi
+          npx --yes vercel@latest env ls production --token="${{ secrets.VERCEL_TOKEN }}" 2>&1 | sed -E 's/[A-Za-z0-9_\-]{40,}/<redacted>/g'
