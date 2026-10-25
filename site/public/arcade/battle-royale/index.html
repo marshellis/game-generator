@@ -199,6 +199,7 @@
 <script src="./ShaderPass.js"></script>
 <script src="./UnrealBloomPass.js"></script>
 <script src="./FXAAShader.js"></script>
+<script src="./colyseus.js"></script>
 <script>
 'use strict';
 
@@ -368,6 +369,24 @@ const STORM_INTERVAL = 90;      // seconds between storm shrinks
 const STORM_SHRINKS  = 8;       // number of times storm shrinks
 const BOT_DETECT_R   = 150;     // full AI within this radius
 const BOT_GHOST_R    = 300;     // ghost mode up to this radius
+
+// ════════════════════════════════════════════════════════════════
+//  PARTY MULTIPLAYER
+// ════════════════════════════════════════════════════════════════
+const SERVER_URL = 'wss://battle-royale-server.fly.dev'; // set once Task 10's Fly app is deployed
+const STATE_BROADCAST_HZ = 15;
+let partyClient = null; // Colyseus.Room for the party lobby, or null
+let matchClient = null; // Colyseus.Room for an active match, or null
+let isPartyLeader = false;
+
+function getDisplayName() {
+  let name = localStorage.getItem('brDisplayName');
+  if (!name) {
+    name = prompt('Choose a display name:', 'Player') || 'Anonymous';
+    localStorage.setItem('brDisplayName', name);
+  }
+  return name;
+}
 
 const WEAPONS = {
   pistol:   { name:'Pistol',        damage:25, fireRate:0.6,  range:200, ammo:12, maxAmmo:12,  spread:0.02, zoom:false },
@@ -1821,39 +1840,6 @@ function updateClouds(dt) {
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-//  GROUND DUST
-// ════════════════════════════════════════════════════════════════
-const DUST_COUNT = 280;
-const dustPositions = new Float32Array(DUST_COUNT * 3);
-const dustGeo = new THREE.BufferGeometry();
-dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
-const dustMat = new THREE.PointsMaterial({
-  color: 0xc8b89a, size: 0.18, transparent: true, opacity: 0.28,
-  depthWrite: false, sizeAttenuation: true
-});
-const dustMesh = new THREE.Points(dustGeo, dustMat);
-scene.add(dustMesh);
-const dustOffsets = Array.from({length: DUST_COUNT}, () => ({
-  ox: (Math.random()-0.5)*22,
-  oy: Math.random()*3.5,
-  oz: (Math.random()-0.5)*22,
-  speed: 0.3 + Math.random()*0.5,
-  phase: Math.random()*Math.PI*2
-}));
-
-function updateDust(dt) {
-  const px = camera.position.x, pz = camera.position.z;
-  for (let i = 0; i < DUST_COUNT; i++) {
-    const d = dustOffsets[i];
-    d.phase += d.speed * dt;
-    dustPositions[i*3]   = px + d.ox + Math.sin(d.phase * 0.7) * 1.2;
-    dustPositions[i*3+1] = d.oy + Math.sin(d.phase) * 0.4;
-    dustPositions[i*3+2] = pz + d.oz + Math.cos(d.phase * 0.9) * 1.2;
-  }
-  dustGeo.attributes.position.needsUpdate = true;
-}
-
 function openChest(chest) {
   if (chest.open) return;
   chest.open = true;
@@ -1963,6 +1949,7 @@ function spawnImpact(pos) {
 }
 
 function shoot() {
+  if (state.partyMatch && myKnockedState.knocked) return;
   const inv = player.inventory[player.weapon];
   if (!inv || inv.ammo <= 0 || player.fireCooldown > 0) return;
 
@@ -1980,7 +1967,15 @@ function shoot() {
   _pieceMeshScratch.length = 0;
   for (const pp of placedPieces) _pieceMeshScratch.push(pp.mesh);
   _aliveBotMeshScratch.length = 0;
-  for (const b of bots) if (b.alive) _aliveBotMeshScratch.push(b.mesh);
+  if (state.partyMatch) {
+    // Party match: local `bots` array is never populated (spawnBots() isn't
+    // called by connectToMatch — bots live server-side); enemies/teammates are
+    // rendered via renderedEntities instead (Task 13), so use those meshes for
+    // the piece-vs-target distance comparison below.
+    for (const [, entry] of renderedEntities) if (entry.mesh.visible) _aliveBotMeshScratch.push(...entry.parts.allMeshes);
+  } else {
+    for (const b of bots) if (b.alive) _aliveBotMeshScratch.push(b.mesh);
+  }
 
   const weaponRange  = WEAPONS[player.weapon].range;
   const weaponDamage = WEAPONS[player.weapon].damage;
@@ -2014,14 +2009,38 @@ function shoot() {
         }
       }
     }
-    // Check bots
-    for (const bot of bots) {
-      if (!bot.alive) continue;
-      const hits = _shootRay.intersectObject(bot.mesh, true);
-      if (hits.length) {
-        damageBot(bot, weaponDamage);
-        spawnImpact(hits[0].point);
-        break;
+    // Check bots (solo mode) / rendered entities (party match — remote real
+    // players and server-driven bots are both rendered via renderedEntities,
+    // Task 13). In a party match, hits are never applied locally — instead we
+    // report them to the server, which is authoritative for HP/knock/kill, and
+    // teammates are skipped entirely (no friendly fire).
+    if (state.partyMatch) {
+      for (const [sessionId, entry] of renderedEntities) {
+        if (!entry.mesh.visible) continue;
+        // Raycast against the body meshes only (entry.parts.allMeshes), not
+        // entry.mesh itself — teammates get a floating name-tag Sprite added as
+        // a child (spawnRemoteEntity), and THREE.Sprite#raycast dereferences
+        // Raycaster.camera (never set on this reused _shootRay), which throws
+        // if a recursive intersectObject() walks into it.
+        const hits = _shootRay.intersectObjects(entry.parts.allMeshes, true);
+        if (hits.length) {
+          spawnImpact(hits[0].point);
+          if (entry.teamId !== myTeamId) {
+            matchClient.send('hit-report', { targetId: sessionId, damage: weaponDamage });
+          }
+          // Teammates: no-op — bullet visually passes through, no tracer-hit registered against them.
+          break;
+        }
+      }
+    } else {
+      for (const bot of bots) {
+        if (!bot.alive) continue;
+        const hits = _shootRay.intersectObject(bot.mesh, true);
+        if (hits.length) {
+          damageBot(bot, weaponDamage);
+          spawnImpact(hits[0].point);
+          break;
+        }
       }
     }
     // Check environment (curated list — NOT scene.children which has thousands of objects)
@@ -2062,6 +2081,7 @@ const state = {
   botsAlive: 0,
   livesMode: false,
   lives: 3,
+  partyMatch: false,   // true when playing a networked Duos/Trios/Squads match
 };
 
 // Save / load
@@ -2298,8 +2318,36 @@ document.addEventListener('mouseup',   e => { if (e.button === 0) mouseLeftDown 
 function isAction(action) { return !!keys[settings.binds[action]]; }
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'KeyE' && state.phase === 'playing') checkChestInteract();
+  if (e.code === 'KeyE' && state.phase === 'playing') {
+    checkChestInteract();
+    if (state.partyMatch) checkReviveInteract();
+  }
 });
+
+// Revive interact (Task 15) — toggles a revive channel on a nearby knocked
+// teammate: press E to start, press E again (still in range of the same
+// target) to cancel. The server's 4s channel timer (REVIVE_CHANNEL_SECONDS)
+// is what actually gates completion — this just models the button press.
+function checkReviveInteract() {
+  if (!matchClient || myKnockedState.knocked) return;
+  const pp = camera.position;
+  for (const [sessionId, entry] of renderedEntities) {
+    if (entry.teamId !== myTeamId) continue;
+    const p = matchClient.state.players.get(sessionId);
+    if (!p || !p.knocked) continue;
+    const dx = pp.x - p.x, dz = pp.z - p.z;
+    if (Math.sqrt(dx*dx + dz*dz) <= 2.5) {
+      if (activeReviveTargetId === sessionId) {
+        matchClient.send('revive-cancel');
+        activeReviveTargetId = null;
+      } else {
+        matchClient.send('revive-start', { targetId: sessionId });
+        activeReviveTargetId = sessionId;
+      }
+      return;
+    }
+  }
+}
 
 document.addEventListener('keydown', e => {
   if (e.code === 'Escape') {
@@ -2321,6 +2369,7 @@ document.addEventListener('keydown', e => {
 // Build mode toggle and piece selection
 document.addEventListener('keydown', e => {
   if (state.phase !== 'playing' || settingsOpen) return;
+  if (state.partyMatch) return; // building is disabled during party matches — no networked sync for placed pieces
   if (e.code === settings.binds.build) {
     if (editMode) cancelEdit(); // exit edit mode before toggling build
     buildMode = !buildMode;
@@ -2758,14 +2807,24 @@ function loop(t) {
   lastTime = t;
   if (state.phase === 'playing') {
     updatePlayer(dt);
-    updateBots(dt);
-    updateStorm(dt);
+    if (state.partyMatch) {
+      lastBroadcast -= dt;
+      if (lastBroadcast <= 0 && matchClient) {
+        matchClient.send('state', {
+          x: camera.position.x, y: camera.position.y, z: camera.position.z,
+          yaw: player.yaw, pitch: player.pitch,
+        });
+        lastBroadcast = 1 / STATE_BROADCAST_HZ;
+      }
+    } else {
+      updateBots(dt);
+      updateStorm(dt);
+    }
     _hudTimer -= dt;
     if (_hudTimer <= 0) { updateHUD(); _hudTimer = 0.067; } // 15fps — canvas redraw is expensive
     updateImpacts(dt);
     updateTracers(dt);
     updateClouds(dt);
-    updateDust(dt);
     updateLightning(dt);
     if (buildMode) updateGhost();
     // Hold to build: continuously place while mouse held (0.15s delay then ~10/sec)
@@ -2808,6 +2867,7 @@ requestAnimationFrame(loop);
 // ════════════════════════════════════════════════════════════════
 function updatePlayer(dt) {
   if (player.hp <= 0) return;
+  const isKnocked = state.partyMatch && myKnockedState.knocked;
 
   // Camera rotation
   camera.rotation.order = 'YXZ';
@@ -2816,7 +2876,7 @@ function updatePlayer(dt) {
 
   // Crouch
   player.crouching = isAction('crouch');
-  const speed = player.crouching ? PLAYER_SPEED * 0.5 : PLAYER_SPEED;
+  const speed = isKnocked ? PLAYER_SPEED * 0.3 : (player.crouching ? PLAYER_SPEED * 0.5 : PLAYER_SPEED);
   const height = player.crouching ? PLAYER_HEIGHT * 0.6 : PLAYER_HEIGHT;
 
   // Movement direction — reuse pre-allocated vectors, no heap allocation per frame
@@ -3396,8 +3456,72 @@ function getMainMenuHTML() {
     <button class="btn" id="btnPlay">&#9654; LEVEL ${Math.min(maxLevel, 100)}</button>
     ${unlocked ? '<button class="btn" id="btnEndless" style="background:#6622cc;color:#fff">&#8734; ENDLESS MODE</button>' : ''}
     <button class="btn" id="btnLives" style="background:#cc2222;color:#fff">&#10084; 3 LIVES MODE</button>
+    <button class="btn" id="btnParty" style="background:#2288cc;color:#fff">&#128101; PARTY MODE</button>
     <p style="font-size:0.8em;color:#777;margin-top:0.8em">Progress saved automatically</p>
   `;
+}
+
+function getPartyMenuHTML() {
+  return `
+    <h1>PARTY MODE</h1>
+    <div id="partyPreJoin">
+      <button class="btn" id="btnCreateParty" style="background:#2288cc;color:#fff">Create Party</button>
+      <div style="margin-top:1em">
+        <input id="joinCodeInput" maxlength="6" placeholder="CODE" style="text-transform:uppercase;font-size:1.2em;text-align:center;width:120px;padding:0.4em;">
+        <button class="btn" id="btnJoinParty">Join</button>
+      </div>
+    </div>
+    <div id="partyLobby" style="display:none">
+      <p>Party code: <strong id="partyCodeDisplay"></strong></p>
+      <ul id="partyMemberList" style="list-style:none;padding:0"></ul>
+      <div id="partyModeSelect"></div>
+      <button class="btn" id="btnStartMatch" style="display:none;background:#2288cc;color:#fff">Start Match</button>
+      <p id="partyWaitingMsg" style="display:none;color:#888">Waiting for the leader to start...</p>
+      <button class="btn" id="btnLeaveParty" style="background:#772222;color:#fff">Leave Party</button>
+    </div>
+    <button class="btn" id="btnBackFromParty" style="margin-top:1em">&larr; Back</button>
+  `;
+}
+
+function renderPartyLobby() {
+  if (!partyClient) return;
+  const state = partyClient.state;
+  document.getElementById('partyPreJoin').style.display = 'none';
+  document.getElementById('partyLobby').style.display = '';
+  document.getElementById('partyCodeDisplay').textContent = state.code;
+
+  const list = document.getElementById('partyMemberList');
+  list.innerHTML = '';
+  state.members.forEach((member, sessionId) => {
+    const li = document.createElement('li');
+    const isLeader = sessionId === state.leaderId;
+    li.textContent = (isLeader ? '★ ' : '') + member.displayName;
+    list.appendChild(li);
+  });
+
+  isPartyLeader = partyClient.sessionId === state.leaderId;
+  const modeSelectEl = document.getElementById('partyModeSelect');
+  // state.selectedMode (and other primitives) can briefly read as undefined: this render
+  // runs once synchronously right after join, before the first server state patch has been
+  // decoded into partyClient.state (the schema's class-default values live server-side and
+  // aren't applied on the client until that first patch arrives). Fall back to the schema's
+  // own default ('duos') so this doesn't throw during that window; onStateChange re-renders
+  // with the real value moments later.
+  const selectedMode = state.selectedMode || 'duos';
+  if (isPartyLeader) {
+    modeSelectEl.innerHTML = ['duos', 'trios', 'squads'].map(m =>
+      `<button class="btn" data-mode="${m}" style="background:${selectedMode === m ? '#2288cc' : '#333'};color:#fff;margin:0.2em">${m.toUpperCase()}</button>`
+    ).join('');
+    modeSelectEl.querySelectorAll('button').forEach(b => {
+      b.addEventListener('click', () => partyClient.send('select-mode', { mode: b.dataset.mode }));
+    });
+    document.getElementById('btnStartMatch').style.display = '';
+    document.getElementById('partyWaitingMsg').style.display = 'none';
+  } else {
+    modeSelectEl.innerHTML = `<p>Selected mode: <strong>${selectedMode.toUpperCase()}</strong></p>`;
+    document.getElementById('btnStartMatch').style.display = 'none';
+    document.getElementById('partyWaitingMsg').style.display = '';
+  }
 }
 
 window.launchLevel = function(lvl) {
@@ -3416,6 +3540,237 @@ function bindMainMenuButtons() {
   document.getElementById('btnPlay')?.addEventListener('click', () => startGame(false));
   document.getElementById('btnEndless')?.addEventListener('click', () => startGame(true));
   document.getElementById('btnLives')?.addEventListener('click', startLivesGame);
+  document.getElementById('btnParty')?.addEventListener('click', openPartyMenu);
+}
+
+function openPartyMenu() {
+  document.getElementById('overlay').innerHTML = getPartyMenuHTML();
+  document.getElementById('btnCreateParty').addEventListener('click', createParty);
+  document.getElementById('btnJoinParty').addEventListener('click', () => {
+    const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+    if (code) joinParty(code);
+  });
+  document.getElementById('btnBackFromParty').addEventListener('click', () => {
+    if (partyClient) { partyClient.leave(); partyClient = null; }
+    document.getElementById('overlay').innerHTML = getMainMenuHTML();
+    bindMainMenuButtons();
+  });
+}
+
+async function createParty() {
+  const client = new Colyseus.Client(SERVER_URL);
+  partyClient = await client.joinOrCreate('party', { displayName: getDisplayName() });
+  wirePartyClient();
+}
+
+// PartyRoom (Task 8) sets this.setMetadata({ code }), so joining by code means listing
+// available party rooms, finding the one whose metadata.code matches, and joining that
+// room's actual ID — Colyseus has no built-in "join by custom code" filter.
+async function joinParty(code) {
+  const client = new Colyseus.Client(SERVER_URL);
+  const rooms = await client.getAvailableRooms('party');
+  const match = rooms.find(r => r.metadata?.code === code);
+  if (!match) { alert('No party found with that code.'); return; }
+  partyClient = await client.joinById(match.roomId, { displayName: getDisplayName() });
+  wirePartyClient();
+}
+
+function wirePartyClient() {
+  partyClient.onStateChange(renderPartyLobby);
+  document.getElementById('btnStartMatch')?.addEventListener('click', () => partyClient.send('start-match'));
+  document.getElementById('btnLeaveParty')?.addEventListener('click', () => {
+    partyClient.leave();
+    partyClient = null;
+    document.getElementById('overlay').innerHTML = getPartyMenuHTML();
+    document.getElementById('btnCreateParty').addEventListener('click', createParty);
+    document.getElementById('btnJoinParty').addEventListener('click', () => {
+      const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+      if (code) joinParty(code);
+    });
+  });
+  partyClient.onMessage('match-ready', (reservation) => connectToMatch(reservation));
+  renderPartyLobby();
+}
+
+const renderedEntities = new Map(); // sessionId -> { mesh, parts, isBot, teamId }
+let myTeamId = -1;
+let lastBroadcast = 0;
+let myKnockedState = { knocked: false, bleedoutRemaining: 0 }; // synced from our own PlayerState (Task 15)
+let activeReviveTargetId = null; // sessionId we're currently channeling a revive on, or null
+
+async function connectToMatch(reservation) {
+  const client = new Colyseus.Client(SERVER_URL);
+  matchClient = await client.consumeSeatReservation(reservation);
+
+  document.getElementById('overlay').style.display = 'none';
+  state.phase = 'playing';
+  state.partyMatch = true;
+  buildMode = false; // building is disabled during party matches — no networked sync for it
+
+  // Reset local player exactly like startGame() does, but bots/storm come from the server.
+  player.hp = 100; player.velY = 0; player.onGround = false;
+  player.weapon = 'pistol'; player.inventory = { pistol: { ...WEAPONS.pistol } }; player.fireCooldown = 0;
+  camera.position.set(0, PLAYER_HEIGHT, 0);
+  player.yaw = 0; player.pitch = 0;
+  canvas.requestPointerLock();
+
+  // KNOWN RACE (see Task 12 report): client.consumeSeatReservation() resolves as
+  // soon as the join handshake completes, which is BEFORE the first server state
+  // patch has been decoded client-side. Reading
+  // matchClient.state.players.get(matchClient.sessionId)?.teamId synchronously
+  // right here would almost always see an empty MapSchema and silently fall back
+  // to -1 instead of our real assigned team — verified live below. MapSchema#onAdd
+  // fires once per entry "as it is added", and by default (triggerAll=true) it
+  // also fires immediately/synchronously for every entry already present at
+  // registration time — including our own entry if the first patch already
+  // decoded — or later, whenever that patch (or a later one) actually adds us.
+  // Waiting on it guarantees myTeamId is correct before any downstream code
+  // (team-color rendering for remote entities) depends on it.
+  await new Promise((resolve) => {
+    const unsub = matchClient.state.players.onAdd((p, sessionId) => {
+      if (sessionId !== matchClient.sessionId) return;
+      myTeamId = p.teamId;
+      unsub();
+      resolve();
+    });
+  });
+
+  // Track our own knocked state (Task 15). Safe to call .get(matchClient.sessionId)
+  // here (unlike at the top of connectToMatch — see the race-condition note above):
+  // the await just above only resolves once our own entry has actually been added to
+  // the players MapSchema, so it's guaranteed present by this point.
+  matchClient.state.players.get(matchClient.sessionId).onChange(() => {
+    const me = matchClient.state.players.get(matchClient.sessionId);
+    myKnockedState.knocked = me.knocked;
+    myKnockedState.bleedoutRemaining = me.bleedoutRemaining;
+  });
+
+  // Spawn everyone already in the room (bots + any other real players who joined
+  // before us) now that myTeamId is known — a plain one-shot forEach over the
+  // current map contents, NOT another onAdd registration, so entities here are
+  // never double-spawned by the future-joins handler registered right after.
+  matchClient.state.players.forEach((p, sessionId) => {
+    if (sessionId !== matchClient.sessionId) spawnRemoteEntity(sessionId, p);
+  });
+  // Future joins only (triggerAll=false — everyone currently present was just
+  // handled by the forEach above; onAdd defaults to re-firing for existing
+  // entries too, which would otherwise double-spawn every bot and player).
+  matchClient.state.players.onAdd((p, sessionId) => {
+    if (sessionId === matchClient.sessionId) return; // that's us — rendered by the existing player/camera code
+    spawnRemoteEntity(sessionId, p);
+  }, false);
+  matchClient.state.players.onRemove((p, sessionId) => {
+    despawnRemoteEntity(sessionId);
+  });
+
+  // Mirror the server's authoritative storm state into the local `storm` object
+  // (used by updateHUD()/drawMinimap() — storm.radius, storm.shrinkTimer — and by
+  // the visual stormWall mesh) instead of ever running updateStorm(dt) client-side.
+  matchClient.state.listen('stormRadius', (value) => {
+    storm.radius = value;
+    stormWall.scale.set(value, 1, value);
+  });
+  matchClient.state.listen('stormTargetRadius', (value) => { storm.targetRadius = value; });
+  matchClient.state.listen('stormShrinkTimer', (value) => { storm.shrinkTimer = value; });
+
+  // MatchRoom (Task 9) flips phase 'playing' -> 'over' once one team remains and
+  // sets winningTeamId to that team's id. React to it here instead of polling.
+  matchClient.state.listen('phase', (phase) => {
+    if (phase === 'over') handleMatchOver(matchClient.state.winningTeamId);
+  });
+
+  renderer.compile(scene, camera);
+}
+
+// Reacts to the server declaring the match over. Extracted as a standalone named
+// function (rather than inlined in the listen() callback above) so it can be invoked
+// directly for verification without needing a real match to actually finish.
+//
+// showOverlay(title, msg, btn1Label, btn2Label) (see ~line 3416) is the existing
+// single-player win/lose overlay helper, but its two buttons have HARDCODED click
+// behavior baked in (ovBtn1 -> startGame(), ovBtn2 -> show main menu) — it does not
+// accept callbacks the way an earlier illustrative sketch of this task assumed.
+// Neither hardcoded action is correct for a party match (there's no single-player
+// startGame() to resume, and neither one leaves the Colyseus room or clears
+// matchClient/state.partyMatch). So: call showOverlay() to get its title/message/
+// overlay-visible rendering for free, then strip its two buttons' default listeners
+// (cloneNode(true) copies attributes but not addEventListener handlers — a standard
+// way to detach listeners without touching showOverlay itself) and rebind both to the
+// same "return to menu" cleanup action, since there's only one meaningful action here.
+function handleMatchOver(winningTeamId) {
+  const won = winningTeamId === String(myTeamId);
+  state.phase = won ? 'win' : 'dead';
+  document.exitPointerLock();
+
+  showOverlay(
+    won ? 'VICTORY!' : 'ELIMINATED',
+    won ? 'Your team won the match!' : 'Your team has been eliminated.',
+    'RETURN TO MENU',
+    'RETURN TO MENU',
+  );
+
+  const returnToMenu = () => {
+    if (matchClient) matchClient.leave();
+    matchClient = null;
+    state.partyMatch = false;
+    const ov = document.getElementById('overlay');
+    ov.innerHTML = getMainMenuHTML();
+    bindMainMenuButtons();
+  };
+  ['ovBtn1', 'ovBtn2'].forEach((id) => {
+    const old = document.getElementById(id);
+    const fresh = old.cloneNode(true);
+    old.replaceWith(fresh);
+    fresh.addEventListener('click', returnToMenu);
+  });
+}
+
+// A small floating text label — used only for teammates, so you can tell them apart
+// from enemy bots/players at a glance (design doc: "teammates... render with a shared
+// team color/name tag above their model, distinct from enemy bots/players").
+function makeNameTagSprite(text) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256; canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#33aaff';
+  ctx.font = 'bold 32px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+  const tex = new THREE.CanvasTexture(canvas);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false }));
+  sprite.scale.set(2, 0.5, 1);
+  sprite.position.y = 2.4; // above the head
+  return sprite;
+}
+
+function spawnRemoteEntity(sessionId, p) {
+  const isTeammate = p.teamId === myTeamId;
+  const outfitColor = new THREE.Color(isTeammate ? 0x33aaff : 0xcc3333);
+  const mesh = createBotMesh(outfitColor); // reused for both remote players and server bots — same humanoid rig
+  mesh.position.set(p.x, p.y, p.z);
+  if (isTeammate) {
+    mesh.add(makeNameTagSprite(p.isBot ? 'Bot' : p.displayName));
+  }
+  scene.add(mesh);
+  renderedEntities.set(sessionId, { mesh, parts: mesh.userData.parts, isBot: p.isBot, teamId: p.teamId });
+
+  p.onChange(() => {
+    const entry = renderedEntities.get(sessionId);
+    if (!entry) return;
+    entry.mesh.position.set(p.x, p.y, p.z);
+    entry.mesh.rotation.y = p.yaw;
+    entry.mesh.visible = p.alive;
+  });
+}
+
+function despawnRemoteEntity(sessionId) {
+  const entry = renderedEntities.get(sessionId);
+  if (!entry) return;
+  scene.remove(entry.mesh);
+  renderedEntities.delete(sessionId);
 }
 
 function triggerLightning() {
@@ -3485,6 +3840,19 @@ function updateHUD() {
   hctx.clearRect(0, 0, W, H);
 
   if (state.phase !== 'playing') return;
+
+  // ── Knocked overlay (Task 15) ──
+  if (state.partyMatch && myKnockedState.knocked) {
+    hctx.fillStyle = 'rgba(120,0,0,0.35)';
+    hctx.fillRect(0, 0, hud.width, hud.height);
+    hctx.fillStyle = '#fff';
+    hctx.font = 'bold 28px sans-serif';
+    hctx.textAlign = 'center';
+    hctx.fillText('KNOCKED', hud.width/2, hud.height/2 - 20);
+    hctx.font = '18px sans-serif';
+    hctx.fillText(`Bleeding out: ${Math.ceil(myKnockedState.bleedoutRemaining)}s`, hud.width/2, hud.height/2 + 10);
+    hctx.textAlign = 'left';
+  }
 
   // ── Storm warning border flash ──
   if (player.inStorm) {
