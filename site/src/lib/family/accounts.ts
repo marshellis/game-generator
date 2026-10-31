@@ -99,6 +99,24 @@ export async function loginParent(input: { email?: string; password?: string }, 
   return { status: 200, json: { household: publicHousehold(hh) }, cookies: deviceCookies(parent, d) };
 }
 
+/**
+ * Step-up for destructive parent actions (delete a child, cancel billing). The 30-minute parent cookie
+ * alone is not enough: a page or game running on this origin could replay it. Re-entering the password
+ * proves a human parent is at the keyboard. Shares the login lockout so it cannot be brute-forced.
+ * Returns null when confirmed, otherwise the failure result.
+ */
+export async function confirmPassword(t: Tokens, password: unknown, d: FamilyDeps): Promise<FamilyResult | null> {
+  const parent = await parentFrom(t, d);
+  if (!parent) return err(401, "parent-required");
+  const lockKey = `plock:${parent.email}`;
+  if (Number((await d.kv.get<number>(lockKey)) ?? 0) >= 8) return err(429, "locked");
+  if (typeof password !== "string" || !password || !verifySecret(password, parent.pwHash)) {
+    await d.kv.incr(lockKey, 15 * 60);
+    return err(403, "password-required");
+  }
+  return null;
+}
+
 /** Leave "parent mode" (the kid gets the phone back); the device stays linked to the household. */
 export function lockParent(): FamilyResult {
   return { status: 204, cookies: [{ name: PARENT_COOKIE, clear: true }] };

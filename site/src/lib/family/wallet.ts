@@ -2,13 +2,15 @@
 // so a clever kid editing the page cannot mint minutes.
 import type { ProfileSettings } from "./types";
 
-export interface Day { spentSec: number; earnedSec: number; asked: number; questions: number; correct: number; rounds: number; lastTick: number }
+export interface Day { spentSec: number; earnedSec: number; asked: number; questions: number; correct: number; rounds: number; lastTick: number; puzzles?: number }
 export const emptyDay = (): Day => ({ spentSec: 0, earnedSec: 0, asked: 0, questions: 0, correct: 0, rounds: 0, lastTick: 0 });
 
 /** Seconds of play one question is worth when answered correctly: ~20s of learning at the parent's ratio. */
 export const SEC_PER_QUESTION = 20;
 /** A finished puzzle from the educational games counts as this many correct answers. */
 export const PUZZLE_WEIGHT = 3;
+/** Puzzles that can earn play time per day. Stops "report a finished puzzle" being a time printer. */
+export const PUZZLE_DAILY_CAP = 10;
 
 export function earnFor(s: ProfileSettings, correctAnswers: number): number {
   return Math.round(correctAnswers * SEC_PER_QUESTION * s.mix.playPerLearn);
@@ -51,7 +53,9 @@ export function status(s: ProfileSettings, day: Day): PlayStatus {
 /** Credit elapsed play. The client reports seconds; the server trusts at most what the clock allows. */
 export function tick(day: Day, reportedSec: number, nowMs: number): Day {
   const gap = day.lastTick ? (nowMs - day.lastTick) / 1000 : 0;
-  const max = day.lastTick && gap < 90 ? gap + 5 : 10; // a first/stale tick can only claim 10s
+  // Credit is bounded by real elapsed time (credit is rounded). A flat per-tick allowance would let a
+  // burst of ticks in one instant drain a child's whole day, so tolerance must not accumulate.
+  const max = day.lastTick && gap < 90 ? gap : 10; // a first/stale tick can only claim 10s
   const credit = Math.max(0, Math.min(reportedSec, 30, max));
   return { ...day, spentSec: day.spentSec + Math.round(credit), lastTick: nowMs };
 }

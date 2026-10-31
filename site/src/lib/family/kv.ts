@@ -49,7 +49,7 @@ export function upstashKV(): KV {
     async del(k) { await client().del(k); },
     async incr(k, ttl) {
       const n = await client().incr(k);
-      if (n === 1 && ttl) await client().expire(k, ttl);
+      if (ttl) await client().expire(k, ttl); // always re-arm, so a lost first expire cannot make a counter permanent
       return n;
     },
     async keys(p) {

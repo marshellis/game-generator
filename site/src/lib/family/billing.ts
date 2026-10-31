@@ -7,7 +7,7 @@
 // retention maze). Not configured (no keys) => billing endpoints answer 503 and everyone stays on free.
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type { FamilyDeps, FamilyResult } from "./accounts";
-import { parentFrom } from "./accounts";
+import { parentFrom, confirmPassword } from "./accounts";
 import { entKey, getEntitlement, PLANS, type Entitlement } from "./plans";
 import { register, type Req } from "./router";
 
@@ -66,6 +66,8 @@ export async function checkout(r: Req, d: FamilyDeps): Promise<FamilyResult> {
 
 /** One-step cancel: stops renewal, keeps access until the period ends. */
 export async function cancel(r: Req, d: FamilyDeps): Promise<FamilyResult> {
+  const denied = await confirmPassword(r.tokens, r.body.password, d);
+  if (denied) return denied;
   return setCancel(r, d, true);
 }
 export async function resume(r: Req, d: FamilyDeps): Promise<FamilyResult> {
@@ -113,7 +115,9 @@ function fromStripeSub(sub: any, prev: Entitlement | null, now: number): Entitle
 
 export async function stripeWebhook(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   if (!verifyStripeSignature(r.raw ?? "", r.headers?.["stripe-signature"], env("STRIPE_WEBHOOK_SECRET"), Math.floor(d.now / 1000))) return err(400, "bad-signature");
-  const ev = JSON.parse(r.raw ?? "{}");
+  let ev: any;
+  try { ev = JSON.parse(r.raw ?? "{}"); } catch { return err(400, "bad-json"); }
+  if (!ev || typeof ev.id !== "string") return err(400, "bad-event");
   if (!(await d.kv.set(`stripe-ev:${ev.id}`, 1, { nx: true, ttlSec: 7 * 86400 }))) return { status: 200, json: { duplicate: true } };
   const obj = ev.data?.object ?? {};
   if (ev.type === "checkout.session.completed" && obj.subscription && obj.client_reference_id) {

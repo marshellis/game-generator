@@ -88,8 +88,9 @@ describe("wallet", () => {
   });
   it("tick credits at most what the clock allows", () => {
     let day = W.tick(W.emptyDay(), 999, 1_000_000); expect(day.spentSec).toBe(10);
-    day = W.tick(day, 999, 1_010_000); expect(day.spentSec).toBe(10 + 15); // 10s gap + 5 slack
-    day = W.tick(day, 5, 1_015_000); expect(day.spentSec).toBe(10 + 15 + 5);
+    day = W.tick(day, 999, 1_010_000); expect(day.spentSec).toBe(10 + 10); // exactly the 10s that elapsed, no slack
+    day = W.tick(day, 30, 1_010_000); expect(day.spentSec).toBe(20); // same instant again: nothing
+    day = W.tick(day, 5, 1_015_000); expect(day.spentSec).toBe(25);
   });
   it("day rolls over at the household's midnight", () => {
     const t = Date.UTC(2026, 9, 31, 3, 0); // 21:00 Oct 30 in Denver, already Oct 31 UTC
