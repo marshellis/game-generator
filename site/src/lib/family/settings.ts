@@ -1,6 +1,6 @@
 import type { Preset, ProfileSettings } from "./types";
 
-export const SUBJECTS = ["math", "logic", "language", "spatial"] as const;
+export const SUBJECTS = ["math", "logic", "language", "spatial", "science"] as const;
 
 /** Presets are just shortcuts over playPerLearn; "custom" keeps whatever the parent typed. */
 export const PRESETS: Record<Exclude<Preset, "custom">, number> = { off: 0, light: 4, balanced: 2, heavy: 1 };

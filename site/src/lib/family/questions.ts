@@ -34,7 +34,55 @@ function scramble(r: Rand, w: string): string {
   return [...w].reverse().join("");
 }
 
+// Bank questions: [prompt, answer, ...wrong answers]. Grade band is the bank's tier (1,3,5,7 like WORDS).
+type Bank = Record<number, [string, string, ...string[]][]>;
+const VOCAB: Bank = {
+  3: [["Which word means the same as “big”?", "large", "tiny", "quiet", "slow"], ["Which word means the opposite of “hot”?", "cold", "warm", "dry", "loud"],
+      ["Which word means “very happy”?", "joyful", "sleepy", "angry", "hungry"], ["Which word means “to look at closely”?", "examine", "ignore", "carry", "whisper"],
+      ["Which word means the opposite of “ancient”?", "modern", "heavy", "narrow", "silent"], ["A “brave” person is…", "not afraid", "very tired", "always late", "quite loud"]],
+  5: [["“Enormous” means…", "extremely large", "very old", "quite funny", "hard to see"], ["To “hesitate” is to…", "pause before acting", "run very fast", "speak loudly", "give a gift"],
+      ["Which word means “to make something better”?", "improve", "damage", "borrow", "repeat"], ["A “fragile” object is easily…", "broken", "found", "washed", "stretched"],
+      ["“Reluctant” means…", "unwilling", "excited", "thankful", "confused"], ["To “conceal” is to…", "hide", "show", "count", "build"]],
+  7: [["“Ambiguous” means…", "open to more than one meaning", "very clear", "extremely rare", "easily broken"], ["To “scrutinize” is to…", "examine very carefully", "forget quickly", "praise loudly", "move away"],
+      ["“Benevolent” means…", "kind and generous", "dishonest", "forgetful", "easily angered"], ["A “meticulous” person is…", "very careful about details", "often late", "easily bored", "very loud"],
+      ["“Inevitable” means…", "certain to happen", "very unlikely", "already finished", "hard to explain"], ["To “mitigate” is to…", "make less severe", "make larger", "make up", "make fun of"]],
+};
+const SCIENCE: Bank = {
+  1: [["Which animal gives us milk?", "cow", "snake", "eagle", "shark"], ["What do plants need to grow?", "sunlight and water", "only candy", "only sand", "only ice"],
+      ["Which one is a liquid?", "water", "rock", "wood", "brick"], ["What do we use our ears for?", "hearing", "smelling", "tasting", "seeing"]],
+  3: [["What do we call frozen water?", "ice", "steam", "fog", "dew"], ["Which planet do we live on?", "Earth", "Mars", "Venus", "Jupiter"],
+      ["What is a baby frog called?", "tadpole", "calf", "cub", "foal"], ["Which is a mammal?", "dolphin", "trout", "lizard", "parrot"], ["What force pulls things down to the ground?", "gravity", "magnetism", "friction", "wind"]],
+  5: [["What gas do plants take in from the air?", "carbon dioxide", "helium", "nitrogen only", "hydrogen"], ["What is the center of an atom called?", "nucleus", "orbit", "cell", "crust"],
+      ["Which layer of Earth do we live on?", "crust", "core", "mantle", "inner core"], ["What do we call animals that eat only plants?", "herbivores", "carnivores", "omnivores", "predators"],
+      ["Which organ pumps blood around the body?", "heart", "lungs", "stomach", "kidney"]],
+  7: [["What is the chemical symbol for water?", "H2O", "CO2", "O2", "NaCl"], ["What part of the cell holds the DNA?", "nucleus", "membrane", "vacuole", "wall"],
+      ["What is the process plants use to make food from light?", "photosynthesis", "respiration", "evaporation", "digestion"], ["Which is a unit of force?", "newton", "volt", "kelvin", "meter"],
+      ["What is the most common gas in Earth's atmosphere?", "nitrogen", "oxygen", "argon", "carbon dioxide"]],
+};
+function fromBank(bank: Bank, g: number, r: Rand): Raw {
+  const tier = [7, 5, 3, 1].find((t) => g >= t && bank[t]) ?? Math.min(...Object.keys(bank).map(Number));
+  const [prompt, answer, ...distractors] = pick(r, bank[tier]);
+  return { prompt, answer, distractors };
+}
+const NAMES = ["Maya", "Leo", "Zoe", "Sam", "Ava", "Noah", "Mia", "Eli"];
+const THINGS = ["apples", "stickers", "marbles", "cards", "cookies", "coins"];
+
 const GEN: Record<string, (r: Rand, g: number) => Raw> = {
+  "math.word": (r, g) => {
+    const n = pick(r, NAMES), t = pick(r, THINGS), hi = g <= 2 ? 10 : g <= 4 ? 40 : 120;
+    const kind = int(r, 0, g >= 3 ? 3 : 1);
+    if (kind === 0) { const a = int(r, 3, hi), b = int(r, 2, hi); return { prompt: `${n} has ${a} ${t} and gets ${b} more. How many ${t} now?`, answer: String(a + b), distractors: numChoices(r, a + b, 3) }; }
+    if (kind === 1) { const a = int(r, 6, hi), b = int(r, 1, a - 1); return { prompt: `${n} has ${a} ${t} and gives away ${b}. How many are left?`, answer: String(a - b), distractors: numChoices(r, a - b, 3) }; }
+    if (kind === 2) { const a = int(r, 2, 9), b = int(r, 2, g >= 5 ? 12 : 9); return { prompt: `${n} has ${a} bags with ${b} ${t} in each. How many ${t} in all?`, answer: String(a * b), distractors: numChoices(r, a * b, Math.max(3, a)) }; }
+    const b = int(r, 2, 9), q = int(r, 2, 12); return { prompt: `${n} shares ${b * q} ${t} equally among ${b} friends. How many does each friend get?`, answer: String(q), distractors: numChoices(r, q, 3) };
+  },
+  "math.place": (r, g) => {
+    const digits = g <= 2 ? 2 : g <= 3 ? 3 : 4, num = int(r, 10 ** (digits - 1), 10 ** digits - 1), s = String(num);
+    const idx = int(r, 0, digits - 1), names = ["ones", "tens", "hundreds", "thousands"], place = names[digits - 1 - idx];
+    return { prompt: `In ${num}, which digit is in the ${place} place?`, answer: s[idx], distractors: [...new Set([...s].filter((c) => c !== s[idx]).concat(["0", "7", "3", "9"].filter((c) => c !== s[idx])))].slice(0, 3) };
+  },
+  "language.vocab": (r, g) => fromBank(VOCAB, g, r),
+  "science.facts": (r, g) => fromBank(SCIENCE, g, r),
   "math.add": (r, g) => {
     const max = g <= 1 ? 10 : g === 2 ? 50 : g === 3 ? 500 : 5000;
     const a = int(r, 1, max), b = int(r, 1, max), ans = a + b;

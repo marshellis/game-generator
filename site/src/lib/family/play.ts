@@ -109,9 +109,16 @@ export async function learnReport(r: Req, d: FamilyDeps): Promise<FamilyResult> 
 /** Mastery summary for one child (their own via /me/progress, or a parent via /profiles/:u/progress). */
 export async function progressFor(u: string, d: FamilyDeps): Promise<FamilyResult> {
   const m = await loadMastery(u, d);
+  // Last 7 days of activity (newest first), from the per-day wallet records.
+  const dayKeys = (await d.kv.keys(dataKey(u, "day:"))).sort().reverse().slice(0, 7);
+  const days = await Promise.all(dayKeys.map(async (k) => {
+    const x = (await d.kv.get<W.Day>(k))!;
+    return { day: k.slice(dataKey(u, "day:").length), questions: x.questions, correct: x.correct, playMin: Math.round(x.spentSec / 60), earnedMin: Math.round(x.earnedSec / 60) };
+  }));
   return {
     status: 200,
     json: {
+      days,
       skills: SKILLS.filter((s) => m[s.id]).map((s) => ({ id: s.id, label: s.label, subject: s.subject, p: m[s.id].p, n: m[s.id].n, mastered: simpleStrategy.isMastered(m[s.id]) })),
     },
   };

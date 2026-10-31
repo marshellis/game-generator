@@ -116,3 +116,15 @@ describe("RevenueCat (Apple + Google)", () => {
     expect(effectivePlan(await getEntitlement(d.kv, hid), d.now)).toBe("free");
   });
 });
+
+describe("parent progress report", () => {
+  it("is a paid feature that returns skills and the last days of activity", async () => {
+    await d.kv.set(entKey(hid), { plan: "family", status: "active", source: "manual", updatedAt: 0 });
+    await A.addProfile(parent, { nickname: "kida", birthYear: 2017 }, d);
+    await d.kv.set(A.dataKey("kida", "day:2026-10-30"), { spentSec: 600, earnedSec: 300, asked: 4, questions: 4, correct: 3, rounds: 2, lastTick: 0 });
+    await d.kv.set(A.dataKey("kida", "mastery"), { "math.add": { p: 0.9, n: 6, last: 1 } });
+    const r: any = await call("GET", "profiles/kida/progress");
+    expect(r.json.skills[0]).toMatchObject({ id: "math.add", mastered: true });
+    expect(r.json.days[0]).toMatchObject({ day: "2026-10-30", correct: 3, playMin: 10, earnedMin: 5 });
+  });
+});
