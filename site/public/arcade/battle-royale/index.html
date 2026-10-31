@@ -3557,9 +3557,22 @@ function openPartyMenu() {
   });
 }
 
+// Marshellis game pass: a signed statement of who is playing + how much play time is left (see docs/game-pass.md).
+// Guests / not signed in: undefined (the old display-name prompt is used). Out of time: shows why and stops.
+async function getPass() {
+  try {
+    const r = await fetch('/api/family/pass', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' }, body: JSON.stringify({ room: 'battle-royale' }) });
+    if (r.status === 403) { alert('No play time left today. Do a brain break to earn more!'); return 'NO-TIME'; }
+    return r.ok ? (await r.json()).pass : undefined;
+  } catch (e) { return undefined; }
+}
+
 async function createParty() {
   const client = new Colyseus.Client(SERVER_URL);
-  partyClient = await client.joinOrCreate('party', { displayName: getDisplayName() });
+  const pass = await getPass();
+  if (pass === 'NO-TIME') return;
+  partyClient = await client.joinOrCreate('party', { displayName: pass ? 'Player' : getDisplayName(), pass });
   wirePartyClient();
 }
 
@@ -3571,7 +3584,9 @@ async function joinParty(code) {
   const rooms = await client.getAvailableRooms('party');
   const match = rooms.find(r => r.metadata?.code === code);
   if (!match) { alert('No party found with that code.'); return; }
-  partyClient = await client.joinById(match.roomId, { displayName: getDisplayName() });
+  const pass = await getPass();
+  if (pass === 'NO-TIME') return;
+  partyClient = await client.joinById(match.roomId, { displayName: pass ? 'Player' : getDisplayName(), pass });
   wirePartyClient();
 }
 
