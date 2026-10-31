@@ -112,7 +112,16 @@ const Net = {
   lobby: { players: [], endsAt: 0, phase: 'lobby' }, roster: [], offlineEnds: 0, notice: '',
   connect() {
     if (!SERVER_URL) return;
-    try { this.ws = new WebSocket(SERVER_URL.replace(/\/$/, '') + '/?room=' + encodeURIComponent(QS.get('room') || 'public')); } catch (e) { return; }
+    // Marshellis game pass (docs/game-pass.md): real nickname + the parent's play-time limit. Guests just connect.
+    fetch('/api/family/pass', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ room: 'hide-and-seek' }) })
+      .then(r => r.status === 403 ? 'NO-TIME' : r.ok ? r.json().then(j => j.pass) : undefined, () => undefined)
+      .then(pass => {
+        if (pass === 'NO-TIME') { this.notice = 'No play time left today. Do a brain break to earn more!'; this.failed = true; return; }
+        this.open(pass);
+      });
+  },
+  open(pass) {
+    try { this.ws = new WebSocket(SERVER_URL.replace(/\/$/, '') + '/?room=' + encodeURIComponent(QS.get('room') || 'public') + (pass ? '&pass=' + encodeURIComponent(pass) : '')); } catch (e) { return; }
     this.ws.onopen = () => { this.connected = true; this.send({ type: 'join', hex: player.hex, shape: player.shape }); };
     this.ws.onmessage = e => { let m; try { m = JSON.parse(e.data); } catch (err) { return; } onNet(m); };
     this.ws.onclose = () => { const was = this.connected; if (!was) this.failed = true; this.connected = false; this.lobby.endsAt = 0; if (was) onNetClosed(); };
@@ -1238,6 +1247,8 @@ function onNet(m) {
   switch (m.type) {
     case 'welcome': Net.id = m.id; break;
     case 'full': Net.notice = 'That room is full (7 players).'; break;
+    case 'timeup': Net.notice = "That's all the play time for today!"; break;
+    case 'signin': Net.notice = 'Please sign in to play online.'; break;
     case 'lobby': Net.hostId = m.hostId; Net.notice = ''; Net.lobby = { players: m.players, phase: m.phase, endsAt: m.startsIn ? performance.now() + m.startsIn : 0 }; break;
     case 'start':
       Net.roster = m.humans; Net.hostId = m.hostId; Net.isHost = m.hostId === Net.id; Net.mode = Net.isHost ? 'host' : 'client'; Net.lobby.endsAt = 0;
