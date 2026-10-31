@@ -33,6 +33,7 @@
 
   <canvas id="game" width="400" height="560"></canvas>
 
+  <div id="mg-picker" class="col"></div>
   <div id="mg-account" class="col"></div>
 
   <div id="mg-board" class="col"></div>
@@ -49,7 +50,7 @@
   showBest();
 
   // Sign-in, leaderboard and score saving all live in the shared SDK.
-  const mg = Marshellis.init({ game: GAME, chip: "#mg-chip", account: "#mg-account", board: "#mg-board" });
+  const mg = Marshellis.init({ game: GAME, chip: "#mg-chip", account: "#mg-account", board: "#mg-board", picker: "#mg-picker" });
 
   async function submit(score) {
     if (score > (Number(localStorage.getItem(LS_BEST) || 0) || 0)) localStorage.setItem(LS_BEST, String(score));
@@ -78,12 +79,22 @@
     const top = margin + Math.random() * (H - GROUND_H - GAP - margin * 2);
     pipes.push({ x: x, top: top, scored: false });
   }
+  let gating = false;
   function flap() {
-    if (state === "ready") { state = "playing"; bird.v = FLAP; }
+    if (gating) return;
+    if (state === "ready") {
+      // Parent-set limits: may block, or show a quick learning break, before the round starts.
+      gating = true;
+      mg.gate().then(function (ok) {
+        gating = false;
+        if (!ok) return;
+        state = "playing"; bird.v = FLAP; mg.startPlaying();
+      });
+    }
     else if (state === "playing") { bird.v = FLAP; }
     else if (state === "dead") { reset(); }
   }
-  function die() { state = "dead"; submit(score); }
+  function die() { state = "dead"; mg.roundEnded(); submit(score); }
   function update() {
     frame++;
     if (state !== "playing") return;
