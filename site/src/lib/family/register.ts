@@ -2,3 +2,5 @@
 import "./play";
 export {};
 import "./billing";
+import "./pass";
+import "./store";
