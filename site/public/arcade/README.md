@@ -51,22 +51,25 @@ Rules:
 
 The `_template/` game ("Click the Dot") is a complete, working example — read it first.
 
-## Optional: a global leaderboard
+## Accounts, leaderboard, parent controls: use the shared SDK
 
-Most games just keep a personal best in `localStorage`. A game can instead post to a
-shared, account-backed leaderboard (the same username + PIN profiles the puzzle games
-use). Because the wrapper iframe is same-origin, relative `fetch` calls carry the
-player's session cookie automatically.
+Every game connects to the Marshellis account through **one shared script** - do not write your own
+sign-in form or call `/api/auth/*` yourself. `flappy/` is the complete worked example.
 
-1. Add your slug to `SCORE_GAMES` in `site/src/lib/profile/scores.ts` (the allowlist —
-   only listed games may post scores).
-2. From your `index.html`:
-   - `GET /api/me` → `{ username, avatar }` if logged in, else `401` (play as guest).
-   - `POST /api/scores` with `{ "game": "<slug>", "score": <int> }` → `{ best, improved }`
-     (auth required; the server keeps each player's highest).
-   - `GET /api/leaderboard?game=<slug>&limit=10` → `{ top: [{ rank, username, score }] }`
-     (public — no login needed to read it).
+```html
+<div id="mg-picker"></div><div id="mg-chip"></div><div id="mg-account"></div><div id="mg-board"></div>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script>
+  const mg = Marshellis.init({ game: "my-slug", chip: "#mg-chip", account: "#mg-account", board: "#mg-board", picker: "#mg-picker" });
+  // before each round:   if (!(await mg.gate())) return;   // parent time limits + learning breaks
+  // when the round starts: mg.startPlaying();
+  // when it ends:          mg.roundEnded(); mg.submitScore(score);   // score is ignored for guests
+  // who is playing:        mg.who()  -> { username, avatar } or null (guest)
+</script>
+```
 
-Guests still work: fall back to `localStorage` and invite them to log in. See `flappy/`
-for a complete worked example. (`flappy` is the one exception to "don't reach out to
-shared code" — calling the site's own API is the sanctioned way to use the leaderboard.)
+Games never see the parent's settings, ratios or subscription - they only ask `gate()`. Guests are never
+gated and keep their best on the device. To post scores add your slug to `SCORE_GAMES` in
+`site/src/lib/profile/scores.ts`. Design: `docs/superpowers/specs/2026-10-30-family-platform-design.md`.
+Online games: see `docs/game-pass.md`. Games from outside publishers use the sandbox bridge instead
+(`site/public/arcade/_sdk/host-bridge.js`).
