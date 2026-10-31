@@ -11,7 +11,7 @@ export const prerender = false;
 const run: APIRoute = async ({ request, params, cookies, url }) => {
   let body: Record<string, unknown> = {};
   let raw = "";
-  if (request.method !== "GET" && request.method !== "DELETE") {
+  if (request.method !== "GET") {
     raw = await request.text();
     try { const j = JSON.parse(raw); if (j && typeof j === "object") body = j; } catch { /* non-JSON bodies (webhooks) use raw */ }
   }

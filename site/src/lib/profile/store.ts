@@ -35,7 +35,8 @@ export function upstashStore(): Store {
     },
     async bumpLockout(u, ttlSec) {
       const n = await client().incr(`lockout:${u}`);
-      if (n === 1) await client().expire(`lockout:${u}`, ttlSec);
+      // Always (re)arm the TTL: a crash between incr and expire must never leave a permanent lockout.
+      await client().expire(`lockout:${u}`, ttlSec);
       return n;
     },
     async getLockout(u) {

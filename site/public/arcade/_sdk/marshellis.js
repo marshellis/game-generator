@@ -11,6 +11,10 @@
  *   mg.startPlaying() / await mg.roundEnded()   -> play clock + round counting for parent time limits
  *   opts.picker: mount point for the "Who's playing?" profile picker (phone-handoff)
  *
+ * Host metering: the arcade wrapper page (outside the game's iframe) calls init({ host: true }). It owns
+ * the gate and the play clock, so time limits hold even for a game that never calls the SDK. A game that
+ * does call gate()/startPlaying()/roundEnded() is routed to the host's single clock (no double counting).
+ *
  * Games never implement sign-in themselves. All calls degrade silently: gameplay never
  * depends on the network. Same-origin only (the arcade iframe keeps allow-same-origin).
  * Every element is optional - omit a mount point and that piece is not drawn.
@@ -240,25 +244,51 @@
       }
       return true;
     }
+    // The wrapper page (same origin, outside the iframe) may own the clock; see opts.host.
+    function hostApi() {
+      try { var h = root.parent && root.parent !== root && root.parent.__mgHost; return h && h.gate ? h : null; } catch (e) { return null; }
+    }
     function startPlaying() {
-      if (timer || !me) return;
+      if (hostApi() || timer || !me) return;
       lastTick = Date.now();
       timer = root.setInterval(function () { tickNow(false); }, 15000);
     }
     async function tickNow(round) {
+      if (doc.hidden && !round) { lastTick = Date.now(); return null; } // a hidden tab is not playing
       var secs = Math.round((Date.now() - lastTick) / 1000); lastTick = Date.now();
       var r = await safe(api("/api/family/play/tick", { method: "POST", body: JSON.stringify({ seconds: secs, round: round }) }));
       return r && r.ok ? await r.json() : null;
     }
-    async function stopPlaying() { if (timer) { root.clearInterval(timer); timer = null; if (me) await tickNow(false); } }
+    async function stopPlaying() { if (hostApi()) return; if (timer) { root.clearInterval(timer); timer = null; if (me) await tickNow(false); } }
     // call when a round/game-over happens: stops the clock and counts the round toward "break every N rounds"
-    async function roundEnded() { if (timer) { root.clearInterval(timer); timer = null; } if (!me) return null; return tickNow(true); }
+    async function roundEnded() {
+      var h = hostApi(); if (h) return h.roundEnded();
+      if (opts.host) { return me ? tickNow(true) : null; } // the host clock keeps running between rounds
+      if (timer) { root.clearInterval(timer); timer = null; } if (!me) return null; return tickNow(true);
+    }
+    var gateImpl = gate;
+    function gateOrHost() { var h = hostApi(); return h ? h.gate() : gateImpl(); }
 
-    load().then(loadPicker);
-    return {
-      who: function () { return me; }, submitScore: submitScore, refreshBoard: refreshBoard,
-      gate: gate, startPlaying: startPlaying, stopPlaying: stopPlaying, roundEnded: roundEnded, learn: learn, status: status,
+    var ready = load().then(loadPicker);
+    var api2 = {
+      who: function () { return me; }, submitScore: submitScore, refreshBoard: refreshBoard, ready: ready,
+      gate: gateOrHost, startPlaying: startPlaying, stopPlaying: stopPlaying, roundEnded: roundEnded, learn: learn, status: status,
     };
+    if (opts.host) {
+      // Meter from the moment the game is on screen, whether or not it cooperates; re-check every 30s and
+      // re-raise the gate (time-up screen / learning break) over the iframe when the parent's limit is reached.
+      ready.then(function () {
+        if (!me) return;
+        lastTick = Date.now();
+        timer = root.setInterval(async function () {
+          await tickNow(false);
+          var st = await status();
+          if (!st.ok && !st.unmanaged && opts.onLimit) opts.onLimit(st);
+        }, 15000);
+      });
+      try { root.__mgHost = { gate: gate, roundEnded: function () { return me ? tickNow(true) : Promise.resolve(null); } }; } catch (e) { /* not a window */ }
+    }
+    return api2;
   }
 
   var api = { init: init, _validate: validate, AVATARS: AVATARS };

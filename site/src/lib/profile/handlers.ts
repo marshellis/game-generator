@@ -25,8 +25,8 @@ export async function signup(
   input: { username?: string; pin?: string; avatar?: string; avatarColor?: string },
   deps: Deps,
 ): Promise<HandlerResult> {
-  const username = normalizeUsername(input.username ?? "");
-  const pin = (input.pin ?? "").trim();
+  const username = normalizeUsername(String(input.username ?? ""));
+  const pin = String(input.pin ?? "").trim();
   if (!validateUsername(username) || !validatePin(pin)) return { status: 400, json: { error: "invalid" } };
   const avatar = sanitizeAvatar(input.avatar);
   const avatarColor = sanitizeColor(input.avatarColor);
@@ -36,8 +36,8 @@ export async function signup(
 }
 
 export async function login(input: { username?: string; pin?: string }, deps: Deps): Promise<HandlerResult> {
-  const username = normalizeUsername(input.username ?? "");
-  const pin = (input.pin ?? "").trim();
+  const username = normalizeUsername(String(input.username ?? ""));
+  const pin = String(input.pin ?? "").trim();
   if (!validateUsername(username) || !validatePin(pin)) return { status: 400, json: { error: "invalid" } };
   if ((await deps.store.getLockout(username)) >= LOCKOUT_MAX) return { status: 429, json: { error: "locked" } };
   const user = await deps.store.getUser(username);
@@ -138,7 +138,7 @@ export async function submitPairScore(
   if (!coopScoreGameAllowed(game) || !validateScore(input.score)) {
     return { status: 400, json: { error: "invalid" } };
   }
-  const partner = normalizeUsername(input.partner ?? "");
+  const partner = normalizeUsername(String(input.partner ?? ""));
   if (!validateUsername(partner) || partner === username) return { status: 400, json: { error: "invalid-partner" } };
   if (!(await deps.store.getUser(partner))) return { status: 400, json: { error: "no-partner" } };
   const pair = canonicalPair(username, partner);

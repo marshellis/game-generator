@@ -36,7 +36,10 @@ export async function handle(r: Req, d: FamilyDeps): Promise<FamilyResult> {
     if (r.method === "PATCH" && r.path.length === 2) return A.updateProfile(r.tokens, u, r.body as never, d);
     if (r.method === "GET" && r.path[2] === "export") return A.exportProfile(r.tokens, u, d);
     if (r.method === "GET" && r.path[2] === "progress") return progressRoute(r, u, d);
-    if (r.method === "DELETE" && r.path.length === 2) return A.deleteProfile(r.tokens, u, SCORE_GAMES, d);
+    if (r.method === "DELETE" && r.path.length === 2) {
+      const denied = await A.confirmPassword(r.tokens, r.body.password, d);
+      return denied ?? A.deleteProfile(r.tokens, u, SCORE_GAMES, d);
+    }
   }
   return { status: 404, json: { error: "not-found" } };
 }

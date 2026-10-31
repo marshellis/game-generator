@@ -9,6 +9,8 @@ function sign(payload: string, secret: string): string {
 
 /** Token = "<username>.<issuedAtSec>.<sig>". Username has no dots (validated). */
 export function signSession(username: string, secret: string, issuedAtSec: number): string {
+  // An empty HMAC key is a key anyone can guess: refuse to mint with it (SESSION_SECRET unset).
+  if (!secret) throw new Error("SESSION_SECRET is not configured");
   const payload = `${username}.${issuedAtSec}`;
   return `${payload}.${sign(payload, secret)}`;
 }
@@ -19,7 +21,7 @@ export function verifySession(
   nowSec: number,
   maxAgeSec: number = SESSION_MAX_AGE_SEC,
 ): { username: string } | null {
-  if (!token) return null;
+  if (!token || !secret) return null; // fail closed: never verify against an empty key
   const lastDot = token.lastIndexOf(".");
   if (lastDot < 0) return null;
   const payload = token.slice(0, lastDot);

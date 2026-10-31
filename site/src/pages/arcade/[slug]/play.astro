@@ -32,7 +32,8 @@ const src = gameUrl(game.slug);
         mouse capture for camera look) — purely additive, existing games
         that don't request pointer lock are unaffected. */}
     <iframe
-      src={src}
+      id="game-frame"
+      data-src={src}
       title={game.title}
       sandbox="allow-scripts allow-same-origin allow-pointer-lock"
       allow="fullscreen; autoplay; gamepad; pointer-lock"
@@ -44,4 +45,20 @@ const src = gameUrl(game.slug);
       <a href={src} target="_blank" rel="noopener" class="text-brand-600 hover:underline">Open fullscreen ↗</a>
     </p>
   </div>
+  {/* Host-side metering: THIS page (not the game) owns the parent's time limit. The game only loads
+      after the gate passes, the clock runs while it is on screen even if the game never calls the SDK,
+      and the gate is re-raised over the frame when time runs out. */}
+  <script is:inline src="/arcade/_sdk/marshellis.js"></script>
+  <script is:inline define:vars={{ slug: game.slug }}>
+    (function () {
+      var frame = document.getElementById("game-frame");
+      var mg = Marshellis.init({ game: slug, host: true, onLimit: function () { frame.src = "about:blank"; mg.gate().then(function (ok) { if (ok) frame.src = frame.dataset.src; }); } });
+      // Fail open if the platform API is unreachable for 6s: a dead network cannot be metered anyway.
+      setTimeout(function () { if (!frame.src || frame.src === "about:blank") frame.src = frame.dataset.src; }, 6000);
+      mg.ready.then(function () { return mg.gate(); }).then(function (ok) {
+        if (ok) frame.src = frame.dataset.src;
+        else frame.insertAdjacentHTML("afterend", '<p class="mt-3 text-sm text-slate-500">That is all the play time for today. See you tomorrow!</p>');
+      });
+    })();
+  </script>
 </Base>

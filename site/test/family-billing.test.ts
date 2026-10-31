@@ -80,25 +80,25 @@ describe("checkout + webhooks", () => {
 describe("cancel + resume", () => {
   beforeEach(async () => { await d.kv.set(entKey(hid), { plan: "family", status: "active", source: "stripe", stripeSubscriptionId: "sub_1", currentPeriodEnd: Date.UTC(2026, 10, 30), updatedAt: 0 }); });
   it("one call cancels at period end and keeps access until then", async () => {
-    const r: any = await call("POST", "billing/cancel");
+    const r: any = await call("POST", "billing/cancel", { password: "correct horse battery" });
     expect(r.status).toBe(200);
     expect(stripeCalls[0].body).toContain("cancel_at_period_end=true");
     expect(r.json.entitlement.cancelAtPeriodEnd).toBe(true);
     expect(effectivePlan(r.json.entitlement, d.now)).toBe("family");
   });
   it("can be undone", async () => {
-    await call("POST", "billing/cancel");
+    await call("POST", "billing/cancel", { password: "correct horse battery" });
     const r: any = await call("POST", "billing/resume");
     expect(r.json.entitlement.cancelAtPeriodEnd).toBe(false);
     expect(stripeCalls[1].body).toContain("cancel_at_period_end=false");
   });
   it("store-billed subscriptions point to the store instead of pretending", async () => {
     await d.kv.set(entKey(hid), { plan: "family", status: "active", source: "apple", updatedAt: 0 });
-    expect(((await call("POST", "billing/cancel")) as any).json).toMatchObject({ error: "managed-by-store", source: "apple" });
+    expect(((await call("POST", "billing/cancel", { password: "correct horse battery" })) as any).json).toMatchObject({ error: "managed-by-store", source: "apple" });
   });
   it("no subscription -> 404; needs a parent", async () => {
     await d.kv.del(entKey(hid));
-    expect((await call("POST", "billing/cancel")).status).toBe(404);
+    expect((await call("POST", "billing/cancel", { password: "correct horse battery" })).status).toBe(404);
     expect((await call("POST", "billing/cancel", {}, { tokens: {} })).status).toBe(401);
   });
 });

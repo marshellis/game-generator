@@ -21,7 +21,7 @@ import Base from "../layouts/Base.astro";
     var inp = "rounded-lg border border-slate-300 px-3 py-2 text-sm w-full";
     var btn = "rounded-lg bg-slate-800 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-700";
     var btn2 = "rounded-lg border border-slate-300 px-3 py-2 text-sm hover:bg-slate-100";
-    var ERR = { "email-taken": "That email already has an account.", "weak-password": "Password needs at least 10 characters.", "invalid-email": "Check the email address.", "bad-credentials": "Wrong email or password.", locked: "Too many tries — wait 15 minutes.", "profile-limit": "Your plan's profile limit is reached.", taken: "That nickname is taken — pick another.", "invalid-nickname": "Nickname: 3–20 letters, numbers, - or _ (no real names please).", "invalid-birth-year": "Check the birth year.", "consent-required": "Please confirm the consent box." };
+    var ERR = { "email-taken": "That email already has an account.", "weak-password": "Password needs at least 10 characters.", "invalid-email": "Check the email address.", "bad-credentials": "Wrong email or password.", locked: "Too many tries — wait 15 minutes.", "profile-limit": "Your plan's profile limit is reached.", taken: "That nickname is taken — pick another.", "invalid-nickname": "Nickname: 3–20 letters, numbers, - or _ (no real names please).", "invalid-birth-year": "Check the birth year.", "consent-required": "Please confirm the consent box.", "password-required": "That password didn't match." };
     var msg = function (j) { return ERR[j && j.error] || "Something went wrong."; };
 
     function authView() {
@@ -116,7 +116,7 @@ import Base from "../layouts/Base.astro";
           var base = "profiles/" + encodeURIComponent(p.username);
           if (a === "save") { var r3 = await api(base, "PATCH", { settings: collect(box) }); box.querySelector("[data-ok]").textContent = r3.ok ? "Saved" : "Could not save"; }
           if (a === "export") { var d = await api(base + "/export"); var blob = new Blob([JSON.stringify(d.json, null, 2)], { type: "application/json" }); var l = document.createElement("a"); l.href = URL.createObjectURL(blob); l.download = p.username + "-data.json"; l.click(); }
-          if (a === "delete" && confirm("Permanently delete " + p.username + " and all their progress and scores?")) { await api(base, "DELETE"); load(); }
+          if (a === "delete" && confirm("Permanently delete " + p.username + " and all their progress and scores?")) { var pw = prompt("Enter your parent password to confirm"); if (!pw) return; var rd = await api(base, "DELETE", { password: pw }); if (!rd.ok) alert(msg(rd.json)); load(); }
           if (a === "pin") { var pin = prompt("New 4–8 digit PIN for " + p.username); if (pin) { var r4 = await api(base, "PATCH", { pin: pin }); if (!r4.ok) alert("PIN must be 4–8 digits."); load(); } }
           if (a === "nopin") { await api(base, "PATCH", { pin: null }); load(); }
           if (a === "progress") {
@@ -131,7 +131,7 @@ import Base from "../layouts/Base.astro";
           }
         };
       });
-      var c = document.getElementById("cancel"); if (c) c.onclick = async function () { if (!confirm("Cancel? You keep access until the end of the period you paid for.")) return; await api("billing/cancel", "POST"); load(); };
+      var c = document.getElementById("cancel"); if (c) c.onclick = async function () { if (!confirm("Cancel? You keep access until the end of the period you paid for.")) return; var pw2 = prompt("Enter your parent password to confirm"); if (!pw2) return; var rc = await api("billing/cancel", "POST", { password: pw2 }); if (!rc.ok) alert(msg(rc.json)); load(); };
       var rs = document.getElementById("resume"); if (rs) rs.onclick = async function () { await api("billing/resume", "POST"); load(); };
       root.querySelectorAll("[data-buy]").forEach(function (b) { b.onclick = async function () { var r5 = await api("billing/checkout", "POST", { interval: b.dataset.buy }); if (r5.ok) location.href = r5.json.url; else alert("Billing isn't available yet."); }; });
     }

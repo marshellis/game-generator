@@ -96,11 +96,13 @@ export async function learnReport(r: Req, d: FamilyDeps): Promise<FamilyResult> 
   const skill = SKILL_FOR_GAME.get(String(r.body.game ?? ""));
   if (!skill) return err(400, "unknown-game");
   const puzzleId = String(r.body.puzzleId ?? "");
+  if (!/^[A-Za-z0-9._-]{1,100}$/.test(puzzleId)) return err(400, "invalid-puzzle");
+  if (((await loadDay(c, d)).puzzles ?? 0) >= W.PUZZLE_DAILY_CAP) return { status: 200, json: { ok: true, capped: true } };
   if (!puzzleId || !(await d.kv.set(dataKey(c.username, `done:${c.day}:${r.body.game}:${puzzleId}`), 1, { nx: true, ttlSec: DAY_TTL }))) {
     return { status: 200, json: { ok: true, duplicate: true } }; // same puzzle twice in a day earns once
   }
   const day = await loadDay(c, d);
-  const next: W.Day = { ...day, correct: day.correct + W.PUZZLE_WEIGHT, questions: day.questions + W.PUZZLE_WEIGHT, earnedSec: day.earnedSec + W.earnFor(c.profile.settings, W.PUZZLE_WEIGHT) };
+  const next: W.Day = { ...day, puzzles: (day.puzzles ?? 0) + 1, correct: day.correct + W.PUZZLE_WEIGHT, questions: day.questions + W.PUZZLE_WEIGHT, earnedSec: day.earnedSec + W.earnFor(c.profile.settings, W.PUZZLE_WEIGHT) };
   await saveDay(c, next, d);
   await d.kv.set(masteryKey(c.username), record(await loadMastery(c.username, d), skill, true, d.now, 2));
   return { status: 200, json: W.status(c.profile.settings, next) };
