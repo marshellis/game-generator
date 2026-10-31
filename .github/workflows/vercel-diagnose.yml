@@ -1,0 +1,37 @@
+name: Vercel diagnose (read-only)
+
+# Manual only. Lists the NAMES of production env vars (never values) and captures the runtime error
+# behind a failing endpoint. Uses the same VERCEL_TOKEN the deploy job already uses. No writes.
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: "Endpoint to probe"
+        default: "/api/leaderboard?game=flappy&limit=1"
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --global vercel@latest
+      - name: Env var names (production) - values are never printed
+        run: vercel env ls production --token="$VERCEL_TOKEN" 2>&1 | sed -E 's/\s+Encrypted.*//' | head -60
+      - name: Recent deployments
+        run: vercel ls --token="$VERCEL_TOKEN" 2>&1 | head -12
+      - name: Probe endpoint while tailing runtime logs
+        run: |
+          (timeout 45 vercel logs https://games.marshellis.com --token="$VERCEL_TOKEN" > /tmp/logs.txt 2>&1 &)
+          sleep 8
+          for i in 1 2 3; do curl -s -o /dev/null -w "probe $i: %{http_code}\n" "https://games.marshellis.com${{ inputs.path }}"; sleep 2; done
+          sleep 25
+          echo "---- runtime logs ----"; cat /tmp/logs.txt | head -60
