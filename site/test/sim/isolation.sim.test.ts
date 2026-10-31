@@ -73,8 +73,8 @@ describe("a game on the isolated origin", () => {
     for (const [m, p] of [
       ["DELETE", "/api/family/profiles/ava"], ["POST", "/api/family/billing/cancel"], ["POST", "/api/family/billing/checkout"],
       ["GET", "/api/family/household"], ["GET", "/api/family/profiles/ava/export"], ["PATCH", "/api/family/profiles/ava"],
-      ["POST", "/api/family/store/review"], ["POST", "/api/family/pass"], ["POST", "/api/family/switch"], ["GET", "/api/family/picker"],
-      ["DELETE", "/api/scores"], ["GET", "/api/me/trophies"], ["GET", "/api/../family/household"], ["GET", "https://evil.example/x"],
+      ["POST", "/api/family/store/review"], ["POST", "/api/family/switch"], ["GET", "/api/family/picker"],
+      ["GET", "/api/me/trophies"], ["GET", "/api/../family/household"], ["GET", "https://evil.example/x"],
     ]) {
       const r = await ask(m, p, { password: "x" });
       expect(r?.status, `${m} ${p} must not be relayed`).toBe(403);
@@ -108,5 +108,53 @@ describe("a game on the isolated origin", () => {
     host.doc.querySelector<HTMLButtonElement>(".mg-go")!.click();
     expect(await g).toBe(false);
     void w;
+  });
+});
+
+describe("legacy games through compat.js (they call fetch('/api/...') directly)", () => {
+  async function legacy() {
+    const w = createWorld();
+    const mum = await Parent.signup(w);
+    const kid = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 30, maxPlayMin: 60 } });
+    const host = openTab(w, kid.b, { url: `${SITE_ORIGIN}/arcade/x/play` }); tabs.push(host);
+    const game = openTab(w, w.browser(ARCADE_ORIGIN), { url: `${ARCADE_ORIGIN}/arcade/x/index.html`, parent: host, crossOrigin: true, compat: true }); tabs.push(game);
+    host.sdk({ game: "bounce", host: true, frame: game.frame });
+    await flush(30);
+    return { w, game };
+  }
+  it("a game that fetches /api/me, posts a score and reads the board keeps working, as the kid", async () => {
+    const { w, game } = await legacy();
+    const me = await game.w.fetch("/api/me");
+    expect(me.status).toBe(200);
+    expect((await me.json()).username).toBe("ava");
+    expect((await game.w.fetch("/api/scores", { method: "POST", body: JSON.stringify({ game: "bounce", score: 33 }) })).status).toBe(200);
+    expect(w.store.boards.get("bounce")?.get("ava")).toBe(33);
+    const board = await (await game.w.fetch("/api/leaderboard?game=bounce&limit=10")).json();
+    expect(board.top[0]).toMatchObject({ username: "ava", score: 33 });
+    expect((await game.w.fetch("/api/scores", { method: "DELETE", body: JSON.stringify({ game: "bounce" }) })).status).toBe(200); // glass-bridge penalty
+  });
+  it("the same shim still cannot reach anything dangerous", async () => {
+    const { w, game } = await legacy();
+    for (const [m, p] of [["GET", "/api/family/household"], ["POST", "/api/family/billing/cancel"], ["DELETE", "/api/family/profiles/ava"], ["POST", "/api/family/switch"]]) {
+      expect((await game.w.fetch(p, { method: m, body: m === "GET" ? undefined : JSON.stringify({ password: "x" }) })).status, `${m} ${p}`).toBe(403);
+    }
+    expect(await w.store.getUser("ava")).not.toBeNull();
+  });
+  it("multiplayer game pass: allowed for a sane room, refused for a malformed one", async () => {
+    process.env.GAME_PASS_SECRET = "pass-secret-for-sim";
+    try {
+      const { game } = await legacy();
+      const ok = await game.w.fetch("/api/family/pass", { method: "POST", body: JSON.stringify({ room: "battle-1" }) });
+      expect(ok.status).toBe(200);
+      expect((await ok.json()).pass).toMatch(/\./);
+      expect((await game.w.fetch("/api/family/pass", { method: "POST", body: JSON.stringify({ room: "../x" }) })).status).toBe(403);
+    } finally { delete process.env.GAME_PASS_SECRET; }
+  });
+  it("outside the isolated origin the shim does nothing (same-origin games keep their own fetch)", async () => {
+    const w = createWorld();
+    const t = openTab(w, w.browser(), { compat: true }); tabs.push(t);
+    const before = t.w.fetch;
+    expect(t.w.fetch).toBe(before);
+    expect((await t.w.fetch("/api/me")).status).toBe(401); // a real, direct call
   });
 });

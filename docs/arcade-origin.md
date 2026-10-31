@@ -20,6 +20,3 @@ actions need the password; the wrapper owns the clock.
 
 ## Known gaps
 - Games that save to `localStorage` keep working (their own origin). Games that talk to the platform WITHOUT the SDK
-  (the legacy list in `arcade-contract.test.ts`) get no scores/accounts on the isolated origin; migrate them first.
-- Multiplayer game passes: `POST /api/family/pass` is not relayed yet; add it to `RELAY` (with a room-name check) when
-  those games move.
