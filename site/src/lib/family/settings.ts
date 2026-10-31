@@ -8,7 +8,7 @@ export const PRESETS: Record<Exclude<Preset, "custom">, number> = { off: 0, ligh
 export function defaultSettings(): ProfileSettings {
   return {
     version: 1,
-    mix: { preset: "balanced", playPerLearn: PRESETS.balanced, dailyLearningTarget: 10 },
+    mix: { preset: "balanced", playPerLearn: PRESETS.balanced, dailyLearningTarget: 10, breakEveryRounds: 3, questionsPerBreak: 3 },
     allowance: { freePlayMin: 20, maxPlayMin: 90 },
     enforcement: "soft",
     subjects: Object.fromEntries(SUBJECTS.map((s) => [s, true])),
@@ -39,7 +39,9 @@ export function sanitizeSettings(input: unknown, base: ProfileSettings = default
   }
   return {
     version: 1,
-    mix: { preset, playPerLearn, dailyLearningTarget: Math.round(num(mix.dailyLearningTarget, 0, 200, base.mix.dailyLearningTarget)) },
+    mix: { preset, playPerLearn, dailyLearningTarget: Math.round(num(mix.dailyLearningTarget, 0, 200, base.mix.dailyLearningTarget)),
+      breakEveryRounds: Math.round(num(mix.breakEveryRounds, 0, 20, base.mix.breakEveryRounds)),
+      questionsPerBreak: Math.round(num(mix.questionsPerBreak, 1, 10, base.mix.questionsPerBreak)) },
     allowance: { freePlayMin, maxPlayMin },
     enforcement: i.enforcement === "hard" || i.enforcement === "soft" ? i.enforcement : base.enforcement,
     subjects,

@@ -21,6 +21,11 @@ const routes: Record<string, Route> = {
 /** Add routes from another module (called at import time by that module's registrar). */
 export function register(extra: Record<string, Route>): void { Object.assign(routes, extra); }
 
+/** Reports are a plan feature and a parent-only view; wired through a registrable hook to avoid a cycle with play.ts. */
+let progressHook: (r: Req, u: string, d: FamilyDeps) => Promise<FamilyResult> = async () => ({ status: 404, json: { error: "not-found" } });
+export function setProgressRoute(f: typeof progressHook): void { progressHook = f; }
+const progressRoute = (r: Req, u: string, d: FamilyDeps) => progressHook(r, u, d);
+
 export async function handle(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const key = `${r.method} ${r.path.join("/")}`;
   const exact = routes[key];
@@ -30,6 +35,7 @@ export async function handle(r: Req, d: FamilyDeps): Promise<FamilyResult> {
     const u = decodeURIComponent(r.path[1]);
     if (r.method === "PATCH" && r.path.length === 2) return A.updateProfile(r.tokens, u, r.body as never, d);
     if (r.method === "GET" && r.path[2] === "export") return A.exportProfile(r.tokens, u, d);
+    if (r.method === "GET" && r.path[2] === "progress") return progressRoute(r, u, d);
     if (r.method === "DELETE" && r.path.length === 2) return A.deleteProfile(r.tokens, u, SCORE_GAMES, d);
   }
   return { status: 404, json: { error: "not-found" } };
