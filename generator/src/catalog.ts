@@ -33,6 +33,10 @@ export function generateCatalog(opts: CatalogOpts): { written: string[] } {
       for (let i = 0; i < opts.perGrade; i++) {
         const seed = deriveSeed(opts.seedBase, m.id, grade, i);
         const item = m.generate({ difficulty: grade, seed, date: opts.date });
+        const problems = m.validate(item.data);
+        if (problems.length) {
+          throw new Error(`${m.id} ${grade} seed ${seed} failed validation, nothing written: ${problems.slice(0, 3).join("; ")}`);
+        }
         const abs = resolve(opts.outputRoot, m.contentDir, `${item.id}.json`);
         mkdirSync(dirname(abs), { recursive: true });
         writeFileSync(abs, JSON.stringify(item.data, null, 2) + "\n");

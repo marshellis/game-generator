@@ -6,7 +6,7 @@ import { generateCatalog } from "./catalog";
 import { getModule } from "./registry";
 
 export interface CliArgs {
-  game: "logic-grid" | "math-packet" | "maze";
+  game: string;
   difficulty: string;
   seed: number;
   date: string;

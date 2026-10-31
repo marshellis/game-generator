@@ -2,14 +2,18 @@
 import { GRADES } from "../../grades";
 import { PRESETS } from "./difficulty";
 import { generatePuzzle } from "./generate";
+import { validateLogicGrid } from "./validate";
 import type { GameModule } from "../framework";
 
 export const logicGridModule: GameModule = {
   id: "logic-grid",
   title: "Logic Grid",
+  emoji: "🧩",
+  skill: "logic.grid",
   grades: GRADES,
   contentDir: "../site/src/content/puzzles",
   difficultyFor: (grade) => PRESETS[grade],
+  validate: validateLogicGrid,
   generate: ({ difficulty, seed, date }) => {
     const p = generatePuzzle({ difficulty, seed, date });
     return { id: p.id, data: p };

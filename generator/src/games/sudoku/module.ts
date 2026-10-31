@@ -2,15 +2,19 @@
 import { GRADES } from "../../grades";
 import { PRESETS } from "./difficulty";
 import { generateSudoku } from "./generate";
+import { validateSudoku } from "./validate";
 import type { GameModule, Load } from "../framework";
 import type { Sudoku } from "./types";
 
 export const sudokuModule: GameModule = {
   id: "sudoku",
   title: "Sudoku",
+  emoji: "🔢",
+  skill: "logic.sudoku",
   grades: GRADES,
   contentDir: "../site/src/content/sudokus",
   difficultyFor: (grade) => PRESETS[grade],
+  validate: validateSudoku,
   generate: ({ difficulty, seed, date }) => {
     const s = generateSudoku({ difficulty, seed, date });
     return { id: s.id, data: s };

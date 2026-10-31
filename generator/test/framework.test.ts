@@ -4,7 +4,7 @@ import type { GameModule, Load, GenerateOpts, GeneratedItem } from "../src/games
 describe("framework contract", () => {
   it("a minimal GameModule type-checks and works", () => {
     const m: GameModule = {
-      id: "demo", title: "Demo", grades: ["g1"], contentDir: "out",
+      id: "demo", title: "Demo", emoji: "🧪", skill: "test.skill", validate: () => [], grades: ["g1"], contentDir: "out",
       difficultyFor: (grade) => ({ grade }),
       generate: (o: GenerateOpts): GeneratedItem => ({ id: `${o.date}-demo-${o.seed}`, data: { o } }),
       score: (): Load => ({ maxTier: 1, steps: 1, score: 1, stars: 1 }),

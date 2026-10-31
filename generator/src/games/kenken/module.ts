@@ -2,6 +2,7 @@
 import { GRADES } from "../../grades";
 import { PRESETS } from "./difficulty";
 import { generateKenKen } from "./generate";
+import { validateKenKen } from "./validate";
 import type { GameModule, Load } from "../framework";
 import type { KenKen, Op } from "./types";
 
@@ -10,9 +11,12 @@ const OP_TIER: Record<Op, number> = { "=": 0, "+": 1, "-": 2, "*": 3, "/": 4 };
 export const kenkenModule: GameModule = {
   id: "kenken",
   title: "KenKen",
+  emoji: "🧮",
+  skill: "logic.kenken",
   grades: GRADES,
   contentDir: "../site/src/content/kenkens",
   difficultyFor: (grade) => PRESETS[grade],
+  validate: validateKenKen,
   generate: ({ difficulty, seed, date }) => {
     const k = generateKenKen({ difficulty, seed, date });
     return { id: k.id, data: k };
