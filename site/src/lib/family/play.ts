@@ -28,6 +28,21 @@ async function ctx(r: Req, d: FamilyDeps): Promise<Ctx | "unmanaged" | null> {
   const hh = (await d.kv.get<Household>(householdKey(profile.householdId)))!;
   return { username: s.username, profile, hh, day: W.dayKey(d.now, hh.timezone) };
 }
+/**
+ * Serialise read-modify-write on one child's data. The KV has no compare-and-set, so without this two requests
+ * in flight (a game that fires answers/ticks in parallel) both read the same day and the last writer wins:
+ * earned time silently vanishes. A short-lived `nx` key is the lock; it expires on its own if a request dies.
+ */
+async function locked<T>(username: string, d: FamilyDeps, fn: () => Promise<T>): Promise<T> {
+  const key = dataKey(username, "lock");
+  for (let attempt = 0; attempt < 100; attempt++) {
+    if (await d.kv.set(key, 1, { nx: true, ttlSec: 10 })) {
+      try { return await fn(); } finally { await d.kv.del(key); }
+    }
+    await new Promise((r) => setTimeout(r, 5 + Math.floor(Math.random() * 15)));
+  }
+  return fn(); // never wedge a child's session on a stuck lock; the lock TTL bounds the damage window
+}
 const loadDay = async (c: Ctx, d: FamilyDeps) => (await d.kv.get<W.Day>(dayStore(c.username, c.day))) ?? W.emptyDay();
 const saveDay = (c: Ctx, day: W.Day, d: FamilyDeps) => d.kv.set(dayStore(c.username, c.day), day, { ttlSec: DAY_TTL });
 const loadMastery = async (u: string, d: FamilyDeps) => (await d.kv.get<Mastery>(masteryKey(u))) ?? {};
@@ -43,10 +58,12 @@ export async function playTick(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
   if (!c) return err(401, "unauthenticated");
   if (c === "unmanaged") return { status: 200, json: { ok: true, unmanaged: true } };
-  let day = W.tick(await loadDay(c, d), Number(r.body.seconds) || 0, d.now);
-  if (r.body.round === true) day = { ...day, rounds: day.rounds + 1 };
-  await saveDay(c, day, d);
-  return { status: 200, json: W.status(c.profile.settings, day) };
+  return locked(c.username, d, async () => {
+    let day = W.tick(await loadDay(c, d), Number(r.body.seconds) || 0, d.now);
+    if (r.body.round === true) day = { ...day, rounds: day.rounds + 1 };
+    await saveDay(c, day, d);
+    return { status: 200, json: W.status(c.profile.settings, day) };
+  });
 }
 
 export async function learnNext(r: Req, d: FamilyDeps): Promise<FamilyResult> {
@@ -77,15 +94,17 @@ export async function learnAnswer(r: Req, d: FamilyDeps): Promise<FamilyResult> 
   const skill = id.split("~")[0];
   if (!SKILL_BY_ID.has(skill) || !token) return err(400, "invalid");
   if (!(await d.kv.set(dataKey(c.username, `ans:${id}`), 1, { nx: true, ttlSec: 3600 }))) return err(409, "already-answered");
-  const correct = checkAnswer(d.secret, id, token, choice);
-  const day = await loadDay(c, d);
-  const next: W.Day = {
-    ...day, asked: (day.asked ?? 0) + 1, questions: day.questions + 1, correct: day.correct + (correct ? 1 : 0),
-    earnedSec: day.earnedSec + (correct ? W.earnFor(c.profile.settings, 1) : 0),
-  };
-  await saveDay(c, next, d);
-  await d.kv.set(masteryKey(c.username), record(await loadMastery(c.username, d), skill, correct, d.now));
-  return { status: 200, json: { correct, ...W.status(c.profile.settings, next) } };
+  return locked(c.username, d, async () => {
+    const correct = checkAnswer(d.secret, id, token, choice);
+    const day = await loadDay(c, d);
+    const next: W.Day = {
+      ...day, asked: (day.asked ?? 0) + 1, questions: day.questions + 1, correct: day.correct + (correct ? 1 : 0),
+      earnedSec: day.earnedSec + (correct ? W.earnFor(c.profile.settings, 1) : 0),
+    };
+    await saveDay(c, next, d);
+    await d.kv.set(masteryKey(c.username), record(await loadMastery(c.username, d), skill, correct, d.now));
+    return { status: 200, json: { correct, ...W.status(c.profile.settings, next) } };
+  });
 }
 
 /** A finished puzzle from one of the educational games: counts toward its skill and earns time. */
@@ -97,15 +116,17 @@ export async function learnReport(r: Req, d: FamilyDeps): Promise<FamilyResult> 
   if (!skill) return err(400, "unknown-game");
   const puzzleId = String(r.body.puzzleId ?? "");
   if (!/^[A-Za-z0-9._-]{1,100}$/.test(puzzleId)) return err(400, "invalid-puzzle");
-  if (((await loadDay(c, d)).puzzles ?? 0) >= W.PUZZLE_DAILY_CAP) return { status: 200, json: { ok: true, capped: true } };
-  if (!puzzleId || !(await d.kv.set(dataKey(c.username, `done:${c.day}:${r.body.game}:${puzzleId}`), 1, { nx: true, ttlSec: DAY_TTL }))) {
-    return { status: 200, json: { ok: true, duplicate: true } }; // same puzzle twice in a day earns once
-  }
-  const day = await loadDay(c, d);
-  const next: W.Day = { ...day, puzzles: (day.puzzles ?? 0) + 1, correct: day.correct + W.PUZZLE_WEIGHT, questions: day.questions + W.PUZZLE_WEIGHT, earnedSec: day.earnedSec + W.earnFor(c.profile.settings, W.PUZZLE_WEIGHT) };
-  await saveDay(c, next, d);
-  await d.kv.set(masteryKey(c.username), record(await loadMastery(c.username, d), skill, true, d.now, 2));
-  return { status: 200, json: W.status(c.profile.settings, next) };
+  return locked(c.username, d, async () => {
+    if (((await loadDay(c, d)).puzzles ?? 0) >= W.PUZZLE_DAILY_CAP) return { status: 200, json: { ok: true, capped: true } };
+    if (!puzzleId || !(await d.kv.set(dataKey(c.username, `done:${c.day}:${r.body.game}:${puzzleId}`), 1, { nx: true, ttlSec: DAY_TTL }))) {
+      return { status: 200, json: { ok: true, duplicate: true } }; // same puzzle twice in a day earns once
+    }
+    const day = await loadDay(c, d);
+    const next: W.Day = { ...day, puzzles: (day.puzzles ?? 0) + 1, correct: day.correct + W.PUZZLE_WEIGHT, questions: day.questions + W.PUZZLE_WEIGHT, earnedSec: day.earnedSec + W.earnFor(c.profile.settings, W.PUZZLE_WEIGHT) };
+    await saveDay(c, next, d);
+    await d.kv.set(masteryKey(c.username), record(await loadMastery(c.username, d), skill, true, d.now, 2));
+    return { status: 200, json: W.status(c.profile.settings, next) };
+  });
 }
 
 /** Mastery summary for one child (their own via /me/progress, or a parent via /profiles/:u/progress). */
