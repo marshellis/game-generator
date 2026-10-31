@@ -1,0 +1,20 @@
+name: Live smoke (real browser)
+
+# Read-only checks of the DEPLOYED site in headless Chromium: games load on the isolated arcade origin, see no
+# cookies, cannot reach the family API, and the host relay still serves scores/boards. Creates nothing (guest only).
+on:
+  schedule:
+    - cron: "17 14 * * *"   # daily; catches a bad deploy or a DNS/CSP regression
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i --no-save playwright && npx playwright install --with-deps chromium
+        working-directory: site
+      - run: node e2e/live-smoke.mjs
+        working-directory: site

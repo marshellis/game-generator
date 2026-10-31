@@ -34,6 +34,12 @@ route to the fuzz route table. The fuzz found two real bugs the first day it ran
 - `generator/test/conformance.test.ts` - every registered game module obeys the `GameModule` contract
   (deterministic, valid, grade-covering, in sync with `games.json`).
 
+## 4. Live smoke (real browser, `site/e2e/live-smoke.mjs`)
+Headless Chromium against the deployed site: games load on `play.marshellis.com`, see no cookies, cannot reach the
+family API or POST to the site cross-origin, and the relay still serves boards. Runs daily (`live-smoke.yml`) and on
+demand: `cd site && npm i --no-save playwright && npx playwright install chromium && node e2e/live-smoke.mjs`.
+Read-only (guest). Pass `EXPECT_ISOLATED=0` to run it against a same-origin build.
+
 ## Known limits (what the sim cannot prove)
 - Wall-clock behaviour of a real browser (throttled background tabs). The host page meters on a 15s interval; the
   sim proves the accounting, not Chrome's timer throttling.
