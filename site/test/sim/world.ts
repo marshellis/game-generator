@@ -15,6 +15,10 @@ import * as P from "../../src/lib/profile/handlers";
 import type { Store, UserRecord, ScoreEntry, CompletionValue } from "../../src/lib/profile/types";
 import { PARENT_COOKIE, HOUSEHOLD_COOKIE } from "../../src/lib/family/accounts";
 import { SESSION_COOKIE } from "../../src/lib/profile/session";
+import { originAllowed } from "../../src/lib/origin";
+
+export const SITE_ORIGIN = "https://games.marshellis.com";
+export const ARCADE_ORIGIN = "https://play.marshellis.com";
 
 export const DEFAULT_SECRET = "sim-secret-sim-secret-sim-secret-32";
 export const DEFAULT_START = Date.UTC(2026, 9, 30, 18, 0, 0);
@@ -55,7 +59,7 @@ export interface World {
   advance(ms: number): void;
   setTime(ms: number): void;
   deps(): FamilyDeps;
-  browser(): Browser;
+  browser(origin?: string): Browser;
   /** Observe every response (for global invariants such as "no secret ever leaves the server"). */
   tap?: (method: string, url: string, res: Res) => void;
 }
@@ -65,7 +69,7 @@ export function createWorld(o: { secret?: string; start?: number } = {}): World 
     kv: memoryKV(), store: memoryStore(), secret: o.secret ?? DEFAULT_SECRET, now: o.start ?? DEFAULT_START,
     advance(ms) { w.now += ms; }, setTime(ms) { w.now = ms; },
     deps() { return { kv: w.kv, store: w.store, secret: w.secret, now: w.now }; },
-    browser() { return new Browser(w); },
+    browser(origin?: string) { const b = new Browser(w); if (origin) b.origin = origin; return b; },
   };
   return w;
 }
@@ -78,6 +82,8 @@ export interface Res<T = any> { status: number; ok: boolean; json: T }
  */
 export class Browser {
   private jar = new Map<string, { value: string; expires: number }>();
+  /** The page origin this browser is "on": sent as Origin on writes, like a real browser. */
+  origin = SITE_ORIGIN;
   constructor(readonly world: World) {}
 
   cookie(name: string): string | undefined {
@@ -97,7 +103,13 @@ export class Browser {
   }
 
   async request(method: string, url: string, body?: unknown, extra: { headers?: Record<string, string>; raw?: string } = {}): Promise<Res> {
-    const u = new URL(url, "https://games.marshellis.com");
+    const u = new URL(url, SITE_ORIGIN);
+    // The Astro routes refuse a foreign Origin on writes (src/lib/origin.ts); the sim must too.
+    if (!originAllowed(method, extra.headers?.origin ?? this.origin, [SITE_ORIGIN])) {
+      const denied = { status: 403, ok: false, json: { error: "cross-origin" } };
+      this.world.tap?.(method, url, denied);
+      return denied;
+    }
     const deps = this.world.deps();
     const pdeps = { store: this.world.store, secret: this.world.secret, now: this.world.now };
     const b = (body ?? {}) as Record<string, any>;

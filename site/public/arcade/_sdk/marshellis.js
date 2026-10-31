@@ -70,7 +70,33 @@
     var chipEl = $(opts.chip), accEl = $(opts.account), boardEl = $(opts.board);
     var st = doc.createElement("style"); st.textContent = CSS; doc.head.appendChild(st);
 
+    // ---- cross-origin mode: the game runs on the isolated arcade origin (no cookies, no site access).
+    // Every platform call is then relayed through the wrapper page, which only forwards an allowlist.
+    var framed = (function () {
+      try { return root.parent && root.parent !== root && root.parent.location.origin !== root.location.origin; }
+      catch (e) { return root.parent !== root; } // reading a cross-origin parent's location throws
+    })();
+    var seq = 0, pending = {};
+    if (framed) {
+      root.addEventListener("message", function (ev) {
+        var m = ev.data;
+        if (ev.source !== root.parent || !m || m.mg !== 1 || !pending[m.id]) return;
+        var done = pending[m.id]; delete pending[m.id]; done(m);
+      });
+    }
+    function rpc(type, payload) {
+      return new Promise(function (resolve) {
+        var id = ++seq; pending[id] = resolve;
+        root.parent.postMessage(Object.assign({ mg: 1, id: id, type: type }, payload), "*");
+        root.setTimeout(function () { if (pending[id]) { delete pending[id]; resolve(null); } }, 15000);
+      });
+    }
     function api(path, o) {
+      if (framed) {
+        return rpc("api", { method: (o && o.method) || "GET", path: path, body: o && o.body ? JSON.parse(o.body) : undefined }).then(function (m) {
+          return m && m.ok !== false && m.status ? { ok: m.status < 400, status: m.status, json: function () { return Promise.resolve(m.json); } } : null;
+        });
+      }
       try {
         var h = o && o.body ? { "content-type": "application/json" } : undefined;
         return root.fetch(path, Object.assign({ credentials: "same-origin", headers: h }, o));
@@ -246,6 +272,7 @@
     }
     // The wrapper page (same origin, outside the iframe) may own the clock; see opts.host.
     function hostApi() {
+      if (framed) return { gate: function () { return rpc("gate").then(function (m) { return !m || m.data !== false; }); }, roundEnded: function () { return rpc("roundEnded").then(function (m) { return m && m.data; }); } };
       try { var h = root.parent && root.parent !== root && root.parent.__mgHost; return h && h.gate ? h : null; } catch (e) { return null; }
     }
     function startPlaying() {
@@ -269,6 +296,32 @@
     var gateImpl = gate;
     function gateOrHost() { var h = hostApi(); return h ? h.gate() : gateImpl(); }
 
+    // Host side of cross-origin mode. ONLY these calls are relayed for a game: scores, its own board, the
+    // play clock and learning questions. Never parent, billing, profile-management or store routes.
+    var RELAY = [
+      ["GET", /^\/api\/me$/], ["GET", /^\/api\/leaderboard\?game=[a-z0-9-]+&limit=\d+$/], ["POST", /^\/api\/scores$/],
+      ["POST", /^\/api\/auth\/(login|signup|logout)$/],
+      ["GET", /^\/api\/family\/play\/status$/], ["POST", /^\/api\/family\/play\/tick$/],
+      ["GET", /^\/api\/family\/learn\/next\?count=\d+$/], ["POST", /^\/api\/family\/learn\/(answer|report)$/],
+    ];
+    function relayAllowed(method, path) { return RELAY.some(function (r) { return r[0] === method && r[1].test(path); }); }
+    function installProxy(frame) {
+      root.addEventListener("message", function (ev) {
+        var m = ev.data;
+        if (!frame.contentWindow || ev.source !== frame.contentWindow || !m || m.mg !== 1) return;
+        function reply(extra) { ev.source.postMessage(Object.assign({ mg: 1, id: m.id }, extra), "*"); }
+        if (m.type === "api") {
+          var method = String(m.method || "GET").toUpperCase(), path = String(m.path || "");
+          if (!relayAllowed(method, path)) return reply({ ok: false, status: 403, json: { error: "not-relayed" } });
+          return api(path, method === "GET" ? undefined : { method: method, body: JSON.stringify(m.body || {}) }).then(function (r) {
+            return r ? r.json().then(function (j) { reply({ ok: true, status: r.status, json: j }); }) : reply({ ok: false, status: 502, json: null });
+          });
+        }
+        if (m.type === "gate") return gate().then(function (ok) { reply({ ok: true, data: ok }); });
+        if (m.type === "roundEnded") return (me ? tickNow(true) : Promise.resolve(null)).then(function (d) { reply({ ok: true, data: d }); });
+      });
+    }
+
     var ready = load().then(loadPicker);
     var api2 = {
       who: function () { return me; }, submitScore: submitScore, refreshBoard: refreshBoard, ready: ready,
@@ -286,6 +339,7 @@
           if (!st.ok && !st.unmanaged && opts.onLimit) opts.onLimit(st);
         }, 15000);
       });
+      if (opts.frame) installProxy(opts.frame);
       try { root.__mgHost = { gate: gate, roundEnded: function () { return me ? tickNow(true) : Promise.resolve(null); } }; } catch (e) { /* not a window */ }
     }
     return api2;

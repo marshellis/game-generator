@@ -1,9 +1,27 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
+  "redirects": [
+    {
+      "source": "/((?!arcade/).*)",
+      "has": [{ "type": "host", "value": "play.marshellis.com" }],
+      "destination": "https://games.marshellis.com/$1",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
+      "has": [{ "type": "host", "value": "play.marshellis.com" }],
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Content-Security-Policy", "value": "frame-ancestors https://games.marshellis.com; object-src 'none'" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "missing": [{ "type": "host", "value": "play.marshellis.com" }],
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },

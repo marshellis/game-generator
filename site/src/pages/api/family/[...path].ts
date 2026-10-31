@@ -5,10 +5,12 @@ import { upstashKV } from "../../../lib/family/kv";
 import { upstashStore } from "../../../lib/profile/store";
 import { PARENT_COOKIE, HOUSEHOLD_COOKIE } from "../../../lib/family/accounts";
 import { SESSION_COOKIE } from "../../../lib/profile/session";
+import { originAllowed, selfOrigins, forbidden } from "../../../lib/origin";
 
 export const prerender = false;
 
 const run: APIRoute = async ({ request, params, cookies, url }) => {
+  if (!originAllowed(request.method, request.headers.get("origin"), selfOrigins(request, url))) return forbidden();
   let body: Record<string, unknown> = {};
   let raw = "";
   if (request.method !== "GET") {

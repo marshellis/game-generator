@@ -17,6 +17,7 @@ in-memory storage, a clock the test owns, and browsers with cookie jars that hon
 
 Scenario files, one question each:
 
+- `isolation.sim.test.ts` - a hostile game on the isolated arcade origin trying to escape (relay allowlist, origin guard).
 - `lifecycle.sim.test.ts` - the happy path as a story (signup -> play -> learn -> limit -> export -> delete).
 - `adversarial.sim.test.ts` - red team. **One test per way to cheat or break in.** A new feature gets its attacker here.
 - `longrun.sim.test.ts` - 14 simulated days of mixed honest/idle/cheating kids checked against invariants, plus a
