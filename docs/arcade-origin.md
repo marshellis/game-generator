@@ -8,7 +8,9 @@ leaderboard, the play clock and learning questions. Parent, billing, profile and
 **Defence in depth (already live):** `originAllowed()` rejects foreign `Origin` on every write; destructive parent
 actions need the password; the wrapper owns the clock.
 
-**Off by default.** Nothing changes until `PUBLIC_ARCADE_ORIGIN` is set at build time.
+**Status: LIVE since 2026-10-31.** `play.marshellis.com` is a Cloudflare CNAME (DNS-only) to Vercel, added to the `site` project, and
+`PUBLIC_ARCADE_ORIGIN=https://play.marshellis.com` is set for production. Unset it and redeploy to roll back; it is off in
+any build where it is unset (previews, local).
 
 ## Cutover (needs DNS + one env var)
 1. Add the domain to the Vercel project: `bin/bailey-vercel api POST /v10/projects/<site>/domains '{"name":"play.marshellis.com"}'`.
