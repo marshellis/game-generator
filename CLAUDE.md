@@ -64,6 +64,16 @@ Arcade card grid and per-game play routes (a sandboxed-iframe wrapper); a Vitest
 AI) is `site/public/arcade/README.md`; `_template/` is a working worked example. See the
 design at `docs/superpowers/specs/2026-06-22-arcade-static-games-design.md`.
 
+## Family platform (accounts, learning mix, play time, subscriptions, store)
+
+Code in `site/src/lib/family/` (pure handlers over an injectable `KV`; routes under `/api/family/*` via
+`router.ts`). Child profiles ARE the legacy username accounts. Free-vs-paid is data in `plans.ts`; every
+parent-tunable choice is a field in `settings.ts`. Browser side: `site/public/arcade/_sdk/marshellis.js`
+(**every new arcade game must use it** - see the arcade README). Parent UI: `/family`; store: `/store`.
+Design: `docs/superpowers/specs/2026-10-30-family-platform-design.md`. Legal drafts (NOT live, need a
+lawyer): `docs/legal/`. Env for billing/passes/store: `STRIPE_*`, `REVENUECAT_WEBHOOK_SECRET`,
+`GAME_PASS_SECRET` (separate from `SESSION_SECRET`), `STORE_PUBLISHER_EMAILS`, `STORE_ADMIN_EMAILS`.
+
 ## Commands
 
 - Generator: `cd generator && npm test` · `npm run generate -- --game <game> --difficulty g3 --seed 1`
