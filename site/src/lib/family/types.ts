@@ -37,6 +37,9 @@ export interface ProfileSettings {
     playPerLearn: number;
     /** Questions the parent wants done per day (a target shown in reports; also the soft cap before bonus). */
     dailyLearningTarget: number;
+    /** Show a short learning break every N finished rounds (0 = only when out of play time). */
+    breakEveryRounds: number;
+    questionsPerBreak: number;
   };
   allowance: {
     freePlayMin: number; // given each day without learning
