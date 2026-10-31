@@ -299,12 +299,16 @@
     // Host side of cross-origin mode. ONLY these calls are relayed for a game: scores, its own board, the
     // play clock and learning questions. Never parent, billing, profile-management or store routes.
     var RELAY = [
-      ["GET", /^\/api\/me$/], ["GET", /^\/api\/leaderboard\?game=[a-z0-9-]+&limit=\d+$/], ["POST", /^\/api\/scores$/],
+      ["GET", /^\/api\/me$/], ["GET", /^\/api\/leaderboard\?game=[a-z0-9-]+&limit=\d+$/], ["POST", /^\/api\/scores$/], ["DELETE", /^\/api\/scores$/],
       ["POST", /^\/api\/auth\/(login|signup|logout)$/],
       ["GET", /^\/api\/family\/play\/status$/], ["POST", /^\/api\/family\/play\/tick$/],
       ["GET", /^\/api\/family\/learn\/next\?count=\d+$/], ["POST", /^\/api\/family\/learn\/(answer|report)$/],
     ];
-    function relayAllowed(method, path) { return RELAY.some(function (r) { return r[0] === method && r[1].test(path); }); }
+    // Multiplayer game passes: only for a well-formed room name (the server re-checks the child's time budget).
+    function relayAllowed(method, path, body) {
+      if (method === "POST" && path === "/api/family/pass") return !!body && typeof body.room === "string" && /^[a-z0-9-]{1,40}$/.test(body.room);
+      return RELAY.some(function (r) { return r[0] === method && r[1].test(path); });
+    }
     function installProxy(frame) {
       root.addEventListener("message", function (ev) {
         var m = ev.data;
@@ -312,7 +316,7 @@
         function reply(extra) { ev.source.postMessage(Object.assign({ mg: 1, id: m.id }, extra), "*"); }
         if (m.type === "api") {
           var method = String(m.method || "GET").toUpperCase(), path = String(m.path || "");
-          if (!relayAllowed(method, path)) return reply({ ok: false, status: 403, json: { error: "not-relayed" } });
+          if (!relayAllowed(method, path, m.body)) return reply({ ok: false, status: 403, json: { error: "not-relayed" } });
           return api(path, method === "GET" ? undefined : { method: method, body: JSON.stringify(m.body || {}) }).then(function (r) {
             return r ? r.json().then(function (j) { reply({ ok: true, status: r.status, json: j }); }) : reply({ ok: false, status: 502, json: null });
           });

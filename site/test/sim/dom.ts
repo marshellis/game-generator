@@ -6,6 +6,7 @@ import fs from "node:fs";
 import { JSDOM } from "jsdom";
 import type { Browser, World } from "./world";
 
+const compatSrc = fs.readFileSync(new URL("../../public/arcade/_sdk/compat.js", import.meta.url), "utf8");
 const sdkSrc = fs.readFileSync(new URL("../../public/arcade/_sdk/marshellis.js", import.meta.url), "utf8");
 export const flush = (ms = 0) => new Promise((r) => setTimeout(r, ms));
 
@@ -15,7 +16,7 @@ export interface Tab {
   frame: { contentWindow: any };
 }
 
-export function openTab(world: World, browser: Browser, o: { html?: string; url?: string; parent?: Tab; crossOrigin?: boolean } = {}): Tab {
+export function openTab(world: World, browser: Browser, o: { html?: string; url?: string; parent?: Tab; crossOrigin?: boolean; compat?: boolean } = {}): Tab {
   const dom = new JSDOM(o.html ?? "<body></body>", { url: o.url ?? "https://games.marshellis.com/arcade/x/play", runScripts: "outside-only", pretendToBeVisual: true });
   const w: any = dom.window;
   const timers: { id: number; every: number; next: number; fn: () => void }[] = [];
@@ -41,7 +42,9 @@ export function openTab(world: World, browser: Browser, o: { html?: string; url?
     Object.defineProperty(w, "parent", { value: o.crossOrigin ? parentStub : o.parent.w });
     if (o.crossOrigin) Object.defineProperty(parentStub, "__mgHost", { get() { throw new Error("SecurityError: cross-origin"); } });
   }
+  w.Response = Response; w.URL = URL;
   w.eval(sdkSrc);
+  if (o.compat) w.eval(compatSrc);
   return {
     w, doc: w.document, frame: { contentWindow: handle },
     sdk: (opts: object) => w.Marshellis.init(opts),

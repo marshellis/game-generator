@@ -27,6 +27,14 @@ describe("arcade integration ratchet", () => {
     for (const g of LEGACY) expect(games, `${g} not found`).toContain(g);
     for (const g of LEGACY) expect(integrates(g), `${g} integrates now: delete it from LEGACY`).toBe(false);
   });
+  it("every game that calls the platform API directly loads compat.js or the SDK, so it survives the isolated origin", () => {
+    const bad = games.filter((g) => {
+      const text = files(path.join(ROOT, g)).map((f) => fs.readFileSync(f, "utf8")).join("\n");
+      const callsApi = /["'`]\/api\/(me|scores|auth|leaderboard|family)/.test(text);
+      return callsApi && !/_sdk\/(compat|marshellis)\.js/.test(text);
+    });
+    expect(bad, "add <script src=\"/arcade/_sdk/compat.js\"> as the first thing in <head>").toEqual([]);
+  });
   it("no game may open a parent-level API: games never call billing, parent or profile-management routes", () => {
     const forbidden = /\/api\/family\/(parent|billing|profiles|store\/review|household)/;
     const bad = games.filter((g) => files(path.join(ROOT, g)).some((f) => forbidden.test(fs.readFileSync(f, "utf8"))));

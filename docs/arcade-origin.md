@@ -19,7 +19,7 @@ actions need the password; the wrapper owns the clock.
 5. Rollback: delete the env var and redeploy; games load same-origin again.
 
 ## Known gaps
-- Games that save to `localStorage` keep working (their own origin). Games that talk to the platform WITHOUT the SDK
-  (the legacy list in `arcade-contract.test.ts`) get no scores/accounts on the isolated origin; migrate them first.
-- Multiplayer game passes: `POST /api/family/pass` is not relayed yet; add it to `RELAY` (with a room-name check) when
-  those games move.
+- Games that save to `localStorage` keep working (they get their own origin's storage; existing saves on games.marshellis.com
+  do not move, so kids' local progress in a game restarts once at cutover).
+- Games that call the platform API directly load `_sdk/compat.js` (a fetch shim that relays through the host). The contract
+  test fails any game that calls `/api/...` without compat.js or the SDK. New games should use `marshellis.js`.
