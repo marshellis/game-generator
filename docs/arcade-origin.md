@@ -19,4 +19,7 @@ actions need the password; the wrapper owns the clock.
 5. Rollback: delete the env var and redeploy; games load same-origin again.
 
 ## Known gaps
-- Games that save to `localStorage` keep working (their own origin). Games that talk to the platform WITHOUT the SDK
+- Games that save to `localStorage` keep working (they get their own origin's storage; existing saves on games.marshellis.com
+  do not move, so kids' local progress in a game restarts once at cutover).
+- Games that call the platform API directly load `_sdk/compat.js` (a fetch shim that relays through the host). The contract
+  test fails any game that calls `/api/...` without compat.js or the SDK. New games should use `marshellis.js`.
