@@ -14,7 +14,11 @@ const { game } = Astro.props;
 // The raw game lives at /arcade/<slug>/index.html (served from public/). This
 // wrapper sits one segment deeper (/arcade/<slug>/play) so its build output
 // never overwrites that file — see playUrl()/gameUrl() in lib/arcade.ts.
-const src = gameUrl(game.slug);
+// With PUBLIC_ARCADE_ORIGIN set (e.g. https://play.marshellis.com) games load from a separate origin that
+// holds no cookies and cannot reach the family API; the SDK relays what a game may do through this page.
+// Unset = same-origin (the original behaviour), so this can ship before the DNS exists.
+const arcadeOrigin = (import.meta.env.PUBLIC_ARCADE_ORIGIN ?? "").replace(/\/$/, "");
+const src = arcadeOrigin + gameUrl(game.slug);
 ---
 <Base title={`${game.title} · Arcade`}>
   <GameHeader
@@ -52,7 +56,7 @@ const src = gameUrl(game.slug);
   <script is:inline define:vars={{ slug: game.slug }}>
     (function () {
       var frame = document.getElementById("game-frame");
-      var mg = Marshellis.init({ game: slug, host: true, onLimit: function () { frame.src = "about:blank"; mg.gate().then(function (ok) { if (ok) frame.src = frame.dataset.src; }); } });
+      var mg = Marshellis.init({ game: slug, host: true, frame: frame, onLimit: function () { frame.src = "about:blank"; mg.gate().then(function (ok) { if (ok) frame.src = frame.dataset.src; }); } });
       // Fail open if the platform API is unreachable for 6s: a dead network cannot be metered anyway.
       setTimeout(function () { if (!frame.src || frame.src === "about:blank") frame.src = frame.dataset.src; }, 6000);
       mg.ready.then(function () { return mg.gate(); }).then(function (ok) {
