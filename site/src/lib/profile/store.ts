@@ -73,5 +73,8 @@ export function upstashStore(): Store {
     async removeScore(game, u) {
       await client().zrem(`leaderboard:${game}`, u);
     },
+    async deleteUser(u) {
+      await client().del(`user:${u}`, `completions:${u}`, `lockout:${u}`);
+    },
   };
 }

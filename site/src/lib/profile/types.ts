@@ -58,6 +58,8 @@ export interface Store {
   playerCount(game: string): Promise<number>;
   /** Remove a player's leaderboard entry for a game (their own record only). */
   removeScore(game: string, username: string): Promise<void>;
+  /** Delete the account record, completions and lockout (parent deleting a child profile). Optional for fakes. */
+  deleteUser?(username: string): Promise<void>;
 }
 
 export type Cookie = { value: string; maxAgeSec: number } | { clear: true };
