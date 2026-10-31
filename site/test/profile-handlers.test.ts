@@ -114,6 +114,9 @@ describe("me", () => {
     const token = cookieValue(await signup({ username: "alice", pin: "4821", avatar: AVATARS[4], avatarColor: AVATAR_COLORS[3] }, deps));
     expect(await me(token, deps)).toEqual({ status: 200, json: { username: "alice", avatar: AVATARS[4], avatarColor: AVATAR_COLORS[3] } });
     expect((await me(undefined, deps)).status).toBe(401);
+    // a profile deleted by a parent must stop looking signed in even though its cookie is still valid
+    store.users.delete("alice");
+    expect((await me(token, deps)).status).toBe(401);
   });
   it("defaults the avatar for a pre-avatar user record", async () => {
     await signup({ username: "alice", pin: "4821" }, deps);

@@ -60,6 +60,8 @@ export async function me(token: string | undefined, deps: Deps): Promise<Handler
   const username = authed(token, deps);
   if (!username) return { status: 401, json: { error: "unauthenticated" } };
   const user = await deps.store.getUser(username);
+  // A deleted account (a parent removed the profile) must not keep looking signed in.
+  if (!user) return { status: 401, json: { error: "unauthenticated" }, cookie: { clear: true } };
   return { status: 200, json: { username, avatar: sanitizeAvatar(user?.avatar), avatarColor: sanitizeColor(user?.avatarColor) } };
 }
 
