@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXUS</title>
+  <script type="module" crossorigin src="./assets/index-BUPu89QS.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BYSPUu-x.css">
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="logo">NEXUS</div>
+      <div class="sub">Gateway to every world</div>
+      <div class="bar"><div id="bar-fill"></div></div>
+      <div id="load-status">Initializing</div>
+      <input id="name-input" type="text" maxlength="16" placeholder="Your name" autocomplete="off" spellcheck="false" hidden>
+      <button id="enter-btn" hidden>Enter the Nexus</button>
+    </div>
+  </div>
+
+  <div id="online" class="hidden"></div>
+
+  <div id="prompt" class="hidden">
+    <div class="p-genre"></div>
+    <div class="p-name"></div>
+    <div class="p-tag"></div>
+    <div class="p-hint">Walk into the portal to enter</div>
+  </div>
+
+  <div id="hints" class="hidden">
+    <span><b>W A S D</b> move</span>
+    <span><b>Mouse</b> / <b>2-finger drag</b> look</span>
+    <span><b>Shift</b> sprint</span>
+    <span><b>Space</b> jump</span>
+    <span><b>Pinch</b> / <b>Scroll</b> zoom</span>
+    <span><b>2-finger double tap</b> / <b>C</b> camera angle</span>
+    <span><b>M</b> sound</span>
+  </div>
+
+  <!-- Dungeon Depths -->
+  <div id="dg" class="hidden">
+    <div id="dg-top">
+      <div class="dg-hp"><i id="dg-hp-fill"></i><span id="dg-hp-text"></span></div>
+      <div id="dg-room"></div>
+    </div>
+    <div id="dg-hint"><b>WASD</b> move <b>Click / Space / J</b> attack <b>C</b> camera <b>Q</b> leave</div>
+    <div id="dg-bars"></div>
+    <div id="dg-nums"></div>
+    <div id="dg-hurt"></div>
+  </div>
+  <div id="dg-upgrade" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <div class="dg-eyebrow">Chamber cleared</div>
+      <h2>Choose a boon</h2>
+      <div id="dg-cards"></div>
+    </div>
+  </div>
+  <div id="dg-end" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <h1 id="dg-end-title"></h1>
+      <p id="dg-end-sub"></p>
+      <div class="dg-btns">
+        <button id="dg-retry">Descend again <small>R</small></button>
+        <button id="dg-leave">Return to the Nexus <small>Q</small></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skyline Racers -->
+
+  <div id="sp" class="hidden">
+    <div id="sp-top">
+      <div id="sp-count">0</div>
+      <div id="sp-goal">/ 5,000 STAIRS</div>
+      <div id="sp-bar"><i></i><b></b><b></b><b></b><b></b></div>
+      <div id="sp-biome"></div>
+    </div>
+    <div id="sp-stats">
+      <div><span>Wipeouts</span><b id="sp-wipe">0</b></div>
+      <div><span>Bones broken</span><b id="sp-bones">0</b></div>
+      <div><span>Hospital bill</span><b id="sp-bill">$0</b></div>
+      <div><span>Best</span><b id="sp-best">0</b></div>
+    </div>
+    <div id="sp-msg"></div>
+    <div id="sp-remount" class="hidden">Press <b>R</b> to climb back on</div>
+    <div id="sp-speed"></div>
+    <div id="sp-hint"><b>W</b> pedal <b>S</b> brake <b>A / D</b> lean back / forward <b>Space</b> hop <b>E</b> bail out <b>R</b> remount <b>C</b> camera <b>Q</b> leave</div>
+  </div>
+  <div id="sp-end" class="dg-modal hidden">
+    <div class="dg-card">
+      <h1 id="sp-end-title">5,000 stairs!</h1>
+      <div id="sp-end-sub"></div>
+      <div class="dg-btns">
+        <button id="sp-keep">Keep falling</button>
+        <button id="sp-leave2">Return to the Nexus</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rc" class="hidden">
+    <div id="rc-top"><div id="rc-pos"></div><div id="rc-lap"></div><div id="rc-time"></div></div>
+    <div id="rc-count"></div>
+    <div id="rc-lobby" class="hidden">
+      <h2 id="rc-lobby-title">Race lobby</h2>
+      <div id="rc-lobby-sub"></div>
+      <div id="rc-lobby-list"></div>
+      <button id="rc-ready">Ready</button>
+    </div>
+    <div id="rc-speedo">
+      <div id="rc-boost">BOOST</div>
+      <div id="rc-speed"></div>
+      <div class="rc-barwrap"><i id="rc-bar"></i></div>
+    </div>
+    <canvas id="rc-map" width="180" height="180"></canvas>
+    <div id="rc-hint"><b>W / S</b> accelerate · brake <b>A / D</b> turn <b>Space</b> drift <b>C</b> camera <b>Q</b> leave</div>
+  </div>
+  <div id="rc-end" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <h1 id="rc-end-title"></h1>
+      <div id="rc-list"></div>
+      <div class="dg-btns">
+        <button id="rc-retry">Race again <small>R</small></button>
+        <button id="rc-leave">Return to the Nexus <small>Q</small></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Star Fleet -->
+  <div id="sf" class="hidden">
+    <div id="sf-bars">
+      <div class="sf-row"><label>SHIELD</label><div class="sf-bar sh"><i id="sf-sh"></i></div></div>
+      <div class="sf-row"><label>HULL</label><div class="sf-bar hu"><i id="sf-hu"></i></div></div>
+      <div class="sf-row"><label>BOOST</label><div class="sf-bar bo"><i id="sf-bo"></i></div></div>
+    </div>
+    <div id="sf-wave"></div>
+    <div id="sf-score"></div>
+    <div id="sf-cross"></div>
+    <canvas id="sf-radar" width="180" height="180"></canvas>
+    <div id="sf-marks"></div>
+    <div id="sf-banner"></div>
+    <div id="sf-warn">LEAVING COMBAT ZONE</div>
+    <div id="sf-hint"><b>W / S</b> pitch <b>A / D</b> turn <b>Mouse / 2-finger drag</b> aim <b>Space</b> fire <b>Shift</b> boost <b>I</b> invert <b>Q</b> leave</div>
+    <div id="sf-hurt"></div>
+  </div>
+  <div id="sf-end" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <h1 id="sf-end-title"></h1>
+      <p id="sf-end-sub"></p>
+      <div class="dg-btns">
+        <button id="sf-retry">Fly again <small>R</small></button>
+        <button id="sf-leave">Return to the Nexus <small>Q</small></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Voxel Frontier -->
+  <div id="vx" class="hidden">
+    <div id="vx-cross"></div>
+    <div id="vx-pos"></div>
+    <div id="vx-name"></div>
+    <div id="vx-hotbar"></div>
+    <div id="vx-hint"><b>WASD</b> move <b>Space</b> jump <b>Mouse / 2-finger drag</b> look <b>Click</b> break <b>E / right-click</b> place <b>1-9 / wheel</b> block <b>C</b> camera <b>Q</b> leave</div>
+  </div>
+
+  <!-- Tower Siege -->
+  <div id="ts" class="hidden">
+    <div id="ts-top">
+      <div class="ts-stat"><b id="ts-gold"></b><span>GOLD</span></div>
+      <div class="ts-stat"><b id="ts-lives"></b><span>LIVES</span></div>
+      <div class="ts-stat"><b id="ts-wave"></b><span>WAVE</span></div>
+      <div class="ts-stat"><b id="ts-score"></b><span>SCORE</span></div>
+    </div>
+    <div id="ts-bars"></div>
+    <div id="ts-nums"></div>
+    <div id="ts-banner"></div>
+    <div id="ts-panel" class="hidden">
+      <h3 id="ts-p-name"></h3>
+      <p id="ts-p-stats"></p>
+      <div class="ts-row"><button id="ts-upgrade"></button><button id="ts-sell"></button></div>
+    </div>
+    <button id="ts-start">Start wave</button>
+    <div id="ts-build"></div>
+    <div id="ts-hint"><b>Click</b> place / select <b>1-4</b> tower <b>Shift</b> keep placing <b>U</b> upgrade <b>X</b> sell <b>F</b> speed <b>WASD</b> pan <b>2-finger drag</b> rotate <b>Q</b> leave</div>
+  </div>
+  <div id="ts-end" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <h1 id="ts-end-title"></h1>
+      <p id="ts-end-sub"></p>
+      <div class="dg-btns">
+        <button id="ts-retry">Defend again <small>R</small></button>
+        <button id="ts-leave">Return to the Nexus <small>Q</small></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arcane Arena -->
+  <div id="ca" class="hidden">
+    <div id="ca-top"><b id="ca-floor"></b><span id="ca-best"></span></div>
+    <div id="ca-markers"></div>
+    <div id="ca-nums"></div>
+    <div id="ca-banner"></div>
+    <div id="ca-energy"><b>3</b><span>/3</span></div>
+    <button id="ca-draw" class="ca-pile"><b id="ca-draw-n">0</b><span>Draw</span></button>
+    <button id="ca-discard" class="ca-pile"><b id="ca-discard-n">0</b><span>Discard</span></button>
+    <button id="ca-end">End turn</button>
+    <div id="ca-hand"></div>
+    <div id="ca-hint"></div>
+  </div>
+  <div id="ca-reward" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <div class="dg-eyebrow" id="ca-reward-sub"></div>
+      <h2 id="ca-reward-title"></h2>
+      <div id="ca-reward-cards"></div>
+      <div class="dg-btns"><button id="ca-upgrade">Upgrade a card</button><button id="ca-skip">Skip</button></div>
+    </div>
+  </div>
+  <div id="ca-deck" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <h2 id="ca-deck-title"></h2>
+      <div id="ca-deck-grid"></div>
+      <div class="dg-btns"><button id="ca-deck-close">Close</button></div>
+    </div>
+  </div>
+  <div id="ca-end-screen" class="dg-modal hidden">
+    <div class="dg-modal-inner">
+      <h1>You Have Fallen</h1>
+      <p id="ca-end-sub"></p>
+      <div class="dg-btns">
+        <button id="ca-retry">New run</button>
+        <button id="ca-leave">Return to the Nexus</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="flash"></div>
+  <div id="toast"></div>
+  <div id="stats" class="hidden"></div>
+
+</body>
+</html>
