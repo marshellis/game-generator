@@ -4,6 +4,9 @@ Everything ships dark: with none of these set, the site, the games and the serve
 before (everyone is "free", no passes, no billing). Set them in this order; each step is independent.
 
 ## 0. Site storage must work first
+(History: the original Upstash database was deleted/uninstalled around 2026-10-12, which made every account and
+leaderboard call return 500. A new store `games-redis` was provisioned on 2026-10-31 via
+`bin/bailey-vercel integration add upstash/upstash-kv --name games-redis`; the old accounts/scores were not recoverable.)
 `/api/leaderboard?game=flappy` must return JSON, not 500. It needs Vercel env `KV_REST_API_URL` and
 `KV_REST_API_TOKEN` (the Upstash for Redis integration) and a running database.
 Also required: `SESSION_SECRET` (any long random string; changing it signs everyone out).
