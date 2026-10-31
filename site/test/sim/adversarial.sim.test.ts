@@ -226,3 +226,32 @@ describe("time limits hold even if the game never cooperates (host metering)", (
 });
 
 void DEFAULT_START;
+
+describe("concurrency: parallel requests must not lose updates", () => {
+  it("20 simultaneous correct answers and 10 simultaneous puzzle reports all count (no lost write)", async () => {
+    const w = createWorld();
+    const mum = await Parent.signup(w);
+    await mum.upgrade(); // lift the free-plan daily question cap
+    const k = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 0, maxPlayMin: 600 }, mix: { preset: "balanced" } });
+    const items = (await Promise.all(Array.from({ length: 4 }, () => k.b.get("/api/family/learn/next?count=5")))).flatMap((r) => r.json.items);
+    const { checkAnswer } = await import("../../src/lib/family/questions");
+    const right = items.slice(0, 20).map((it: any) => ({ it, choice: it.choices.find((c: string) => checkAnswer(w.secret, it.id, it.token, c)) }));
+    await Promise.all([
+      ...right.map(({ it, choice }: any) => k.b.post("/api/family/learn/answer", { id: it.id, token: it.token, choice })),
+      ...Array.from({ length: 10 }, (_, i) => k.reportPuzzle("sudoku", `par-${i}`)),
+    ]);
+    const st = await k.status();
+    // 20 right answers * 20s * 2  +  10 puzzles * 3 * 20s * 2, minus nothing lost
+    expect(st.remainingSec).toBe(20 * 20 * 2 + PUZZLE_DAILY_CAP * 3 * 20 * 2);
+    expect(st.learnedToday).toBe(20 + PUZZLE_DAILY_CAP * 3);
+  });
+  it("parallel ticks never credit more than the clock allows", async () => {
+    const w = createWorld();
+    const mum = await Parent.signup(w);
+    const k = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 10, maxPlayMin: 10 } });
+    await k.b.post("/api/family/play/tick", { seconds: 0 });
+    w.advance(30_000);
+    await Promise.all(Array.from({ length: 25 }, () => k.b.post("/api/family/play/tick", { seconds: 30 })));
+    expect((await k.status()).remainingSec).toBe(600 - 30); // 30s elapsed, spent once
+  });
+});
