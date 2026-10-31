@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NEXUS</title>
-  <script type="module" crossorigin src="./assets/index-CPn9CGJg.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CDAoPmqO.css">
+  <script type="module" crossorigin src="./assets/index-BUPu89QS.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BYSPUu-x.css">
 </head>
 <body>
   <canvas id="scene"></canvas>
@@ -70,6 +70,36 @@
   </div>
 
   <!-- Skyline Racers -->
+
+  <div id="sp" class="hidden">
+    <div id="sp-top">
+      <div id="sp-count">0</div>
+      <div id="sp-goal">/ 5,000 STAIRS</div>
+      <div id="sp-bar"><i></i><b></b><b></b><b></b><b></b></div>
+      <div id="sp-biome"></div>
+    </div>
+    <div id="sp-stats">
+      <div><span>Wipeouts</span><b id="sp-wipe">0</b></div>
+      <div><span>Bones broken</span><b id="sp-bones">0</b></div>
+      <div><span>Hospital bill</span><b id="sp-bill">$0</b></div>
+      <div><span>Best</span><b id="sp-best">0</b></div>
+    </div>
+    <div id="sp-msg"></div>
+    <div id="sp-remount" class="hidden">Press <b>R</b> to climb back on</div>
+    <div id="sp-speed"></div>
+    <div id="sp-hint"><b>W</b> pedal <b>S</b> brake <b>A / D</b> lean back / forward <b>Space</b> hop <b>E</b> bail out <b>R</b> remount <b>C</b> camera <b>Q</b> leave</div>
+  </div>
+  <div id="sp-end" class="dg-modal hidden">
+    <div class="dg-card">
+      <h1 id="sp-end-title">5,000 stairs!</h1>
+      <div id="sp-end-sub"></div>
+      <div class="dg-btns">
+        <button id="sp-keep">Keep falling</button>
+        <button id="sp-leave2">Return to the Nexus</button>
+      </div>
+    </div>
+  </div>
+
   <div id="rc" class="hidden">
     <div id="rc-top"><div id="rc-pos"></div><div id="rc-lap"></div><div id="rc-time"></div></div>
     <div id="rc-count"></div>
