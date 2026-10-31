@@ -1,0 +1,104 @@
+[
+  {
+    "id": "logic-grid",
+    "title": "Logic Grid",
+    "emoji": "🧩",
+    "skill": "logic.grid",
+    "collection": "puzzles",
+    "grades": [
+      "g1",
+      "g2",
+      "g3",
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8"
+    ]
+  },
+  {
+    "id": "math-packet",
+    "title": "Math Worksheets",
+    "emoji": "➕",
+    "skill": "math.worksheet",
+    "collection": "packets",
+    "grades": [
+      "g1",
+      "g2",
+      "g3",
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8"
+    ]
+  },
+  {
+    "id": "maze",
+    "title": "Mazes",
+    "emoji": "🌀",
+    "skill": "spatial.maze",
+    "collection": "mazes",
+    "grades": [
+      "g1",
+      "g2",
+      "g3",
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8"
+    ]
+  },
+  {
+    "id": "sudoku",
+    "title": "Sudoku",
+    "emoji": "🔢",
+    "skill": "logic.sudoku",
+    "collection": "sudokus",
+    "grades": [
+      "g1",
+      "g2",
+      "g3",
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8"
+    ]
+  },
+  {
+    "id": "word-search",
+    "title": "Word Search",
+    "emoji": "🔎",
+    "skill": "language.wordsearch",
+    "collection": "wordsearches",
+    "grades": [
+      "g1",
+      "g2",
+      "g3",
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8"
+    ]
+  },
+  {
+    "id": "kenken",
+    "title": "KenKen",
+    "emoji": "🧮",
+    "skill": "logic.kenken",
+    "collection": "kenkens",
+    "grades": [
+      "g1",
+      "g2",
+      "g3",
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8"
+    ]
+  }
+]

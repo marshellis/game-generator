@@ -3,14 +3,18 @@ import { GRADES } from "../../grades";
 import { PRESETS } from "./difficulty";
 import { generateMaze } from "./generate";
 import type { Maze } from "./types";
+import { validateMaze } from "./validate";
 import type { GameModule } from "../framework";
 
 export const mazeModule: GameModule = {
   id: "maze",
   title: "Mazes",
+  emoji: "🌀",
+  skill: "spatial.maze",
   grades: GRADES,
   contentDir: "../site/src/content/mazes",
   difficultyFor: (grade) => PRESETS[grade],
+  validate: validateMaze,
   generate: ({ difficulty, seed, date }) => {
     const m = generateMaze({ difficulty, seed, date });
     return { id: m.id, data: m };

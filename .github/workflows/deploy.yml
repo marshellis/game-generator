@@ -27,12 +27,14 @@ jobs:
         working-directory: generator
         run: |
           npm ci
+          npm run typecheck
           npm test
-      - name: Site tests
+      - name: Site tests + production build
         working-directory: site
         run: |
           npm ci
           npm test
+          npm run build
 
   deploy:
     needs: test

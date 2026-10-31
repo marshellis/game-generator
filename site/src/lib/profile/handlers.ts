@@ -1,4 +1,5 @@
 import type { Deps, HandlerResult } from "./types";
+import games from "../../data/games.json";
 import { normalizeUsername, validateUsername, validatePin, hashPin, verifyPin } from "./auth";
 import { signSession, verifySession, SESSION_MAX_AGE_SEC } from "./session";
 import { parseCompletions, groupByGame, completionField } from "./completions";
@@ -7,9 +8,8 @@ import { SCORE_GAMES, scoreGameAllowed, coopScoreGameAllowed, canonicalPair, val
 
 const LOCKOUT_MAX = 8;
 const LOCKOUT_TTL_SEC = 15 * 60;
-const KNOWN_GAMES = new Set([
-  "logic-grid", "math-packet", "maze", "sudoku", "word-search", "kenken",
-]);
+// Derived from the generator registry (see generator/src/manifest.ts) so a new game can't be forgotten here.
+const KNOWN_GAMES = new Set<string>(games.map((g) => g.id));
 
 function sessionCookie(username: string, deps: Deps) {
   const nowSec = Math.floor(deps.now / 1000);

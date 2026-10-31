@@ -8,6 +8,8 @@
     "test:watch": "vitest",
     "generate": "tsx src/cli.ts",
     "generate:all": "tsx src/cli.ts --all",
+    "manifest": "tsx src/manifest.ts",
+    "new-game": "tsx scripts/new-game.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

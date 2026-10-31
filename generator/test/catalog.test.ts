@@ -7,7 +7,7 @@ import type { GameModule } from "../src/games/framework";
 
 function fakeModule(id: string): GameModule {
   return {
-    id, title: id, grades: ["g1", "g2"], contentDir: id,
+    id, title: id, emoji: "🧪", skill: "test.skill", validate: () => [], grades: ["g1", "g2"], contentDir: id,
     difficultyFor: (g) => ({ g }),
     generate: ({ difficulty, seed, date }) => ({ id: `${date}-${id}-${difficulty}-${seed}`, data: { id: `${date}-${id}-${difficulty}-${seed}`, v: 1 } }),
   };
