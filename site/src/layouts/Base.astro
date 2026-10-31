@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
-interface Props { title: string; }
-const { title } = Astro.props;
+interface Props { title: string; noindex?: boolean; }
+const { title, noindex = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="en" class="h-full">
@@ -9,6 +9,7 @@ const { title } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
   </head>
   <body class="min-h-full bg-slate-50 text-slate-900 antialiased">
     <header class="border-b border-slate-200 bg-white/80 backdrop-blur">

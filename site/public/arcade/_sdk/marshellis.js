@@ -7,6 +7,9 @@
  *   mg.who()                -> { username, avatar, avatarColor } | null  (null = guest)
  *   await mg.submitScore(n) -> { best } | null     (guests: no-op, keep best on the device)
  *   mg.refreshBoard()
+ *   await mg.gate()         -> true when allowed to start a round (shows learning breaks / time-up screens)
+ *   mg.startPlaying() / await mg.roundEnded()   -> play clock + round counting for parent time limits
+ *   opts.picker: mount point for the "Who's playing?" profile picker (phone-handoff)
  *
  * Games never implement sign-in themselves. All calls degrade silently: gameplay never
  * depends on the network. Same-origin only (the arcade iframe keeps allow-same-origin).
@@ -48,7 +51,14 @@
     ".mg-chip button{margin-left:auto;font:inherit;font-size:12px;background:#334155;color:#e2e8f0;border:0;border-radius:8px;padding:5px 9px;cursor:pointer}" +
     ".mg-board ol{list-style:none;margin:0;padding:0}" +
     ".mg-board li{display:flex;gap:10px;padding:5px 0;font-size:14px;border-top:1px solid rgba(255,255,255,.06)}.mg-board li:first-child{border-top:0}" +
-    ".mg-rk{width:22px;color:#64748b}.mg-nm{flex:1}.mg-sc{color:#f9d71c;font-weight:700}.mg-board li.me .mg-nm::after{content:' (you)';color:#93c5fd;font-size:12px}.mg-empty{color:#64748b;font-size:13px}";
+    ".mg-rk{width:22px;color:#64748b}.mg-nm{flex:1}.mg-sc{color:#f9d71c;font-weight:700}.mg-board li.me .mg-nm::after{content:' (you)';color:#93c5fd;font-size:12px}.mg-empty{color:#64748b;font-size:13px}" +
+    ".mg-pick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.mg-pick button{background:#1e293b;border:2px solid #334155;border-radius:12px;color:#e2e8f0;padding:8px 12px;font:inherit;cursor:pointer;display:flex;gap:8px;align-items:center}" +
+    ".mg-ov{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#e2e8f0}" +
+    ".mg-card{background:#1e293b;border-radius:16px;padding:20px;width:min(94vw,420px);text-align:center}" +
+    ".mg-q{font-size:26px;font-weight:700;margin:14px 0}.mg-ch{display:grid;grid-template-columns:1fr 1fr;gap:10px}" +
+    ".mg-ch button,.mg-card .mg-go{font:inherit;font-size:20px;padding:14px;border:0;border-radius:12px;background:#334155;color:#fff;cursor:pointer}" +
+    ".mg-ch button.ok{background:#16a34a}.mg-ch button.bad{background:#dc2626}.mg-card .mg-go{background:#f9d71c;color:#1c2530;font-weight:700;margin-top:14px;width:100%}" +
+    ".mg-sub{color:#93c5fd;font-size:14px}";
 
   function init(opts) {
     var doc = root.document, game = opts.game, me = null, chosen = AVATARS[0];
@@ -142,8 +152,113 @@
       boardEl.innerHTML = '<div class="mg-box mg-board"><div class="mg-title"><span>Global leaderboard</span><span style="color:#5dcaa5">● live</span></div><ol>' + rows + "</ol></div>";
     }
 
-    load();
-    return { who: function () { return me; }, submitScore: submitScore, refreshBoard: refreshBoard };
+    // ---- profile picker (phone-handoff): the parent's device lists the kids; tap one to play as them
+    var pickEl = $(opts.picker);
+    async function loadPicker() {
+      if (!pickEl) return;
+      var r = await safe(api("/api/family/picker"));
+      if (!r || !r.ok) { pickEl.innerHTML = ""; return; }
+      var j = await r.json();
+      if (!j.profiles.length) { pickEl.innerHTML = ""; return; }
+      pickEl.innerHTML = '<div class="mg-box"><div class="mg-title">Who\'s playing?</div><div class="mg-pick"></div></div>';
+      var box = pickEl.querySelector(".mg-pick");
+      j.profiles.forEach(function (p) {
+        var b = doc.createElement("button");
+        b.innerHTML = '<span class="mg-av" style="background:' + esc(p.avatarColor) + '">' + esc(p.avatar) + "</span>" + esc(p.username) + (p.locked ? " \ud83d\udd12" : "");
+        b.onclick = async function () {
+          var pin = p.locked ? root.prompt("PIN for " + p.username) : undefined;
+          if (p.locked && !pin) return;
+          var r2 = await safe(api("/api/family/switch", { method: "POST", body: JSON.stringify({ username: p.username, pin: pin }) }));
+          if (!r2 || !r2.ok) return root.alert("That PIN didn't work.");
+          await load(); loadPicker();
+        };
+        box.appendChild(b);
+      });
+    }
+
+    // ---- play gate: parent-set time limits and learning breaks (managed profiles only)
+    var timer = null, lastTick = 0;
+    async function status() {
+      var r = await safe(api("/api/family/play/status"));
+      return r && r.ok ? await r.json() : { ok: true, unmanaged: true };
+    }
+    function overlay(html) {
+      var ov = doc.createElement("div"); ov.className = "mg-ov"; ov.innerHTML = '<div class="mg-card">' + html + "</div>";
+      doc.body.appendChild(ov); return ov;
+    }
+    function fmt(sec) { var m = Math.floor(sec / 60); return m >= 1 ? m + " min" : sec + " sec"; }
+
+    // Show N quick questions. Resolves with the final status. Wrong answers just move on - no penalty.
+    function learn(count) {
+      return new Promise(async function (resolve) {
+        var r = await safe(api("/api/family/learn/next?count=" + count));
+        if (!r || !r.ok) { var st0 = await status(); return resolve(st0); }
+        var items = (await r.json()).items, i = 0, last = null, before = await status();
+        var ov = overlay("");
+        var card = ov.firstChild;
+        function show() {
+          if (i >= items.length) {
+            card.innerHTML = '<div class="mg-sub">Nice work!</div><div class="mg-q">+' + fmt(Math.max(0, (last ? last.remainingSec : 0) - (before.remainingSec || 0))) + ' of play time</div><button class="mg-go">Play</button>';
+            card.querySelector(".mg-go").onclick = function () { ov.remove(); resolve(last); };
+            return;
+          }
+          var it = items[i];
+          card.innerHTML = '<div class="mg-sub">Quick brain break ' + (i + 1) + " of " + items.length + '</div><div class="mg-q">' + esc(it.prompt) + '</div><div class="mg-ch"></div>';
+          var box = card.querySelector(".mg-ch");
+          it.choices.forEach(function (c) {
+            var b = doc.createElement("button"); b.textContent = c;
+            b.onclick = async function () {
+              Array.prototype.forEach.call(box.children, function (x) { x.disabled = true; });
+              var r2 = await safe(api("/api/family/learn/answer", { method: "POST", body: JSON.stringify({ id: it.id, token: it.token, choice: c }) }));
+              var j = r2 && r2.ok ? await r2.json() : { correct: false };
+              b.className = j.correct ? "ok" : "bad";
+              if (j.remainingSec !== undefined) last = j;
+              i++; setTimeout(show, 700);
+            };
+            box.appendChild(b);
+          });
+        }
+        show();
+      });
+    }
+
+    // await mg.gate() before starting each round. Resolves true when the child may play, false if time is up for today.
+    async function gate() {
+      var st = await status();
+      if (st.unmanaged || !me) return true;
+      while (!st.ok || st.breakNow) {
+        if (!st.ok && st.reason === "limit") {
+          await new Promise(function (res) {
+            var ov = overlay('<div class="mg-q">That\'s all the play time for today</div><div class="mg-sub">See you tomorrow!</div><button class="mg-go">OK</button>');
+            ov.querySelector(".mg-go").onclick = function () { ov.remove(); res(); };
+          });
+          return false;
+        }
+        st = await learn(st.questionsPerBreak || 3);
+        if (st.ok && !st.breakNow) break;
+        if (st.ok) break; // a voluntary break was done; do not loop on it
+      }
+      return true;
+    }
+    function startPlaying() {
+      if (timer || !me) return;
+      lastTick = Date.now();
+      timer = root.setInterval(function () { tickNow(false); }, 15000);
+    }
+    async function tickNow(round) {
+      var secs = Math.round((Date.now() - lastTick) / 1000); lastTick = Date.now();
+      var r = await safe(api("/api/family/play/tick", { method: "POST", body: JSON.stringify({ seconds: secs, round: round }) }));
+      return r && r.ok ? await r.json() : null;
+    }
+    async function stopPlaying() { if (timer) { root.clearInterval(timer); timer = null; if (me) await tickNow(false); } }
+    // call when a round/game-over happens: stops the clock and counts the round toward "break every N rounds"
+    async function roundEnded() { if (timer) { root.clearInterval(timer); timer = null; } if (!me) return null; return tickNow(true); }
+
+    load().then(loadPicker);
+    return {
+      who: function () { return me; }, submitScore: submitScore, refreshBoard: refreshBoard,
+      gate: gate, startPlaying: startPlaying, stopPlaying: stopPlaying, roundEnded: roundEnded, learn: learn, status: status,
+    };
   }
 
   var api = { init: init, _validate: validate, AVATARS: AVATARS };

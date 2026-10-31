@@ -1,0 +1,132 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Family — Marshellis Games" noindex>
+  <h1 class="text-3xl font-extrabold tracking-tight">Family</h1>
+  <p class="mt-2 text-slate-500">Parent controls: profiles, play time, learning mix and subscription.</p>
+  <div id="fam" class="mt-6">Loading…</div>
+  <script is:inline>
+  (function () {
+    var root = document.getElementById("fam");
+    var qs = new URLSearchParams(location.search);
+    var hh = null, sub = null;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var AV = ["🦊","🐼","🐯","🦁","🐸","🐵","🐙","🦄","🐶","🐱","🐧","🐝","🦖","🐢","🦉","🐳"];
+    async function api(path, method, body) {
+      var r = await fetch("/api/family/" + path, { method: method || "GET", credentials: "same-origin", headers: body ? { "content-type": "application/json" } : undefined, body: body ? JSON.stringify(body) : undefined });
+      var j = null; try { j = await r.json(); } catch (e) {}
+      return { ok: r.ok, status: r.status, json: j };
+    }
+    var card = "rounded-xl border border-slate-200 bg-white p-4 mb-4";
+    var inp = "rounded-lg border border-slate-300 px-3 py-2 text-sm w-full";
+    var btn = "rounded-lg bg-slate-800 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-700";
+    var btn2 = "rounded-lg border border-slate-300 px-3 py-2 text-sm hover:bg-slate-100";
+    var ERR = { "email-taken": "That email already has an account.", "weak-password": "Password needs at least 10 characters.", "invalid-email": "Check the email address.", "bad-credentials": "Wrong email or password.", locked: "Too many tries — wait 15 minutes.", "profile-limit": "Your plan's profile limit is reached.", taken: "That nickname is taken — pick another.", "invalid-nickname": "Nickname: 3–20 letters, numbers, - or _ (no real names please).", "invalid-birth-year": "Check the birth year.", "consent-required": "Please confirm the consent box." };
+    var msg = function (j) { return ERR[j && j.error] || "Something went wrong."; };
+
+    function authView() {
+      root.innerHTML =
+        '<div class="' + card + ' max-w-md"><h2 class="font-bold mb-1">Parent account</h2>' +
+        '<p class="text-sm text-slate-500 mb-3">Parents create the account; kids get profiles with just a nickname, avatar and birth year.</p>' +
+        '<div class="space-y-2"><input id="em" class="' + inp + '" type="email" placeholder="Email" autocomplete="username">' +
+        '<input id="pw" class="' + inp + '" type="password" placeholder="Password (10+ characters)" autocomplete="current-password">' +
+        '<input id="hn" class="' + inp + '" placeholder="Family name (new accounts)">' +
+        '<label class="flex gap-2 text-xs text-slate-600"><input id="co" type="checkbox"> I am a parent or guardian. I agree to let Marshellis Games keep my children\'s nickname, avatar, birth year and learning progress to run the games, and I can view, download or delete it any time. No ads, no selling data. (Draft wording — final policy pending review.)</label>' +
+        '<div class="flex gap-2"><button id="li" class="' + btn + '">Log in</button><button id="su" class="' + btn2 + '">Create account</button></div>' +
+        '<div id="er" class="text-sm text-red-600"></div></div></div>';
+      var go = async function (kind) {
+        var body = { email: val("em"), password: val("pw") };
+        if (kind === "signup") { body.householdName = val("hn"); body.consent = document.getElementById("co").checked; body.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; }
+        var r = await api("parent/" + kind, "POST", body);
+        if (!r.ok) return (document.getElementById("er").textContent = msg(r.json));
+        load();
+      };
+      document.getElementById("li").onclick = function () { go("login"); };
+      document.getElementById("su").onclick = function () { go("signup"); };
+    }
+    var val = function (id) { return document.getElementById(id).value; };
+
+    function profileView(p) {
+      var s = p.settings, id = "p-" + p.username;
+      var sel = function (name, opts, cur) { return '<select data-f="' + name + '" class="' + inp + '">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (String(o[0]) === String(cur) ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select>"; };
+      var num = function (name, cur, lo, hi) { return '<input data-f="' + name + '" type="number" min="' + lo + '" max="' + hi + '" value="' + cur + '" class="' + inp + '">'; };
+      var lab = function (t, inner) { return '<label class="block text-xs font-semibold text-slate-600">' + t + inner + "</label>"; };
+      return '<div class="' + card + '" id="' + id + '"><div class="flex items-center gap-3"><h3 class="font-bold">' + esc(p.username) + '</h3><span class="text-xs text-slate-500">born ' + p.birthYear + (p.locked ? " · PIN lock" : "") + '</span>' +
+        '<span class="ml-auto flex gap-2"><button data-act="export" class="' + btn2 + '">Download data</button><button data-act="delete" class="rounded-lg border border-red-300 px-3 py-2 text-sm text-red-700 hover:bg-red-50">Delete</button></span></div>' +
+        '<div class="mt-3 grid gap-3 sm:grid-cols-3">' +
+        lab("Learning mix", sel("preset", [["off", "Off — free play"], ["light", "Light (4 min play per min learning)"], ["balanced", "Balanced (2:1)"], ["heavy", "Heavy (1:1)"], ["custom", "Custom ratio"]], s.mix.preset)) +
+        lab("Custom: play minutes per learning minute", num("playPerLearn", s.mix.playPerLearn, 0, 20)) +
+        lab("Daily learning goal (questions)", num("dailyLearningTarget", s.mix.dailyLearningTarget, 0, 200)) +
+        lab("Brain break every N rounds (0 = never)", num("breakEveryRounds", s.mix.breakEveryRounds, 0, 20)) +
+        lab("Questions per break", num("questionsPerBreak", s.mix.questionsPerBreak, 1, 10)) +
+        lab("Free play minutes each day", num("freePlayMin", s.allowance.freePlayMin, 0, 600)) +
+        lab("Most play minutes per day", num("maxPlayMin", s.allowance.maxPlayMin, 0, 1440)) +
+        lab("When time runs out", sel("enforcement", [["soft", "Offer a learning break to earn more"], ["hard", "Stop for the day"]], s.enforcement)) +
+        lab("Difficulty vs age", sel("gradeOffset", [[-2, "Two grades easier"], [-1, "One easier"], [0, "Matches age"], [1, "One harder"], [2, "Two harder"]], s.gradeOffset)) +
+        "</div>" +
+        '<div class="mt-3 flex flex-wrap gap-4 text-sm">' + ["math", "logic", "language", "spatial"].map(function (k) { return '<label><input type="checkbox" data-subj="' + k + '"' + (s.subjects[k] !== false ? " checked" : "") + "> " + k + "</label>"; }).join("") +
+        '<label><input type="checkbox" data-f="leaderboard"' + (s.leaderboard ? " checked" : "") + "> Show on leaderboards</label></div>" +
+        '<div class="mt-3 flex items-center gap-2"><button data-act="save" class="' + btn + '">Save settings</button><span class="text-xs text-emerald-700" data-ok></span>' +
+        '<span class="ml-auto text-xs text-slate-500">PIN lock: <button data-act="pin" class="underline">set</button> · <button data-act="nopin" class="underline">remove</button> · <button data-act="progress" class="underline">progress</button></span></div></div>';
+    }
+
+    function collect(box) {
+      var g = function (f) { var e = box.querySelector('[data-f="' + f + '"]'); return e; };
+      var n = function (f) { return Number(g(f).value); };
+      var subjects = {}; box.querySelectorAll("[data-subj]").forEach(function (e) { subjects[e.dataset.subj] = e.checked; });
+      return { mix: { preset: g("preset").value, playPerLearn: n("playPerLearn"), dailyLearningTarget: n("dailyLearningTarget"), breakEveryRounds: n("breakEveryRounds"), questionsPerBreak: n("questionsPerBreak") },
+        allowance: { freePlayMin: n("freePlayMin"), maxPlayMin: n("maxPlayMin") }, enforcement: g("enforcement").value, gradeOffset: n("gradeOffset"), subjects: subjects, leaderboard: g("leaderboard").checked };
+    }
+
+    function subView() {
+      var e = sub.entitlement, plan = e && e.status !== "none" ? e : null;
+      var date = function (ms) { return new Date(ms).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }); };
+      var h = '<div class="' + card + '"><h2 class="font-bold mb-2">Subscription</h2>';
+      if (plan && plan.plan === "family") {
+        var price = plan.price ? "$" + (plan.price.amountCents / 100).toFixed(2) + " per " + plan.price.interval : "";
+        h += "<p class='text-sm'>Family plan " + esc(price) + " · billed via " + esc(plan.source) + "</p>" +
+          "<p class='text-sm text-slate-600 mt-1'>" + (plan.cancelAtPeriodEnd ? "Cancelled — you keep Family until <b>" + (plan.currentPeriodEnd ? date(plan.currentPeriodEnd) : "the end of the period") + "</b>, then it will not renew." : "Renews " + (plan.currentPeriodEnd ? "on <b>" + date(plan.currentPeriodEnd) + "</b>" : "automatically") + ".") + "</p>" +
+          '<div class="mt-3">' + (plan.cancelAtPeriodEnd ? '<button id="resume" class="' + btn + '">Keep my subscription</button>' : '<button id="cancel" class="' + btn2 + '">Cancel subscription</button>') + '<span class="ml-3 text-xs text-slate-500">One click. No forms, no phone calls.</span></div>';
+      } else {
+        h += "<p class='text-sm text-slate-600'>You're on the Free plan (" + sub.plans.free.maxProfiles + " profiles, " + sub.plans.free.dailyQuestions + " learning questions per child per day). Family: " + sub.plans.family.maxProfiles + " profiles, unlimited questions, progress reports.</p>" +
+          (sub.billingEnabled ? '<div class="mt-3 flex gap-2"><button data-buy="month" class="' + btn + '">Family — monthly</button><button data-buy="year" class="' + btn2 + '">Family — yearly</button></div><p class="mt-2 text-xs text-slate-500">Cancel any time from this page. Bought on iPhone or Android? Manage it there.</p>' : '<p class="mt-2 text-xs text-slate-500">Paid plans are not open yet.</p>');
+      }
+      return h + "</div>";
+    }
+
+    async function load() {
+      var r = await api("household");
+      if (!r.ok) return authView();
+      hh = r.json; sub = (await api("billing/subscription")).json;
+      root.innerHTML =
+        '<div class="flex items-center gap-3 mb-4"><h2 class="text-xl font-bold">' + esc(hh.household.name) + '</h2><span class="text-sm text-slate-500">' + esc(hh.email) + " · " + esc(hh.plan) + ' plan</span><button id="lock" class="ml-auto ' + btn2 + '">Lock parent mode</button></div>' +
+        hh.profiles.map(profileView).join("") +
+        '<div class="' + card + '"><h3 class="font-bold mb-2">Add a child</h3><div class="grid gap-2 sm:grid-cols-4"><input id="nn" class="' + inp + '" placeholder="Nickname (not a real name)"><input id="by" class="' + inp + '" type="number" placeholder="Birth year"><input id="np" class="' + inp + '" placeholder="Profile PIN (optional)" inputmode="numeric"><button id="add" class="' + btn + '">Add</button></div><div id="aerr" class="text-sm text-red-600 mt-1"></div></div>' +
+        (sub ? subView() : "");
+      document.getElementById("lock").onclick = async function () { await api("parent/lock", "POST"); load(); };
+      document.getElementById("add").onclick = async function () {
+        var r2 = await api("profiles", "POST", { nickname: val("nn"), birthYear: Number(val("by")), pin: val("np") || undefined });
+        if (!r2.ok) return (document.getElementById("aerr").textContent = msg(r2.json));
+        load();
+      };
+      hh.profiles.forEach(function (p) {
+        var box = document.getElementById("p-" + p.username);
+        box.onclick = async function (ev) {
+          var a = ev.target.dataset && ev.target.dataset.act; if (!a) return;
+          var base = "profiles/" + encodeURIComponent(p.username);
+          if (a === "save") { var r3 = await api(base, "PATCH", { settings: collect(box) }); box.querySelector("[data-ok]").textContent = r3.ok ? "Saved" : "Could not save"; }
+          if (a === "export") { var d = await api(base + "/export"); var blob = new Blob([JSON.stringify(d.json, null, 2)], { type: "application/json" }); var l = document.createElement("a"); l.href = URL.createObjectURL(blob); l.download = p.username + "-data.json"; l.click(); }
+          if (a === "delete" && confirm("Permanently delete " + p.username + " and all their progress and scores?")) { await api(base, "DELETE"); load(); }
+          if (a === "pin") { var pin = prompt("New 4–8 digit PIN for " + p.username); if (pin) { var r4 = await api(base, "PATCH", { pin: pin }); if (!r4.ok) alert("PIN must be 4–8 digits."); load(); } }
+          if (a === "nopin") { await api(base, "PATCH", { pin: null }); load(); }
+          if (a === "progress") { var pr = await api(base + "/progress"); if (pr.status === 402) return alert("Progress reports are part of the Family plan."); alert(pr.json.skills.length ? pr.json.skills.map(function (s) { return s.label + ": " + Math.round(s.p * 100) + "%" + (s.mastered ? " ✓" : ""); }).join("\n") : "Nothing yet."); }
+        };
+      });
+      var c = document.getElementById("cancel"); if (c) c.onclick = async function () { if (!confirm("Cancel? You keep access until the end of the period you paid for.")) return; await api("billing/cancel", "POST"); load(); };
+      var rs = document.getElementById("resume"); if (rs) rs.onclick = async function () { await api("billing/resume", "POST"); load(); };
+      root.querySelectorAll("[data-buy]").forEach(function (b) { b.onclick = async function () { var r5 = await api("billing/checkout", "POST", { interval: b.dataset.buy }); if (r5.ok) location.href = r5.json.url; else alert("Billing isn't available yet."); }; });
+    }
+    load();
+  })();
+  </script>
+</Base>

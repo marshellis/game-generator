@@ -82,6 +82,14 @@ async function postCompletion(meta: Meta): Promise<void> {
       headers: { "content-type": "application/json" },
       body: JSON.stringify(meta),
     });
+    // Also feed the learning framework: a finished puzzle counts toward its skill and earns play time.
+    // Unmanaged (standalone) accounts get a harmless no-op answer.
+    await fetch("/api/family/learn/report", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ game: meta.game, puzzleId: meta.puzzleId }),
+    });
   } catch {
     // ignore — recording is best-effort
   }
