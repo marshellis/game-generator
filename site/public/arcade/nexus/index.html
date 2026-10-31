@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NEXUS</title>
-  <script type="module" crossorigin src="./assets/index-BUPu89QS.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BYSPUu-x.css">
+  <script type="module" crossorigin src="./assets/index-Flyi2rkG.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DYskfBFu.css">
 </head>
 <body>
   <canvas id="scene"></canvas>
@@ -77,9 +77,12 @@
       <div id="sp-goal">/ 5,000 STAIRS</div>
       <div id="sp-bar"><i></i><b></b><b></b><b></b><b></b></div>
       <div id="sp-biome"></div>
+      <div id="sp-blood"><i></i><span>BLOOD</span></div>
+      <div id="sp-son"><i></i><span>SON</span></div>
     </div>
     <div id="sp-stats">
       <div><span>Wipeouts</span><b id="sp-wipe">0</b></div>
+      <div><span>Flips</span><b id="sp-flips">0</b></div>
       <div><span>Bones broken</span><b id="sp-bones">0</b></div>
       <div><span>Hospital bill</span><b id="sp-bill">$0</b></div>
       <div><span>Best</span><b id="sp-best">0</b></div>
@@ -87,7 +90,14 @@
     <div id="sp-msg"></div>
     <div id="sp-remount" class="hidden">Press <b>R</b> to climb back on</div>
     <div id="sp-speed"></div>
-    <div id="sp-hint"><b>W</b> pedal <b>S</b> brake <b>A / D</b> lean back / forward <b>Space</b> hop <b>E</b> bail out <b>R</b> remount <b>C</b> camera <b>Q</b> leave</div>
+    <div id="sp-hint"><b>W</b> pedal <b>S</b> brake <b>A / D</b> backflip / frontflip in the air <b>Space</b> jump <b>E</b> bail out <b>R</b> remount <b>C</b> camera <b>Q</b> leave</div>
+  </div>
+  <div id="sp-dead" class="dg-modal hidden">
+    <div class="dg-card">
+      <h1>You bled out</h1>
+      <div id="sp-dead-sub"></div>
+      <div class="dg-btns"><button id="sp-respawn">Respawn <small>R</small></button><button id="sp-leave3">Return to the Nexus</button></div>
+    </div>
   </div>
   <div id="sp-end" class="dg-modal hidden">
     <div class="dg-card">
