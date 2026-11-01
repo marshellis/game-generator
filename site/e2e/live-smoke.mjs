@@ -2,14 +2,16 @@
 //   cd site && npx --yes -p playwright node e2e/live-smoke.mjs [https://games.marshellis.com]
 // (first time: npx playwright install chromium). Exit code 1 on any failed check. Complements the jsdom sim:
 // the sim proves the logic, this proves the real browser/CSP/cross-origin plumbing on the real deployment.
-import { chromium } from "playwright";
+import { chromium, firefox, webkit } from "playwright";
 
 const BASE = process.argv[2] ?? "https://games.marshellis.com";
 const SLUGS = ["flappy", "bounce", "hex-collapse"]; // SDK game + two compat-shim games
 let failed = 0;
 const check = (ok, what, extra = "") => { console.log(`${ok ? "PASS" : "FAIL"}  ${what}${extra ? "  — " + extra : ""}`); if (!ok) failed++; };
 
-const browser = await chromium.launch();
+// BROWSER=webkit exercises the Safari engine (iPhone/iPad/Mac), firefox the Gecko one. Default chromium.
+const engine = { chromium, firefox, webkit }[process.env.BROWSER ?? "chromium"];
+const browser = await engine.launch();
 for (const slug of SLUGS) {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
