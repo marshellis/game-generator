@@ -73,3 +73,11 @@ gated and keep their best on the device. To post scores add your slug to `SCORE_
 `site/src/lib/profile/scores.ts`. Design: `docs/superpowers/specs/2026-10-30-family-platform-design.md`.
 Online games: see `docs/game-pass.md`. Games from outside publishers use the sandbox bridge instead
 (`site/public/arcade/_sdk/host-bridge.js`).
+
+
+## Big engines (Godot, Unity, etc.)
+A web export of a game engine ships the engine itself: a Godot export is a ~39 MB `index.wasm` plus a tiny `.pck` with the
+game. That is fine for ONE game (see `reverse-zelda`; Vercel compresses it and browsers cache it). Do **not** commit the same
+engine build into several game folders. If a second engine-based game arrives: host one shared copy of the engine (a shared
+folder or storage bucket) and point each game at it, or use Git LFS. The `arcade-contract` test fails any other file over 10 MB.
+Keep the game's source in its own repo and commit only the exported build here.
