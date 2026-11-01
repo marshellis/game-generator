@@ -17,9 +17,10 @@ export async function healthCheck(kv: KV, env: Record<string, string | undefined
   const t0 = Date.now();
   let storage: Health["checks"]["storage"] = "failed";
   try {
-    const key = "health:ping", val = String(now);
+    // Not a numeric string: Redis clients auto-parse "123" into the number 123 on read, which is not a failure.
+    const key = "health:ping", val = `ping-${now}`;
     await kv.set(key, val, { ttlSec: 120 });
-    storage = (await kv.get<string>(key)) === val ? "ok" : "failed";
+    storage = String(await kv.get<string>(key)) === val ? "ok" : "failed";
   } catch { /* leave failed */ }
   const s = env.SESSION_SECRET ?? "", p = env.GAME_PASS_SECRET ?? "";
   const sessionSecret = !s ? "missing" : s.length < 32 ? "weak" : "ok";
