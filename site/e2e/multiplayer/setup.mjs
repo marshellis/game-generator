@@ -13,7 +13,7 @@ const REPOS = [
   { name: "battle-royale-server", build: ["npx", "tsc"] },
   { name: "hide-and-seek-server" },
   { name: "nexus-server", private: true },
-  { name: "galaga", workspace: true },
+  // galaga: its server only runs under ts-node + tsconfig-paths (its `tsc` build trips over the shared package rootDir); add when a galaga test exists
 ];
 
 fs.mkdirSync(DIR, { recursive: true });
