@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="minecraft-2d"></script>
 <meta charset="UTF-8">
 <title>Minecraft 2D</title>
 <style>
@@ -473,6 +475,7 @@ function spawnDrop(x,y,type) {
 
 function die() {
   gameRunning=false;
+  window.MGRounds && MGRounds.end();
   const ds=document.getElementById('deathscreen');
   ds.style.display='flex';
   document.getElementById('deathMsg').textContent='You lost all your hearts!';

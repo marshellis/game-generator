@@ -275,6 +275,7 @@ function startGame() {
 function endGame(reason) {
   if (state.mode !== 'playing') return;
   state.mode = 'crashing';
+  window.MGRounds && MGRounds.end();
   state.crashTimer = 0;
   state.crashReason = reason;
   playCrash();

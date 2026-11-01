@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <script src="/arcade/_sdk/compat.js"></script>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="hide-and-seek"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Hide and Seek</title>
@@ -982,6 +984,7 @@ function endRound() {
 }
 function showEnd(seekersWin) {
   game.state = 'over';
+  window.MGRounds && MGRounds.end();
   const win = player.role === (seekersWin ? 'seeker' : 'hider');
   document.getElementById('ovTitle').innerHTML = `<div id="result" style="color:${win ? '#6ee79a' : '#ff7a70'}">${win ? 'YOU WIN!' : 'YOU LOSE'}</div>`;
   document.getElementById('ovText').textContent = seekersWin ? 'The seekers splashed every hider.' : 'Time ran out — surviving hiders win, seekers lose.';

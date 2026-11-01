@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <script src="/arcade/_sdk/compat.js"></script>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="hex-collapse"></script>
 <meta charset="utf-8">
 <title>Hex Collapse</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -626,6 +628,7 @@ function die(ch) {
   puff(ch.pos.x, LAVA_Y + 0.5, ch.pos.z, 30, 0.8, 0xff7a1a, 5, 1.8, 1.2, true);
   puff(ch.pos.x, LAVA_Y + 0.5, ch.pos.z, 12, 0.8, 0x222222, 4, 2.2, 2, false);
   if (ch.isPlayer) {
+    window.MGRounds && MGRounds.end();
     saveBest();
     const place = aliveBots() + 1;
     showOverlay('BURNED', 'You survived <b>' + P.time.toFixed(1) + 's</b> and placed <b>' + ordinal(place) + '</b> of ' + everyone.length, 700);

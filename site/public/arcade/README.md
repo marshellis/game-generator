@@ -82,3 +82,16 @@ game. That is fine for ONE game (see `reverse-zelda`; Vercel compresses it and b
 engine build into several game folders. If a second engine-based game arrives: host one shared copy of the engine (a shared
 folder or storage bucket) and point each game at it, or use Git LFS. The `arcade-contract` test fails any other file over 10 MB.
 Keep the game's source in its own repo and commit only the exported build here.
+
+
+## Learning loop (required for every game)
+Parents can ask for "a brain break every N rounds" and a daily learning goal. For that to work a game must say when a round
+ends. Add to `<head>` (compat first if the game fetches `/api/...` itself):
+```html
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="my-game"></script>
+```
+and call `window.MGRounds && MGRounds.end();` wherever a round / match / life ends (game over, win, death). That is the whole
+integration: the brain break is drawn over the game by the wrapper page. Time limits do NOT depend on this (the wrapper enforces
+them for every game), but round-based breaks do. `arcade-contract.test.ts` fails a game that skips it; `e2e/rounds.spec.ts` proves it
+reaches a real child's brain break. Games with a Godot/Unity export must call it from the engine's JS bridge.
