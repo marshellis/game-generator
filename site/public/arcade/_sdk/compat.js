@@ -32,7 +32,7 @@
         resolve(new Response(m.json === undefined || m.json === null ? null : JSON.stringify(m.json), { status: m.status, headers: { "content-type": "application/json" } }));
       };
       root.parent.postMessage({ mg: 1, id: id, type: "api", method: method, path: u.pathname + u.search, body: body }, "*");
-      root.setTimeout(function () { if (pending[id]) { delete pending[id]; reject(new TypeError("Failed to fetch")); } }, 15000);
+      root.setTimeout(function () { if (pending[id]) { delete pending[id]; reject(new TypeError("Failed to fetch")); } }, 45000);
     });
   };
 })(typeof window !== "undefined" ? window : globalThis);

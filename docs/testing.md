@@ -59,6 +59,10 @@ games on a second origin (127.0.0.1) exactly like production's play. host. `npm 
 It cannot judge game RULES or fun - those are the kids' code - so "works" means: starts, doesn't crash, renders,
 responds to input, and obeys the platform.
 
+- `e2e/multiplayer/` - the REAL game servers (cloned from the org) run locally and several kids on separate devices play through them
+  (`npm run e2e:mp`, see `site/e2e/multiplayer/README.md`). Covers Hide & Seek: real passes, meeting in one lobby, leaving, and the
+  server dropping a child when the parent's time limit runs out.
+
 ## Known limits (what the sim cannot prove)
 - Wall-clock behaviour of a real browser (throttled background tabs). The host page meters on a 15s interval; the
   sim proves the accounting, not Chrome's timer throttling.

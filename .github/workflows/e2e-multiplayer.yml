@@ -1,0 +1,37 @@
+name: E2E multiplayer (real game servers)
+
+# Boots the REAL game servers (cloned from the marshellis org) beside the local site and drives several kids on separate
+# devices through them. See site/e2e/multiplayer/README.md. Slow; not a required check.
+on:
+  pull_request:
+    paths: ["site/e2e/multiplayer/**", "site/playwright.mp.config.ts", "site/public/arcade/**", "site/src/lib/family/**", ".github/workflows/e2e-multiplayer.yml"]
+  schedule:
+    - cron: "17 10 * * *"
+  workflow_dispatch:
+
+jobs:
+  multiplayer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+        working-directory: site
+      - run: npx playwright install --with-deps chromium
+        working-directory: site
+      - name: Fetch and build the real game servers
+        run: npm run e2e:mp:setup
+        working-directory: site
+      - run: npm run e2e:mp
+        working-directory: site
+        env: { CI: "true" }
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-multiplayer-report
+          path: |
+            site/playwright-report
+            site/test-results
+          retention-days: 7
