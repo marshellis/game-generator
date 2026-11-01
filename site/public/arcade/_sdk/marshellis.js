@@ -117,11 +117,11 @@
     // ---- chip + account form
     var uEl, pEl, msgEl, loginBtn, createBtn;
     if (accEl) {
-      accEl.innerHTML = '<div class="mg-box"><div class="mg-title">Create an account to join the leaderboard</div>' +
+      accEl.innerHTML = '<div class="mg-box"><div class="mg-title">Join the leaderboard <span style="font-weight:400;color:#94a3b8">free · username + PIN · no email</span></div>' +
         '<div class="mg-row"><input class="mg-u" type="text" maxlength="20" placeholder="Username" autocomplete="off" autocapitalize="off">' +
         '<input class="mg-p" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 digits)" autocomplete="off"></div>' +
         '<div class="mg-avs"></div><div class="mg-row mg-btns"><button class="mg-login">Log in</button><button class="mg-create">Create account</button></div>' +
-        '<div class="mg-msg"></div><div class="mg-note">…or just play as a guest — your best is saved on this device.</div></div>';
+        '<div class="mg-msg"></div><div class="mg-note">No account needed: you can keep playing as a guest. Your best is saved on this device.</div></div>';
       uEl = accEl.querySelector(".mg-u"); pEl = accEl.querySelector(".mg-p"); msgEl = accEl.querySelector(".mg-msg");
       loginBtn = accEl.querySelector(".mg-login"); createBtn = accEl.querySelector(".mg-create");
       var avs = accEl.querySelector(".mg-avs");
@@ -137,13 +137,19 @@
       uEl.addEventListener("keydown", function (e) { if (e.key === "Enter") pEl.focus(); });
       pEl.addEventListener("keydown", function (e) { if (e.key === "Enter") auth("login"); });
     }
+    var showSignup = false; // guests start with the sign-up panel folded away (only when the game has a chip to unfold it from)
     function setMsg(t, k) { if (msgEl) { msgEl.textContent = t || ""; msgEl.className = "mg-msg " + (k || ""); } }
     function busy(on) { if (loginBtn) { loginBtn.disabled = on; createBtn.disabled = on; } }
 
     function render() {
-      if (accEl) accEl.hidden = !!me;
+      // A guest is a first-class player: say so, and keep sign-up one tap away instead of in the way.
+      if (accEl) accEl.hidden = !!me || (!!chipEl && !showSignup);
       if (!chipEl) return;
-      if (!me) { chipEl.innerHTML = ""; return; }
+      if (!me) {
+        chipEl.innerHTML = '<div class="mg-chip"><span class="mg-av" style="background:' + DEFAULT_COLOR + '">\ud83d\udc64</span>Playing as <b>Guest</b><button>' + (showSignup ? "Hide" : "Join leaderboard") + "</button></div>";
+        chipEl.querySelector("button").onclick = function () { showSignup = !showSignup; render(); };
+        return;
+      }
       chipEl.innerHTML = '<div class="mg-chip"><span class="mg-av" style="background:' + esc(me.avatarColor || DEFAULT_COLOR) + '">' +
         esc(me.avatar || AVATARS[0]) + "</span>Playing as <b>" + esc(me.username) + '</b><button>Log out</button></div>';
       chipEl.querySelector("button").onclick = logout;

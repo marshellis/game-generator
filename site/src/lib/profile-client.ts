@@ -182,7 +182,7 @@ function openAuthModal(): void {
   overlay.innerHTML = `
     <div role="dialog" aria-modal="true" style="width:100%;max-width:340px;background:#fff;border-radius:16px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.25);">
       <h2 style="margin:0 0 4px;font-size:20px;font-weight:800;color:#0f172a;" data-title>Sign in</h2>
-      <p style="margin:0;font-size:13px;color:#64748b;">Username + PIN. No email needed.</p>
+      <p style="margin:0;font-size:13px;color:#64748b;">Username + PIN. No email needed. <b>You don't need an account to play</b> &mdash; guests can play every game; an account just saves your scores.</p>
       <input data-username placeholder="username" autocomplete="username" maxlength="20" style="${input}" />
       <input data-pin placeholder="PIN (4-8 digits)" inputmode="numeric" autocomplete="off" maxlength="8" style="${input}" />
       <div data-avatar-picker hidden style="margin-top:14px;">
@@ -194,7 +194,7 @@ function openAuthModal(): void {
       <p data-error style="margin:10px 0 0;font-size:13px;color:#dc2626;min-height:16px;"></p>
       <button data-submit style="${btn}background:#4f46e5;color:#fff;margin-top:8px;">Sign in</button>
       <button data-toggle style="background:none;border:none;margin-top:12px;width:100%;font-size:13px;color:#4f46e5;cursor:pointer;">New here? Create a profile</button>
-      <button data-cancel style="background:none;border:none;margin-top:6px;width:100%;font-size:13px;color:#94a3b8;cursor:pointer;">Cancel</button>
+      <button data-cancel style="background:none;border:none;margin-top:6px;width:100%;font-size:13px;color:#94a3b8;cursor:pointer;">Keep playing as a guest</button>
     </div>`;
   document.body.appendChild(overlay);
 
