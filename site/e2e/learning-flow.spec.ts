@@ -135,3 +135,17 @@ test("scores flow (legacy game via compat): fetch('/api/scores') from the isolat
   const top = await (await context.request.get("/api/leaderboard?game=bounce&limit=5")).json();
   expect(top.top.some((r: any) => r.username === fam.child && r.score === 17)).toBe(true);
 });
+
+test("multiplayer game pass: a legacy multiplayer game on the isolated origin gets a signed pass for the right child", async ({ page, context }) => {
+  const fam = await makeFamily(context, { settings: { allowance: { freePlayMin: 30, maxPlayMin: 60 } } });
+  await becomeKid(context, fam);
+  await page.route(/\.fly\.dev/, (r) => r.abort()); // never create rooms on the real servers
+  await page.goto("/arcade/hide-and-seek/play");
+  const frame = await gameFrame(page, "hide-and-seek");
+  const r = await frame.evaluate(async () => { const x = await fetch("/api/family/pass", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ room: "lobby-1" }) }); return { status: x.status, json: await x.json() }; });
+  expect(r.status).toBe(200);
+  const claims = JSON.parse(Buffer.from(r.json.pass.split(".")[0], "base64url").toString());
+  expect(claims.u).toBe(fam.child);
+  expect(claims.room).toBe("lobby-1");
+  expect(claims.exp * 1000).toBeGreaterThan(Date.now());
+});

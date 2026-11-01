@@ -1,0 +1,49 @@
+name: Health monitor
+
+# Every 30 minutes: is the site up, is storage alive, are the secrets sane? A failed run emails the repo's watchers
+# (GitHub's own notification) and opens/updates a single "Site health" issue so it is visible and not duplicated.
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe
+        id: probe
+        run: |
+          set -u
+          fail=""
+          h=$(curl -s -m 20 -w '\n%{http_code}' https://games.marshellis.com/api/health); code=${h##*$'\n'}; body=${h%$'\n'*}
+          echo "health: $code $body"
+          [ "$code" = 200 ] || fail="$fail /api/health=$code"
+          echo "$body" | grep -q '"sessionSecret":"ok"' || fail="$fail session-secret-not-ok"
+          echo "$body" | grep -q '"passSecret":"ok"' || fail="$fail pass-secret-not-ok"
+          for u in https://games.marshellis.com/arcade https://games.marshellis.com/family "https://games.marshellis.com/api/leaderboard?game=flappy&limit=1"; do
+            c=$(curl -s -o /dev/null -m 20 -w '%{http_code}' "$u"); echo "$u -> $c"; [ "$c" = 200 ] || fail="$fail $u=$c"
+          done
+          c=$(curl -s -o /dev/null -m 20 -w '%{http_code}' https://play.marshellis.com/arcade/flappy/index.html); echo "play -> $c"; [ "$c" = 200 ] || fail="$fail play-origin=$c"
+          csp=$(curl -sI -m 20 https://play.marshellis.com/arcade/flappy/index.html | grep -i '^content-security-policy' || true)
+          echo "$csp" | grep -q 'frame-ancestors https://games.marshellis.com' || fail="$fail play-csp-missing"
+          echo "fail=$fail" >> "$GITHUB_OUTPUT"
+      - name: Open or update the health issue on failure
+        if: steps.probe.outputs.fail != ''
+        env: { GH_TOKEN: "${{ github.token }}", FAIL: "${{ steps.probe.outputs.fail }}" }
+        run: |
+          n=$(gh issue list -R "$GITHUB_REPOSITORY" --label site-health --state open --json number --jq '.[0].number')
+          body="Health probe failed at $(date -u +%FT%TZ):\`$FAIL\`  Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ -n "$n" ]; then gh issue comment "$n" -R "$GITHUB_REPOSITORY" --body "$body"
+          else gh label create site-health -R "$GITHUB_REPOSITORY" --color D93F0B 2>/dev/null || true; gh issue create -R "$GITHUB_REPOSITORY" --label site-health --title "Site health check failing" --body "$body"; fi
+          exit 1
+      - name: Close the health issue when healthy again
+        if: steps.probe.outputs.fail == ''
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          n=$(gh issue list -R "$GITHUB_REPOSITORY" --label site-health --state open --json number --jq '.[0].number')
+          [ -n "$n" ] && gh issue close "$n" -R "$GITHUB_REPOSITORY" --comment "Healthy again as of $(date -u +%FT%TZ)." || true
