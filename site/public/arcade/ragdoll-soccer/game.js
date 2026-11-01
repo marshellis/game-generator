@@ -303,7 +303,7 @@
       });
     }
     if (scores[scorer] >= TARGET) {
-      state = "over"; stateT = 0; sndWin();
+      state = "over"; stateT = 0; sndWin(); window.MGRounds && MGRounds.end();
       if (mode === 1) endOfMatchStreak(scorer === 0);
     } else { state = "goal"; stateT = 0; }
   }

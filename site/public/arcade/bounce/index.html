@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <script src="/arcade/_sdk/compat.js"></script>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="bounce"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>Bounce</title>
@@ -301,7 +303,7 @@
     spawnParticles(ball.x, ball.y, "#2ee6a6");
     sndReturn();
   }
-  function die() { state = "dead"; sndOver(); submit(score); }
+  function die() { state = "dead"; sndOver(); submit(score); window.MGRounds && MGRounds.end(); }
 
   function update() {
     // paddle follows input even on the ready/dead screens so it feels alive

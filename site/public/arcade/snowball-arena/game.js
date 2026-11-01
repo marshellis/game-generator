@@ -302,6 +302,7 @@
   function endMatch(youWon, customMsg) {
     if (!running && !els.overlay.hidden) return; // already ended — don't double-fire
     running = false;
+    window.MGRounds && MGRounds.end();
     els.roundMsg.hidden = true;
     // Show the end screen FIRST so it always appears, even if something below hiccups.
     const title = customMsg ? "Match over" : (youWon ? "🏆 Victory!" : "💧 Defeated");

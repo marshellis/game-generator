@@ -48,6 +48,9 @@ games on a second origin (127.0.0.1) exactly like production's play. host. `npm 
 - `arcade-games.spec.ts` - EVERY arcade game: loads on the isolated origin, renders, survives generic input, no uncaught
   errors, no cookies / no site access; and a child with no time left never gets the game. (This found a real
   `dungeon-crawler` crash on the title screen.) Heavy 3D/wasm games get a lighter check (software GL on CI is slow).
+- `rounds.spec.ts` - the learning loop reaches every arcade game: a finished round (through the game's own end-of-round code where it is
+  reachable) produces a round tick on the server and a brain break drawn over the game for a child whose parent asked for one.
+  Also: guests are counted but never interrupted, and a burst of end() calls is one round.
 - `puzzles.spec.ts` - all six educational games solved through the real UI at g1/g4/g8 (typing, drag, arrow keys,
   clicks): win celebration, completion recorded, mastery updated, play time earned; a wrong board earns nothing.
 - `learning-flow.spec.ts` - parent onboarding in the UI, password-gated delete, the kid loop (who's playing -> brain

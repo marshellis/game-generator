@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <script src="/arcade/_sdk/compat.js"></script>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="net-rally"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>Net Rally</title>
@@ -299,6 +301,7 @@
     function endRally(reason) {
       if (state !== "play") return;
       state = "over"; screen = "over"; overReason = reason;
+      window.MGRounds && MGRounds.end();
       if (mode === "coop" && role === "host") net && net.broadcast({ t: "over", score, reason });
       if (mode === "solo") submitSolo(score);
       else submitDuo(score, partnerName);

@@ -512,7 +512,7 @@
     if (p.hp <= 0) killPlayer(p);
   }
   function endStreak() {
-    if (S.streak > 0) { postScore(S.streak); }
+    if (S.streak > 0) { postScore(S.streak); window.MGRounds && MGRounds.end(); } // a run is over: count the round for the learning loop
     S.streak = 0;
     if (role === "host" && net) net.send({ t: "reset" });
   }

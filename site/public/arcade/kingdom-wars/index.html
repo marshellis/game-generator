@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="kingdom-wars"></script>
 <meta charset="UTF-8">
 <title>Kingdom Wars</title>
 <style>
@@ -963,6 +965,7 @@ function checkWinLose(){
 }
 function endGame(title,msg){
   gameOver=true;
+  window.MGRounds && MGRounds.end();
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-msg').textContent=msg;
   document.getElementById('modal').classList.remove('hidden');

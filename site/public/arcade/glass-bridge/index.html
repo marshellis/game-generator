@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <script src="/arcade/_sdk/compat.js"></script>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="glass-bridge"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>Glass Bridge</title>
@@ -735,6 +737,7 @@
       return;
     }
     state = "falling";
+    window.MGRounds && MGRounds.end();
     deathCause = cause;
     ch.vh = cause === "glass" ? -0.5 : -1.2; // glass gives way, gaps you just drop into
     ch.spin = (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 2);

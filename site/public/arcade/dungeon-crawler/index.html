@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="dungeon-crawler"></script>
 <title>Dungeon Crawler</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -784,6 +786,7 @@ function checkRoomClear() {
 
 function die() {
   gameState = 'dead';
+  window.MGRounds && MGRounds.end();
   const ov = document.getElementById('overlay');
   ov.style.display = 'flex';
   document.getElementById('overlayTitle').textContent = '💀 You Died!';

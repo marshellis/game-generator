@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <script src="/arcade/_sdk/compat.js"></script>
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="battle-royale"></script>
   <meta charset="UTF-8">
   <title>Battle Royale</title>
   <style>
@@ -3345,6 +3347,7 @@ function killPlayer() {
     return;
   }
   state.phase = 'dead';
+  window.MGRounds && MGRounds.end();
   document.exitPointerLock();
   showOverlay('YOU DIED', `Level ${state.level} — Try again?`, 'RETRY', 'MAIN MENU');
 }
@@ -3716,6 +3719,7 @@ async function connectToMatch(reservation) {
 function handleMatchOver(winningTeamId) {
   const won = winningTeamId === String(myTeamId);
   state.phase = won ? 'win' : 'dead';
+  window.MGRounds && MGRounds.end();
   document.exitPointerLock();
 
   showOverlay(
