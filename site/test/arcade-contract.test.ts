@@ -35,6 +35,19 @@ describe("arcade integration ratchet", () => {
     });
     expect(bad, "add <script src=\"/arcade/_sdk/compat.js\"> as the first thing in <head>").toEqual([]);
   });
+  it("no single arcade file is huge (a repeated engine/build artifact belongs in shared hosting, not N copies)", () => {
+    // reverse-zelda's Godot engine wasm is the one known exception; a second copy of it would trip this.
+    const ALLOWED = new Set(["reverse-zelda/index.wasm"]);
+    const big: string[] = [];
+    const walk = (dir: string) => fs.readdirSync(dir, { withFileTypes: true }).forEach((e) => {
+      const f = path.join(dir, e.name);
+      if (e.isDirectory()) return walk(f);
+      const rel = path.relative(ROOT, f);
+      if (fs.statSync(f).size > 10_000_000 && !ALLOWED.has(rel)) big.push(rel);
+    });
+    walk(ROOT);
+    expect(big, "files over 10 MB: host once and share (see arcade/README.md, 'Big engines')").toEqual([]);
+  });
   it("no game may open a parent-level API: games never call billing, parent or profile-management routes", () => {
     const forbidden = /\/api\/family\/(parent|billing|profiles|store\/review|household)/;
     const bad = games.filter((g) => files(path.join(ROOT, g)).some((f) => forbidden.test(fs.readFileSync(f, "utf8"))));
