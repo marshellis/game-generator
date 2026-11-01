@@ -30,6 +30,8 @@ export function memoryKV(): KV & { dump(): Record<string, unknown> } {
 }
 
 let redis: Redis | null = null;
+/** The raw client, for admin tooling (backup) that needs SCAN/TYPE which the KV interface deliberately does not expose. */
+export function redisClient(): Redis { return client(); }
 function client(): Redis {
   if (!redis) {
     const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
