@@ -6,7 +6,8 @@
  *                                board: "#mg-board", onChange: (me) => {} });
  *   mg.who()                -> { username, avatar, avatarColor } | null  (null = guest)
  *   await mg.submitScore(n) -> { best } | null     (guests: no-op, keep best on the device)
- *   mg.refreshBoard()
+ *   await mg.submitScore(n, "<game>-race")          optional sub-board: must be your game slug or start with "<slug>-"
+ *   mg.refreshBoard([board])
  *   await mg.gate()         -> true when allowed to start a round (shows learning breaks / time-up screens)
  *   mg.startPlaying() / await mg.roundEnded()   -> play clock + round counting for parent time limits
  *   await mg.getPass(room)  -> { pass, exp } | { noTime: true } (403: no play time left) | null (guest / error)
@@ -67,6 +68,11 @@
     ".mg-ch button,.mg-card .mg-go{font:inherit;font-size:20px;padding:14px;border:0;border-radius:12px;background:#334155;color:#fff;cursor:pointer}" +
     ".mg-ch button.ok{background:#16a34a}.mg-ch button.bad{background:#dc2626}.mg-card .mg-go{background:#f9d71c;color:#1c2530;font-weight:700;margin-top:14px;width:100%}" +
     ".mg-sub{color:#93c5fd;font-size:14px}";
+
+  // A board is the game slug itself or "<slug>-<name>"; "nexusx" and "nexus_" are other games' names.
+  function boardAllowed(game, b) {
+    return typeof game === "string" && typeof b === "string" && /^[a-z0-9-]{1,40}$/.test(b) && (b === game || b.indexOf(game + "-") === 0 && b.length > game.length + 1);
+  }
 
   function init(opts) {
     var doc = root.document, game = opts.game, me = null, chosen = AVATARS[0];
@@ -167,16 +173,22 @@
     }
 
     // ---- scores + leaderboard
-    async function submitScore(score) {
+    // A game may use its own slug or "<slug>-<name>" sub-boards; anything else is refused (no request is sent).
+    function boardOk(b) { return boardAllowed(game, b); }
+    async function submitScore(score, board) {
+      var b = board == null ? game : board;
+      if (!boardOk(b)) return null;
       if (!me) return null;
-      var r = await safe(api("/api/scores", { method: "POST", body: JSON.stringify({ game: game, score: score }) }));
+      var r = await safe(api("/api/scores", { method: "POST", body: JSON.stringify({ game: b, score: score }) }));
       var out = r && r.ok ? await r.json() : null;
-      refreshBoard();
+      refreshBoard(b);
       return out;
     }
-    async function refreshBoard() {
+    async function refreshBoard(board) {
       if (!boardEl) return;
-      var r = await safe(api("/api/leaderboard?game=" + encodeURIComponent(game) + "&limit=10"));
+      var b = board == null ? game : board;
+      if (!boardOk(b)) return;
+      var r = await safe(api("/api/leaderboard?game=" + encodeURIComponent(b) + "&limit=10"));
       if (!r || !r.ok) return;
       var top = (await r.json()).top || [];
       var rows = top.length ? top.map(function (row) {
@@ -323,6 +335,9 @@
     ];
     // Multiplayer game passes: only for a well-formed room name (the server re-checks the child's time budget).
     function relayAllowed(method, path, body) {
+      // A framed game may only touch boards under its own slug (the host page knows which game it embeds).
+      if (path.indexOf("/api/leaderboard?") === 0) { var q = /[?&]game=([^&]*)/.exec(path); if (!q || !boardAllowed(game, q[1])) return false; }
+      if (path === "/api/scores" && (method === "POST" || method === "DELETE")) { if (!body || !boardAllowed(game, body.game)) return false; }
       if (method === "POST" && path === "/api/family/pass") return !!body && typeof body.room === "string" && /^[a-z0-9-]{1,40}$/.test(body.room);
       return RELAY.some(function (r) { return r[0] === method && r[1].test(path); });
     }

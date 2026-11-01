@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NEXUS</title>
-  <script type="module" crossorigin src="./assets/index-CvC-APd5.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CG0E5AHL.css">
+  <script type="module" crossorigin src="./assets/index-CfYaq46s.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-V8eMI53T.css">
 </head>
 <body>
   <canvas id="scene"></canvas>
@@ -70,6 +70,25 @@
   </div>
 
   <!-- Skyline Racers -->
+
+  <div id="ar" class="hidden">
+    <div id="ar-top"><div id="ar-title">RAGDOLL ARENA</div><div id="ar-round">ROUND 1</div><div id="ar-alive"></div><div id="ar-wins"></div></div>
+    <div id="ar-plates"></div>
+    <div id="ar-combo"><div id="ar-combo-n"></div><small>HIT COMBO</small><div id="ar-combo-d"></div><div id="ar-combo-r"></div></div>
+    <div id="ar-msg"></div>
+    <button id="ar-menu-btn">☰ MOVES <small>Tab</small></button>
+    <div id="ar-menu"><div class="ar-menu-head"><span>MOVE LIST</span><button id="ar-menu-close">✕</button></div><div id="ar-menu-body"></div></div>
+    <div id="ar-zone"></div>
+    <div id="ar-secrets"><div class="ar-menu-head"><span>POWER MOVES</span><button id="ar-secrets-close">✕</button></div><div id="ar-secrets-body"></div></div>
+    <div id="ar-guardwrap"><i id="ar-guard"></i></div>
+    <div id="ar-hint"><b>J</b> light <b>K</b> heavy <b>L</b> kick <b>U</b> grab <b>I</b> special <b>O</b> block <b>Shift</b> dodge <b>Space</b> jump <b>Tab</b> all moves</div>
+  </div>
+
+  <div id="sk" class="hidden">
+    <div id="sk-top"><div id="sk-title">SKY ISLANDS</div><div id="sk-crystals">✦ 0 / 0</div><div id="sk-alt"></div></div>
+    <canvas id="sk-map" width="200" height="200"></canvas>
+    <div id="sk-hint"><b>WASD</b> move <b>Shift</b> sprint <b>Space</b> jump · hold Space in the air to glide · stand in a wind column to rise <b>C</b> camera <b>Q</b> leave</div>
+  </div>
 
   <div id="sp" class="hidden">
     <div id="sp-top">
@@ -247,6 +266,13 @@
 
   <div id="flash"></div>
   <div id="toast"></div>
+
+  <!-- Marshellis platform SDK mounts (empty until the SDK fills/opens them; absent SDK = nothing shown) -->
+  <div id="mg-chip"></div>
+  <div id="mg-picker" class="mg-panel"></div>
+  <div id="mg-account" class="mg-panel"></div>
+  <div id="mg-board" class="mg-panel"></div>
+  <script src="/arcade/_sdk/marshellis.js"></script>
   <div id="stats" class="hidden"></div>
 
 </body>

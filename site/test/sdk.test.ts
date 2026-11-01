@@ -78,3 +78,65 @@ describe("mg.getPass (framed, via the host relay)", () => {
     expect(await framed(() => ({ ok: false, status: 502, json: null })).getPass("nexus")).toBeNull();
   });
 });
+
+describe("mg.submitScore / refreshBoard sub-boards", () => {
+  const BAD = ["nexusx", "nexus_", "nexus_race", "flappy", "NEXUS-race", "nexus-", "nexus-a b", "nexus-" + "x".repeat(40), "", 5, {}];
+  // same-origin: signed in (GET /api/me -> user); record every other request
+  function same() {
+    const calls: any[] = [];
+    const mg = tab((w) => {
+      w.fetch = async (url: string, init: any = {}) => {
+        if (url === "/api/me") return reply(200, { username: "ava", avatar: "x" })();
+        calls.push([url, init.method ?? "GET", init.body ? JSON.parse(init.body) : undefined]);
+        return reply(200, { best: 7, top: [] })();
+      };
+    });
+    return { mg, calls };
+  }
+  it("same-origin: own slug and nexus-<name> boards are posted; default is the slug", async () => {
+    const { mg, calls } = same(); await mg.ready;
+    expect(await mg.submitScore(5)).toEqual({ best: 7, top: [] });
+    expect(calls[0]).toEqual(["/api/scores", "POST", { game: "nexus", score: 5 }]);
+    await mg.submitScore(1234, "nexus-race");
+    expect(calls.find((c) => c[0] === "/api/scores" && c[2].game === "nexus-race")?.[2]).toEqual({ game: "nexus-race", score: 1234 });
+    await mg.submitScore(3, "nexus-stairs");
+    expect(calls.some((c) => c[2]?.game === "nexus-stairs")).toBe(true);
+  });
+  it("same-origin: foreign boards and prefix attacks are refused with no request", async () => {
+    const { mg, calls } = same(); await mg.ready;
+    for (const b of BAD) expect(await mg.submitScore(9, b as any), String(b)).toBeNull();
+    expect(calls).toEqual([]);
+  });
+  it("same-origin: refreshBoard(board) reads that board, refuses foreign ones", async () => {
+    const dom = new JSDOM('<body><div id="b"></div></body>', { url: "https://play.marshellis.com/arcade/x/index.html", runScripts: "outside-only" });
+    const w: any = dom.window; const urls: string[] = [];
+    w.fetch = async (u: string) => { urls.push(u); return u === "/api/me" ? reply(401, {})() : reply(200, { top: [] })(); };
+    w.eval(sdkSrc);
+    const mg = w.Marshellis.init({ game: "nexus", board: "#b" }); await mg.ready; urls.length = 0;
+    await mg.refreshBoard("nexus-race");
+    await mg.refreshBoard("nexusx"); await mg.refreshBoard("nexus_"); await mg.refreshBoard("flappy");
+    expect(urls).toEqual(["/api/leaderboard?game=nexus-race&limit=10"]);
+  });
+  it("framed: the board is relayed; a refused board sends nothing", async () => {
+    const seen: any[] = [];
+    const dom = new JSDOM("<body></body>", { url: "https://play.marshellis.com/arcade/x/index.html", runScripts: "outside-only" });
+    const w: any = dom.window;
+    const parent: any = {
+      location: { origin: "https://games.marshellis.com" },
+      postMessage: (m: any) => {
+        seen.push(m);
+        const json = m.path === "/api/me" ? { username: "ava", avatar: "x" } : { best: 1 };
+        const ev: any = new w.Event("message"); Object.assign(ev, { data: { mg: 1, id: m.id, ok: true, status: 200, json }, source: parent });
+        w.dispatchEvent(ev);
+      },
+    };
+    Object.defineProperty(w, "parent", { value: parent });
+    w.eval(sdkSrc);
+    const mg = w.Marshellis.init({ game: "nexus" }); await mg.ready; seen.length = 0;
+    await mg.submitScore(88, "nexus-race");
+    expect(seen.find((m) => m.path === "/api/scores")).toMatchObject({ method: "POST", body: { game: "nexus-race", score: 88 } });
+    seen.length = 0;
+    for (const b of ["nexusx", "nexus_", "flappy"]) expect(await mg.submitScore(1, b)).toBeNull();
+    expect(seen).toEqual([]);
+  });
+});
