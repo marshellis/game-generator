@@ -10,6 +10,9 @@ import { record, selectNext, simpleStrategy, type Mastery } from "./mastery";
 import { askable, checkAnswer, makeItem, mulberry32 } from "./questions";
 import * as W from "./wallet";
 import { register, setProgressRoute, type Req } from "./router";
+import { GUEST_COOKIE } from "./accounts";
+import { signToken, verifyToken } from "./token";
+import { randomBytes } from "node:crypto";
 import { parentFrom } from "./accounts";
 
 const err = (status: number, error: string): FamilyResult => ({ status, json: { error } });
@@ -33,8 +36,8 @@ async function ctx(r: Req, d: FamilyDeps): Promise<Ctx | "unmanaged" | null> {
  * in flight (a game that fires answers/ticks in parallel) both read the same day and the last writer wins:
  * earned time silently vanishes. A short-lived `nx` key is the lock; it expires on its own if a request dies.
  */
-async function locked<T>(username: string, d: FamilyDeps, fn: () => Promise<T>): Promise<T> {
-  const key = dataKey(username, "lock");
+async function locked<T>(who: string, d: FamilyDeps, fn: () => Promise<T>): Promise<T> {
+  const key = who.startsWith("guest-") ? `lock:${who}` : dataKey(who, "lock");
   for (let attempt = 0; attempt < 100; attempt++) {
     if (await d.kv.set(key, 1, { nx: true, ttlSec: 10 })) {
       try { return await fn(); } finally { await d.kv.del(key); }
@@ -43,20 +46,49 @@ async function locked<T>(username: string, d: FamilyDeps, fn: () => Promise<T>):
   }
   return fn(); // never wedge a child's session on a stuck lock; the lock TTL bounds the damage window
 }
+// ---- guests: no account, one flat daily allowance, tracked by a signed cookie ---------------------------------------
+// A guest identity is just a random id in a signed cookie. Clearing cookies or using a private window gives a fresh
+// allowance - that cannot be prevented without accounts - but it makes casual sharing/reloading count, and the way to
+// keep playing is the thing we want: make a (free) profile.
+const GUEST_MAX_AGE = 365 * 24 * 3600;
+const guestDayKey = (id: string, nowMs: number) => `guest:${id}:day:${new Date(nowMs).toISOString().slice(0, 10)}`;
+
+function guestIdentity(r: Req, d: FamilyDeps): { id: string; cookies?: FamilyResult["cookies"] } {
+  const now = Math.floor(d.now / 1000);
+  const id = verifyToken("guest", r.tokens.guest, d.secret, now, GUEST_MAX_AGE);
+  if (id) return { id };
+  const fresh = randomBytes(8).toString("hex");
+  return { id: fresh, cookies: [{ name: GUEST_COOKIE, value: signToken("guest", fresh, d.secret, now), maxAgeSec: GUEST_MAX_AGE }] };
+}
+async function guestPlay(r: Req, d: FamilyDeps, tick: boolean): Promise<FamilyResult> {
+  if (!d.secret) return err(401, "unauthenticated"); // fail closed: never mint a guest cookie with an empty signing key
+  const who = guestIdentity(r, d), key = guestDayKey(who.id, d.now), limit = W.guestLimitSec(process.env.GUEST_PLAY_MIN);
+  const run = async () => {
+    let day = (await d.kv.get<W.Day>(key)) ?? W.emptyDay();
+    if (tick) {
+      day = W.tick(day, Number(r.body.seconds) || 0, d.now);
+      if (r.body.round === true) day = { ...day, rounds: day.rounds + 1 };
+      await d.kv.set(key, day, { ttlSec: 3 * 24 * 3600 });
+    }
+    return { status: 200, json: W.guestStatus(day, limit), cookies: who.cookies } as FamilyResult;
+  };
+  return tick ? locked(`guest-${who.id}`, d, run) : run();
+}
+
 const loadDay = async (c: Ctx, d: FamilyDeps) => (await d.kv.get<W.Day>(dayStore(c.username, c.day))) ?? W.emptyDay();
 const saveDay = (c: Ctx, day: W.Day, d: FamilyDeps) => d.kv.set(dayStore(c.username, c.day), day, { ttlSec: DAY_TTL });
 const loadMastery = async (u: string, d: FamilyDeps) => (await d.kv.get<Mastery>(masteryKey(u))) ?? {};
 
 export async function playStatus(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
-  if (!c) return err(401, "unauthenticated");
+  if (!c) return guestPlay(r, d, false);
   if (c === "unmanaged") return { status: 200, json: { ok: true, unmanaged: true } };
   return { status: 200, json: W.status(c.profile.settings, await loadDay(c, d)) };
 }
 
 export async function playTick(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
-  if (!c) return err(401, "unauthenticated");
+  if (!c) return guestPlay(r, d, true);
   if (c === "unmanaged") return { status: 200, json: { ok: true, unmanaged: true } };
   return locked(c.username, d, async () => {
     let day = W.tick(await loadDay(c, d), Number(r.body.seconds) || 0, d.now);

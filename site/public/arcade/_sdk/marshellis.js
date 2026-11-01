@@ -290,12 +290,16 @@
     // await mg.gate() before starting each round. Resolves true when the child may play, false if time is up for today.
     async function gate() {
       var st = await status();
-      if (st.unmanaged || !me) return true;
+      if (st.unmanaged) return true;            // a signed-in standalone account: no managed limits
+      if (!me && !st.guest) return true;        // (platform unreachable)
+      // a guest (no account) is metered too: a flat daily allowance, no way to earn more except making a profile
       while (!st.ok || st.breakNow) {
         if (!st.ok && st.reason === "limit") {
           await new Promise(function (res) {
-            var ov = overlay('<div class="mg-q">That\'s all the play time for today</div><div class="mg-sub">See you tomorrow!</div><button class="mg-go">OK</button>');
-            ov.querySelector(".mg-go").onclick = function () { ov.remove(); res(); };
+            var ov = st.guest
+              ? overlay('<div class="mg-q">That\'s all the guest play time for today</div><div class="mg-sub">Make a free profile to keep playing (username + PIN, no email) &mdash; or come back tomorrow.</div><a class="mg-go" style="display:block;text-decoration:none;box-sizing:border-box" href="/profile" target="_top">Make a profile</a><button class="mg-go" style="background:#334155;color:#e2e8f0;margin-top:8px">Not now</button>')
+              : overlay('<div class="mg-q">That\'s all the play time for today</div><div class="mg-sub">See you tomorrow!</div><button class="mg-go">OK</button>');
+            ov.querySelector("button.mg-go").onclick = function () { ov.remove(); res(); };
           });
           return false;
         }
@@ -311,7 +315,7 @@
       try { var h = root.parent && root.parent !== root && root.parent.__mgHost; return h && h.gate ? h : null; } catch (e) { return null; }
     }
     function startPlaying() {
-      if (hostApi() || timer || !me) return;
+      if (hostApi() || timer) return;  // guests are metered too
       lastTick = Date.now();
       timer = root.setInterval(function () { tickNow(false); }, 15000);
     }
@@ -325,8 +329,8 @@
     // call when a round/game-over happens: stops the clock and counts the round toward "break every N rounds"
     async function roundEnded() {
       var h = hostApi(); if (h) return h.roundEnded();
-      if (opts.host) { return me ? tickNow(true) : null; } // the host clock keeps running between rounds
-      if (timer) { root.clearInterval(timer); timer = null; } if (!me) return null; return tickNow(true);
+      if (opts.host) { return tickNow(true); } // the host clock keeps running between rounds
+      if (timer) { root.clearInterval(timer); timer = null; } return tickNow(true);
     }
     var gateImpl = gate;
     function gateOrHost() { var h = hostApi(); return h ? h.gate() : gateImpl(); }
@@ -360,7 +364,7 @@
           });
         }
         if (m.type === "gate") return gate().then(function (ok) { reply({ ok: true, data: ok }); });
-        if (m.type === "roundEnded") return (me ? tickNow(true) : Promise.resolve(null)).then(function (d) { reply({ ok: true, data: d }); });
+        if (m.type === "roundEnded") return tickNow(true).then(function (d) { reply({ ok: true, data: d }); });
       });
     }
 
@@ -373,7 +377,6 @@
       // Meter from the moment the game is on screen, whether or not it cooperates; re-check every 30s and
       // re-raise the gate (time-up screen / learning break) over the iframe when the parent's limit is reached.
       ready.then(function () {
-        if (!me) return;
         lastTick = Date.now();
         timer = root.setInterval(async function () {
           await tickNow(false);
@@ -382,7 +385,7 @@
         }, 15000);
       });
       if (opts.frame) installProxy(opts.frame);
-      try { root.__mgHost = { gate: gate, roundEnded: function () { return me ? tickNow(true) : Promise.resolve(null); } }; } catch (e) { /* not a window */ }
+      try { root.__mgHost = { gate: gate, roundEnded: function () { return tickNow(true); } }; } catch (e) { /* not a window */ }
     }
     return api2;
   }

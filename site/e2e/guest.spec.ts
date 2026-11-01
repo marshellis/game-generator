@@ -37,3 +37,42 @@ for (const slug of arcadeSlugs()) {
     await expect(page.locator(".mg-ov")).toHaveCount(0); // a guest is never gated or blocked
   });
 }
+
+test("guest play is limited: when the guest allowance is used the game is blocked and a profile is offered; 'Not now' doesn't unblock it", async ({ page, context }) => {
+  await page.goto("/arcade/flappy/play");
+  await gameFrame(page, "flappy");
+  await expect(page.locator(".mg-ov")).toHaveCount(0);              // at first: free to play
+  const st0 = await (await context.request.get("/api/family/play/status")).json();
+  expect(st0).toMatchObject({ ok: true, guest: true });
+  expect(st0.remainingSec).toBeGreaterThan(14 * 60);
+
+  // Use up the guest day (test-only endpoint; a real guest would play ~15 minutes)
+  expect((await context.request.post("/api/e2e/guest-spend", { data: { seconds: 15 * 60 } })).ok()).toBe(true);
+  await page.reload();
+  const ov = page.locator(".mg-ov");
+  await expect(ov).toContainText(/guest play time for today/i, { timeout: 15_000 });
+  await expect(ov.getByRole("link", { name: /make a profile/i })).toHaveAttribute("href", "/profile");
+  expect((await page.locator("#game-frame").getAttribute("src")) ?? "").toMatch(/^(about:blank)?$/);  // the game never loaded
+
+  await ov.getByRole("button", { name: /not now/i }).click();
+  await expect(ov).toHaveCount(0);
+  expect((await page.locator("#game-frame").getAttribute("src")) ?? "").toMatch(/^(about:blank)?$/);  // still blocked
+  expect((await (await context.request.get("/api/family/play/status")).json()).ok).toBe(false);
+
+  // the offered way on works: a profile has no guest cap (it is a normal account)
+  await context.request.post("/api/auth/signup", { data: { username: `g${Date.now().toString(36).slice(-6)}`, pin: "1234" } });
+  await page.reload();
+  await expect(page.locator("#game-frame")).toHaveAttribute("src", /flappy\/index\.html/, { timeout: 15_000 });
+  await expect(page.locator(".mg-ov")).toHaveCount(0);
+});
+
+test("the guest cap is per browser, and a different visitor is unaffected", async ({ page, browser }) => {
+  const other = await browser.newContext(); const op = await other.newPage();
+  await page.goto("/arcade/bounce/play");
+  await page.context().request.get("/api/family/play/status");
+  await page.context().request.post("/api/e2e/guest-spend", { data: { seconds: 15 * 60 } });
+  expect((await (await page.context().request.get("/api/family/play/status")).json()).ok).toBe(false);
+  await op.goto("/arcade/bounce/play");
+  expect((await (await other.request.get("/api/family/play/status")).json()).ok).toBe(true);
+  await other.close();
+});

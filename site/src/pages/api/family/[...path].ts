@@ -3,7 +3,7 @@ import { handle } from "../../../lib/family/router";
 import "../../../lib/family/register"; // registers learning / wallet / billing / store routes
 import { upstashKV } from "../../../lib/family/kv";
 import { upstashStore } from "../../../lib/profile/store";
-import { PARENT_COOKIE, HOUSEHOLD_COOKIE } from "../../../lib/family/accounts";
+import { PARENT_COOKIE, HOUSEHOLD_COOKIE, GUEST_COOKIE } from "../../../lib/family/accounts";
 import { SESSION_COOKIE } from "../../../lib/profile/session";
 import { cookieSecure } from "../../../lib/e2e";
 import { originAllowed, selfOrigins, forbidden } from "../../../lib/origin";
@@ -21,7 +21,7 @@ const run: APIRoute = async ({ request, params, cookies, url }) => {
   const res = await handle(
     {
       method: request.method, path: (params.path ?? "").split("/").filter(Boolean), body, raw,
-      tokens: { parent: cookies.get(PARENT_COOKIE)?.value, household: cookies.get(HOUSEHOLD_COOKIE)?.value },
+      tokens: { parent: cookies.get(PARENT_COOKIE)?.value, household: cookies.get(HOUSEHOLD_COOKIE)?.value, guest: cookies.get(GUEST_COOKIE)?.value },
       childToken: cookies.get(SESSION_COOKIE)?.value,
       query: Object.fromEntries(url.searchParams), headers: Object.fromEntries(request.headers),
     },

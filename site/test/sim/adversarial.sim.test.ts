@@ -19,7 +19,7 @@ describe("forged sessions", () => {
     const attacker = w.browser();
     attacker.setCookie("mg_session", forge("victim", "", Math.floor(w.now / 1000)));
     expect((await attacker.get("/api/me")).status).toBe(401);
-    expect((await attacker.get("/api/family/play/status")).status).toBe(401);
+    expect((await attacker.get("/api/family/play/status")).status).toBe(401); // and no guest cookie either
     // Legit signup must not silently mint a session signed with an empty key either.
     await expect(w.browser().post("/api/auth/signup", { username: "newkid", pin: "1234" })).rejects.toThrow(/SESSION_SECRET/);
   });
@@ -275,5 +275,111 @@ describe("multiplayer game pass honours the parent's limits", () => {
     // a malformed room or an unsigned-in caller gets nothing
     expect((await fine.b.post("/api/family/pass", { room: "../etc" })).status).toBe(400);
     expect((await w.browser().post("/api/family/pass", { room: "lobby-1" })).status).toBe(401);
+  });
+});
+
+describe("guests (no account) get a limited daily allowance", () => {
+  afterEach(() => { delete process.env.GUEST_PLAY_MIN; });
+
+  it("a first visit is a guest with the default 15 minutes, and the browser keeps one identity", async () => {
+    const w = createWorld(), b = w.browser();
+    const first = await b.get("/api/family/play/status");
+    expect(first.json).toMatchObject({ ok: true, guest: true, remainingSec: 15 * 60 });
+    expect(b.cookie("mg_guest")).toBeTruthy();
+    const id1 = b.cookie("mg_guest");
+    await b.get("/api/family/play/status");
+    expect(b.cookie("mg_guest")).toBe(id1); // not re-minted
+  });
+  it("guest play time is spent, runs out, and then the guest is stopped with no way to earn more", async () => {
+    process.env.GUEST_PLAY_MIN = "2";
+    const w = createWorld(), b = w.browser();
+    await b.post("/api/family/play/tick", { seconds: 0 });
+    for (let i = 0; i < 4; i++) { w.advance(30_000); await b.post("/api/family/play/tick", { seconds: 30 }); }
+    const st = (await b.get("/api/family/play/status")).json;
+    expect(st).toMatchObject({ ok: false, reason: "limit", guest: true, remainingSec: 0 });
+    // brain breaks are for managed children: a guest cannot learn their way to more time
+    expect((await b.get("/api/family/learn/next?count=3")).status).toBe(401);
+    expect((await b.post("/api/family/learn/report", { game: "sudoku", puzzleId: "x1" })).status).toBe(401);
+    // tomorrow is a new allowance
+    w.advance(24 * 3600 * 1000);
+    expect((await b.get("/api/family/play/status")).json).toMatchObject({ ok: true, remainingSec: 2 * 60 });
+  });
+  it("tick claims can't burn or skip a guest's time: bounded by the clock like everyone's", async () => {
+    process.env.GUEST_PLAY_MIN = "10";
+    const w = createWorld(), b = w.browser();
+    await b.post("/api/family/play/tick", { seconds: 0 });
+    expect((await b.post("/api/family/play/tick", { seconds: 1e9 })).json.remainingSec).toBe(600);
+    let last: any; for (let i = 0; i < 50; i++) last = await b.post("/api/family/play/tick", { seconds: 30 });
+    expect(last.json.remainingSec).toBe(600); // no wall-clock time passed
+    w.advance(30_000);
+    await Promise.all(Array.from({ length: 20 }, () => b.post("/api/family/play/tick", { seconds: 30 })));
+    expect((await b.get("/api/family/play/status")).json.remainingSec).toBe(570); // 30s elapsed, spent exactly once
+  });
+  it("a forged or tampered guest cookie is just a new guest; it can't borrow a child's identity or time", async () => {
+    const w = createWorld(), mum = await Parent.signup(w), kid = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 1, maxPlayMin: 1 } });
+    const evil = w.browser();
+    evil.setCookie("mg_guest", "guest~ava~1~aaaa");
+    const r = await evil.get("/api/family/play/status");
+    expect(r.json).toMatchObject({ guest: true, remainingSec: 15 * 60 }); // got a fresh guest, not ava's minute
+    expect(evil.cookie("mg_guest")).not.toBe("guest~ava~1~aaaa");
+    void kid;
+  });
+  it("a signed-in standalone account is not a guest (unlimited, as before); a managed child follows their parent's rules, not the guest cap", async () => {
+    const w = createWorld(), legacy = w.browser();
+    await legacy.post("/api/auth/signup", { username: "olduser", pin: "1234" });
+    expect((await legacy.get("/api/family/play/status")).json).toMatchObject({ ok: true, unmanaged: true });
+    const mum = await Parent.signup(w), kid = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 40, maxPlayMin: 60 } });
+    expect((await kid.status()).remainingSec).toBe(40 * 60);
+  });
+  it("GUEST_PLAY_MIN=off removes the guest cap, an unusable value falls back to the default, no secret = no guest cookie", async () => {
+    process.env.GUEST_PLAY_MIN = "off";
+    const w = createWorld(), b = w.browser();
+    expect((await b.get("/api/family/play/status")).json.limitSec).toBeNull();
+    expect((await b.get("/api/family/play/status")).json.ok).toBe(true);
+    process.env.GUEST_PLAY_MIN = "banana";
+    expect((await w.browser().get("/api/family/play/status")).json.remainingSec).toBe(15 * 60);
+    const noSecret = createWorld({ secret: "" }), nb = noSecret.browser();
+    expect((await nb.get("/api/family/play/status")).status).toBe(401);
+    expect(nb.cookie("mg_guest")).toBeUndefined();
+  });
+});
+
+describe("guests in the real SDK: the wrapper page meters them and offers a profile when time is up", () => {
+  const tabs: ReturnType<typeof openTab>[] = [];
+  afterEach(() => { tabs.splice(0).forEach((t) => t.close()); delete process.env.GUEST_PLAY_MIN; });
+  it("a guest tab is metered with no cooperation from the game; at the limit onLimit fires and the gate says 'make a profile'", async () => {
+    process.env.GUEST_PLAY_MIN = "2";
+    const w = createWorld(), b = w.browser();
+    const host = openTab(w, b); tabs.push(host);
+    let limited = false;
+    const mg = host.sdk({ game: "x", host: true, onLimit: () => { limited = true; } });
+    await flush(30);
+    expect(await mg.gate()).toBe(true);            // time left: straight in, no wall
+    await host.fire(90);
+    expect(limited).toBe(false);
+    await host.fire(60);                           // past 2 minutes of guest play
+    expect(limited).toBe(true);
+    const g = mg.gate();
+    await flush(40);
+    const ov = host.doc.querySelector(".mg-ov")!;
+    expect(ov.textContent).toMatch(/guest play time/i);
+    expect(ov.querySelector("a.mg-go")!.getAttribute("href")).toBe("/profile");
+    host.doc.querySelector<HTMLButtonElement>("button.mg-go")!.click(); // "Not now"
+    expect(await g).toBe(false);
+  });
+  it("two game tabs and the host share one guest allowance (a cooperating game does not double the clock)", async () => {
+    process.env.GUEST_PLAY_MIN = "10";
+    const w = createWorld(), b = w.browser();
+    const host = openTab(w, b); tabs.push(host);
+    host.sdk({ game: "x", host: true });
+    await flush(30);
+    const frame = openTab(w, b, { parent: host }); tabs.push(frame);
+    const mg = frame.sdk({ game: "x" });
+    await flush(30);
+    mg.startPlaying();
+    await host.fire(4 * 60);
+    const left = (await b.get("/api/family/play/status")).json.remainingSec;
+    expect(left).toBeGreaterThan(10 * 60 - 4 * 60 - 25);
+    expect(left).toBeLessThan(10 * 60 - 4 * 60 + 25);
   });
 });

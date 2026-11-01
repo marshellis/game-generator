@@ -43,6 +43,8 @@ Read-only (guest). Pass `EXPECT_ISOLATED=0` to run it against a same-origin buil
 ## 5. Full end-to-end (`site/e2e/`, Playwright)
 The REAL site (`astro dev`, in-memory storage via `E2E_MEMORY=1`, never active on Vercel) in real browsers, with the
 games on a second origin (127.0.0.1) exactly like production's play. host. `npm run e2e` (add `BROWSER=webkit` for Safari's engine).
+- `guest.spec.ts` - guests play every game with no wall; the guest daily limit blocks the game and offers a profile (fast-forwarded
+  via the e2e-only `/api/e2e/guest-spend`, which 404s outside `E2E_MEMORY`).
 - `arcade-games.spec.ts` - EVERY arcade game: loads on the isolated origin, renders, survives generic input, no uncaught
   errors, no cookies / no site access; and a child with no time left never gets the game. (This found a real
   `dungeon-crawler` crash on the title screen.) Heavy 3D/wasm games get a lighter check (software GL on CI is slow).

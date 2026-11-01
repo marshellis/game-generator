@@ -12,7 +12,7 @@ import type { FamilyDeps } from "../../src/lib/family/accounts";
 import "../../src/lib/family/register";
 import { handle } from "../../src/lib/family/router";
 import * as P from "../../src/lib/profile/handlers";
-import { PARENT_COOKIE, HOUSEHOLD_COOKIE } from "../../src/lib/family/accounts";
+import { PARENT_COOKIE, HOUSEHOLD_COOKIE, GUEST_COOKIE } from "../../src/lib/family/accounts";
 import { SESSION_COOKIE } from "../../src/lib/profile/session";
 import { originAllowed } from "../../src/lib/origin";
 
@@ -95,7 +95,7 @@ export class Browser {
       res = await handle({
         method, path: p.slice("/api/family/".length).split("/").filter(Boolean), body: b,
         raw: extra.raw ?? (body === undefined ? "" : JSON.stringify(body)),
-        tokens: { parent: this.cookie(PARENT_COOKIE), household: this.cookie(HOUSEHOLD_COOKIE) },
+        tokens: { parent: this.cookie(PARENT_COOKIE), household: this.cookie(HOUSEHOLD_COOKIE), guest: this.cookie(GUEST_COOKIE) },
         childToken: token, query: Object.fromEntries(u.searchParams), headers: extra.headers ?? {},
       }, deps);
     } else if (p === "/api/auth/login") res = await P.login(b, pdeps);
