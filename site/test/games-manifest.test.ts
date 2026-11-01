@@ -24,7 +24,7 @@ describe("games.json <-> site", () => {
     void recordCompletion;
   });
   it("every game's content collection is declared in the site's content config", async () => {
-    const cfg = (await import("node:fs")).readFileSync(new URL("../src/content/config.ts", import.meta.url), "utf8");
+    const cfg = (await import("node:fs")).readFileSync(new URL("../src/content.config.ts", import.meta.url), "utf8");
     for (const g of games) expect(cfg, `collection ${g.collection}`).toMatch(new RegExp(`\\b${g.collection}\\b`));
   });
 });

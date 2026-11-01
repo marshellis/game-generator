@@ -81,4 +81,4 @@ let reg = readFileSync(regPath, "utf8");
 reg = reg.replace(/\n\nexport const REGISTRY/, `\nimport { ${camel}Module } from "./games/${id}/module";\n\nexport const REGISTRY`);
 reg = reg.replace(/(REGISTRY: GameModule\[\] = \[[^\]]*)\]/, `$1, ${camel}Module]`);
 writeFileSync(regPath, reg);
-console.log(`Scaffolded ${id}. Next: docs/adding-a-game.md (steps 2-6): implement generate+validate, \`npm run manifest\`, add the skill to site/src/lib/family/skills.ts, the zod collection in site/src/content/config.ts, then the site pages.`);
+console.log(`Scaffolded ${id}. Next: docs/adding-a-game.md (steps 2-6): implement generate+validate, \`npm run manifest\`, add the skill to site/src/lib/family/skills.ts, the zod collection (glob loader) in site/src/content.config.ts, then the site pages.`);

@@ -19,7 +19,7 @@ export default defineConfig({
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   use: { baseURL: SITE, launchOptions: browser === "chromium" ? { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--autoplay-policy=no-user-gesture-required"] } : {}, ...devices[browser === "webkit" ? "Desktop Safari" : browser === "firefox" ? "Desktop Firefox" : "Desktop Chrome"], trace: "retain-on-failure", screenshot: "only-on-failure" },
   webServer: {
-    command: "npx astro dev --port 4321 --host 0.0.0.0",
+    command: "npx astro dev --port 4321 --host 0.0.0.0 --ignore-lock",
     url: SITE,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

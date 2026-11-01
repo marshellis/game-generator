@@ -1,4 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
 
 const ref = z.object({ cat: z.number(), item: z.number() });
 
@@ -10,7 +12,8 @@ const structured = z.discriminatedUnion("type", [
 ]);
 
 const puzzles = defineCollection({
-  type: "data",
+  // Astro 6: collections are loader-based. Each JSON file is one entry; its `id` field becomes the entry id.
+  loader: glob({ pattern: "**/*.json", base: "./src/content/puzzles" }),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -214,7 +217,8 @@ const activity = z.discriminatedUnion("type", [
 ]);
 
 const packets = defineCollection({
-  type: "data",
+  // Astro 6: collections are loader-based. Each JSON file is one entry; its `id` field becomes the entry id.
+  loader: glob({ pattern: "**/*.json", base: "./src/content/packets" }),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -231,7 +235,8 @@ const packets = defineCollection({
 
 const cell = z.object({ r: z.number(), c: z.number() });
 const mazes = defineCollection({
-  type: "data",
+  // Astro 6: collections are loader-based. Each JSON file is one entry; its `id` field becomes the entry id.
+  loader: glob({ pattern: "**/*.json", base: "./src/content/mazes" }),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -254,7 +259,8 @@ const mazes = defineCollection({
 });
 
 const sudokus = defineCollection({
-  type: "data",
+  // Astro 6: collections are loader-based. Each JSON file is one entry; its `id` field becomes the entry id.
+  loader: glob({ pattern: "**/*.json", base: "./src/content/sudokus" }),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -275,7 +281,8 @@ const sudokus = defineCollection({
 
 const wpos = z.object({ r: z.number(), c: z.number() });
 const wordsearches = defineCollection({
-  type: "data",
+  // Astro 6: collections are loader-based. Each JSON file is one entry; its `id` field becomes the entry id.
+  loader: glob({ pattern: "**/*.json", base: "./src/content/wordsearches" }),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -295,7 +302,8 @@ const wordsearches = defineCollection({
 
 const kenkenCell = z.object({ r: z.number(), c: z.number() });
 const kenkens = defineCollection({
-  type: "data",
+  // Astro 6: collections are loader-based. Each JSON file is one entry; its `id` field becomes the entry id.
+  loader: glob({ pattern: "**/*.json", base: "./src/content/kenkens" }),
   schema: z.object({
     id: z.string(),
     title: z.string(),
