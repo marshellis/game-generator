@@ -134,13 +134,13 @@ describe("a game on the isolated origin", () => {
 });
 
 describe("legacy games through compat.js (they call fetch('/api/...') directly)", () => {
-  async function legacy() {
+  async function legacy(slug = "bounce") {
     const w = createWorld();
     const mum = await Parent.signup(w);
     const kid = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 30, maxPlayMin: 60 } });
     const host = openTab(w, kid.b, { url: `${SITE_ORIGIN}/arcade/x/play` }); tabs.push(host);
     const game = openTab(w, w.browser(ARCADE_ORIGIN), { url: `${ARCADE_ORIGIN}/arcade/x/index.html`, parent: host, crossOrigin: true, compat: true }); tabs.push(game);
-    host.sdk({ game: "bounce", host: true, frame: game.frame });
+    host.sdk({ game: slug, host: true, frame: game.frame });
     await flush(30);
     return { w, game };
   }
@@ -154,6 +154,19 @@ describe("legacy games through compat.js (they call fetch('/api/...') directly)"
     const board = await (await game.w.fetch("/api/leaderboard?game=bounce&limit=10")).json();
     expect(board.top[0]).toMatchObject({ username: "ava", score: 33 });
     expect((await game.w.fetch("/api/scores", { method: "DELETE", body: JSON.stringify({ game: "bounce" }) })).status).toBe(200); // glass-bridge penalty
+  });
+  it("a framed game can only write and read boards under its own slug", async () => {
+    const { w, game } = await legacy("nexus"); // host embeds "nexus"
+    const post = async (g: string) => (await game.w.fetch("/api/scores", { method: "POST", body: JSON.stringify({ game: g, score: 5 }) })).status;
+    expect(await post("nexus-race")).toBe(200);
+    expect(w.store.boards.get("nexus-race")?.get("ava")).toBe(5);
+    for (const g of ["flappy", "nexusx", "nexus_", "nexus_race", "Nexus-race", "bounce"]) {
+      expect(await post(g), `POST ${g}`).toBe(403);
+      expect((await game.w.fetch(`/api/leaderboard?game=${g}&limit=10`)).status, `GET ${g}`).toBe(403);
+      expect((await game.w.fetch("/api/scores", { method: "DELETE", body: JSON.stringify({ game: g }) })).status, `DELETE ${g}`).toBe(403);
+    }
+    expect(w.store.boards.get("flappy")?.get("ava")).toBeUndefined();
+    expect((await game.w.fetch("/api/leaderboard?game=nexus-race&limit=10")).status).toBe(200);
   });
   it("the same shim still cannot reach anything dangerous", async () => {
     const { w, game } = await legacy();

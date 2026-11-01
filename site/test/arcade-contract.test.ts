@@ -8,7 +8,7 @@ import path from "node:path";
 const ROOT = path.resolve(__dirname, "../public/arcade");
 const LEGACY = [
   "bounce", "cop-chase", "dungeon-crawler", "galaga", "glass-bridge", "hex-collapse", "kingdom-wars", "minecraft-2d",
-  "net-rally", "nexus", "ragdoll-siege", "ragdoll-soccer", "reverse-zelda", "snowball-arena", "stickfigure-tower-defense",
+  "net-rally", "ragdoll-siege", "ragdoll-soccer", "reverse-zelda", "snowball-arena", "stickfigure-tower-defense",
 ];
 
 function files(dir: string): string[] {
