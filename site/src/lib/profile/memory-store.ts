@@ -1,5 +1,6 @@
 // In-memory implementation of the profile Store: used by the simulation tests AND by the local end-to-end
 // server (E2E_MEMORY=1), so both exercise the same storage semantics. Never used in production.
+import { scoreDirection } from "./scores";
 import type { Store, UserRecord, ScoreEntry, CompletionValue } from "./types";
 
 /** Full in-memory implementation of the profile Store (users, completions, lockouts, leaderboards). */
@@ -9,7 +10,7 @@ export function memoryStore() {
   const lockouts = new Map<string, number>();
   const boards = new Map<string, Map<string, number>>();
   const board = (g: string) => { if (!boards.has(g)) boards.set(g, new Map()); return boards.get(g)!; };
-  const sorted = (g: string): [string, number][] => [...board(g)].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+  const sorted = (g: string): [string, number][] => [...board(g)].sort((a, b) => (scoreDirection(g) === "lower" ? a[1] - b[1] : b[1] - a[1]) || (a[0] < b[0] ? -1 : 1));
   const store: Store & { users: typeof users; boards: typeof boards } = {
     users, boards,
     async getUser(u) { return structuredClone(users.get(u) ?? null); },
@@ -18,7 +19,7 @@ export function memoryStore() {
     async putCompletion(u, f, v: CompletionValue) { completions.set(u, { ...(completions.get(u) ?? {}), [f]: v }); },
     async bumpLockout(u) { const n = (lockouts.get(u) ?? 0) + 1; lockouts.set(u, n); return n; },
     async getLockout(u) { return lockouts.get(u) ?? 0; },
-    async bumpScore(g, u, s) { const b = board(g); b.set(u, Math.max(b.get(u) ?? -Infinity, s)); return b.get(u)!; },
+    async bumpScore(g, u, s) { const b = board(g); const lower = scoreDirection(g) === "lower"; b.set(u, (lower ? Math.min : Math.max)(b.get(u) ?? (lower ? Infinity : -Infinity), s)); return b.get(u)!; },
     async topScores(g, n): Promise<ScoreEntry[]> { return sorted(g).slice(0, n).map(([username, score]) => ({ username, score })); },
     async userBest(g, u) { return board(g).get(u) ?? 0; },
     async userRank(g, u) { const i = sorted(g).findIndex(([m]) => m === u); return i < 0 ? null : i + 1; },

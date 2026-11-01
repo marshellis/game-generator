@@ -71,7 +71,8 @@ sign-in form or call `/api/auth/*` yourself. `flappy/` is the complete worked ex
 Games never see the parent's settings, ratios or subscription - they only ask `gate()`. Guests are never
 gated and keep their best on the device. To post scores add your slug to `SCORE_GAMES` in
 `site/src/lib/profile/scores.ts`. Design: `docs/superpowers/specs/2026-10-30-family-platform-design.md`.
-Online games: see `docs/game-pass.md`. Games from outside publishers use the sandbox bridge instead
+Online games: see `docs/game-pass.md` (`mg.getPass(room)` fetches the pass; server kit in `docs/room-kit/`). For a board where
+the LOWEST value wins (race times) add the slug to `LOWER_IS_BETTER` in `scores.ts` too (integer values > 0). Games from outside publishers use the sandbox bridge instead
 (`site/public/arcade/_sdk/host-bridge.js`).
 
 

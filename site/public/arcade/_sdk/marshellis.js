@@ -9,6 +9,10 @@
  *   mg.refreshBoard()
  *   await mg.gate()         -> true when allowed to start a round (shows learning breaks / time-up screens)
  *   mg.startPlaying() / await mg.roundEnded()   -> play clock + round counting for parent time limits
+ *   await mg.getPass(room)  -> { pass, exp } | { noTime: true } (403: no play time left) | null (guest / error)
+ *       a signed pass for your multiplayer server (see docs/game-pass.md): put it on the ws URL as ?pass=<token>.
+ *       Over a long-lived socket send {"type":"renew","pass":<fresh>} and call getPass again about every
+ *       10 minutes (a pass lasts 15), or the server ends the session with {"type":"timeup"} + close 4003.
  *   opts.picker: mount point for the "Who's playing?" profile picker (phone-handoff)
  *
  * Host metering: the arcade wrapper page (outside the game's iframe) calls init({ host: true }). It owns
@@ -182,6 +186,16 @@
       boardEl.innerHTML = '<div class="mg-box mg-board"><div class="mg-title"><span>Global leaderboard</span><span style="color:#5dcaa5">● live</span></div><ol>' + rows + "</ol></div>";
     }
 
+    // ---- multiplayer game pass. Works same-origin and framed (api() relays POST /api/family/pass).
+    async function getPass(room) {
+      var r = await safe(api("/api/family/pass", { method: "POST", body: JSON.stringify({ room: room }) }));
+      if (!r) return null;
+      if (r.status === 403) return { noTime: true };
+      if (!r.ok) return null;
+      var j = await safe(r.json());
+      return j && j.pass ? { pass: j.pass, exp: j.exp } : null;
+    }
+
     // ---- profile picker (phone-handoff): the parent's device lists the kids; tap one to play as them
     var pickEl = $(opts.picker);
     async function loadPicker() {
@@ -332,7 +346,7 @@
     var ready = load().then(loadPicker);
     var api2 = {
       who: function () { return me; }, submitScore: submitScore, refreshBoard: refreshBoard, ready: ready,
-      gate: gateOrHost, startPlaying: startPlaying, stopPlaying: stopPlaying, roundEnded: roundEnded, learn: learn, status: status,
+      getPass: getPass, gate: gateOrHost, startPlaying: startPlaying, stopPlaying: stopPlaying, roundEnded: roundEnded, learn: learn, status: status,
     };
     if (opts.host) {
       // Meter from the moment the game is on screen, whether or not it cooperates; re-check every 30s and

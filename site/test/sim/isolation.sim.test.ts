@@ -4,6 +4,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import { createWorld, ARCADE_ORIGIN, SITE_ORIGIN } from "./world";
 import { Parent } from "./actors";
 import { openTab, flush } from "./dom";
+import { verifyPass } from "../../src/lib/family/pass";
 import { originAllowed, selfOrigins } from "../../src/lib/origin";
 
 const tabs: ReturnType<typeof openTab>[] = [];
@@ -58,6 +59,27 @@ describe("a game on the isolated origin", () => {
     expect(w.store.boards.get("flappy")?.get("ava")).toBe(42);
     expect(await gsdk.gate()).toBe(true);
     void kid;
+  });
+  it("gets a game pass through the relay (getPass), bound to the room, and noTime once the budget is gone", async () => {
+    process.env.GAME_PASS_SECRET = "sim-pass-secret";
+    const { w, gsdk } = await setup({ allowance: { freePlayMin: 30, maxPlayMin: 60 } });
+    await gsdk.ready;
+    const p = await gsdk.getPass("nexus");
+    expect(p.pass).toBeTruthy();
+    const claims = verifyPass(p.pass, "sim-pass-secret", Math.floor(w.now / 1000));
+    expect(claims).toMatchObject({ u: "ava", room: "nexus", exp: p.exp });
+    expect(await gsdk.getPass("BAD ROOM")).toBeNull(); // the relay refuses a malformed room
+    delete process.env.GAME_PASS_SECRET;
+  });
+  it("getPass is null for a guest game (no session on the isolated origin)", async () => {
+    process.env.GAME_PASS_SECRET = "sim-pass-secret";
+    const w = createWorld();
+    const host = openTab(w, w.browser(SITE_ORIGIN), { url: `${SITE_ORIGIN}/arcade/x/play` }); tabs.push(host);
+    const game = openTab(w, w.browser(ARCADE_ORIGIN), { url: `${ARCADE_ORIGIN}/arcade/x/index.html`, parent: host, crossOrigin: true }); tabs.push(game);
+    host.sdk({ game: "flappy", host: true, frame: game.frame }); await flush(30);
+    const gsdk = game.sdk({ game: "flappy" }); await flush(30);
+    expect(await gsdk.getPass("nexus")).toBeNull();
+    delete process.env.GAME_PASS_SECRET;
   });
   it("cannot use the relay to reach parent, billing, profile or store routes (allowlist)", async () => {
     const { w, mum, game, gameBrowser } = await setup();

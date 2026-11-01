@@ -2,6 +2,7 @@ import { Redis } from "@upstash/redis";
 import type { Store, UserRecord, ScoreEntry } from "./types";
 import { e2eMemory } from "../e2e";
 import { memoryStore } from "./memory-store";
+import { scoreDirection } from "./scores";
 
 let redis: Redis | null = null;
 function client(): Redis {
@@ -48,14 +49,14 @@ export function upstashStore(): Store {
     },
     async bumpScore(game, u, score) {
       const key = `leaderboard:${game}`;
-      // gt: only raise an existing entry, never lower it. Then read it back.
-      await client().zadd(key, { gt: true }, { score, member: u });
+      // Only ever improve an existing entry (gt: raise it; lt: lower it, for lowest-wins boards). Then read it back.
+      await client().zadd(key, scoreDirection(game) === "lower" ? { lt: true } : { gt: true }, { score, member: u });
       return Number(await client().zscore(key, u)) || score;
     },
     async topScores(game, limit) {
-      // rev + withScores → a flat [member, score, member, score, …] array.
+      // rev (highest first; ascending for lowest-wins boards) + withScores → a flat [member, score, …] array.
       const flat = (await client().zrange(`leaderboard:${game}`, 0, limit - 1, {
-        rev: true,
+        rev: scoreDirection(game) === "higher",
         withScores: true,
       })) as (string | number)[];
       const out: ScoreEntry[] = [];
@@ -68,8 +69,9 @@ export function upstashStore(): Store {
       return Number(await client().zscore(`leaderboard:${game}`, u)) || 0;
     },
     async userRank(game, u) {
-      // zrevrank is 0-based and null for a member that isn't on the board.
-      const i = await client().zrevrank(`leaderboard:${game}`, u);
+      // 0-based, null for a member that isn't on the board.
+      const key = `leaderboard:${game}`;
+      const i = scoreDirection(game) === "lower" ? await client().zrank(key, u) : await client().zrevrank(key, u);
       return i === null || i === undefined ? null : Number(i) + 1;
     },
     async playerCount(game) {

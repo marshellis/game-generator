@@ -4,7 +4,7 @@ import { normalizeUsername, validateUsername, validatePin, hashPin, verifyPin } 
 import { signSession, verifySession, SESSION_MAX_AGE_SEC } from "./session";
 import { parseCompletions, groupByGame, completionField } from "./completions";
 import { sanitizeAvatar, sanitizeColor } from "./avatars";
-import { SCORE_GAMES, scoreGameAllowed, coopScoreGameAllowed, canonicalPair, validateScore, clampLimit } from "./scores";
+import { SCORE_GAMES, scoreGameAllowed, coopScoreGameAllowed, canonicalPair, validateScore, validateScoreFor, beats, clampLimit } from "./scores";
 
 const LOCKOUT_MAX = 8;
 const LOCKOUT_TTL_SEC = 15 * 60;
@@ -95,12 +95,13 @@ export async function submitScore(
   const username = authed(token, deps);
   if (!username) return { status: 401, json: { error: "unauthenticated" } };
   const game = String(input.game ?? "");
-  if (!scoreGameAllowed(game) || !validateScore(input.score)) {
+  if (!scoreGameAllowed(game) || !validateScoreFor(game, input.score)) {
     return { status: 400, json: { error: "invalid" } };
   }
   const prev = await deps.store.userBest(game, username);
   const best = await deps.store.bumpScore(game, username, input.score);
-  return { status: 200, json: { game, score: input.score, best, improved: input.score > prev } };
+  // prev 0 = no entry yet, so the first score on a lowest-wins board always counts as an improvement.
+  return { status: 200, json: { game, score: input.score, best, improved: prev === 0 ? input.score > 0 : beats(game, input.score, prev) } };
 }
 
 /**
@@ -185,7 +186,7 @@ export async function myTrophies(token: string | undefined, deps: Deps): Promise
         deps.store.topScores(game, 1),
       ]);
       const best = top[0];
-      const first = !best || score >= best.score;
+      const first = !best || !beats(game, best.score, score);
       return { game, score, rank: first ? 1 : rank, total, first, leader: first ? null : best };
     }),
   );
