@@ -50,6 +50,21 @@ export function status(s: ProfileSettings, day: Day): PlayStatus {
   };
 }
 
+/** Guests (no account) get one flat daily allowance and cannot earn more; the only way on is to make a profile. */
+export const DEFAULT_GUEST_MIN = 15;
+/** Seconds of guest play per day from GUEST_PLAY_MIN (default 15; "off" = unlimited => null). */
+export function guestLimitSec(raw: string | undefined): number | null {
+  if (raw === undefined || raw.trim() === "") return DEFAULT_GUEST_MIN * 60;
+  if (raw.trim().toLowerCase() === "off") return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? Math.round(n * 60) : DEFAULT_GUEST_MIN * 60;
+}
+export function guestStatus(day: Day, limitSec: number | null): PlayStatus & { guest: true; limitSec: number | null } {
+  const remainingSec = limitSec === null ? 99 * 3600 : Math.max(0, limitSec - day.spentSec);
+  const out = remainingSec <= 0;
+  return { ok: !out, remainingSec, reason: out ? "limit" : undefined, breakNow: false, questionsPerBreak: 0, learnedToday: 0, dailyLearningTarget: 0, guest: true, limitSec };
+}
+
 /** Credit elapsed play. The client reports seconds; the server trusts at most what the clock allows. */
 export function tick(day: Day, reportedSec: number, nowMs: number): Day {
   const gap = day.lastTick ? (nowMs - day.lastTick) / 1000 : 0;

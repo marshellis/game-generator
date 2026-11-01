@@ -28,7 +28,8 @@ export const HOUSEHOLD_MAX_AGE = 365 * 24 * 3600;
 export interface FamilyDeps { kv: KV; store: Store; secret: string; now: number; }
 export type CookieOp = { name: string; value?: string; maxAgeSec?: number; clear?: true };
 export interface FamilyResult { status: number; json?: unknown; cookies?: CookieOp[]; }
-export interface Tokens { parent?: string; household?: string }
+export interface Tokens { parent?: string; household?: string; guest?: string }
+export const GUEST_COOKIE = "mg_guest";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const rid = () => randomBytes(8).toString("hex");

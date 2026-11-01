@@ -45,3 +45,11 @@ Vercel env: `STORE_PUBLISHER_EMAILS` (comma list of parent emails allowed to sub
 - A lawyer who handles children's privacy reviews `docs/legal/` and the consent box on `/family`.
 - Link `/family` from the home page once the policies are final (it is deliberately unlinked and noindex today).
 - Decide free vs paid in `site/src/lib/family/plans.ts` (Ellis and Marshall's research).
+
+
+## Guest play limit
+Visitors without an account ("guests") get a flat daily allowance, metered server-side against a signed `mg_guest` cookie
+(the arcade wrapper page owns the clock, so every game is covered). Default **15 minutes/day**; set `GUEST_PLAY_MIN` in Vercel
+to change it (`off` = unlimited). At the limit the game is blocked and the visitor is offered a free profile (`/profile`).
+Signed-in standalone accounts are not guests (unlimited); managed children follow their parent's rules. Clearing cookies or a
+private window starts a new guest day - that cannot be prevented without accounts.

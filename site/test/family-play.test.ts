@@ -147,7 +147,8 @@ describe("learning API end to end", () => {
     expect((await call("GET", "learn/next")).status).toBe(402);
   });
   it("unauthenticated and legacy (unmanaged) children are handled", async () => {
-    expect((await call("GET", "play/status", {}, { childToken: undefined })).status).toBe(401);
+    // no session at all = a guest: metered on a flat daily allowance, never a managed child's rules
+    expect(((await call("GET", "play/status", {}, { childToken: undefined })) as any).json).toMatchObject({ ok: true, guest: true, remainingSec: 15 * 60 });
     users.set("legacy", { pinHash: "x", createdAt: 1 });
     const tok = (await import("../src/lib/profile/session")).signSession("legacy", "sec", Math.floor(d.now / 1000));
     expect(((await call("GET", "play/status", {}, { childToken: tok })) as any).json).toMatchObject({ ok: true, unmanaged: true });
