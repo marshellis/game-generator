@@ -1,0 +1,28 @@
+name: Nightly backup (encrypted)
+
+# Downloads an ENCRYPTED dump of the site's Redis (accounts, households, profiles, progress, scores) from the
+# token-protected /api/admin/backup and keeps it as a build artifact for 30 days. It is encrypted to a public key;
+# the private key lives with the owner/Bailey, never here. Restore: site/scripts/restore.mjs (docs/backup-restore.md).
+on:
+  schedule:
+    - cron: "11 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download
+        env: { BACKUP_TOKEN: "${{ secrets.BACKUP_TOKEN }}" }
+        run: |
+          test -n "$BACKUP_TOKEN" || { echo "BACKUP_TOKEN secret is not set"; exit 1; }
+          code=$(curl -s -m 60 -D headers.txt -o backup.enc -w '%{http_code}' -H "Authorization: Bearer $BACKUP_TOKEN" https://games.marshellis.com/api/admin/backup)
+          echo "status $code"; grep -iE '^x-backup' headers.txt || true
+          [ "$code" = 200 ] || { echo "backup endpoint failed"; cat backup.enc | head -c 300; exit 1; }
+          [ "$(stat -c %s backup.enc)" -gt 500 ] || { echo "backup suspiciously small"; exit 1; }
+          mv backup.enc "games-backup-$(date -u +%F).enc"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: games-backup
+          path: games-backup-*.enc
+          retention-days: 30
