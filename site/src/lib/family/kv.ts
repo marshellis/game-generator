@@ -1,6 +1,7 @@
 // Minimal key-value surface the family platform needs. Handlers depend on this interface only,
 // so tests use memoryKV() and production uses upstashKV(). Values are JSON-serialisable.
 import { Redis } from "@upstash/redis";
+import { e2eMemory } from "../e2e";
 
 export interface KV {
   get<T>(key: string): Promise<T | null>;
@@ -39,7 +40,9 @@ function client(): Redis {
   return redis;
 }
 
+let e2eKv: KV | null = null;
 export function upstashKV(): KV {
+  if (e2eMemory()) return (e2eKv ??= memoryKV()); // local e2e only; see lib/e2e.ts
   return {
     async get<T>(k: string) { return (await client().get<T>(k)) ?? null; },
     async set(k, v, o) {

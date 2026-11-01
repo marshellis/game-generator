@@ -40,6 +40,20 @@ family API or POST to the site cross-origin, and the relay still serves boards. 
 demand: `cd site && npm i --no-save playwright && npx playwright install chromium && node e2e/live-smoke.mjs`.
 Read-only (guest). Pass `EXPECT_ISOLATED=0` to run it against a same-origin build.
 
+## 5. Full end-to-end (`site/e2e/`, Playwright)
+The REAL site (`astro dev`, in-memory storage via `E2E_MEMORY=1`, never active on Vercel) in real browsers, with the
+games on a second origin (127.0.0.1) exactly like production's play. host. `npm run e2e` (add `BROWSER=webkit` for Safari's engine).
+- `arcade-games.spec.ts` - EVERY arcade game: loads on the isolated origin, renders, survives generic input, no uncaught
+  errors, no cookies / no site access; and a child with no time left never gets the game. (This found a real
+  `dungeon-crawler` crash on the title screen.) Heavy 3D/wasm games get a lighter check (software GL on CI is slow).
+- `puzzles.spec.ts` - all six educational games solved through the real UI at g1/g4/g8 (typing, drag, arrow keys,
+  clicks): win celebration, completion recorded, mastery updated, play time earned; a wrong board earns nothing.
+- `learning-flow.spec.ts` - parent onboarding in the UI, password-gated delete, the kid loop (who's playing -> brain
+  break -> wrong answers earn nothing -> right answers earn time -> game loads), scores via SDK and via compat, and a
+  REAL 60-second hard limit that the host page enforces on a game that knows nothing about time.
+It cannot judge game RULES or fun - those are the kids' code - so "works" means: starts, doesn't crash, renders,
+responds to input, and obeys the platform.
+
 ## Known limits (what the sim cannot prove)
 - Wall-clock behaviour of a real browser (throttled background tabs). The host page meters on a 15s interval; the
   sim proves the accounting, not Chrome's timer throttling.

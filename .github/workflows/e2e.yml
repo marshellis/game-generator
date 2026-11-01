@@ -1,0 +1,39 @@
+name: E2E (real browsers, full site)
+
+# Runs the REAL site (astro dev, in-memory storage) in real browsers: every arcade game, every puzzle game solved
+# through the UI, the parent -> child -> brain-break -> earn-time -> limit loop. See docs/testing.md layer 5.
+# Not a required merge check (it is slow); runs on PRs that touch the site, nightly, and on demand.
+on:
+  pull_request:
+    paths: ["site/**", ".github/workflows/e2e.yml"]
+  schedule:
+    - cron: "43 9 * * *"
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, webkit]   # webkit = the Safari engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+        working-directory: site
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+        working-directory: site
+      - run: npm run e2e
+        working-directory: site
+        env: { CI: "true", BROWSER: "${{ matrix.browser }}" }
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-${{ matrix.browser }}-report
+          path: |
+            site/playwright-report
+            site/test-results
+          retention-days: 7
