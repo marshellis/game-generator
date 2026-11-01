@@ -9,6 +9,11 @@ describe("health", () => {
     expect(h.ok).toBe(true);
     expect(h.checks).toMatchObject({ storage: "ok", sessionSecret: "ok", passSecret: "ok" });
   });
+  it("works with a client that JSON-parses what it stores, like Upstash (this was a real production false alarm)", async () => {
+    const m = memoryKV(), store = new Map<string, unknown>();
+    const upstashLike: KV = { ...m, set: async (k, v) => { store.set(k, JSON.stringify(v)); return true; }, get: async <T,>(k: string) => (store.has(k) ? JSON.parse(store.get(k) as string) : null) as T };
+    expect((await healthCheck(upstashLike, good)).ok).toBe(true);
+  });
   it("fails when storage is gone (the lost-Redis case) or throws", async () => {
     const dead: KV = { ...memoryKV(), get: async () => null };
     expect((await healthCheck(dead, good)).checks.storage).toBe("failed");
