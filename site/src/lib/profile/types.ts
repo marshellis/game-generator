@@ -40,11 +40,11 @@ export interface Store {
   getLockout(username: string): Promise<number>;
   /**
    * Leaderboard sorted set per game ("leaderboard:<game>"): member=username,
-   * score=best. Raises the player's entry to max(existing, score) and returns
-   * the resulting best.
+   * score=best. Raises the player's entry to max(existing, score) (min for the
+   * lowest-wins boards in scores.ts LOWER_IS_BETTER) and returns the resulting best.
    */
   bumpScore(game: string, username: string, score: number): Promise<number>;
-  /** Top N rows for a game, highest score first. */
+  /** Top N rows for a game, best first (highest, or lowest on a LOWER_IS_BETTER board). */
   topScores(game: string, limit: number): Promise<ScoreEntry[]>;
   /** A single player's best for a game (0 if none recorded). */
   userBest(game: string, username: string): Promise<number>;

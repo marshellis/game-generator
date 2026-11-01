@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Store, UserRecord, CompletionValue, ScoreEntry, Deps } from "../src/lib/profile/types";
 import { signup, submitScore, submitPairScore, deleteScore, leaderboard, myTrophies } from "../src/lib/profile/handlers";
-import { MAX_SCORE, canonicalPair } from "../src/lib/profile/scores";
+import { MAX_SCORE, canonicalPair, scoreDirection, LOWER_IS_BETTER, SCORE_GAMES } from "../src/lib/profile/scores";
 
 class FakeStore implements Store {
   users = new Map<string, UserRecord>();
@@ -16,12 +16,13 @@ class FakeStore implements Store {
   async getLockout(u: string) { return this.lockouts.get(u) ?? 0; }
   async bumpScore(game: string, u: string, score: number) {
     const g = this.scores.get(game) ?? new Map<string, number>();
-    const best = Math.max(g.get(u) ?? 0, score); g.set(u, best); this.scores.set(game, g); return best;
+    const cur = g.get(u);
+    const best = cur === undefined ? score : scoreDirection(game) === "lower" ? Math.min(cur, score) : Math.max(cur, score); g.set(u, best); this.scores.set(game, g); return best;
   }
   async topScores(game: string, limit: number): Promise<ScoreEntry[]> {
     const g = this.scores.get(game) ?? new Map<string, number>();
     return [...g.entries()].map(([username, score]) => ({ username, score }))
-      .sort((a, b) => b.score - a.score).slice(0, limit);
+      .sort((a, b) => (scoreDirection(game) === "lower" ? a.score - b.score : b.score - a.score)).slice(0, limit);
   }
   async userBest(game: string, u: string) { return this.scores.get(game)?.get(u) ?? 0; }
   async userRank(game: string, u: string) {
@@ -242,5 +243,71 @@ describe("myTrophies", () => {
     await submitPairScore(alice, { game: "net-rally-duo", score: 20, partner: "bob" }, deps);
     const res = (await myTrophies(alice, deps)) as any;
     expect(res.json.games).toEqual([]);
+  });
+});
+
+describe("lowest-wins boards (nexus-race)", () => {
+  it("registers the nexus boards, and only nexus-race ranks lowest first", () => {
+    expect(SCORE_GAMES.has("nexus-stairs")).toBe(true);
+    expect(SCORE_GAMES.has("nexus-race")).toBe(true);
+    expect([...LOWER_IS_BETTER]).toEqual(["nexus-race"]);
+    for (const g of LOWER_IS_BETTER) expect(SCORE_GAMES.has(g)).toBe(true);
+    expect(scoreDirection("nexus-race")).toBe("lower");
+    for (const g of ["nexus-stairs", "flappy", "hex-collapse", "net-rally-duo"]) expect(scoreDirection(g)).toBe("higher");
+  });
+
+  it("keeps the LOWEST time and only flags a faster one as improved", async () => {
+    const t = await tokenFor("alice");
+    const first = (await submitScore(t, { game: "nexus-race", score: 5400 }, deps)) as any;
+    expect(first.json).toMatchObject({ best: 5400, improved: true });
+    const slower = (await submitScore(t, { game: "nexus-race", score: 6000 }, deps)) as any;
+    expect(slower.json).toMatchObject({ best: 5400, improved: false });
+    const same = (await submitScore(t, { game: "nexus-race", score: 5400 }, deps)) as any;
+    expect(same.json).toMatchObject({ best: 5400, improved: false });
+    const faster = (await submitScore(t, { game: "nexus-race", score: 4900 }, deps)) as any;
+    expect(faster.json).toMatchObject({ best: 4900, improved: true });
+  });
+
+  it("refuses a 0 time (it is also the 'no entry' sentinel) but still accepts 0 on a highest-wins board", async () => {
+    const t = await tokenFor("alice");
+    expect((await submitScore(t, { game: "nexus-race", score: 0 }, deps)).status).toBe(400);
+    expect((await submitScore(t, { game: "nexus-race", score: 1.5 }, deps)).status).toBe(400);
+    expect((await submitScore(t, { game: "nexus-stairs", score: 0 }, deps)).status).toBe(200);
+  });
+
+  it("lists the fastest first, with ranks counting up", async () => {
+    await submitScore(await tokenFor("alice"), { game: "nexus-race", score: 5400 }, deps);
+    await submitScore(await tokenFor("bob"), { game: "nexus-race", score: 4100 }, deps);
+    await submitScore(await tokenFor("cara"), { game: "nexus-race", score: 9000 }, deps);
+    const res = (await leaderboard({ game: "nexus-race" }, deps)) as any;
+    expect(res.json.top).toEqual([
+      { rank: 1, username: "bob", score: 4100 },
+      { rank: 2, username: "alice", score: 5400 },
+      { rank: 3, username: "cara", score: 9000 },
+    ]);
+  });
+
+  it("trophies: the fastest holds the crown, others see the leader's time and their rank", async () => {
+    const alice = await tokenFor("alice");
+    const bob = await tokenFor("bob");
+    await submitScore(alice, { game: "nexus-race", score: 5400 }, deps);
+    await submitScore(bob, { game: "nexus-race", score: 4100 }, deps);
+    const a = (await myTrophies(alice, deps)) as any;
+    expect(a.json.games).toEqual([{ game: "nexus-race", score: 5400, rank: 2, total: 2, first: false, leader: { username: "bob", score: 4100 } }]);
+    const b = (await myTrophies(bob, deps)) as any;
+    expect(b.json.games[0]).toMatchObject({ game: "nexus-race", rank: 1, first: true, leader: null });
+    expect(b.json.firsts).toBe(1);
+  });
+
+  it("highest-wins boards are unchanged (nexus-stairs and flappy)", async () => {
+    const alice = await tokenFor("alice");
+    await submitScore(alice, { game: "nexus-stairs", score: 40 }, deps);
+    await submitScore(alice, { game: "nexus-stairs", score: 25 }, deps);
+    const bob = await tokenFor("bob");
+    await submitScore(bob, { game: "nexus-stairs", score: 90 }, deps);
+    const res = (await leaderboard({ game: "nexus-stairs" }, deps)) as any;
+    expect(res.json.top.map((r: any) => [r.username, r.score])).toEqual([["bob", 90], ["alice", 40]]);
+    const t = (await myTrophies(alice, deps)) as any;
+    expect(t.json.games[0]).toMatchObject({ game: "nexus-stairs", rank: 2, first: false, leader: { username: "bob", score: 90 } });
   });
 });
