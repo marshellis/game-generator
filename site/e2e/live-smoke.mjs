@@ -17,7 +17,8 @@ for (const slug of SLUGS) {
   const page = await ctx.newPage();
   const problems = []; let errorsBeforeProbe;
   page.on("console", (m) => { if (m.type() === "error" && /refused|csp|blocked|cors/i.test(m.text())) problems.push(m.text().slice(0, 140)); });
-  page.on("pageerror", (e) => problems.push("pageerror: " + e.message.slice(0, 120)));
+  // Headless CI browsers have no GPU: a 3D game failing to create a WebGL context is the environment, not the site.
+  page.on("pageerror", (e) => { if (!/WebGL context/i.test(e.message)) problems.push("pageerror: " + e.message.slice(0, 120)); });
   await page.goto(`${BASE}/arcade/${slug}/play`, { waitUntil: "load" });
   await page.waitForSelector("#game-frame", { timeout: 10000 });
   await page.waitForFunction(() => { const f = document.getElementById("game-frame"); return f && f.src && f.src !== "about:blank" && !!f.src; }, null, { timeout: 15000 });
