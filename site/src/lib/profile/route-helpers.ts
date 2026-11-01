@@ -1,6 +1,7 @@
 import type { AstroCookies } from "astro";
 import { SESSION_COOKIE } from "./session";
 import { upstashStore } from "./store";
+import { cookieSecure } from "../e2e";
 import type { Deps, HandlerResult } from "./types";
 
 export function deps(): Deps {
@@ -23,7 +24,7 @@ export function applyCookie(cookies: AstroCookies, res: HandlerResult): void {
   }
   cookies.set(SESSION_COOKIE, res.cookie.value, {
     httpOnly: true,
-    secure: true,
+    secure: cookieSecure(),
     sameSite: "lax",
     path: "/",
     maxAge: res.cookie.maxAgeSec,

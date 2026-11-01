@@ -185,7 +185,7 @@
     // ---- profile picker (phone-handoff): the parent's device lists the kids; tap one to play as them
     var pickEl = $(opts.picker);
     async function loadPicker() {
-      if (!pickEl) return;
+      if (!pickEl || hostApi()) return; // inside a game the wrapper page shows the picker (a game cannot switch profiles)
       var r = await safe(api("/api/family/picker"));
       if (!r || !r.ok) { pickEl.innerHTML = ""; return; }
       var j = await r.json();
@@ -228,7 +228,10 @@
         var card = ov.firstChild;
         function show() {
           if (i >= items.length) {
-            card.innerHTML = '<div class="mg-sub">Nice work!</div><div class="mg-q">+' + fmt(Math.max(0, (last ? last.remainingSec : 0) - (before.remainingSec || 0))) + ' of play time</div><button class="mg-go">Play</button>';
+            var gained = Math.max(0, (last ? last.remainingSec : 0) - (before.remainingSec || 0));
+            card.innerHTML = gained > 0
+              ? '<div class="mg-sub">Nice work!</div><div class="mg-q">+' + fmt(gained) + ' of play time</div><button class="mg-go">Play</button>'
+              : '<div class="mg-sub">Not quite yet</div><div class="mg-q">No play time earned this time</div><button class="mg-go">Try again</button>';
             card.querySelector(".mg-go").onclick = function () { ov.remove(); resolve(last); };
             return;
           }

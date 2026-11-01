@@ -29,6 +29,7 @@ const src = arcadeOrigin + gameUrl(game.slug);
     showClear={false}
   />
 
+  <div id="mg-picker" class="mt-4"></div>
   <div class="mt-5">
     {/* The game runs in a sandboxed iframe so its code can't touch the site
         chrome. allow-same-origin is kept so games can use localStorage.
@@ -56,10 +57,15 @@ const src = arcadeOrigin + gameUrl(game.slug);
   <script is:inline define:vars={{ slug: game.slug }}>
     (function () {
       var frame = document.getElementById("game-frame");
-      var mg = Marshellis.init({ game: slug, host: true, frame: frame, onLimit: function () { frame.src = "about:blank"; mg.gate().then(function (ok) { if (ok) frame.src = frame.dataset.src; }); } });
+      var started = false;
+      var mg = Marshellis.init({ game: slug, host: true, frame: frame, picker: "#mg-picker",
+        // Someone else picked up the device ("Who's playing?"): drop the running game and gate it again for THEM.
+        onChange: function () { if (!started) return; frame.src = "about:blank"; mg.gate().then(function (ok) { if (ok) frame.src = frame.dataset.src; }); }, onLimit: function () { frame.src = "about:blank"; mg.gate().then(function (ok) { if (ok) frame.src = frame.dataset.src; }); } });
       // Fail open if the platform API is unreachable for 6s: a dead network cannot be metered anyway.
-      setTimeout(function () { if (!frame.src || frame.src === "about:blank") frame.src = frame.dataset.src; }, 6000);
-      mg.ready.then(function () { return mg.gate(); }).then(function (ok) {
+      // (Only until the platform answers: once it has, the gate decides, and a learning break can take as long as it likes.)
+      var failOpen = setTimeout(function () { if (!frame.src || frame.src === "about:blank") frame.src = frame.dataset.src; }, 6000);
+      mg.ready.then(function () { clearTimeout(failOpen); return mg.gate(); }).then(function (ok) {
+        started = true;
         if (ok) frame.src = frame.dataset.src;
         else frame.insertAdjacentHTML("afterend", '<p class="mt-3 text-sm text-slate-500">That is all the play time for today. See you tomorrow!</p>');
       });

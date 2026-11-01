@@ -1,5 +1,7 @@
 import { Redis } from "@upstash/redis";
 import type { Store, UserRecord, ScoreEntry } from "./types";
+import { e2eMemory } from "../e2e";
+import { memoryStore } from "./memory-store";
 
 let redis: Redis | null = null;
 function client(): Redis {
@@ -15,7 +17,9 @@ function client(): Redis {
   return redis;
 }
 
+let e2eStore: Store | null = null;
 export function upstashStore(): Store {
+  if (e2eMemory()) return (e2eStore ??= memoryStore()); // local e2e only; see lib/e2e.ts
   // client() is called per-method (not once up front) so building the store is
   // free: routes that never touch Redis (e.g. an unauthenticated /api/me) don't
   // trigger Redis.fromEnv() and so return a clean 401 even if env is missing.

@@ -5,6 +5,7 @@ import { upstashKV } from "../../../lib/family/kv";
 import { upstashStore } from "../../../lib/profile/store";
 import { PARENT_COOKIE, HOUSEHOLD_COOKIE } from "../../../lib/family/accounts";
 import { SESSION_COOKIE } from "../../../lib/profile/session";
+import { cookieSecure } from "../../../lib/e2e";
 import { originAllowed, selfOrigins, forbidden } from "../../../lib/origin";
 
 export const prerender = false;
@@ -28,7 +29,7 @@ const run: APIRoute = async ({ request, params, cookies, url }) => {
   );
   for (const c of res.cookies ?? []) {
     if (c.clear) cookies.delete(c.name, { path: "/" });
-    else cookies.set(c.name, c.value ?? "", { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: c.maxAgeSec });
+    else cookies.set(c.name, c.value ?? "", { httpOnly: true, secure: cookieSecure(), sameSite: "lax", path: "/", maxAge: c.maxAgeSec });
   }
   return new Response(res.json === undefined ? null : JSON.stringify(res.json), {
     status: res.status, headers: { "content-type": "application/json", "cache-control": "no-store" },

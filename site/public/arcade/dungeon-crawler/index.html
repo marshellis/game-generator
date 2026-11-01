@@ -291,7 +291,7 @@ function spawnEnemy(roomLevel) {
 
 // ── Input ────────────────────────────────────────────────────────────────────
 canvas.addEventListener('mousedown', e => {
-  if (abilityInventoryOpen) {
+  if (abilityInventoryOpen && player) {
     const r=canvas.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
     getAbilitySlotRects().forEach((s,i)=>{ if (player.abilitySlots[i]&&mx>s.x&&mx<s.x+s.w&&my>s.y&&my<s.y+s.h) abilityDrag={ability:player.abilitySlots[i],fromType:'slot',fromIndex:i,x:mx,y:my}; });
     getAbilityBagRects().forEach((s,i)=>{ if (player.abilityBag[i]&&mx>s.x&&mx<s.x+s.w&&my>s.y&&my<s.y+s.h) abilityDrag={ability:player.abilityBag[i],fromType:'bag',fromIndex:i,x:mx,y:my}; });
@@ -372,18 +372,19 @@ document.addEventListener('keydown', e => {
   if (k === 'w') { e.preventDefault(); executeAbility(0); }
   if (e.key === 'a') { e.preventDefault(); executeAbility(1); }
   if (e.key === 's') { e.preventDefault(); executeAbility(2); }
-  if (e.key === 'd') { e.preventDefault(); const ab = player.abilitySlots[3]; if (ab && ab.special === 'charge') startCharge(); else executeAbility(3); }
+  if (e.key === 'd') { e.preventDefault(); const ab = player && player.abilitySlots[3]; if (ab && ab.special === 'charge') startCharge(); else executeAbility(3); }
   if (e.key === 'u' || e.key === 'U') { abilityInventoryOpen = !abilityInventoryOpen; abilityDrag = null; inventoryOpen = false; }
   if (e.key === 'o' || e.key === 'O') { if (roomCleared && !doorOpen) { doorOpen = true; spawnTextParticle(W/2, WALL + 30, '🚪 Door Open!', '#0f0'); } }
   if (e.key === 'i' || e.key === 'I') { inventoryOpen = !inventoryOpen; drag = null; }
 });
 document.addEventListener('keyup', e => {
   keys[e.key] = false;
-  if (e.key === 'd' || e.key === 'D') { const ab = player.abilitySlots[3]; if (ab && ab.special === 'charge') releaseBlast(); }
+  if (e.key === 'd' || e.key === 'D') { const ab = player && player.abilitySlots[3]; if (ab && ab.special === 'charge') releaseBlast(); }
 });
 
 // ── Abilities ────────────────────────────────────────────────────────────────
 function executeAbility(slot) {
+  if (!player) return; // title screen: no hero yet (keys pressed on the menu used to throw)
   const ab = player.abilitySlots[slot];
   if (!ab || cooldowns[slot] > 0 || (ab.special === 'charge')) return;
   cooldowns[slot] = ab.cd;
