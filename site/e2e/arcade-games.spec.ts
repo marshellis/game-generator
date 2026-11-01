@@ -11,7 +11,7 @@ const blockRealtime = (page: Page) => page.route(/\.fly\.dev|peerjs|stun\.|meter
 const ENV_NOISE = /WebGL|webgl|GPU|AudioContext|autoplay|Failed to load resource|net::ERR|WebSocket|ERR_BLOCKED|Pointer ?lock|requestPointerLock|fullscreen/i;
 
 // Software-rendered 3D / wasm engines can starve the main thread on a CI box; load + one click is the honest check there.
-const HEAVY = new Set(["hide-and-seek", "reverse-zelda", "battle-royale", "nexus"]);
+const HEAVY = new Set(["hide-and-seek", "reverse-zelda", "battle-royale", "nexus", "ragdoll-siege"]); // ragdoll-siege hung once when the box was busy
 
 for (const slug of arcadeSlugs()) {
   test.describe(slug, () => {

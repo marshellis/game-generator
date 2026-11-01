@@ -255,3 +255,25 @@ describe("concurrency: parallel requests must not lose updates", () => {
     expect((await k.status()).remainingSec).toBe(600 - 30); // 30s elapsed, spent once
   });
 });
+
+describe("multiplayer game pass honours the parent's limits", () => {
+  afterEach(() => { delete process.env.GAME_PASS_SECRET; });
+  it("a child with no time left cannot get a pass (online play can't dodge the limit); one with time can, scoped to their name and room", async () => {
+    process.env.GAME_PASS_SECRET = "pass-secret-for-the-sim-0123456789";
+    const w = createWorld();
+    const mum = await Parent.signup(w);
+    const broke = await mum.addChild("broke", 2017, { allowance: { freePlayMin: 0, maxPlayMin: 0 }, enforcement: "hard" });
+    const fine = await mum.addChild("fine", 2017, { allowance: { freePlayMin: 30, maxPlayMin: 60 } });
+    const no = await broke.b.post("/api/family/pass", { room: "lobby-1" });
+    expect(no.status).toBe(403);
+    expect(no.json.error).toBe("no-time");
+    const yes = await fine.b.post("/api/family/pass", { room: "lobby-1" });
+    expect(yes.status).toBe(200);
+    const claims = JSON.parse(Buffer.from(yes.json.pass.split(".")[0], "base64url").toString());
+    expect(claims).toMatchObject({ u: "fine", room: "lobby-1" });
+    expect(claims.exp - Math.floor(w.now / 1000)).toBeLessThanOrEqual(15 * 60); // short-lived
+    // a malformed room or an unsigned-in caller gets nothing
+    expect((await fine.b.post("/api/family/pass", { room: "../etc" })).status).toBe(400);
+    expect((await w.browser().post("/api/family/pass", { room: "lobby-1" })).status).toBe(401);
+  });
+});
