@@ -11,6 +11,7 @@ const browser = process.env.BROWSER ?? "chromium";
 export default defineConfig({
   testDir: "./e2e",
   testMatch: /.*\.spec\.ts/,
+  testIgnore: /multiplayer\//, // the multiplayer suite needs the real game servers: npm run e2e:mp
   timeout: 90_000,
   expect: { timeout: 10_000 },
   fullyParallel: false, // one in-memory server: tests share state, so each creates its own uniquely named family

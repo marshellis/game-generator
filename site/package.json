@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "test": "vitest run",
     "e2e": "playwright test",
+    "e2e:mp": "playwright test -c playwright.mp.config.ts",
+    "e2e:mp:setup": "node e2e/multiplayer/setup.mjs",
     "e2e:fast": "playwright test --grep-invert \"hard limit, for real\""
   },
   "dependencies": {
@@ -19,9 +21,11 @@
   "devDependencies": {
     "@playwright/test": "^1.64.1",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/ws": "^8.18.2",
     "jsdom": "^30.1.3",
     "tailwindcss": "^4.3.3",
-    "vitest": "^5.0.5"
+    "vitest": "^5.0.5",
+    "ws": "^8.22.1"
   },
   "overrides": {
     "path-to-regexp": "^6.3.0",

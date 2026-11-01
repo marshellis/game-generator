@@ -98,7 +98,7 @@
       return new Promise(function (resolve) {
         var id = ++seq; pending[id] = resolve;
         root.parent.postMessage(Object.assign({ mg: 1, id: id, type: type }, payload), "*");
-        root.setTimeout(function () { if (pending[id]) { delete pending[id]; resolve(null); } }, 15000);
+        root.setTimeout(function () { if (pending[id]) { delete pending[id]; resolve(null); } }, 45000);
       });
     }
     function api(path, o) {
