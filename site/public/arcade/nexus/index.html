@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NEXUS</title>
-  <script type="module" crossorigin src="./assets/index-CfYaq46s.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-V8eMI53T.css">
+  <script type="module" crossorigin src="./assets/index-jMinkylU.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-7uNrlZcY.css">
 </head>
 <body>
   <canvas id="scene"></canvas>
@@ -78,8 +78,6 @@
     <div id="ar-msg"></div>
     <button id="ar-menu-btn">☰ MOVES <small>Tab</small></button>
     <div id="ar-menu"><div class="ar-menu-head"><span>MOVE LIST</span><button id="ar-menu-close">✕</button></div><div id="ar-menu-body"></div></div>
-    <div id="ar-zone"></div>
-    <div id="ar-secrets"><div class="ar-menu-head"><span>POWER MOVES</span><button id="ar-secrets-close">✕</button></div><div id="ar-secrets-body"></div></div>
     <div id="ar-guardwrap"><i id="ar-guard"></i></div>
     <div id="ar-hint"><b>J</b> light <b>K</b> heavy <b>L</b> kick <b>U</b> grab <b>I</b> special <b>O</b> block <b>Shift</b> dodge <b>Space</b> jump <b>Tab</b> all moves</div>
   </div>
@@ -88,6 +86,34 @@
     <div id="sk-top"><div id="sk-title">SKY ISLANDS</div><div id="sk-crystals">✦ 0 / 0</div><div id="sk-alt"></div></div>
     <canvas id="sk-map" width="200" height="200"></canvas>
     <div id="sk-hint"><b>WASD</b> move <b>Shift</b> sprint <b>Space</b> jump · hold Space in the air to glide · stand in a wind column to rise <b>C</b> camera <b>Q</b> leave</div>
+  </div>
+
+  <div id="tt" class="hidden">
+    <div id="tt-boss">
+      <div id="tt-name">GORATH <small>THE SUNKEN COLOSSUS</small></div>
+      <div id="tt-bar"><i></i><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+      <div id="tt-pips"></div>
+    </div>
+    <div id="tt-markers"></div>
+    <div id="tt-party"></div>
+    <div id="tt-cross"></div>
+    <div id="tt-vitals">
+      <div class="tt-row"><span>VITALITY</span><div class="tt-meter hp"><i></i></div></div>
+      
+    </div>
+    <div id="tt-prompt"></div>
+    <div id="tt-warn"></div>
+    <div id="tt-vignette"></div>
+    <div id="tt-flash"></div>
+    <div id="tt-banner"><h1></h1><p></p></div>
+    <div id="tt-hint"><b>WASD</b> move <b>Shift</b> sprint <b>Space</b> jump <b>F</b> / click attack his weak points <b>Ctrl</b> / <b>V</b> roll — roll through the red circles to dodge <b>Q</b> leave</div>
+  </div>
+  <div id="tt-end" class="dg-modal hidden">
+    <div class="dg-card">
+      <h1 id="tt-end-title">TITAN SLAIN</h1>
+      <div id="tt-end-sub"></div>
+      <div class="dg-btns"><button id="tt-again">Hunt again <small>R</small></button><button id="tt-leave">Return to the Nexus</button></div>
+    </div>
   </div>
 
   <div id="sp" class="hidden">
