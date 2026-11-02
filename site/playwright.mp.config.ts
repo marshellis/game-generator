@@ -23,9 +23,10 @@ export default defineConfig({
     ...(Array.isArray(base.webServer) ? base.webServer : [base.webServer!]),
     // only servers that setup.mjs actually fetched (nexus-server is private and needs GH_TOKEN)
     ...[
-      srv("battle-royale", "battle-royale-server", "node dist/index.js", 2567, "http://127.0.0.1:2567/health"),
+      srv("battle-royale", "battle-royale-server", "node dist/index.js", 2568, "http://127.0.0.1:2568/health"),
       srv("hide-and-seek", "hide-and-seek-server", "node server.js", 8083, "http://127.0.0.1:8083/"),
       srv("nexus", "nexus-server", "node server.js", 8081, "http://127.0.0.1:8081/"),
+      { ...srv("galaga", "galaga/server", "npx ts-node-transpile-only -r tsconfig-paths/register src/index.ts", 2567, "http://127.0.0.1:2567/health"), timeout: 120_000 },
     ].filter((s) => fs.existsSync(s.cwd)),
   ],
 });
