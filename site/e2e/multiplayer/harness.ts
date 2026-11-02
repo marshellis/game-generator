@@ -18,6 +18,8 @@ export const LOCAL_SERVERS: Record<string, { port: number; name: string }> = {
   "hide-and-seek-server.fly.dev": { port: 8083, name: "hide-and-seek" },
   "nexus-server.fly.dev": { port: 8081, name: "nexus" },
   "galaga-server.fly.dev": { port: 2567, name: "galaga" },
+  // the public PeerJS signalling broker the WebRTC games use by default; players then connect directly to each other
+  "0.peerjs.com": { port: 9000, name: "peerjs" },
 };
 
 export interface WsRecord { host: string; path: string; query: URLSearchParams; toServer: number; toPage: number; open: boolean; closeCode?: number; lastToPage?: string[] }

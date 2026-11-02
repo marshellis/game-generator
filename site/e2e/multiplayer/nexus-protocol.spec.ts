@@ -3,9 +3,10 @@
 // by renewing their pass, while the server still enforces the limit.
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { test, expect, virtualKid, rawSocket, earnTime, mintPass } from "./harness";
 
-const DIR = process.env.MP_SERVERS_DIR ?? path.resolve(__dirname, "../../.mp-servers");
+const DIR = process.env.MP_SERVERS_DIR ?? path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../.mp-servers");
 test.skip(!fs.existsSync(path.join(DIR, "nexus-server")), "nexus-server is private: run `GH_TOKEN=... npm run e2e:mp:setup` to include it");
 
 const URL = (pass?: string) => `ws://127.0.0.1:8081/${pass ? `?pass=${encodeURIComponent(pass)}` : ""}`;

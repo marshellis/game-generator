@@ -18,7 +18,11 @@ export default defineConfig({
   workers: process.env.CI ? 2 : 1,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
-  use: { baseURL: SITE, launchOptions: browser === "chromium" ? { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--autoplay-policy=no-user-gesture-required"] } : {}, ...devices[browser === "webkit" ? "Desktop Safari" : browser === "firefox" ? "Desktop Firefox" : "Desktop Chrome"], trace: "retain-on-failure", screenshot: "only-on-failure" },
+  use: { baseURL: SITE, launchOptions: browser === "chromium" ? { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--autoplay-policy=no-user-gesture-required",
+  // WebRTC between two browser contexts on one machine (the p2p games): allow loopback candidates, no mDNS-hidden hosts
+  "--allow-loopback-in-peer-connection", "--disable-features=WebRtcHideLocalIpsWithMdns",
+  // the public STUN/TURN servers are unreachable from a test box: fail their DNS instantly instead of making ICE wait them out
+  "--host-resolver-rules=MAP stun.l.google.com ~NOTFOUND, MAP stun1.l.google.com ~NOTFOUND, MAP *.turn.peerjs.com ~NOTFOUND, MAP *.metered.ca ~NOTFOUND"] } : {}, ...devices[browser === "webkit" ? "Desktop Safari" : browser === "firefox" ? "Desktop Firefox" : "Desktop Chrome"], trace: "retain-on-failure", screenshot: "only-on-failure" },
   webServer: {
     command: "npx astro dev --port 4321 --host 0.0.0.0 --ignore-lock",
     url: SITE,
