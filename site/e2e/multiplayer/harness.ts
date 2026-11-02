@@ -11,11 +11,15 @@ import WebSocket from "ws";
 import { becomeKid, makeFamily, type Family } from "../helpers";
 
 export const PASS_SECRET = "e2e-pass-secret-e2e-pass-secret";
+// Ports match what each game picks when it is served from localhost (galaga and glass-bridge: ws://localhost:2567, nexus: :8081),
+// so a game that decides on its own to talk to "its local server" finds the right one.
 export const LOCAL_SERVERS: Record<string, { port: number; name: string }> = {
-  "battle-royale-server.fly.dev": { port: 2567, name: "battle-royale" },
+  "battle-royale-server.fly.dev": { port: 2568, name: "battle-royale" },
   "hide-and-seek-server.fly.dev": { port: 8083, name: "hide-and-seek" },
   "nexus-server.fly.dev": { port: 8081, name: "nexus" },
-  "galaga-server.fly.dev": { port: 2568, name: "galaga" },
+  "galaga-server.fly.dev": { port: 2567, name: "galaga" },
+  // the public PeerJS signalling broker the WebRTC games use by default; players then connect directly to each other
+  "0.peerjs.com": { port: 9000, name: "peerjs" },
 };
 
 export interface WsRecord { host: string; path: string; query: URLSearchParams; toServer: number; toPage: number; open: boolean; closeCode?: number; lastToPage?: string[] }
@@ -83,3 +87,60 @@ export async function gameFrame(page: Page, slug: string) {
 export const passClaims = (pass: string) => JSON.parse(Buffer.from(pass.split(".")[0]!, "base64url").toString()) as { u: string; room: string; exp: number };
 export { test } from "@playwright/test";
 export { expect };
+
+/** What a local Colyseus server says about its rooms right now (server-side truth, independent of what the game shows). */
+export async function colyseusRooms(port: number, roomName: string): Promise<{ roomId: string; clients: number; maxClients: number; metadata?: Record<string, unknown> }[]> {
+  const r = await fetch(`http://127.0.0.1:${port}/matchmake/${roomName}`);
+  return r.ok ? ((await r.json()) as never) : [];
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Virtual players: scripted clients that join the REAL servers with REAL passes minted by the local site. They scale a test
+// to a full lobby (8 players) without 8 browsers, and give server-side truth (`room.state`) to assert against.
+// ---------------------------------------------------------------------------------------------------------------------
+import { Client as ColyseusClient, type Room } from "colyseus.js";
+
+/** Ask the local site for a game pass as this kid, exactly like a game page does. */
+export async function mintPass(context: BrowserContext, room: string): Promise<string> {
+  const r = await context.request.post("/api/family/pass", { data: { room } });
+  expect(r.ok(), `pass for ${room}: ${r.status()} ${await r.text()}`).toBe(true);
+  return (await r.json()).pass as string;
+}
+
+/** A kid without a browser: own family + signed-in child, used only to mint passes. */
+export async function virtualKid(browser: Browser, settings?: object): Promise<{ context: BrowserContext; fam: Family; pass: (room: string) => Promise<string> }> {
+  const context = await browser.newContext();
+  const fam = await makeFamily(context, { settings: settings ?? { allowance: { freePlayMin: 60, maxPlayMin: 120 } } });
+  await becomeKid(context, fam);
+  return { context, fam, pass: (room) => mintPass(context, room) };
+}
+
+/** Join a Colyseus room by id as a virtual player. `onLeave` code 4003 = the server dropped them when their pass ran out. */
+export async function colyseusJoin(port: number, roomId: string, pass: string, extra: Record<string, unknown> = {}): Promise<Room & { leftWith?: number }> {
+  const room = (await new ColyseusClient(`ws://127.0.0.1:${port}`).joinById(roomId, { displayName: "virtual", pass, ...extra })) as Room & { leftWith?: number };
+  room.onLeave((code) => { room.leftWith = code; });
+  return room;
+}
+
+/** Join a raw-WebSocket game (hide-and-seek / nexus style): resolves with the socket and everything the server sends. */
+export async function rawSocket(url: string): Promise<{ ws: WebSocket; messages: any[]; closed: Promise<number>; send(o: unknown): void }> {
+  const ws = new WebSocket(url), messages: any[] = [];
+  let resolveClosed!: (c: number) => void;
+  const closed = new Promise<number>((r) => { resolveClosed = r; });
+  ws.on("message", (d) => { try { messages.push(JSON.parse(d.toString())); } catch { /* binary */ } });
+  ws.on("close", (c) => resolveClosed(c));
+  await new Promise<void>((res, rej) => { ws.on("open", () => res()); ws.on("error", rej); });
+  return { ws, messages, closed, send: (o) => ws.send(JSON.stringify(o)) };
+}
+
+/** A child answers `n` brain-break questions correctly through the real API (the education loop) and so earns play time. */
+export async function earnTime(context: BrowserContext, n = 3): Promise<void> {
+  const { checkAnswer } = await import("../../src/lib/family/questions");
+  const next = await context.request.get(`/api/family/learn/next?count=${n}`);
+  expect(next.ok(), `learn/next: ${next.status()}`).toBe(true);
+  for (const it of (await next.json()).items as { id: string; token: string; choices: string[] }[]) {
+    const right = it.choices.find((c) => checkAnswer("e2e-session-secret-e2e-session-secret", it.id, it.token, c))!;
+    const a = await context.request.post("/api/family/learn/answer", { data: { id: it.id, token: it.token, choice: right } });
+    expect(a.ok()).toBe(true);
+  }
+}
