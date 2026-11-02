@@ -37,7 +37,7 @@ Fly game servers: `GAME_PASS_SECRET` (same value), optional `GAME_PASS_REQUIRED=
 
 ## Backups
 Nightly `backup.yml` stores an encrypted dump as a 30-day artifact. Restore steps and key custody: [backup-restore.md](backup-restore.md).
-**The private key must exist in a second safe place.** A backup run that fails or is "suspiciously small" means the database is empty/lost: investigate first.
+**The private key lives in Bailey's vault (`BACKUP_PRIVATE_KEY`); until that entry exists it is only on Bailey's runner.** A backup run that fails or is "suspiciously small" means the database is empty/lost: investigate first.
 
 ## DNS / domains
 `marshellis.com` is on Cloudflare; `games.` and `play.` are DNS-only CNAMEs to `cname.vercel-dns.com`, both attached to the Vercel project.
