@@ -2,6 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- Marshellis platform: parent time limits + "brain break every N rounds". Copy these two lines into every game and change data-game. -->
+    <script src="/arcade/_sdk/marshellis.js"></script>
+    <script src="/arcade/_sdk/rounds.js" data-game="template"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Click the Dot</title>
     <style>
@@ -98,6 +101,7 @@
       });
 
       function end() {
+        window.MGRounds && MGRounds.end();   // the round is over: count it for the parent's learning rules (brain break every N rounds)
         clearInterval(timer);
         timer = null;
         dot.hidden = true;

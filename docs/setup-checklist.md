@@ -21,7 +21,7 @@ Make one random secret (32+ chars) and set the SAME value in four places. Never 
 | Fly Battle Royale app | `fly secrets set GAME_PASS_SECRET=... -a <app in battle-royale-server/fly.toml>` |
 | Fly Hide & Seek app | `fly secrets set GAME_PASS_SECRET=... -a <app in hide-and-seek-server/fly.toml>` |
 
-Optional: `GAME_PASS_REQUIRED=1` on a Fly app refuses guests (default: guests get a `Guest-1234` name).
+Optional: `GAME_PASS_REQUIRED=1` on a Fly app refuses anyone without a valid pass (default: no/invalid pass = an anonymous "Player N"; a forged pass can never claim a name). Trade-off: required = every online player is a named profile with an enforced limit, but guests cannot play online. See `docs/runbook.md`.
 
 ## 2. Subscriptions via the website (Stripe)
 1. Create a Stripe account; make a product "Family" with a monthly and a yearly recurring price.
@@ -47,9 +47,12 @@ Vercel env: `STORE_PUBLISHER_EMAILS` (comma list of parent emails allowed to sub
 - Decide free vs paid in `site/src/lib/family/plans.ts` (Ellis and Marshall's research).
 
 
-## Guest play limit
+## 6. Guest play limit
 Visitors without an account ("guests") get a flat daily allowance, metered server-side against a signed `mg_guest` cookie
 (the arcade wrapper page owns the clock, so every game is covered). Default **15 minutes/day**; set `GUEST_PLAY_MIN` in Vercel
 to change it (`off` = unlimited). At the limit the game is blocked and the visitor is offered a free profile (`/profile`).
 Signed-in standalone accounts are not guests (unlimited); managed children follow their parent's rules. Clearing cookies or a
 private window starts a new guest day - that cannot be prevented without accounts.
+
+## 7. Also see
+Every environment variable, deploy/rollback, health and incident steps: [runbook.md](runbook.md). How it fits together: [architecture.md](architecture.md).

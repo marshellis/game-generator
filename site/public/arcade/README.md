@@ -1,97 +1,86 @@
-# Arcade — how to add a static game
+# Arcade - how to add a game
 
-This folder holds **static games**: self-contained interactive HTML/JS games that
-appear in the site's **Arcade** section (`/arcade`). Unlike the puzzle games, they
-are *not* grade-calibrated and *not* daily — they're just games. To add one, drop in
-one folder and open a PR. Green CI auto-merges and deploys (see the repo's `CLAUDE.md`).
+This folder holds **arcade games**: self-contained HTML/JS games shown in the site's Arcade (`/arcade`). Unlike the generated puzzle
+games they are not grade-calibrated and not daily. To add one: drop in one folder and open a PR. Green CI merges and deploys.
+How the platform around them works: [`docs/architecture.md`](../../../docs/architecture.md).
 
 ## The contract
 
-Create one folder here named with your game's **slug** (kebab-case, e.g.
-`space-blaster`). The slug becomes the URL: `/arcade/space-blaster`. It must contain:
+One folder named with the game's **slug** (kebab-case) containing `index.html`, `game.json`, and any assets:
 
 ```
 site/public/arcade/<slug>/
-  index.html     # your game — opens and runs on its own, no build step
-  game.json      # the manifest (see below)
-  …              # any assets your game needs (images, audio, JS, CSS)
+  index.html     # runs on its own, no build step (a built bundle is fine; commit the build, keep the source in its own repo)
+  game.json      # manifest, below
 ```
 
-Rules:
-
-- **`index.html` must run by itself.** It is served as a plain static file and loaded
-  inside a sandboxed iframe. Use **relative** asset paths (`./sprite.png`, not `/sprite.png`).
-- **Everything the game needs lives inside the folder.** Don't reach out to shared site
-  code or external CDNs you don't control.
-- **`localStorage` is available** (the iframe is same-origin), so you can save high
-  scores / progress. Namespace your keys with the slug to avoid clashes.
-- Folders starting with `_` (like `_template`) are ignored by the site — that's where
-  the worked example lives.
+- Use **relative** asset paths (`./sprite.png`). Everything the game needs lives in its folder (plus the platform scripts under `/arcade/_sdk/`).
+- Folders starting with `_` (`_sdk`, `_template`) are not games. `_template/` is a complete working example - copy it.
+- **Where it runs:** on the isolated origin (`play.marshellis.com`), inside a sandboxed iframe on the wrapper page. The game has **no
+  cookies and cannot call the site's API directly**; the wrapper relays an allowlist. `localStorage` works (per origin).
+- **Nothing in your game controls time limits.** The wrapper page meters play time, shows the time-up screen and brain breaks over the
+  game and unloads it at the limit - for every game, whether or not it cooperates.
 
 ## `game.json`
 
 ```jsonc
-{
-  "title": "Space Blaster",            // required — shown on the card and play page
-  "description": "Dodge the asteroids", // required — one-line blurb for the card
-  "emoji": "🚀",                        // required — one emoji for the card
-  "author": "Theo",                     // required — who made it
-  "createdAt": "2026-06-22",            // required — YYYY-MM-DD; drives the "NEW" badge
-  "tags": ["arcade", "shooter"]         // optional — array of strings
-}
+{ "title": "Space Blaster", "description": "Dodge the asteroids", "emoji": "🚀", "author": "Theo",
+  "createdAt": "2026-06-22",            // YYYY-MM-DD, drives the NEW badge
+  "tags": ["arcade", "shooter"] }       // optional
 ```
 
-## Get started
+## Required: join the learning loop (2 script tags + 1 call)
 
-1. Copy `_template/` to `<your-slug>/`.
-2. Replace `index.html` with your game and edit `game.json`.
-3. From `site/`, run `npm test` — the arcade test validates every manifest and that each
-   folder has an `index.html`. Then `npm run build` to confirm the site builds.
-4. Open a PR. Once CI is green it auto-merges and deploys to games.marshellis.com.
+Parents can ask for "a brain break every N rounds". For that a game must say when a round ends. In `<head>` (put `compat.js` first if
+the game calls `/api/...` itself):
 
-The `_template/` game ("Click the Dot") is a complete, working example — read it first.
+```html
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="my-slug"></script>
+```
+and wherever a round / match / life ends (game over, win, death): `window.MGRounds && MGRounds.end();`
+(counts the round; the brain break is drawn over your game by the wrapper; safe to call repeatedly - calls within 2.5s are one round).
+`arcade-contract.test.ts` fails a game that skips it; `e2e/rounds.spec.ts` proves it reaches a real child's brain break.
+Engine exports (Godot/Unity) must call it from the engine's JS bridge (`reverse-zelda` is the one documented exception today).
 
-## Accounts, leaderboard, parent controls: use the shared SDK
+## Optional: accounts, scores, passes
 
-Every game connects to the Marshellis account through **one shared script** - do not write your own
-sign-in form or call `/api/auth/*` yourself. `flappy/` is the complete worked example.
+**Use the shared SDK - never write your own sign-in or call `/api/auth/*` yourself.** `flappy/` is the worked example.
 
 ```html
 <div id="mg-picker"></div><div id="mg-chip"></div><div id="mg-account"></div><div id="mg-board"></div>
 <script src="/arcade/_sdk/marshellis.js"></script>
 <script>
-  const mg = Marshellis.init({ game: "my-slug", chip: "#mg-chip", account: "#mg-account", board: "#mg-board", picker: "#mg-picker" });
-  // before each round:   if (!(await mg.gate())) return;   // parent time limits + learning breaks
-  // when the round starts: mg.startPlaying();
-  // when it ends:          mg.roundEnded(); mg.submitScore(score);   // score is ignored for guests
-  // who is playing:        mg.who()  -> { username, avatar } or null (guest)
+  const mg = Marshellis.init({ game: "my-slug", chip: "#mg-chip", account: "#mg-account", board: "#mg-board" });
+  // before each round:  if (!(await mg.gate())) return;     // parent limits + learning breaks (delegated to the wrapper)
+  // round starts:       mg.startPlaying();
+  // round ends:         mg.roundEnded(); mg.submitScore(score);   // submitScore is a no-op for guests
+  // who is playing:     mg.who()  -> { username, avatar } or null (guest)
+  // online games:       const p = await mg.getPass("my-room")      // { pass } | { noTime: true } | null (guest) - docs/game-pass.md
 </script>
 ```
+(Using `mg.roundEnded()` directly replaces `MGRounds.end()`; use one.) Guests see "Playing as Guest [Join leaderboard]": sign-up is one tap away,
+never in the way. **Guests are metered too** (default 15 min/day, then a free profile is offered), so do not build a login wall and do not treat a
+guest as "unlimited". The "Who's playing?" picker lives on the wrapper page, not in your game (a game cannot switch profiles).
 
-Games never see the parent's settings, ratios or subscription - they only ask `gate()`. Guests are never
-gated and keep their best on the device. To post scores add your slug to `SCORE_GAMES` in
-`site/src/lib/profile/scores.ts`. Design: `docs/superpowers/specs/2026-10-30-family-platform-design.md`.
-Online games: see `docs/game-pass.md` (`mg.getPass(room)` fetches the pass; server kit in `docs/room-kit/`). For a board where
-the LOWEST value wins (race times) add the slug to `LOWER_IS_BETTER` in `scores.ts` too (integer values > 0). Games from outside publishers use the sandbox bridge instead
-(`site/public/arcade/_sdk/host-bridge.js`).
+To post scores add the slug to `SCORE_GAMES` in `site/src/lib/profile/scores.ts` (a game may only touch boards named `<slug>` or
+`<slug>-<name>`). Lowest-wins boards (race times): also `LOWER_IS_BETTER`, integer values > 0. Scores are client-trusted (friendly boards).
 
+### Games that call the API themselves (legacy)
+Load `<script src="/arcade/_sdk/compat.js"></script>` **first** in `<head>`. It relays same-origin `/api/...` fetches (`/api/me`, `/api/scores`,
+`/api/auth/*`, `/api/family/pass`, ...) through the wrapper's allowlist so the game keeps working on the isolated origin. Anything not on the
+allowlist gets a 403. New games should use the SDK instead. Games from outside publishers use the sandbox bridge (`_sdk/host-bridge.js`).
 
-## Big engines (Godot, Unity, etc.)
-A web export of a game engine ships the engine itself: a Godot export is a ~39 MB `index.wasm` plus a tiny `.pck` with the
-game. That is fine for ONE game (see `reverse-zelda`; Vercel compresses it and browsers cache it). Do **not** commit the same
-engine build into several game folders. If a second engine-based game arrives: host one shared copy of the engine (a shared
-folder or storage bucket) and point each game at it, or use Git LFS. The `arcade-contract` test fails any other file over 10 MB.
-Keep the game's source in its own repo and commit only the exported build here.
+## Multiplayer
+Realtime servers verify a signed game pass: [`docs/game-pass.md`](../../../docs/game-pass.md) and the copy-paste server kit in
+[`docs/room-kit/`](../../../docs/room-kit/README.md). Peer-to-peer (WebRTC) games need `NETRALLY_ICE_SERVERS` for strict NATs.
+Test it: [`site/e2e/multiplayer/README.md`](../../e2e/multiplayer/README.md).
 
+## Big engines (Godot, Unity, ...)
+A web export ships the engine: Godot's is a ~39 MB `index.wasm`. Fine for ONE game (`reverse-zelda`); do not commit the same engine into several
+folders - host one shared copy or use Git LFS. `arcade-contract.test.ts` fails any other file over 10 MB. Keep the game's source in its own repo and
+commit only the export.
 
-## Learning loop (required for every game)
-Parents can ask for "a brain break every N rounds" and a daily learning goal. For that to work a game must say when a round
-ends. Add to `<head>` (compat first if the game fetches `/api/...` itself):
-```html
-<script src="/arcade/_sdk/marshellis.js"></script>
-<script src="/arcade/_sdk/rounds.js" data-game="my-game"></script>
-```
-and call `window.MGRounds && MGRounds.end();` wherever a round / match / life ends (game over, win, death). That is the whole
-integration: the brain break is drawn over the game by the wrapper page. Time limits do NOT depend on this (the wrapper enforces
-them for every game), but round-based breaks do. `arcade-contract.test.ts` fails a game that skips it; `e2e/rounds.spec.ts` proves it
-reaches a real child's brain break. Games with a Godot/Unity export must call it from the engine's JS bridge.
+## Checks before you open the PR
+`cd site && npm test && npm run build`. `arcade-contract.test.ts` and `arcade.test.ts` validate the manifest, the learning-loop wiring, that no game
+touches parent/billing routes, and the file-size guard. `npm run e2e` (Playwright) loads every game for real.

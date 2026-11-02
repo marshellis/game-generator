@@ -193,3 +193,31 @@ describe("legacy games through compat.js (they call fetch('/api/...') directly)"
     expect((await t.w.fetch("/api/me")).status).toBe(401); // a real, direct call
   });
 });
+
+
+describe("SDK robustness", () => {
+  it("a learning break whose answers all fail to reach the server asks again instead of crashing (gate never throws on a null status)", async () => {
+    const w = createWorld(), mum = await Parent.signup(w);
+    const kid = await mum.addChild("ava", 2017, { allowance: { freePlayMin: 0, maxPlayMin: 90 }, mix: { preset: "balanced", questionsPerBreak: 1 } });
+    const tab = openTab(w, kid.b); tabs.push(tab);
+    const mg = tab.sdk({ game: "x" });
+    await flush(40);
+    const realFetch = tab.w.fetch;
+    tab.w.fetch = async (u: string, i?: any) => (String(u).includes("learn/answer") ? null : realFetch(u, i));   // the network drops every answer
+    const g = mg.gate();
+    await flush(80);
+    tab.doc.querySelectorAll<HTMLButtonElement>(".mg-ch button")[0]!.click();
+    await flush(900);
+    tab.doc.querySelector<HTMLButtonElement>(".mg-go")!.click();
+    // Nothing was earned, so the gate correctly asks again (a fresh brain break). Before the fix it instead REJECTED with
+    // "Cannot read properties of null (reading 'ok')" and the game was left hanging.
+    const outcome = await Promise.race([g.then(() => "resolved", (e: Error) => "rejected: " + e.message), new Promise((r) => setTimeout(() => r("asking again"), 600))]);
+    expect(outcome).toBe("asking again");
+    expect(tab.doc.querySelectorAll(".mg-ch button").length).toBeGreaterThan(0);
+  });
+  it("loading the SDK twice on one page injects its stylesheet once", async () => {
+    const w = createWorld(), b = w.browser(), tab = openTab(w, b); tabs.push(tab);
+    tab.sdk({ game: "x" }); tab.sdk({ game: "x" }); tab.sdk({ game: "x" });
+    expect(tab.doc.querySelectorAll("#mg-sdk-css").length).toBe(1);
+  });
+});

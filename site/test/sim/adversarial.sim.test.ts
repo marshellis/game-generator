@@ -293,7 +293,8 @@ describe("guests (no account) get a limited daily allowance", () => {
   it("guest play time is spent, runs out, and then the guest is stopped with no way to earn more", async () => {
     process.env.GUEST_PLAY_MIN = "2";
     const w = createWorld(), b = w.browser();
-    await b.post("/api/family/play/tick", { seconds: 0 });
+    await b.get("/api/family/play/status");                  // the first visit hands out the guest cookie (like the SDK's first call)
+    await b.post("/api/family/play/tick", { seconds: 0 });   // ...then the clock is primed
     for (let i = 0; i < 4; i++) { w.advance(30_000); await b.post("/api/family/play/tick", { seconds: 30 }); }
     const st = (await b.get("/api/family/play/status")).json;
     expect(st).toMatchObject({ ok: false, reason: "limit", guest: true, remainingSec: 0 });
@@ -307,7 +308,8 @@ describe("guests (no account) get a limited daily allowance", () => {
   it("tick claims can't burn or skip a guest's time: bounded by the clock like everyone's", async () => {
     process.env.GUEST_PLAY_MIN = "10";
     const w = createWorld(), b = w.browser();
-    await b.post("/api/family/play/tick", { seconds: 0 });
+    await b.get("/api/family/play/status");                  // the first visit hands out the guest cookie (like the SDK's first call)
+    await b.post("/api/family/play/tick", { seconds: 0 });   // ...then the clock is primed
     expect((await b.post("/api/family/play/tick", { seconds: 1e9 })).json.remainingSec).toBe(600);
     let last: any; for (let i = 0; i < 50; i++) last = await b.post("/api/family/play/tick", { seconds: 30 });
     expect(last.json.remainingSec).toBe(600); // no wall-clock time passed
@@ -381,5 +383,27 @@ describe("guests in the real SDK: the wrapper page meters them and offers a prof
     const left = (await b.get("/api/family/play/status")).json.remainingSec;
     expect(left).toBeGreaterThan(10 * 60 - 4 * 60 - 25);
     expect(left).toBeLessThan(10 * 60 - 4 * 60 + 25);
+  });
+});
+
+
+describe("unauthenticated traffic cannot grow the database", () => {
+  it("cookieless guest ticks write nothing; a returning guest (with the cookie) is recorded", async () => {
+    const w = createWorld();
+    const before = Object.keys(w.kv.dump()).length;
+    for (let i = 0; i < 200; i++) await w.browser().post("/api/family/play/tick", { seconds: 30 });   // 200 different cookieless clients
+    expect(Object.keys(w.kv.dump()).length).toBe(before);
+    const b = w.browser();
+    await b.get("/api/family/play/status"); await b.post("/api/family/play/tick", { seconds: 0 }); w.advance(10_000); await b.post("/api/family/play/tick", { seconds: 10 });
+    expect(Object.keys(w.kv.dump()).filter((k) => k.startsWith("guest:")).length).toBe(1);
+  });
+  it("a profile whose household has been deleted gets a clean refusal, not a crash", async () => {
+    const w = createWorld(), mum = await Parent.signup(w), kid = await mum.addChild("ava");
+    const hh = (await mum.household()).json.household.id;
+    await w.kv.del(`hh:${hh}`);
+    for (const [m, u] of [["GET", "/api/family/play/status"], ["POST", "/api/family/play/tick"], ["GET", "/api/family/learn/next"], ["POST", "/api/family/learn/answer"], ["POST", "/api/family/learn/report"], ["GET", "/api/family/me/progress"]] as const) {
+      const r = await kid.b.request(m, u, m === "GET" ? undefined : {});
+      expect(r.status, `${m} ${u}`).toBeLessThan(500);
+    }
   });
 });
