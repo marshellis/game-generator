@@ -78,7 +78,7 @@
     var doc = root.document, game = opts.game, me = null, chosen = AVATARS[0];
     var $ = function (sel) { return sel ? doc.querySelector(sel) : null; };
     var chipEl = $(opts.chip), accEl = $(opts.account), boardEl = $(opts.board);
-    var st = doc.createElement("style"); st.textContent = CSS; doc.head.appendChild(st);
+    if (!doc.getElementById("mg-sdk-css")) { var st = doc.createElement("style"); st.id = "mg-sdk-css"; st.textContent = CSS; doc.head.appendChild(st); }   // once per page, however many inits
 
     // ---- cross-origin mode: the game runs on the isolated arcade origin (no cookies, no site access).
     // Every platform call is then relayed through the wrapper page, which only forwards an allowlist.
@@ -264,7 +264,7 @@
             card.innerHTML = gained > 0
               ? '<div class="mg-sub">Nice work!</div><div class="mg-q">+' + fmt(gained) + ' of play time</div><button class="mg-go">Play</button>'
               : '<div class="mg-sub">Not quite yet</div><div class="mg-q">No play time earned this time</div><button class="mg-go">Try again</button>';
-            card.querySelector(".mg-go").onclick = function () { ov.remove(); resolve(last); };
+            card.querySelector(".mg-go").onclick = function () { ov.remove(); (last ? Promise.resolve(last) : status()).then(resolve); };   // never resolve null: gate() reads .ok
             return;
           }
           var it = items[i];
@@ -304,8 +304,7 @@
           return false;
         }
         st = await learn(st.questionsPerBreak || 3);
-        if (st.ok && !st.breakNow) break;
-        if (st.ok) break; // a voluntary break was done; do not loop on it
+        if (st.ok) break; // earned time (or a voluntary break was done): go play; never loop on a voluntary break
       }
       return true;
     }
@@ -325,7 +324,7 @@
       var r = await safe(api("/api/family/play/tick", { method: "POST", body: JSON.stringify({ seconds: secs, round: round }) }));
       return r && r.ok ? await r.json() : null;
     }
-    async function stopPlaying() { if (hostApi()) return; if (timer) { root.clearInterval(timer); timer = null; if (me) await tickNow(false); } }
+    async function stopPlaying() { if (hostApi()) return; if (timer) { root.clearInterval(timer); timer = null; await tickNow(false); } }   // guests are metered too
     // call when a round/game-over happens: stops the clock and counts the round toward "break every N rounds"
     async function roundEnded() {
       var h = hostApi(); if (h) return h.roundEnded();

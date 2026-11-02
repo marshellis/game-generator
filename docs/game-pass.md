@@ -2,7 +2,7 @@
 
 The site issues a signed pass to a signed-in child: `POST /api/family/pass {"room":"galaga"}`
 (browser, with cookies) -> `{ "pass": "<token>", "exp": <unix seconds> }`. It returns **403** when the
-parent's play-time limit is used up. Guests get no pass; give them a `Guest-1234` name server-side.
+parent's play-time limit is used up. Guests (no account) get no pass: servers give them an anonymous "Player N" name unless `GAME_PASS_REQUIRED=1`.
 
 The client gets a pass with the SDK, `await mg.getPass(room)`, which works same-origin and from the isolated
 arcade origin (it relays `POST /api/family/pass`). It resolves `{ pass, exp }`, `{ noTime: true }` when the API says
@@ -24,8 +24,9 @@ arcade origin (it relays `POST /api/family/pass`). It resolves `{ pass, exp }`, 
   success the expiry becomes the new pass's `exp` and the server replies `{"type":"renewed","exp":<unix seconds>}`.
 - **Time up:** when the expiry passes, the server sends `{"type":"timeup"}` and closes with code **4003**. The client
   must NOT auto-reconnect after 4003 without a fresh pass (and if `getPass` says `noTime`, show the time-up screen).
-- **Guests** (no pass, or no `GAME_PASS_SECRET` configured) still connect, unless the server sets
-  `GAME_PASS_REQUIRED=1`. Give them a `Guest-1234` name server-side.
+- **Guests** (no pass, an invalid/forged pass, or no `GAME_PASS_SECRET` configured) still connect as an anonymous "Player N", unless
+  the server sets `GAME_PASS_REQUIRED=1`. Server-side time limits therefore only bind players who present a valid pass; the wrapper
+  page still meters whatever game it is showing. Tested in `site/e2e/multiplayer/` (a forged pass can never claim someone's nickname).
 
 ## Server code
 Copy [`docs/room-kit/pass.js`](room-kit/pass.js) (CommonJS, no dependencies, tested): `verifyPass`, `identify`

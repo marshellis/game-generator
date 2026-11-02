@@ -1,8 +1,26 @@
-# Marshellis Game Generator
+# Marshellis Games
 
-A small generator for kids' logic puzzles, published to https://games.marshellis.com.
+The kids' games site, https://games.marshellis.com: generated, grade-calibrated puzzle games (logic grids, math worksheets, mazes, sudoku, word
+search, KenKen), an arcade of kid-made games including multiplayer, and a **family platform** on top - parent accounts, per-child play-time
+limits, a learning mix ("earn play time with brain breaks and puzzles"), guest limits, subscriptions and an app store.
 
-The first game is **logic grid puzzles** ("zebra" / Dell-puzzle-book style): several
+**Start with [`docs/README.md`](docs/README.md)** (index) -> [`docs/architecture.md`](docs/architecture.md) (how it fits together) ->
+[`docs/runbook.md`](docs/runbook.md) (operating it). Contributing a game: [`docs/adding-a-game.md`](docs/adding-a-game.md) (puzzles) or
+[`site/public/arcade/README.md`](site/public/arcade/README.md) (arcade). AI agents: [`CLAUDE.md`](CLAUDE.md).
+
+## Quick start
+```bash
+cd generator && npm ci && npm test            # puzzle generators (Vitest)
+cd site && npm ci && npm test                 # unit + simulation tests
+cd site && npm run dev                        # http://localhost:4321  (needs Node >= 22.23.4)
+cd site && npm run build                      # the same production build CI deploys
+cd site && npm run e2e                        # real-browser end-to-end (npx playwright install chromium once)
+cd site && npm run e2e:mp:setup && npm run e2e:mp   # multiplayer against the real game servers
+```
+Local dev without Redis: `E2E_MEMORY=1 SESSION_SECRET=<32+ chars> npm run dev` uses in-memory storage (never honoured on Vercel).
+
+## The original game: logic grid puzzles
+The first game generated here was **logic grid puzzles** ("zebra" / Dell-puzzle-book style): several
 categories of things plus a list of clues; the solver marks each grid cell **X** (can't
 match) or **O** (must match) and deduces the one consistent solution. Every generated
 puzzle is guaranteed to have **exactly one solution, reachable by pure deduction (no
@@ -80,7 +98,4 @@ Vercel auto-deploys `main` to games.marshellis.com.
 
 ## Test
 
-```bash
-cd generator && npm test
-cd site && npm test
-```
+See [`docs/testing.md`](docs/testing.md) for all six layers (unit, simulation, contract ratchets, real-browser e2e, multiplayer e2e, live smoke).

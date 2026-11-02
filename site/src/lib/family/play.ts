@@ -1,6 +1,6 @@
 // Learning + play-time endpoints for the signed-in child.
 import type { FamilyDeps, FamilyResult } from "./accounts";
-import { dataKey, householdKey, profileKey } from "./accounts";
+import { dataKey, householdKey, profileKey, GUEST_COOKIE, parentFrom } from "./accounts";
 import type { Household, ProfileRecord } from "./types";
 import { verifySession } from "../profile/session";
 import { featuresFor } from "./plans";
@@ -10,10 +10,8 @@ import { record, selectNext, simpleStrategy, type Mastery } from "./mastery";
 import { askable, checkAnswer, makeItem, mulberry32 } from "./questions";
 import * as W from "./wallet";
 import { register, setProgressRoute, type Req } from "./router";
-import { GUEST_COOKIE } from "./accounts";
 import { signToken, verifyToken } from "./token";
 import { randomBytes } from "node:crypto";
-import { parentFrom } from "./accounts";
 
 const err = (status: number, error: string): FamilyResult => ({ status, json: { error } });
 const masteryKey = (u: string) => dataKey(u, "mastery");
@@ -23,12 +21,13 @@ const DAY_TTL = 60 * 24 * 3600;
 interface Ctx { username: string; profile: ProfileRecord; hh: Household; day: string }
 
 /** Resolve the signed-in child to a managed profile. null child => 401; unmanaged (legacy) => {unmanaged:true}. */
-async function ctx(r: Req, d: FamilyDeps): Promise<Ctx | "unmanaged" | null> {
+async function ctx(r: Req, d: FamilyDeps): Promise<Ctx | "unmanaged" | "orphaned" | null> {
   const s = verifySession(r.childToken, d.secret, Math.floor(d.now / 1000));
   if (!s) return null;
   const profile = await d.kv.get<ProfileRecord>(profileKey(s.username));
   if (!profile) return "unmanaged";
-  const hh = (await d.kv.get<Household>(householdKey(profile.householdId)))!;
+  const hh = await d.kv.get<Household>(householdKey(profile.householdId));
+  if (!hh) return "orphaned"; // a profile whose household is gone (partial delete): refuse rather than guess its rules
   return { username: s.username, profile, hh, day: W.dayKey(d.now, hh.timezone) };
 }
 /**
@@ -36,8 +35,7 @@ async function ctx(r: Req, d: FamilyDeps): Promise<Ctx | "unmanaged" | null> {
  * in flight (a game that fires answers/ticks in parallel) both read the same day and the last writer wins:
  * earned time silently vanishes. A short-lived `nx` key is the lock; it expires on its own if a request dies.
  */
-async function locked<T>(who: string, d: FamilyDeps, fn: () => Promise<T>): Promise<T> {
-  const key = who.startsWith("guest-") ? `lock:${who}` : dataKey(who, "lock");
+async function locked<T>(key: string, d: FamilyDeps, fn: () => Promise<T>): Promise<T> {
   for (let attempt = 0; attempt < 100; attempt++) {
     if (await d.kv.set(key, 1, { nx: true, ttlSec: 10 })) {
       try { return await fn(); } finally { await d.kv.del(key); }
@@ -65,14 +63,16 @@ async function guestPlay(r: Req, d: FamilyDeps, tick: boolean): Promise<FamilyRe
   const who = guestIdentity(r, d), key = guestDayKey(who.id, d.now), limit = W.guestLimitSec(process.env.GUEST_PLAY_MIN);
   const run = async () => {
     let day = (await d.kv.get<W.Day>(key)) ?? W.emptyDay();
-    if (tick) {
+    // Only a request that already carries a valid guest cookie is recorded. A cookieless client (a bot, curl) is handed a cookie
+    // and an empty day but writes nothing, so unauthenticated traffic cannot create database keys.
+    if (tick && !who.cookies) {
       day = W.tick(day, Number(r.body.seconds) || 0, d.now);
       if (r.body.round === true) day = { ...day, rounds: day.rounds + 1 };
       await d.kv.set(key, day, { ttlSec: 3 * 24 * 3600 });
     }
     return { status: 200, json: W.guestStatus(day, limit), cookies: who.cookies } as FamilyResult;
   };
-  return tick ? locked(`guest-${who.id}`, d, run) : run();
+  return tick ? locked(`lock:guest:${who.id}`, d, run) : run();
 }
 
 const loadDay = async (c: Ctx, d: FamilyDeps) => (await d.kv.get<W.Day>(dayStore(c.username, c.day))) ?? W.emptyDay();
@@ -81,6 +81,7 @@ const loadMastery = async (u: string, d: FamilyDeps) => (await d.kv.get<Mastery>
 
 export async function playStatus(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
+  if (c === "orphaned") return err(409, "household-missing");
   if (!c) return guestPlay(r, d, false);
   if (c === "unmanaged") return { status: 200, json: { ok: true, unmanaged: true } };
   return { status: 200, json: W.status(c.profile.settings, await loadDay(c, d)) };
@@ -88,9 +89,10 @@ export async function playStatus(r: Req, d: FamilyDeps): Promise<FamilyResult> {
 
 export async function playTick(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
+  if (c === "orphaned") return err(409, "household-missing");
   if (!c) return guestPlay(r, d, true);
   if (c === "unmanaged") return { status: 200, json: { ok: true, unmanaged: true } };
-  return locked(c.username, d, async () => {
+  return locked(dataKey(c.username, "lock"), d, async () => {
     let day = W.tick(await loadDay(c, d), Number(r.body.seconds) || 0, d.now);
     if (r.body.round === true) day = { ...day, rounds: day.rounds + 1 };
     await saveDay(c, day, d);
@@ -100,6 +102,7 @@ export async function playTick(r: Req, d: FamilyDeps): Promise<FamilyResult> {
 
 export async function learnNext(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
+  if (c === "orphaned") return err(409, "household-missing");
   if (!c) return err(401, "unauthenticated");
   if (c === "unmanaged") return err(409, "not-in-household");
   const day = await loadDay(c, d);
@@ -120,13 +123,14 @@ export async function learnNext(r: Req, d: FamilyDeps): Promise<FamilyResult> {
 
 export async function learnAnswer(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
+  if (c === "orphaned") return err(409, "household-missing");
   if (!c) return err(401, "unauthenticated");
   if (c === "unmanaged") return err(409, "not-in-household");
   const id = String(r.body.id ?? ""), token = String(r.body.token ?? ""), choice = String(r.body.choice ?? "");
   const skill = id.split("~")[0];
   if (!SKILL_BY_ID.has(skill) || !token) return err(400, "invalid");
   if (!(await d.kv.set(dataKey(c.username, `ans:${id}`), 1, { nx: true, ttlSec: 3600 }))) return err(409, "already-answered");
-  return locked(c.username, d, async () => {
+  return locked(dataKey(c.username, "lock"), d, async () => {
     const correct = checkAnswer(d.secret, id, token, choice);
     const day = await loadDay(c, d);
     const next: W.Day = {
@@ -142,13 +146,14 @@ export async function learnAnswer(r: Req, d: FamilyDeps): Promise<FamilyResult> 
 /** A finished puzzle from one of the educational games: counts toward its skill and earns time. */
 export async function learnReport(r: Req, d: FamilyDeps): Promise<FamilyResult> {
   const c = await ctx(r, d);
+  if (c === "orphaned") return err(409, "household-missing");
   if (!c) return err(401, "unauthenticated");
   if (c === "unmanaged") return { status: 200, json: { ok: true, unmanaged: true } };
   const skill = SKILL_FOR_GAME.get(String(r.body.game ?? ""));
   if (!skill) return err(400, "unknown-game");
   const puzzleId = String(r.body.puzzleId ?? "");
   if (!/^[A-Za-z0-9._-]{1,100}$/.test(puzzleId)) return err(400, "invalid-puzzle");
-  return locked(c.username, d, async () => {
+  return locked(dataKey(c.username, "lock"), d, async () => {
     if (((await loadDay(c, d)).puzzles ?? 0) >= W.PUZZLE_DAILY_CAP) return { status: 200, json: { ok: true, capped: true } };
     if (!puzzleId || !(await d.kv.set(dataKey(c.username, `done:${c.day}:${r.body.game}:${puzzleId}`), 1, { nx: true, ttlSec: DAY_TTL }))) {
       return { status: 200, json: { ok: true, duplicate: true } }; // same puzzle twice in a day earns once
@@ -187,6 +192,7 @@ register({
   "POST learn/report": learnReport,
   "GET me/progress": async (r, d) => {
     const c = await ctx(r, d);
+  if (c === "orphaned") return err(409, "household-missing");
     return !c || c === "unmanaged" ? err(401, "unauthenticated") : progressFor(c.username, d);
   },
 });
