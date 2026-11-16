@@ -295,10 +295,17 @@ function arenaSDF(x,y,z,n){
    ==================================================================== */
 const canvas=document.createElement('canvas'); document.body.prepend(canvas);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'});
-let PR=Math.min(window.devicePixelRatio||1,2);
+/* LITE mode: a software renderer (SwiftShader / llvmpipe: no GPU, e.g. automated browsers and some very old machines) cannot afford the full look.
+   It keeps the same scene but drops the expensive parts: shadow map, 4x MSAA, bloom, god rays, most of the terrain/tree detail, and renders at a lower resolution.
+   ?lite=1 forces it (handy for testing); ?lite=0 forces the full look. */
+const LITE=(()=>{
+  const q=/[?&]lite=([01])/.exec(location.search);if(q)return q[1]==='1';
+  try{const gl=renderer.getContext(),e=gl.getExtension('WEBGL_debug_renderer_info'),r=e?String(gl.getParameter(e.UNMASKED_RENDERER_WEBGL)):'';return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(r);}catch(x){return false;}
+})();
+let PR=LITE?.6:Math.min(window.devicePixelRatio||1,2);
 renderer.setPixelRatio(PR);
 renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=true;
+renderer.shadowMap.enabled=!LITE;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
 const scene=new THREE.Scene();
@@ -306,13 +313,13 @@ scene.fog=new THREE.FogExp2(0x070a18,0.0032);
 const camera=new THREE.PerspectiveCamera(82,innerWidth/innerHeight,0.3,1400);
 camera.position.set(0,40,-90);
 
-const rt=new THREE.WebGLRenderTarget(innerWidth*PR,innerHeight*PR,{type:THREE.HalfFloatType,format:THREE.RGBAFormat,samples:4});
+const rt=new THREE.WebGLRenderTarget(innerWidth*PR,innerHeight*PR,{type:THREE.HalfFloatType,format:THREE.RGBAFormat,samples:LITE?0:4});
 const composer=new THREE.EffectComposer(renderer,rt);
 composer.setPixelRatio(PR);
 composer.setSize(innerWidth,innerHeight);
 composer.addPass(new THREE.RenderPass(scene,camera));
 const bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.22,0.6,1.1);
-composer.addPass(bloom);
+composer.addPass(bloom);if(LITE)bloom.enabled=false;
 const FinalShader={
   uniforms:{tDiffuse:{value:null},uTime:{value:0},uAberr:{value:0.012},uVig:{value:0.32},uExp:{value:.76},uBlur:{value:0},uSunUV:{value:new THREE.Vector2(.5,.5)},uSunI:{value:0},uFlash:{value:0},uFlashCol:{value:new THREE.Color(1,1,1)}},
   vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
@@ -479,7 +486,7 @@ scene.fog=new THREE.FogExp2(new THREE.Color(.80,.77,.80).getHex(),0.00024);
 /* ---------------- lights ---------------- */
 const hemiL=new THREE.HemisphereLight(0xa6c4ff,0x4f6b2e,0.55);scene.add(hemiL);
 const sun=new THREE.DirectionalLight(0xffd2a0,1.85);
-sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);
+sun.castShadow=true;sun.shadow.mapSize.set(LITE?1024:4096,LITE?1024:4096);
 {const sc=sun.shadow.camera;sc.left=-115;sc.right=115;sc.top=115;sc.bottom=-115;sc.near=20;sc.far=700;}
 sun.shadow.bias=-0.0003;sun.shadow.normalBias=0.4;
 scene.add(sun,sun.target);
@@ -802,7 +809,7 @@ function terrainH(x,z){
   return roll+mtn-0.5-lk(-560,-380,150,18)-lk(520,560,120,15)-lk(-380,660,100,13);
 }
 {
-  const TSZ=5000,TSEG=320;
+  const TSZ=5000,TSEG=LITE?110:320;
   const tg=new THREE.PlaneGeometry(TSZ,TSZ,TSEG,TSEG); tg.rotateX(-Math.PI/2);
   const tp=tg.attributes.position,tcol=new Float32Array(tp.count*3);
   for(let i=0;i<tp.count;i++){
@@ -849,7 +856,7 @@ function terrainH(x,z){
     {g:new THREE.ConeGeometry(1.9,5,7).translate(0,14,0),col:[.08,.28,.10]}]);
   const treeMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.95,flatShading:true,envMapIntensity:.3});
   treeMat.onBeforeCompile=sh=>{sh.uniforms.uT=timeU;sh.uniforms.uSnowT=SCN.snowT;sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vH2;uniform float uSnowT;').replace('#include <color_fragment>','#include <color_fragment>\ndiffuseColor.rgb=mix(diffuseColor.rgb,vec3(.92,.96,1.),uSnowT*smoothstep(.05,.9,vH2));');sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nuniform float uT;varying float vH2;').replace('#include <begin_vertex>','#include <begin_vertex>\nvH2=position.y*.06;float sw_=position.y*position.y*.0035;transformed.x+=sin(uT*1.4+instanceMatrix[3].x*.07+instanceMatrix[3].z*.05)*sw_;transformed.z+=cos(uT*1.1+instanceMatrix[3].z*.06)*sw_*.7;');};
-  const TN=3200,trees=new THREE.InstancedMesh(treeGeo,treeMat,TN);
+  const TN=LITE?900:3200,trees=new THREE.InstancedMesh(treeGeo,treeMat,TN);
   const dm=new THREE.Object3D(),col=new THREE.Color();let k=0;
   const place=(range,want,minH,maxH)=>{
     let done=0;
@@ -883,7 +890,7 @@ function terrainH(x,z){
 }
 // wildflower meadows
 {
-  const FN=2000,fl=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.5,0),new THREE.MeshStandardMaterial({roughness:.6,emissive:0x1a1a1a,emissiveIntensity:.3,flatShading:true}),FN);
+  const FN=LITE?300:2000,fl=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.5,0),new THREE.MeshStandardMaterial({roughness:.6,emissive:0x1a1a1a,emissiveIntensity:.3,flatShading:true}),FN);
   const pal=[0xffffff,0xffe14a,0xff7fb0,0xb58cff,0xff6a3a],o=new THREE.Object3D(),cc=new THREE.Color();let k=0;
   for(let t=0;t<14000&&k<FN;t++){
     const x=rand(-HX-340,HX+340),z=rand(-HZ-380,HZ+380);
@@ -1386,7 +1393,7 @@ function fxUpdate(rdt,t){
   }else{blurCur=lerp(blurCur,0,.1);camRoll=lerp(camRoll,0,.1);}
   finalPass.uniforms.uBlur.value=blurCur;
   {const sp=_d.copy(camera.position).addScaledVector(SUN_DIR,2000).project(camera),fw=_c.set(0,0,-1).applyQuaternion(camera.quaternion);
-   finalPass.uniforms.uSunUV.value.set(sp.x*.5+.5,sp.y*.5+.5);finalPass.uniforms.uSunI.value=(sp.z<1?1:0)*clamp(fw.dot(SUN_DIR)*1.8,0,1);}
+   finalPass.uniforms.uSunUV.value.set(sp.x*.5+.5,sp.y*.5+.5);finalPass.uniforms.uSunI.value=LITE?0:(sp.z<1?1:0)*clamp(fw.dot(SUN_DIR)*1.8,0,1);}
   // map weather
   if(MAPID==='frost'&&state!=='menu'&&state!=='garage'){for(let q=0;q<3;q++)dustPS.emit(camera.position.x+rand(-45,45),camera.position.y+rand(6,32),camera.position.z+rand(-45,45),rand(-2,2),rand(-6,-3.5),rand(-2,2),1,1,1,.3,rand(5,8),0,.05);}
   if(MAPID==='neon'&&state!=='menu'&&state!=='garage'&&Math.random()<.6){const neonC=Math.random()<.5?[.2,.9,1.2]:[1.2,.3,.9];glowPS.emit(camera.position.x+rand(-40,40),rand(1,30),camera.position.z+rand(-40,40),rand(-.5,.5),rand(.6,2),rand(-.5,.5),neonC[0],neonC[1],neonC[2],.3,rand(4,7),0,.1);}
@@ -3087,7 +3094,7 @@ function frame(now){
   let rdt=Math.min((now-last)/1000,.1);last=now;tAbs+=rdt;
   // auto quality
   fpsT+=rdt;fpsN++;
-  if(fpsT>2){const fps=fpsN/fpsT;fpsT=0;fpsN=0;if(fps<40&&PR>1){PR=Math.max(1,PR-.25);resize();}}
+  if(fpsT>2){const fps=fpsN/fpsT;fpsT=0;fpsN=0;{const PRMIN=LITE?.5:.75;if(fps<40&&PR>PRMIN){PR=Math.max(PRMIN,PR-.25);resize();}}}
   if(state==='paused'){composer.render();return;}
   timeU.value=tAbs;skyT.value=tAbs;finalPass.uniforms.uTime.value=tAbs;
   const guestLive=mp.live&&mp.role==='guest';
@@ -3161,7 +3168,7 @@ buildTeams();resetKickoff();drawScoreboard();
 // give pads/materials time to compile then reveal
 requestAnimationFrame(()=>{composer.render();setTimeout(()=>{$('loading').style.opacity=0;setTimeout(()=>$('loading').remove(),900);},300);});
 requestAnimationFrame(frame);
-window.__game={mp,applyMap,THEMES,pads,startQueue,buildCar,CAR_IDS,CAR_DEFS,openGarage,garageStep,equipCar,cars,ball,scene,camera,renderer,get state(){return state;},set state(v){state=v;},startMatch,score,arenaSDF};
+window.__game={lite:LITE,mp,applyMap,THEMES,pads,startQueue,buildCar,CAR_IDS,CAR_DEFS,openGarage,garageStep,equipCar,cars,ball,scene,camera,renderer,get state(){return state;},set state(v){state=v;},startMatch,score,arenaSDF};
 })();
 </script>
 </body>
