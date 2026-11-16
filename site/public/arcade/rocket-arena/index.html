@@ -2614,8 +2614,8 @@ refreshEq();
    MULTIPLAYER  (own server: matchmaking + map vote + relay)
    host = the player who waited (runs the physics) · guest = the joiner (sends inputs, renders snapshots)
    ==================================================================== */
-const mp={on:false,role:null,live:false,waiting:false,voting:false,ws:null,opp:null,map:null,snaps:[],seq:0,evq:[],lastSnap:0,lastIn:0,lastInKey:'',delay:60,intentional:false,voteEnd:0,off:null,jit:4,rtt:0,pred:false,recQ:[],hist:[],vo:{c:new V3(),b:new V3(),on:false},pacc:0,tPrev:0,edgeSent:false,ack:0,ackAt:0,pingT:0,myVote:null};
-const NET_VER=2;   // bump when the snapshot/input format changes: the server only pairs players on the same version
+const mp={on:false,role:null,live:false,waiting:false,voting:false,ws:null,opp:null,map:null,snaps:[],seq:0,evq:[],lastSnap:0,lastIn:0,lastInKey:'',delay:60,intentional:false,voteEnd:0,off:null,jit:4,rtt:0,pred:false,recQ:[],hist:[],vo:{c:new V3(),b:new V3(),on:false},legacy:false,pacc:0,tPrev:0,edgeSent:false,ack:0,ackAt:0,pingT:0,myVote:null};
+const NET_VER=2;   // informational: newer pages add fields (host clock, input ack) and fall back gracefully when the other side is older
 const ST={countdown:1,play:2,goal:3,over:4},STN=[null,'countdown','play','goal','over'];
 const r2=x=>Math.round(x*100)/100,r3=x=>Math.round(x*1000)/1000;
 function readName(){const v=($('pname').value||'PLAYER').toUpperCase().replace(/[^A-Z0-9 _-]/g,'').trim().slice(0,12)||'PLAYER';playerName=v;try{localStorage.setItem('ra_name',v);}catch(e){}return v;}
@@ -2748,7 +2748,7 @@ function startMPMatch(){
   for(const x of['vote','waitbar','mpmsg','over','pause'])$(x).classList.remove('on');
   showScreen('');hud.classList.add('on');updateScoreHUD();resetKickoff();
   mp.live=true;mp.waiting=false;mp.voting=false;mp.snaps.length=0;mp.evq.length=0;mp.seq=0;
-  mp.off=null;mp.jit=4;mp.rtt=0;mp.pred=false;mp.recQ.length=0;mp.hist.length=0;mp.pacc=0;mp.edgeSent=false;mp.ack=0;mp.delay=60;$('ping').style.display=mp.role==='guest'?'block':'none';
+  mp.off=null;mp.jit=4;mp.rtt=0;mp.legacy=false;mp.pred=false;mp.recQ.length=0;mp.hist.length=0;mp.pacc=0;mp.edgeSent=false;mp.ack=0;mp.delay=60;$('ping').style.display=mp.role==='guest'?'block':'none';
   if(mp.role==='host')beginCountdown();else{state='countdown';countdown=3.99;lastCount=4;showMsg('','#fff');}
   camSnap=true;
 }
@@ -2794,10 +2794,14 @@ function mpOnSnap(s){
   }
   if(!mp.pred)ball.since=s.b[10];
   // timeline: the host stamps every snapshot with its own clock, so network jitter does not wobble the interpolation
-  const tr=performance.now(),ht=typeof s.ht==='number'?s.ht:tr,o=tr-ht;
-  if(mp.off===null||o<mp.off)mp.off=o;else mp.off+=(o-mp.off)*.01;
-  mp.jit=mp.jit*.96+Math.abs(o-mp.off)*.04;
-  mp.delay=clamp(30+2.4*mp.jit,42,130);
+  const tr=performance.now(),hasHt=typeof s.ht==='number',ht=hasHt?s.ht:tr,o=tr-ht;
+  if(!hasHt){mp.legacy=true;mp.delay=90;mp.off=0;}   // an OLDER page is hosting: no host clock, no input ack -> plain delayed interpolation, no prediction (old and new pages can still play each other)
+  else{
+    mp.legacy=false;
+    if(mp.off===null||o<mp.off)mp.off=o;else mp.off+=(o-mp.off)*.01;
+    mp.jit=mp.jit*.96+Math.abs(o-mp.off)*.04;
+    mp.delay=clamp(30+2.4*mp.jit,42,130);
+  }
   mp.snaps.push({t:ht,d:s});if(mp.snaps.length>40)mp.snaps.shift();
   if(s.ak){mp.recQ.push({s});if(mp.recQ.length>8)mp.recQ.shift();}
 }
@@ -2872,7 +2876,7 @@ function guestFrame(rdt,now){
   sendInput(now);
   const mi=cars.indexOf(me);
   // ---- predict my car + the ball with the real physics
-  const want=playing&&me.demo<=0&&mp.snaps.length>1;
+  const want=playing&&me.demo<=0&&mp.snaps.length>1&&!mp.legacy;
   if(want&&!mp.pred){mp.pred=true;mp.hist.length=0;mp.pacc=0;}
   else if(!want&&mp.pred){mp.pred=false;mp.hist.length=0;}
   if(mp.pred){
