@@ -386,10 +386,6 @@
     metal: stdMat({ color: 0x8d949c, metalness: 0.6, roughness: 0.45 }),
     steel: stdMat({ color: 0xd6dade, metalness: 0.95, roughness: 0.2 }),
     glass: basicMat({ color: 0x223040 }),
-    stairConcrete: stdMat({ color: 0x8b8782, roughness: 0.95 }),
-    stairWall: stdMat({ color: 0xb9b4a8, roughness: 0.9, side: THREE.DoubleSide }),
-    stairNose: stdMat({ color: 0xd8b020, roughness: 0.6 }),
-    stairPit: basicMat({ color: 0x050505 }),
     cloth: stdMat({ color: 0xffffff }),
     cart: stdMat({ color: 0xb0b8c0, metalness: 0.8, roughness: 0.3 }),
     pot: stdMat({ color: 0xb4572e }),
@@ -599,8 +595,12 @@
     if (has("sconceOff")) { w.sconces.forEach((sc) => { sc.shade.material = M.shade; }); const sc = w.sconces[1 + Math.floor(Math.random() * 3)]; sc.shade.material = M.shadeOff; sc.glow.visible = false; }
 
     // stairwell doors at both ends
-    makeStairDoor(g, -L / 2, false, has("backwards"), has("stairsRed"), has("bricked"));
-    makeStairDoor(g, L / 2, true, false);
+    const stub = {
+      carpet: ownMat(stdMat({ map: has("noCarpet") ? concreteTex(3) : has("greenCarpet") ? carpetTex("#1f6b34", "#c9b04a", 3) : carpetTex("#7a1c24", "#c9a04a", 3), roughness: 0.95 })),
+      wall: ownMat(stdMat({ map: wallTex(3, has("blueWallpaper") ? "blue" : "normal", has("horizontalStripes")), side: THREE.DoubleSide })),
+    };
+    makeStairDoor(g, -L / 2, false, has("backwards"), has("stairsRed"), has("bricked"), stub);
+    makeStairDoor(g, L / 2, true, false, false, false, stub);
 
     // floor sign + guest notice near the start
     const fsign = plane(0.9, 0.5, ownMat(stdMat({ map: textTex(256, 144, "#2a1a08", "#ffd86b", ["FLOOR", String(has("floorSign") ? (floor >= 4 ? floor - 3 : floor + 3) : floor)], ["bold 40px Georgia", "bold 70px Georgia"]) })));
@@ -822,33 +822,19 @@
     g.add(grp);
     return { group: grp, art, z, side, kind };
   }
-  function makeStairDoor(g, z, behind, backwards, red, bricked) {
+  function makeStairDoor(g, z, behind, backwards, red, bricked, stub) {
     const grp = new THREE.Group(); grp.position.set(0, 0, z); if (behind) grp.rotation.y = Math.PI;
     // door frame around the opening
     for (const sx of [-1, 1]) { const j = box(0.08, DOOR_H + 0.04, 0.14, M.frame); j.position.set(sx * (DOOR_W / 2 + 0.04), DOOR_H / 2, 0); grp.add(j); }
     const head = box(DOOR_W + 0.16, 0.08, 0.14, M.frame); head.position.set(0, DOOR_H + 0.04, 0); grp.add(head);
-    // the door itself is propped wide open, swung back into the stairwell
-    const hinge = new THREE.Group(); hinge.position.set(-DOOR_W / 2, 0, -0.03); hinge.rotation.y = 1.75; grp.add(hinge);
-    const slab = box(1.15, 2.25, 0.05, M.metal); slab.position.set(0.575, 1.13, 0); hinge.add(slab);
-    const win = plane(0.3, 0.5, M.glass); win.position.set(0.82, 1.6, 0.03); hinge.add(win);
-    const bar = box(0.8, 0.06, 0.08, M.steel); bar.position.set(0.575, 1.0, 0.06); hinge.add(bar);
-    const stop = box(0.12, 0.05, 0.12, M.steel); stop.position.set(1.0, 0.03, 0.05); hinge.add(stop);   // little door stop
-    // stairwell: concrete landing, stairs going down, handrail, dim light
-    const SW = 2.6, SD = 3.2;
-    const land = plane(SW, 1.35, M.stairConcrete); land.rotation.x = -Math.PI / 2; land.position.set(0, 0.001, -0.675); grp.add(land);
-    const strip = plane(1.35, SD - 1.35, M.stairConcrete); strip.rotation.x = -Math.PI / 2; strip.position.set(-0.625, 0.001, -1.35 - (SD - 1.35) / 2); grp.add(strip);
-    const sCeil = plane(SW, SD, M.stairWall); sCeil.rotation.x = Math.PI / 2; sCeil.position.set(0, H, -SD / 2); grp.add(sCeil);
-    for (const sx of [-1, 1]) { const wl = plane(SD, H + 3, M.stairWall); wl.rotation.y = -sx * Math.PI / 2; wl.position.set(sx * SW / 2, H / 2 - 1.5, -SD / 2); grp.add(wl); }
-    const back = plane(SW, H + 3, M.stairWall); back.position.set(0, H / 2 - 1.5, -SD); grp.add(back);
-    for (let i = 0; i < 6; i++) {   // steps going down on the right
-      const top = -(i + 1) * 0.18, hgt = 3 + top;
-      const st = box(1.25, hgt, 0.3, M.stairConcrete); st.position.set(0.675, top - hgt / 2, -1.5 - i * 0.3); grp.add(st);
-      const nose = box(1.25, 0.02, 0.05, M.stairNose); nose.position.set(0.675, top + 0.011, -1.37 - i * 0.3); grp.add(nose);
-    }
-    const ledge = box(0.06, 0.9, SD - 1.35, M.stairWall); ledge.position.set(0.03, -0.45, -1.35 - (SD - 1.35) / 2); grp.add(ledge);
-    const rail = box(0.04, 0.04, 2.0, M.steel); rail.position.set(1.22, 0.45, -2.25); rail.rotation.x = -0.54; grp.add(rail);
-    const lamp = box(0.5, 0.04, 0.2, basicMat({ color: 0xe8f0ff })); lamp.position.set(0, H - 0.03, -1.2); grp.add(lamp);
-    const sl = new THREE.PointLight(0xcfe0ff, 0.5, 5, 1.6); sl.position.set(0, H - 0.4, -1.2); grp.add(sl);
+    // through the open doorway: a short bit of the same hallway (so walking through looks seamless)
+    const SD = 3.0, SW = DOOR_W + 0.4;
+    const sc = plane(SW, SD, stub.carpet); sc.rotation.x = -Math.PI / 2; sc.position.set(0, 0.001, -SD / 2); grp.add(sc);
+    const sCeil = plane(SW, SD, M.ceiling); sCeil.rotation.x = Math.PI / 2; sCeil.position.set(0, H, -SD / 2); grp.add(sCeil);
+    for (const sx of [-1, 1]) { const wl = plane(SD, H, stub.wall); wl.rotation.y = -sx * Math.PI / 2; wl.position.set(sx * SW / 2, H / 2, -SD / 2); grp.add(wl); }
+    const sb = plane(SW, H, stub.wall); sb.position.set(0, H / 2, -SD); grp.add(sb);
+    const sgl = glowSprite(0xffe2b0, 1.6, 0.4); sgl.position.set(0, H - 0.25, -1.5); grp.add(sgl);
+    const spl = new THREE.PointLight(new THREE.Color(0xffe2b8).convertSRGBToLinear(), 0.6, 5, 1.4); spl.position.set(0, H - 0.4, -1.5); grp.add(spl);
     const mat = basicMat({ map: behind ? backTex : red ? stairsTexRed : (backwards ? stairsTexBackwards : stairsTex) });
     if (bricked) { const br = plane(DOOR_W + 0.02, DOOR_H + 0.02, basicMat({ map: brickTex })); br.material.color = new THREE.Color(0.55, 0.5, 0.48); br.position.set(0, DOOR_H / 2, 0.08); grp.add(br); }
     const sign = plane(1.15, 0.42, mat); sign.position.set(0, 2.68, 0.02); grp.add(sign);
@@ -1038,7 +1024,7 @@
     nx = THREE.MathUtils.clamp(nx, -W / 2 + RADIUS, W / 2 - RADIUS);
     const inDoor = Math.abs(nx) < DOOR_W / 2 - 0.12;
     const farOpen = inDoor && world.anomaly !== "bricked", backOpen = inDoor && (player.armedBack || player.z > L / 2 - RADIUS);
-    nz = THREE.MathUtils.clamp(nz, farOpen ? -L / 2 - 1.2 : -L / 2 + RADIUS, backOpen ? L / 2 + 1.2 : L / 2 - RADIUS);
+    nz = THREE.MathUtils.clamp(nz, farOpen ? -L / 2 - 0.5 : -L / 2 + RADIUS, backOpen ? L / 2 + 0.5 : L / 2 - RADIUS);
     if (Math.abs(nz) > L / 2 - RADIUS) nx = THREE.MathUtils.clamp(nx, -DOOR_W / 2 + 0.12, DOOR_W / 2 - 0.12);
     for (const c of world.colliders) {
       const dx = nx - c.x, dz = nz - c.z, ox = c.hx + RADIUS - Math.abs(dx), oz = c.hz + RADIUS - Math.abs(dz);
@@ -1122,7 +1108,7 @@
       toast("BACK TO FLOOR " + START_FLOOR, anomaly ? "You missed it: " + ANOMALIES[anomaly] + "." : "Nothing was weird on that floor.", true, 3500);
     }
     // you come out of the stairwell door at the start of the new hallway, still walking
-    player.z = world.L / 2 + 0.5; player.x = THREE.MathUtils.clamp(player.x, -0.4, 0.4);
+    player.z = world.L / 2 + 0.1; player.x = THREE.MathUtils.clamp(player.x, -0.4, 0.4);
     player.yaw = dir === "back" ? yaw + Math.PI : yaw; player.pitch = pitch;
     movePlayer(0);
   }
@@ -1159,8 +1145,8 @@
       movePlayer(dt);
       const L = world.L;
       if (player.z < L / 2 - 5) player.armedBack = true;
-      if (player.z < (world.anomaly === "bricked" ? -L / 2 + 0.9 : -L / 2 - 0.6)) choose("forward");
-      else if (player.armedBack && player.z > L / 2 + 0.6) choose("back");
+      if (player.z < (world.anomaly === "bricked" ? -L / 2 + 0.9 : -L / 2 - 0.15)) choose("forward");
+      else if (player.armedBack && player.z > L / 2 + 0.15) choose("back");
       $("hudTime").textContent = (() => { const s = Math.floor(t - runStart); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); })();
     } else if (state === "menu") {
       // slow look down the hallway behind the menu
