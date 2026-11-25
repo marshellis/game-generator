@@ -2,7 +2,7 @@
 // only games on this allowlist may post to the shared leaderboard — so a random
 // or hostile slug can't create unbounded Redis keys. Add a slug here when a new
 // arcade game should keep a global leaderboard.
-export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege", "ragdoll-soccer", "glass-bridge", "hex-collapse", "nexus-stairs", "nexus-race", "tumble-rush", "laser-hop"]);
+export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege", "ragdoll-soccer", "glass-bridge", "hex-collapse", "nexus-stairs", "nexus-race", "tumble-rush", "laser-hop", "laser-hop-survive"]);
 
 // Boards where the LOWEST value wins (race times). Every other board ranks highest first. A slug here must
 // also be in SCORE_GAMES (or COOP_SCORE_GAMES). Values are integers; "nexus-race" is the finish time in
