@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="tumble-rush"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Tumble Rush</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: "Trebuchet MS", system-ui, -apple-system, sans-serif;
+    background: #12204a; color: #fff;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 10px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+  }
+  .col { width: min(96vw, 900px); }
+  #top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #bestChip { font-size: 14px; color: #cbd5e1; }
+  #bestChip b { color: #ffd84d; font-size: 16px; }
+  #stage {
+    position: relative; width: min(96vw, 900px); aspect-ratio: 16 / 10; max-height: 78vh;
+    border-radius: 16px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,.5);
+    background: linear-gradient(#5ec8ff, #b9ecff); touch-action: none;
+  }
+  @media (max-aspect-ratio: 1/1) { #stage { aspect-ratio: 3 / 4; } }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; text-align: center; padding: 16px; background: rgba(18, 32, 74, .55); backdrop-filter: blur(2px);
+  }
+  .hidden { display: none !important; }
+  h1 { margin: 0; font-size: clamp(34px, 7vw, 64px); letter-spacing: 1px; color: #ffd84d;
+       text-shadow: 0 4px 0 #e2591d, 0 8px 18px rgba(0,0,0,.45); transform: rotate(-3deg); }
+  h2 { margin: 0; font-size: clamp(26px, 5vw, 44px); color: #ffd84d; text-shadow: 0 3px 0 #e2591d; }
+  .sub { color: #e0f2fe; font-size: 15px; max-width: 460px; }
+  .modes { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .card {
+    width: 190px; padding: 12px; border-radius: 14px; background: #fff; color: #1e293b; text-align: left;
+    box-shadow: 0 6px 0 #c7d2fe; cursor: pointer; border: 0; font: inherit;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card b { font-size: 18px; display: block; color: #e2591d; }
+  .card small { color: #475569; font-size: 13px; }
+  .card.soon { background: #e2e8f0; cursor: default; opacity: .8; box-shadow: none; }
+  .card.soon b { color: #64748b; }
+  .btn {
+    font: inherit; font-weight: 800; font-size: 18px; padding: 10px 22px; border: 0; border-radius: 12px;
+    background: #ffd84d; color: #7c2d12; box-shadow: 0 5px 0 #e2591d; cursor: pointer;
+  }
+  .btn.alt { background: #e0f2fe; color: #12204a; box-shadow: 0 5px 0 #7dd3fc; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .keys { font-size: 13px; color: #e0f2fe; }
+  #hud { position: absolute; top: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; pointer-events: none; }
+  .pill { background: rgba(18,32,74,.75); padding: 5px 12px; border-radius: 999px; font-weight: 800; font-size: 16px; }
+  .pill span { color: #ffd84d; }
+  #banner { position: absolute; top: 32%; left: 0; right: 0; text-align: center; pointer-events: none;
+            font-size: clamp(40px, 9vw, 88px); font-weight: 900; color: #fff; text-shadow: 0 5px 0 #e2591d, 0 10px 20px rgba(0,0,0,.4); }
+  #pop { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .popt { position: absolute; font-weight: 900; font-size: 22px; color: #ffd84d; text-shadow: 0 2px 0 #7c2d12;
+          animation: rise .9s ease-out forwards; transform: translate(-50%, -50%); }
+  @keyframes rise { to { opacity: 0; margin-top: -50px; } }
+  #touch { position: absolute; inset: 0; pointer-events: none; }
+  #stick { position: absolute; width: 110px; height: 110px; border-radius: 50%; border: 3px solid rgba(255,255,255,.55);
+           background: rgba(255,255,255,.12); transform: translate(-50%, -50%); pointer-events: none; }
+  #knob { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%;
+          background: rgba(255,255,255,.8); }
+  #jumpBtn { position: absolute; right: 18px; bottom: 18px; width: 88px; height: 88px; border-radius: 50%; border: 0;
+             background: rgba(255,216,77,.9); color: #7c2d12; font: inherit; font-weight: 900; font-size: 17px;
+             box-shadow: 0 5px 0 #e2591d; pointer-events: auto; touch-action: none; }
+  .stats { font-size: 18px; line-height: 1.6; }
+  .stats b { color: #ffd84d; }
+</style>
+</head>
+<body>
+  <div id="top" class="col">
+    <div id="mg-chip"></div>
+    <div id="bestChip">Infinite best <b id="best">0</b></div>
+  </div>
+
+  <div id="stage">
+    <div id="hud" class="hidden">
+      <div class="pill" id="hudA"></div>
+      <div class="pill" id="hudB"></div>
+      <div class="pill" id="hudC"></div>
+    </div>
+    <div id="pop"></div>
+    <div id="banner"></div>
+    <div id="touch" class="hidden">
+      <div id="stick" class="hidden"><div id="knob"></div></div>
+      <button id="jumpBtn">JUMP</button>
+    </div>
+
+    <div id="menu" class="overlay">
+      <h1>TUMBLE RUSH</h1>
+      <div class="sub">A wobbly party in the sky. Pick a game mode!</div>
+      <div class="modes">
+        <button class="card" id="playClassic"><b>Hop Deck: Classic</b><small>You and 7 rivals on a floating deck. Jump the spinning bar and the sliding blocks. Last one standing (or survive 60s) wins!</small></button>
+        <button class="card" id="playInfinite"><b>Hop Deck: Infinite</b><small>Just you. It keeps getting faster forever. How long can you last? Scores go on the global leaderboard.</small></button>
+        <div class="card soon"><b>Online party</b><small>Play Hop Deck with friends over the internet. Coming next!</small></div>
+      </div>
+      <div class="keys">Move: WASD / arrow keys · Jump: Space · On a phone: drag to move, tap JUMP</div>
+    </div>
+
+    <div id="result" class="overlay hidden">
+      <h2 id="resTitle"></h2>
+      <div class="stats" id="resStats"></div>
+      <div class="row">
+        <button class="btn" id="again">Play again</button>
+        <button class="btn alt" id="toMenu">Modes</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mg-picker" class="col"></div>
+  <div id="mg-account" class="col"></div>
+  <div id="mg-board" class="col"></div>
+
+<script src="./three.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  // ======================= platform (accounts, leaderboard, play time) =======================
+  const GAME = "tumble-rush";            // the Infinite-mode board is the game's own board
+  const LS_BEST = "tumble-rush:best";
+  const $ = (id) => document.getElementById(id);
+  const mg = window.Marshellis ? Marshellis.init({ game: GAME, chip: "#mg-chip", account: "#mg-account", board: "#mg-board", picker: "#mg-picker" }) : null;
+  let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+  function showBest() { $("best").textContent = best; }
+  showBest();
+  async function submitInfinite(score) {
+    if (score > best) { best = score; localStorage.setItem(LS_BEST, String(best)); }
+    showBest();
+    if (!mg) return;
+    const r = await mg.submitScore(score);
+    if (r && r.best > best) { best = r.best; showBest(); }
+  }
+  function roundOver() { window.MGRounds && MGRounds.end(); }
+
+  // ======================= tuning =======================
+  const R = 10;              // deck radius
+  const PILLAR = 0.9;        // centre pillar radius
+  const BODY = 0.42;         // blob radius
+  const GRAV = -24, JUMP_V = 9, MOVE = 6.2;   // a jump clears 0.6 high from 0.07s to 0.68s after take-off
+  const ARM_H = 0.6;         // sweeper bar top
+  const ARM_W = 0.32;
+  const CLASSIC_TIME = 60;
+  const COLORS = [0xff5d8f, 0x4dd8ff, 0x8cff5a, 0xffa94d, 0xb07cff, 0xffe14d, 0x47e0b3, 0xff7a5c];
+  const NAMES = ["You", "Pip", "Mochi", "Zoom", "Bean", "Wobbles", "Tofu", "Squish"];
+
+  // ======================= three.js scene =======================
+  const stage = $("stage");
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x8fdcff);
+  scene.fog = new THREE.Fog(0x8fdcff, 40, 90);
+  const camera = new THREE.PerspectiveCamera(50, 16 / 10, 0.1, 200);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x6a8fd0, 0.85));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(6, 14, 8); scene.add(sun);
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    // Fit the whole deck: portrait screens need a wider view and a higher camera.
+    camera.fov = camera.aspect < 1 ? 62 : 48;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", resize);
+
+  // Deck: a striped disc with a soft bumper rim.
+  function deckTexture() {
+    const c = document.createElement("canvas"); c.width = c.height = 512;
+    const g = c.getContext("2d");
+    const seg = 16;
+    for (let i = 0; i < seg; i++) {
+      g.beginPath(); g.moveTo(256, 256);
+      g.arc(256, 256, 256, (i / seg) * Math.PI * 2, ((i + 1) / seg) * Math.PI * 2);
+      g.fillStyle = i % 2 ? "#ffe9a8" : "#ffc85a"; g.fill();
+    }
+    g.lineWidth = 10; g.strokeStyle = "#ff8f3d";
+    for (const r of [90, 170]) { g.beginPath(); g.arc(256, 256, r, 0, Math.PI * 2); g.stroke(); }
+    const t = new THREE.CanvasTexture(c); return t;
+  }
+  const deck = new THREE.Group(); scene.add(deck);
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(R, R, 0.2, 64), [
+    new THREE.MeshLambertMaterial({ color: 0xff8f3d }),
+    new THREE.MeshLambertMaterial({ map: deckTexture() }),
+    new THREE.MeshLambertMaterial({ color: 0xff8f3d }),
+  ]);
+  top.position.y = -0.1; deck.add(top);
+  const under = new THREE.Mesh(new THREE.CylinderGeometry(R - 0.2, R * 0.55, 1.6, 48), new THREE.MeshLambertMaterial({ color: 0x8b6fd6 }));
+  under.position.y = -1.0; deck.add(under);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 0.14, 8, 80), new THREE.MeshLambertMaterial({ color: 0xffffff }));
+  rim.rotation.x = Math.PI / 2; rim.position.y = 0.02; deck.add(rim);
+  const pillar = new THREE.Mesh(new THREE.CylinderGeometry(PILLAR, PILLAR * 1.1, 1.3, 32), new THREE.MeshLambertMaterial({ color: 0x5b6cff }));
+  pillar.position.y = 0.65; deck.add(pillar);
+  const cap = new THREE.Mesh(new THREE.SphereGeometry(PILLAR * 0.9, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshLambertMaterial({ color: 0xff5d8f }));
+  cap.position.y = 1.3; deck.add(cap);
+
+  // Clouds far below and around the deck.
+  const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  for (let i = 0; i < 26; i++) {
+    const g = new THREE.Group();
+    for (let k = 0; k < 4; k++) {
+      const s = new THREE.Mesh(new THREE.SphereGeometry(1.4 + Math.random() * 1.6, 12, 8), cloudMat);
+      s.position.set(k * 1.8 - 2.7, Math.random() * 0.8, Math.random() * 1.2); g.add(s);
+    }
+    const a = Math.random() * Math.PI * 2, d = 16 + Math.random() * 34;
+    g.position.set(Math.cos(a) * d, -8 - Math.random() * 14, Math.sin(a) * d);
+    g.userData.spin = (Math.random() - 0.5) * 0.02;
+    scene.add(g);
+  }
+  const clouds = scene.children.filter((o) => o.userData && o.userData.spin !== undefined);
+
+  // ======================= blobs (players and rivals) =======================
+  const shadowGeo = new THREE.CircleGeometry(BODY * 0.95, 20);
+  const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.25, depthWrite: false });
+  function makeBlobMesh(color, isPlayer) {
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.SphereGeometry(BODY, 24, 16), new THREE.MeshLambertMaterial({ color }));
+    body.scale.set(1, 1.12, 1); body.position.y = BODY * 1.12; g.add(body);
+    const belly = new THREE.Mesh(new THREE.SphereGeometry(BODY * 0.7, 18, 12), new THREE.MeshLambertMaterial({ color: 0xffffff }));
+    belly.scale.set(1, 0.9, 0.55); belly.position.set(0, BODY * 0.9, BODY * 0.55); g.add(belly);
+    const eyeW = new THREE.MeshLambertMaterial({ color: 0xffffff }), eyeB = new THREE.MeshBasicMaterial({ color: 0x111111 });
+    for (const sx of [-1, 1]) {
+      const e = new THREE.Mesh(new THREE.SphereGeometry(BODY * 0.27, 12, 10), eyeW); e.position.set(sx * BODY * 0.33, BODY * 1.45, BODY * 0.78); g.add(e);
+      const p = new THREE.Mesh(new THREE.SphereGeometry(BODY * 0.13, 10, 8), eyeB); p.position.set(sx * BODY * 0.33, BODY * 1.45, BODY * 1.02); g.add(p);
+    }
+    // A little leaf sprout on top: every blob has one, the player's is a gold star.
+    if (isPlayer) {
+      const star = new THREE.Mesh(new THREE.OctahedronGeometry(BODY * 0.38), new THREE.MeshLambertMaterial({ color: 0xffd84d, emissive: 0x553300 }));
+      star.position.y = BODY * 2.75; g.add(star); g.userData.star = star;
+    } else {
+      const leaf = new THREE.Mesh(new THREE.SphereGeometry(BODY * 0.22, 10, 8), new THREE.MeshLambertMaterial({ color: 0x3fbf5f }));
+      leaf.scale.set(1.6, 0.5, 0.8); leaf.position.y = BODY * 2.35; g.add(leaf);
+    }
+    g.userData.body = body;
+    const sh = new THREE.Mesh(shadowGeo, shadowMat); sh.rotation.x = -Math.PI / 2; sh.renderOrder = 1;
+    scene.add(sh);
+    scene.add(g);
+    return { g, sh };
+  }
+
+  function newBlob(i, isPlayer, x, z) {
+    const m = makeBlobMesh(COLORS[i % COLORS.length], isPlayer);
+    return {
+      name: NAMES[i] || "Bot", isPlayer, mesh: m.g, shadow: m.sh,
+      x, y: 0, z, vx: 0, vy: 0, vz: 0, onGround: true, alive: true,
+      stun: 0, hitCd: 0, face: Math.atan2(-x, -z), squash: 0,
+      // bot brain
+      skill: 0.72 + Math.random() * 0.25, tx: x, tz: z, retarget: 0, plan: new Map(), armImmune: new Map(),
+    };
+  }
+
+  // ======================= obstacles =======================
+  const armMat = new THREE.MeshLambertMaterial({ color: 0xff3d6e });
+  const armStripe = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  function makeArm(phase, dir) {
+    const g = new THREE.Group();
+    const len = R - PILLAR + 0.3;
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(len, 0.34, ARM_W), armMat);
+    bar.position.set(PILLAR + len / 2, ARM_H - 0.17, 0); g.add(bar);
+    for (let k = 0; k < 5; k++) {
+      const s = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.36, ARM_W + 0.02), armStripe);
+      s.position.set(PILLAR + 1 + k * (len - 1.5) / 4, ARM_H - 0.17, 0); g.add(s);
+    }
+    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.32, 14, 10), armMat); knob.position.set(R + 0.25, ARM_H - 0.17, 0); g.add(knob);
+    scene.add(g);
+    return { g, angle: phase, dir, omega: 0, prevV: new Map() };
+  }
+  const lowMat = new THREE.MeshLambertMaterial({ color: 0x47c9ff });
+  const tallMat = new THREE.MeshLambertMaterial({ color: 0xff7a1a });
+  function spawnBlock(speed, tall) {
+    const phi = Math.random() * Math.PI * 2;
+    const dx = Math.cos(phi), dz = Math.sin(phi);
+    // Blocks never cross the centre pillar: they pass to one side of it.
+    const lat = (Math.random() < 0.5 ? -1 : 1) * (1.9 + Math.random() * 5.1);
+    const w = tall ? 2.4 : 2.0, depth = 1.0, h = tall ? 2.2 : 0.6;
+    const start = R + 3;
+    const cx = -dx * start + -dz * lat, cz = -dz * start + dx * lat;
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(depth, h, w), tall ? tallMat : lowMat);
+    mesh.rotation.y = -phi; mesh.position.set(cx, h / 2, cz);
+    scene.add(mesh);
+    return { mesh, x: cx, z: cz, dx, dz, speed, w, depth, h, tall, travelled: 0, total: 2 * start, hitIds: new Set(), prevA: new Map() };
+  }
+
+  // ======================= game state =======================
+  const outLog = [];
+  let mode = null;          // "classic" | "infinite"
+  let state = "menu";       // menu | countdown | play | over
+  let blobs = [], arms = [], blocks = [];
+  let player = null, t = 0, countdown = 0, blockTimer = 0, hops = 0, outCount = 0, endTimer = 0, finalPlace = 0;
+
+  function clearWorld() {
+    for (const b of blobs) { scene.remove(b.mesh); scene.remove(b.shadow); }
+    for (const a of arms) scene.remove(a.g);
+    for (const k of blocks) scene.remove(k.mesh);
+    blobs = []; arms = []; blocks = [];
+  }
+
+  function setupRound(m) {
+    clearWorld();
+    mode = m; t = 0; hops = 0; outCount = 0; blockTimer = 1.5; endTimer = 0; finalPlace = 0;
+    const n = mode === "classic" ? 8 : 1;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + Math.PI / 2;
+      const d = n === 1 ? 5 : 6.2;
+      blobs.push(newBlob(i, i === 0, Math.cos(a) * d, Math.sin(a) * d));
+    }
+    player = blobs[0];
+    arms.push(makeArm(Math.PI / 8, 1));   // starts between two blobs, never on one
+    updateMeshes(0);
+  }
+
+  // Difficulty as a function of time survived.
+  function difficulty(time) {
+    const inf = mode === "infinite";
+    return {
+      omega1: Math.min(inf ? 3.3 : 2.7, 1.05 + 0.028 * time),
+      arm2: time >= (inf ? 35 : 30),
+      omega2: Math.min(2.6, 0.9 + 0.022 * (time - (inf ? 35 : 30))),
+      blockEvery: Math.max(inf ? 0.55 : 0.8, 2.6 - 0.032 * time),
+      blockSpeed: Math.min(8.5, 5.5 + 0.04 * time),
+      tallChance: time < 15 ? 0 : Math.min(0.35, 0.1 + (time - 15) * 0.005),
+    };
+  }
+
+  // ======================= input =======================
+  const keys = new Set();
+  let jumpQueued = false;
+  addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) e.preventDefault();
+    keys.add(k);
+    if (k === " ") jumpQueued = true;
+    if ((k === "enter" || k === " ") && state === "over" && endTimer > 0.8) startMode(mode);
+  });
+  addEventListener("keyup", (e) => keys.delete(e.key.toLowerCase()));
+  addEventListener("blur", () => keys.clear());
+
+  const isTouch = matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+  const stick = { id: null, ox: 0, oy: 0, x: 0, y: 0 };
+  const stickEl = $("stick"), knobEl = $("knob");
+  stage.addEventListener("pointerdown", (e) => {
+    if (state !== "play" && state !== "countdown") return;
+    if (e.target.id === "jumpBtn" || e.pointerType === "mouse") return;
+    const r = stage.getBoundingClientRect();
+    stick.id = e.pointerId; stick.ox = e.clientX; stick.oy = e.clientY; stick.x = 0; stick.y = 0;
+    stickEl.classList.remove("hidden"); stickEl.style.left = (e.clientX - r.left) + "px"; stickEl.style.top = (e.clientY - r.top) + "px";
+    knobEl.style.transform = "translate(0,0)";
+  });
+  addEventListener("pointermove", (e) => {
+    if (e.pointerId !== stick.id) return;
+    let dx = e.clientX - stick.ox, dy = e.clientY - stick.oy;
+    const d = Math.hypot(dx, dy), max = 45;
+    if (d > max) { dx *= max / d; dy *= max / d; }
+    stick.x = dx / max; stick.y = dy / max;
+    knobEl.style.transform = "translate(" + dx + "px," + dy + "px)";
+  });
+  function endStick(e) { if (e.pointerId === stick.id) { stick.id = null; stick.x = stick.y = 0; stickEl.classList.add("hidden"); } }
+  addEventListener("pointerup", endStick); addEventListener("pointercancel", endStick);
+  $("jumpBtn").addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); jumpQueued = true; });
+
+  function playerInput() {
+    let ix = 0, iz = 0;
+    if (keys.has("a") || keys.has("arrowleft")) ix -= 1;
+    if (keys.has("d") || keys.has("arrowright")) ix += 1;
+    if (keys.has("w") || keys.has("arrowup")) iz -= 1;
+    if (keys.has("s") || keys.has("arrowdown")) iz += 1;
+    if (stick.id !== null) { ix += stick.x; iz += stick.y; }
+    const l = Math.hypot(ix, iz);
+    if (l > 1) { ix /= l; iz /= l; }
+    const jump = jumpQueued || keys.has(" ");
+    jumpQueued = false;
+    return { ix, iz, jump };
+  }
+
+  // ======================= sound =======================
+  let actx = null;
+  function beep(freq, dur, type, vol, slide) {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      if (slide) o.frequency.exponentialRampToValueAtTime(slide, actx.currentTime + dur);
+      g.gain.value = vol || 0.08; g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+      o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + dur);
+    } catch (_) { /* no audio */ }
+  }
+  const sfx = {
+    jump: () => beep(420, 0.15, "square", 0.04, 760),
+    hop: () => beep(880, 0.12, "triangle", 0.06, 1320),
+    bonk: () => beep(180, 0.25, "sawtooth", 0.07, 70),
+    out: () => beep(500, 0.6, "sine", 0.07, 90),
+    go: () => beep(660, 0.3, "square", 0.05, 990),
+  };
+
+  // ======================= pop text =======================
+  const popEl = $("pop");
+  const tmpV = new THREE.Vector3();
+  function popText(text, b) {
+    tmpV.set(b.x, b.y + 1.6, b.z).project(camera);
+    const d = document.createElement("div"); d.className = "popt"; d.textContent = text;
+    d.style.left = ((tmpV.x + 1) / 2 * 100) + "%"; d.style.top = ((1 - tmpV.y) / 2 * 100) + "%";
+    popEl.appendChild(d); setTimeout(() => d.remove(), 950);
+  }
+
+  // ======================= physics =======================
+  function jump(b) {
+    if (!b.onGround || b.stun > 0.15) return;
+    b.vy = JUMP_V; b.onGround = false; b.squash = -0.25;
+    if (b.isPlayer) sfx.jump();
+  }
+
+  function knock(b, nx, nz, power, lift, by) {
+    if (b.hitCd > 0) return;
+    b.lastHit = by;
+    b.vx = nx * power; b.vz = nz * power; b.vy = Math.max(b.vy, lift); b.onGround = false;
+    b.stun = 0.55; b.hitCd = 0.6; b.squash = 0.35;
+    if (b.isPlayer) { sfx.bonk(); popText("BONK!", b); }
+  }
+
+  function stepBlob(b, dt, ix, iz, wantJump) {
+    if (!b.alive) return;
+    b.stun = Math.max(0, b.stun - dt); b.hitCd = Math.max(0, b.hitCd - dt);
+    const control = b.stun > 0 ? 0.15 : 1;
+    const acc = (b.onGround ? 34 : 13) * control;
+    const tvx = ix * MOVE, tvz = iz * MOVE;
+    b.vx += Math.max(-acc * dt, Math.min(acc * dt, tvx - b.vx)) ;
+    b.vz += Math.max(-acc * dt, Math.min(acc * dt, tvz - b.vz));
+    if (ix || iz) b.face = Math.atan2(ix, iz);
+    // A bonked blob skids to a stop on the deck instead of sliding off forever.
+    if (b.stun > 0 && b.onGround) {
+      const sp = Math.hypot(b.vx, b.vz), dec = Math.min(sp, 16 * dt);
+      if (sp > 0) { b.vx -= b.vx / sp * dec; b.vz -= b.vz / sp * dec; }
+    }
+    if (wantJump) jump(b);
+    b.vy += GRAV * dt;
+    b.x += b.vx * dt; b.y += b.vy * dt; b.z += b.vz * dt;
+    const r = Math.hypot(b.x, b.z);
+    // Deck floor (only while over the deck).
+    if (r <= R && b.y <= 0 && b.y > -0.6) {
+      if (!b.onGround && b.vy < -4) b.squash = 0.25;
+      b.y = 0; b.vy = 0; b.onGround = true;
+    } else if (b.y > 0 || r > R) b.onGround = false;
+    // Centre pillar.
+    if (r < PILLAR + BODY && b.y < 1.3) {
+      const nx = b.x / (r || 1), nz = b.z / (r || 1);
+      b.x = nx * (PILLAR + BODY); b.z = nz * (PILLAR + BODY);
+    }
+    if (b.y < -14) { if (b.god) { b.x = 0; b.z = 4; b.y = 2; b.vx = b.vz = b.vy = 0; } else eliminate(b); }
+  }
+
+  function collideBlobs() {
+    for (let i = 0; i < blobs.length; i++) for (let j = i + 1; j < blobs.length; j++) {
+      const a = blobs[i], c = blobs[j];
+      if (!a.alive || !c.alive || Math.abs(a.y - c.y) > 0.8) continue;
+      const dx = c.x - a.x, dz = c.z - a.z, d = Math.hypot(dx, dz), min = BODY * 2;
+      if (d > 0 && d < min) {
+        const nx = dx / d, nz = dz / d, push = (min - d) / 2;
+        a.x -= nx * push; a.z -= nz * push; c.x += nx * push; c.z += nz * push;
+        // A gentle bump: trade a little momentum so crowds jostle.
+        const rel = (a.vx - c.vx) * nx + (a.vz - c.vz) * nz;
+        if (rel > 0) { a.vx -= nx * rel * 0.6; a.vz -= nz * rel * 0.6; c.vx += nx * rel * 0.6; c.vz += nz * rel * 0.6; }
+      }
+    }
+  }
+
+  function stepArms(dt, D) {
+    if (D.arm2 && arms.length < 2) arms.push(makeArm(arms[0].angle + Math.PI, -1));
+    arms[0].omega = D.omega1;
+    if (arms[1]) arms[1].omega = D.omega2;
+    for (const arm of arms) {
+      arm.angle += arm.dir * arm.omega * dt;
+      arm.g.rotation.y = -arm.angle;
+      const ca = Math.cos(arm.angle), sa = Math.sin(arm.angle);
+      for (const b of blobs) {
+        if (!b.alive) continue;
+        const u = b.x * ca + b.z * sa, v = -b.x * sa + b.z * ca;
+        const prev = arm.prevV.get(b);
+        arm.prevV.set(b, v);
+        const inReach = u > PILLAR - 0.3 && u < R + 0.6;
+        const immune = (b.armImmune.get(arm) || 0) > t;
+        if (!immune && inReach && Math.abs(v) < ARM_W / 2 + BODY && b.y < ARM_H && b.y > -0.8) {
+          // Knocked along the direction the bar is sweeping.
+          const s = arm.dir;
+          const tx = -sa * s, tz = ca * s;
+          // Bonked up and over: the bar sweeps on underneath instead of bulldozing the blob off the deck.
+          knock(b, tx, tz, Math.min(6.5, 2.5 + arm.omega * Math.max(u, 2) * 0.6), 7, "bar");
+          b.armImmune.set(arm, t + 1.0);
+        } else if (b.isPlayer && inReach && prev !== undefined && prev * v < 0 && b.hitCd === 0 && Math.abs(v) < 2) {
+          scoreHop(b);
+        }
+      }
+    }
+  }
+
+  function stepBlocks(dt, D) {
+    blockTimer -= dt;
+    if (blockTimer <= 0) {
+      blocks.push(spawnBlock(D.blockSpeed * (0.85 + Math.random() * 0.3), Math.random() < D.tallChance));
+      blockTimer = D.blockEvery * (0.75 + Math.random() * 0.5);
+    }
+    for (let i = blocks.length - 1; i >= 0; i--) {
+      const k = blocks[i];
+      const step = k.speed * dt;
+      k.x += k.dx * step; k.z += k.dz * step; k.travelled += step;
+      k.mesh.position.set(k.x, k.h / 2, k.z);
+      for (const b of blobs) {
+        if (!b.alive) continue;
+        const px = b.x - k.x, pz = b.z - k.z;
+        const a = px * k.dx + pz * k.dz;           // along the block's travel
+        const l = -px * k.dz + pz * k.dx;          // across it
+        const prevA = k.prevA.get(b); k.prevA.set(b, a);
+        const lateral = Math.abs(l) < k.w / 2 + BODY;
+        if (lateral && Math.abs(a) < k.depth / 2 + BODY && b.y < k.h - 0.05 && b.y > -0.8) {
+          k.hitIds.add(b);
+          knock(b, k.dx, k.dz, Math.min(7.5, k.speed + 1), 5, "block");
+        } else if (b.isPlayer && lateral && prevA !== undefined && prevA > 0 && a <= 0 && !k.hitIds.has(b) && b.y >= 0) {
+          scoreHop(b);
+        }
+      }
+      if (k.travelled > k.total) { scene.remove(k.mesh); blocks.splice(i, 1); }
+    }
+  }
+
+  function scoreHop(b) {
+    if (!b.isPlayer || state !== "play") return;
+    hops++; sfx.hop(); popText("+HOP", b);
+  }
+
+  function eliminate(b) {
+    if (!b.alive) return;
+    b.alive = false; b.mesh.visible = false; b.shadow.visible = false;
+    outLog.push({ name: b.name, t: +t.toFixed(1), by: b.lastHit || "walked off" });
+    outCount++;
+    const aliveCount = blobs.filter((x) => x.alive).length;
+    if (b.isPlayer) {
+      sfx.out(); finalPlace = aliveCount + 1;
+      finish(false);
+    } else if (mode === "classic" && state === "play") {
+      flash(b.name + " is out!", 900);
+      if (aliveCount === 1 && player.alive) { finalPlace = 1; finish(true); }
+    }
+  }
+
+  // ======================= bots =======================
+  function botThink(b, dt) {
+    const out = { ix: 0, iz: 0, jump: false };
+    if (!b.alive) return out;
+    b.retarget -= dt;
+    const r = Math.hypot(b.x, b.z);
+    if (b.retarget <= 0 || Math.hypot(b.tx - b.x, b.tz - b.z) < 0.6) {
+      const a = Math.random() * Math.PI * 2, d = 2.5 + Math.random() * 4.5;
+      b.tx = Math.cos(a) * d; b.tz = Math.sin(a) * d; b.retarget = 1.5 + Math.random() * 2.5;
+    }
+    let mx = b.tx - b.x, mz = b.tz - b.z;
+    const ml = Math.hypot(mx, mz) || 1; mx /= ml; mz /= ml;
+    let speed = 0.55;
+    if (r > R - 1.6) { mx = -b.x / r; mz = -b.z / r; speed = 1; }   // keep away from the edge
+    // Threat: the sweeping bars.
+    for (const arm of arms) {
+      const ang = Math.atan2(b.z, b.x);
+      let d = (ang - arm.angle) * arm.dir;
+      d = ((d % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const reachTime = (d - (ARM_W / 2 + BODY) / Math.max(r, 1)) / Math.max(arm.omega, 0.1);
+      considerJump(b, arm, reachTime, out);
+    }
+    // Threat: blocks heading this way.
+    for (const k of blocks) {
+      const px = b.x - k.x, pz = b.z - k.z;
+      const a = px * k.dx + pz * k.dz, l = -px * k.dz + pz * k.dx;
+      if (a < 0 || Math.abs(l) > k.w / 2 + BODY + 0.3) continue;
+      const reachTime = (a - k.depth / 2 - BODY) / k.speed;
+      if (k.tall) {
+        if (reachTime < 1.2) { const side = l >= 0 ? 1 : -1; mx = -k.dz * side; mz = k.dx * side; speed = 1; }
+      } else considerJump(b, k, reachTime, out);
+    }
+    out.ix = mx * speed; out.iz = mz * speed;
+    return out;
+  }
+  // Each bot decides ONCE per incoming threat whether it will time the jump well, so better bots survive longer.
+  function considerJump(b, threat, reachTime, out) {
+    if (reachTime < -0.3 || reachTime > 0.7) { b.plan.delete(threat); return; }
+    let p = b.plan.get(threat);
+    if (!p) {
+      const good = Math.random() < b.skill;
+      p = { at: good ? 0.09 + Math.random() * 0.11 : (Math.random() < 0.5 ? 0.35 + Math.random() * 0.2 : -1) };
+      b.plan.set(threat, p);
+    }
+    if (p.at >= 0 && reachTime <= p.at) { out.jump = true; p.at = -2; }
+  }
+
+  // ======================= rendering =======================
+  function updateMeshes(dt) {
+    for (const b of blobs) {
+      if (!b.alive) continue;
+      b.mesh.position.set(b.x, b.y, b.z);
+      let diff = b.face - b.mesh.rotation.y;
+      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+      b.mesh.rotation.y += diff * Math.min(1, dt * 12);
+      b.squash += (0 - b.squash) * Math.min(1, dt * 10);
+      const body = b.mesh.userData.body;
+      const sq = b.squash + (b.onGround ? 0 : -0.08);
+      body.scale.set(1 + sq * 0.5, 1.12 * (1 - sq), 1 + sq * 0.5);
+      b.mesh.rotation.z = b.stun > 0 ? Math.sin(t * 30) * 0.25 : 0;
+      if (b.mesh.userData.star) b.mesh.userData.star.rotation.y += dt * 3;
+      const r = Math.hypot(b.x, b.z);
+      b.shadow.visible = r < R && b.y > -0.5;
+      b.shadow.position.set(b.x, 0.02, b.z);
+      const s = Math.max(0.4, 1 - b.y * 0.12); b.shadow.scale.set(s, s, s);
+    }
+    // Camera: high, slightly behind, drifting a little toward the player.
+    const portrait = camera.aspect < 1;
+    const px = player && player.alive ? player.x : 0, pz = player && player.alive ? player.z : 0;
+    const cx = px * 0.18, cz = pz * 0.12;
+    camera.position.set(cx, portrait ? 22 : 15.5, (portrait ? 13 : 14.5) + cz);
+    camera.lookAt(cx, -0.5, cz + (portrait ? 0.5 : 0.8));
+  }
+
+  // ======================= flow =======================
+  const banner = $("banner");
+  let bannerUntil = 0;
+  function flash(text, ms) { banner.textContent = text; bannerUntil = performance.now() + ms; banner.style.fontSize = text.length > 8 ? "clamp(24px,5vw,44px)" : ""; }
+
+  let starting = false;
+  async function startMode(m) {
+    if (starting) return;
+    starting = true;
+    if (mg) { const ok = await mg.gate(); if (!ok) { starting = false; return; } }
+    starting = false;
+    $("menu").classList.add("hidden"); $("result").classList.add("hidden");
+    setupRound(m);
+    state = "countdown"; countdown = 3.0;
+    $("hud").classList.remove("hidden");
+    $("touch").classList.toggle("hidden", !isTouch);
+    mg && mg.startPlaying();
+  }
+
+  function finish(won) {
+    if (state !== "play") return;
+    state = "over"; endTimer = 0;
+    roundOver();
+    const secs = Math.floor(t);
+    let title, stats;
+    if (mode === "infinite") {
+      const score = secs + hops * 2;
+      title = score > best ? "NEW BEST!" : "You tumbled!";
+      stats = "Survived <b>" + t.toFixed(1) + "s</b> · Hops <b>" + hops + "</b><br>Score <b>" + score + "</b> (1 per second + 2 per hop)";
+      if (!player.god) submitInfinite(score);   // the test hook's no-fall mode never reaches the leaderboard
+    } else {
+      const alive = blobs.filter((b) => b.alive).length;
+      if (won && alive === 1) { title = "VICTORY! 👑"; stats = "Last blob standing after <b>" + t.toFixed(1) + "s</b> · Hops <b>" + hops + "</b>"; }
+      else if (won) { title = "QUALIFIED!"; stats = "You survived the full minute with <b>" + (alive - 1) + "</b> other" + (alive === 2 ? "" : "s") + " · Hops <b>" + hops + "</b>"; }
+      else { title = "ELIMINATED"; stats = "You finished <b>#" + finalPlace + "</b> of 8 after <b>" + t.toFixed(1) + "s</b> · Hops <b>" + hops + "</b>"; }
+    }
+    $("resTitle").textContent = title; $("resStats").innerHTML = stats;
+    setTimeout(() => { if (state === "over") { $("result").classList.remove("hidden"); $("touch").classList.add("hidden"); } }, 900);
+  }
+
+  function hud() {
+    if (mode === "infinite") {
+      $("hudA").innerHTML = "Time <span>" + t.toFixed(1) + "</span>";
+      $("hudB").innerHTML = "Hops <span>" + hops + "</span>";
+      $("hudC").innerHTML = "Best <span>" + best + "</span>";
+    } else {
+      $("hudA").innerHTML = "Time left <span>" + Math.max(0, CLASSIC_TIME - t).toFixed(0) + "</span>";
+      $("hudB").innerHTML = "Alive <span>" + blobs.filter((b) => b.alive).length + "/8</span>";
+      $("hudC").innerHTML = "Hops <span>" + hops + "</span>";
+    }
+  }
+
+  $("playClassic").onclick = () => startMode("classic");
+  $("playInfinite").onclick = () => startMode("infinite");
+  $("again").onclick = () => startMode(mode);
+  $("toMenu").onclick = () => {
+    state = "menu"; clearWorld(); setupRound("infinite");
+    $("result").classList.add("hidden"); $("hud").classList.add("hidden"); $("menu").classList.remove("hidden");
+  };
+
+  // ======================= main loop =======================
+  let last = performance.now(), menuSpin = 0;
+  function frame(now) {
+    const dt = Math.min(0.04, (now - last) / 1000); last = now;
+    for (const c of clouds) c.rotation.y += c.userData.spin;
+    if (state === "menu") {
+      menuSpin += dt * 0.25;
+      if (arms[0]) { arms[0].angle += dt * 1.2; arms[0].g.rotation.y = -arms[0].angle; }
+      camera.position.set(Math.sin(menuSpin) * 17, 12, Math.cos(menuSpin) * 17); camera.lookAt(0, 0, 0);
+      if (player) { player.face += dt; updateBlobOnly(dt); }
+    } else if (state === "countdown") {
+      countdown -= dt;
+      const n = Math.ceil(countdown);
+      if (n > 0) { if (banner.textContent !== String(n)) { flash(String(n), 1000); beep(440, 0.12, "square", 0.04); } }
+      else { state = "play"; flash("GO!", 700); sfx.go(); }
+      updateMeshes(dt); hud();
+    } else if (state === "play" || state === "over") {
+      const D = difficulty(t);
+      if (state === "play") t += dt;
+      else endTimer += dt;
+      const sub = 2, h = dt / sub;
+      for (let s = 0; s < sub; s++) {
+        stepArms(h, D);
+        if (state === "play" || state === "over") stepBlocks(h, D);
+        for (const b of blobs) {
+          if (!b.alive) continue;
+          if (b.isPlayer) {
+            const inp = s === 0 ? playerInput() : { ix: lastInp.ix, iz: lastInp.iz, jump: false };
+            if (s === 0) lastInp = inp;
+            stepBlob(b, h, inp.ix, inp.iz, inp.jump);
+          } else {
+            const ai = botThink(b, h);
+            stepBlob(b, h, ai.ix, ai.iz, ai.jump);
+          }
+        }
+        collideBlobs();
+      }
+      if (state === "play" && mode === "classic" && t >= CLASSIC_TIME) { finalPlace = 1; finish(true); }
+      updateMeshes(dt); hud();
+    }
+    if (bannerUntil && now > bannerUntil) { banner.textContent = ""; bannerUntil = 0; }
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  let lastInp = { ix: 0, iz: 0, jump: false };
+  function updateBlobOnly(dt) {
+    const p = camera.position.clone(), q = camera.quaternion.clone();
+    updateMeshes(dt); camera.position.copy(p); camera.quaternion.copy(q);
+  }
+
+  resize();
+  setupRound("infinite");   // a single blob idling on the deck behind the menu
+  requestAnimationFrame(frame);
+  // Test hook: lets automated checks read the game state without poking at internals.
+  window.__tumble = { get state() { return state; }, get mode() { return mode; }, get t() { return t; }, get hops() { return hops; },
+                      get alive() { return blobs.filter((b) => b.alive).length; },
+                      get outs() { return outLog.slice(); },
+                      god(on) { if (player) player.god = !!on; } };   // automated tests only
+})();
+</script>
+</body>
+</html>
