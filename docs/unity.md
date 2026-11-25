@@ -64,7 +64,7 @@ cold. Learned on the first builds:
 
 ## Putting a Unity game on the site
 
-No Unity game is on the site yet (`reverse-zelda` is Godot). The steps are the arcade contract
+The first Unity game on the site is `checkout` (source: private repo [`marshellis/checkout-unity`](https://github.com/marshellis/checkout-unity), Unity 6000.6.10f1 + URP, built on Jonathan's Mac). Its WebGL template keeps the menu, HUD, SDK and input in the page and draws textures on a canvas; C# talks to it through a small `.jslib` bridge. The steps are the arcade contract
 ([`site/public/arcade/README.md`](../site/public/arcade/README.md)): commit the WebGL export to
 `site/public/arcade/<slug>/` with a `game.json`, open a PR, green CI deploys. Deploying is public, so it needs
 Jonathan's OK. Before the first Unity game, the starter needs:

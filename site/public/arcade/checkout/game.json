@@ -1,14 +1,15 @@
 {
   "title": "Checkout",
   "description": "You're stuck on Floor 6 of a strange hotel and the hallway keeps repeating. If everything is normal, keep going to the stairs at the end. If ANYTHING is weird (and yes, the lights going out counts), turn back. Get it right every time to reach the lobby and check out.",
-  "emoji": "🛎️",
+  "emoji": "\ud83d\udece\ufe0f",
   "author": "Marshall",
   "createdAt": "2026-11-25",
   "tags": [
-    "arcade",
     "3d",
+    "arcade",
+    "leaderboard",
     "puzzle",
     "spot-the-difference",
-    "leaderboard"
+    "unity"
   ]
 }
