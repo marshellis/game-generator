@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="checkout"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Checkout</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: radial-gradient(ellipse at top, #4a1e24 0%, #22090d 65%, #120406 100%); color: #fff7e6;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 10px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
+  }
+  .col { width: min(96vw, 900px); }
+  #top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #bestChip { font-size: 14px; color: #f6e3b4; background: rgba(255,255,255,.08); padding: 5px 12px; border-radius: 999px; font-family: system-ui, sans-serif; }
+  #bestChip b { color: #ffd86b; font-size: 16px; }
+  #stage {
+    position: relative; width: min(96vw, 900px); aspect-ratio: 16 / 10; max-height: 78vh;
+    border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 4px #d4a94a55, 0 16px 40px rgba(0,0,0,.6);
+    background: #000; touch-action: none; cursor: grab;
+  }
+  #stage.dragging { cursor: grabbing; }
+  @media (max-aspect-ratio: 1/1) { #stage { aspect-ratio: 3 / 4; } }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+             gap: 14px; text-align: center; padding: 18px; }
+  #menu { background: linear-gradient(rgba(20,5,8,.78), rgba(20,5,8,.55) 45%, rgba(20,5,8,.85)); overflow-y: auto; }
+  #result { background: radial-gradient(ellipse at center, rgba(20,5,8,.55), rgba(20,5,8,.92)); }
+  .hidden { display: none !important; }
+  h1 { margin: 0; font-size: clamp(42px, 9vw, 84px); letter-spacing: 6px; color: #ffd86b; font-weight: 700;
+       text-shadow: 0 0 22px rgba(255,190,80,.55), 0 4px 0 #6b2a12, 0 10px 20px rgba(0,0,0,.6); }
+  h1 small { display: block; font-size: .28em; letter-spacing: 8px; color: #f6e3b4; text-shadow: none; margin-top: 6px; }
+  h2 { margin: 0; font-size: clamp(30px, 6vw, 52px); color: #ffd86b; text-shadow: 0 4px 0 #6b2a12, 0 10px 18px rgba(0,0,0,.5); }
+  .rules { font-size: clamp(13px, 2.1vw, 16px); line-height: 1.55; text-align: left; background: rgba(0,0,0,.45);
+           border: 1px solid #d4a94a66; border-radius: 14px; padding: 10px 18px; max-width: 560px; }
+  .rules b { color: #ffd86b; }
+  .btn { font: inherit; font-weight: 700; font-size: 22px; padding: 12px 34px; border: 0; border-radius: 14px; cursor: pointer;
+         background: linear-gradient(#ffe7a3, #e0a93a); color: #3a1206; box-shadow: 0 6px 0 #8a5412, 0 12px 20px rgba(0,0,0,.4); }
+  .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #8a5412; }
+  .btn.alt { font-size: 17px; padding: 10px 22px; background: linear-gradient(#fff, #e8dcc4); box-shadow: 0 6px 0 #9b8a6a, 0 12px 20px rgba(0,0,0,.4); }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .keys { font-size: 12px; font-family: system-ui, sans-serif; background: rgba(0,0,0,.5); padding: 6px 14px; border-radius: 999px; }
+  .keys kbd { background: #fff; color: #3a1206; border-radius: 5px; padding: 1px 6px; font: inherit; font-weight: 800; }
+  #hud { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; pointer-events: none; font-family: system-ui, sans-serif; }
+  .pill { background: rgba(0,0,0,.55); border: 1px solid #d4a94a88; padding: 5px 12px; border-radius: 999px; font-size: 15px; font-weight: 700; }
+  .pill b { color: #ffd86b; }
+  #hint { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); pointer-events: none; font-family: system-ui, sans-serif;
+          background: rgba(0,0,0,.55); padding: 6px 14px; border-radius: 999px; font-size: 13px; text-align: center; max-width: 92%; transition: opacity .6s; }
+  #hint b { color: #ffd86b; }
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .45s;
+          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; }
+  #fade.on { opacity: 1; }
+  #fadeBig { font-size: clamp(34px, 7vw, 64px); color: #ffd86b; letter-spacing: 4px; }
+  #fadeSmall { font-size: clamp(15px, 2.6vw, 20px); color: #f6e3b4; max-width: 520px; line-height: 1.4; }
+  .stats { font-size: 18px; line-height: 1.7; background: rgba(0,0,0,.5); padding: 10px 18px; border-radius: 14px; }
+  .stats b { color: #ffd86b; }
+  #stick { position: absolute; left: 18px; bottom: 18px; width: 120px; height: 120px; border-radius: 50%;
+           background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.35); touch-action: none; }
+  #knob { position: absolute; left: 35px; top: 35px; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,216,107,.8); pointer-events: none; }
+</style>
+</head>
+<body>
+  <div id="top" class="col">
+    <div id="mg-chip"></div>
+    <div id="bestChip">Best checkout <b id="best">–</b></div>
+  </div>
+
+  <div id="stage">
+    <div id="hud" class="hidden">
+      <div class="pill">🛗 <b id="hudFloor">Floor 6</b></div>
+      <div class="pill">⏱ <b id="hudTime">0:00</b></div>
+    </div>
+    <div id="hint" class="hidden">Normal? <b>keep going</b> to the far stairs · Weird? <b>turn back</b> to the door behind you</div>
+    <div id="stick" class="hidden"><div id="knob"></div></div>
+    <div id="fade"><div id="fadeBig"></div><div id="fadeSmall"></div></div>
+
+    <div id="menu" class="overlay">
+      <h1>CHECKOUT<small>THE HOTEL THAT WON'T LET YOU LEAVE</small></h1>
+      <div class="rules">
+        🛎️ You're on <b>Floor 6</b>. Get down to the <b>Lobby</b>.<br>
+        👀 Walk the hallway and look closely at everything.<br>
+        ✅ All normal? <b>Keep going</b> to the STAIRS at the far end.<br>
+        🔙 Anything weird? <b>Turn back</b> through the door you came in.<br>
+        💡 The lights are <b>always on</b>. If they go out, that's weird!<br>
+        ❌ Wrong choice and you're back on Floor 6.
+      </div>
+      <button class="btn" id="play">▶ CHECK IN</button>
+      <div class="keys">Walk <kbd>W</kbd><kbd>S</kbd> / <kbd>↑</kbd><kbd>↓</kbd> · Step sideways <kbd>A</kbd><kbd>D</kbd> · Turn <kbd>←</kbd><kbd>→</kbd> or drag · Run <kbd>Shift</kbd></div>
+    </div>
+
+    <div id="result" class="overlay hidden">
+      <div style="font-size:54px">🛎️</div>
+      <h2 id="resTitle">YOU CHECKED OUT!</h2>
+      <div class="stats" id="resStats"></div>
+      <div class="row">
+        <button class="btn" id="again">Play again</button>
+        <button class="btn alt" id="toMenu">Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mg-picker" class="col"></div>
+  <div id="mg-account" class="col"></div>
+  <div id="mg-board" class="col"></div>
+
+<script src="./three.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  // ======================= platform: accounts, leaderboard, play time =======================
+  const GAME = "checkout";
+  const BOARD = "checkout";            // lowest wins: centiseconds from check-in to the lobby
+  const LS_BEST = "checkout:best-cs";
+  const $ = (id) => document.getElementById(id);
+  const mg = window.Marshellis ? Marshellis.init({ game: GAME, chip: "#mg-chip", account: "#mg-account", board: "#mg-board", picker: "#mg-picker" }) : null;
+  let best = Number(localStorage.getItem(LS_BEST) || 0) || 0;
+  const fmt = (cs) => { const s = Math.floor(cs / 100); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0") + "." + String(cs % 100).padStart(2, "0"); };
+  const showBest = () => { $("best").textContent = best ? fmt(best) : "–"; };
+  if (mg) mg.refreshBoard(BOARD);
+  showBest();
+  async function submit(cs) {
+    if (!best || cs < best) { best = cs; localStorage.setItem(LS_BEST, String(best)); }
+    showBest();
+    if (!mg) return;
+    const r = await mg.submitScore(cs, BOARD);
+    if (r && r.best && r.best < best) { best = r.best; showBest(); }
+  }
+
+  // ======================= tuning =======================
+  const START_FLOOR = 6;
+  const W = 3.2, H = 3.0;              // hallway width / height
+  const BASE_L = 36;                   // normal hallway length
+  const EYE = 1.6, SPEED = 3.0, RUN = 5.2, RADIUS = 0.32;
+  const ANOMALY_CHANCE = 0.55;
+
+  // ======================= renderer =======================
+  const stage = $("stage");
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x050203);
+  const camera = new THREE.PerspectiveCamera(70, 16 / 10, 0.05, 120);
+  camera.rotation.order = "YXZ";
+  const AMB = 0.15, HEMI = 0.15;
+  const ambient = new THREE.AmbientLight(0xffe6c4, AMB);
+  const hemi = new THREE.HemisphereLight(0xfff3dd, 0x3a1a10, HEMI);
+  scene.add(ambient, hemi);
+  function resize() {
+    const r = stage.getBoundingClientRect();
+    renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false);
+    camera.aspect = Math.max(1, r.width) / Math.max(1, r.height); camera.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", resize);
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+  resize();
+
+  // ======================= sound =======================
+  let actx = null;
+  function audio() { if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { actx = null; } } if (actx && actx.state === "suspended") actx.resume(); return actx; }
+  function beep(f, dur, type, vol, f2) {
+    const a = actx; if (!a) return;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type || "sine"; o.frequency.setValueAtTime(f, a.currentTime);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, a.currentTime + dur);
+    g.gain.setValueAtTime(vol || 0.05, a.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + dur);
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + dur + 0.02);
+  }
+  const ding = () => { beep(880, 0.5, "sine", 0.08); setTimeout(() => beep(1320, 0.8, "sine", 0.07), 140); };
+  const buzz = () => { beep(140, 0.6, "square", 0.05, 70); };
+  const knock = () => { for (let i = 0; i < 3; i++) setTimeout(() => beep(110, 0.09, "square", 0.08, 60), i * 170); };
+  const step = () => beep(70 + Math.random() * 20, 0.07, "sine", 0.05, 45);
+  const buzzLight = () => beep(60, 0.15, "sawtooth", 0.025);
+
+  // ======================= textures (all drawn, nothing to download) =======================
+  function canvasTex(w, h, draw, repeat) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    draw(c.getContext("2d"), w, h);
+    const t = new THREE.CanvasTexture(c);
+    if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat[0], repeat[1]); }
+    t.anisotropy = 4;
+    return t;
+  }
+  function carpetTex(base, line, len) {
+    return canvasTex(128, 128, (g, w, h) => {
+      g.fillStyle = base; g.fillRect(0, 0, w, h);
+      g.strokeStyle = line; g.lineWidth = 5;
+      g.beginPath(); g.moveTo(64, 8); g.lineTo(120, 64); g.lineTo(64, 120); g.lineTo(8, 64); g.closePath(); g.stroke();
+      g.fillStyle = line; g.beginPath(); g.arc(64, 64, 9, 0, Math.PI * 2); g.fill();
+      g.globalAlpha = 0.35; for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(i % 2 ? 0 : 128, i < 2 ? 0 : 128, 14, 0, 7); g.fill(); }
+    }, [W / 1.6, len / 1.6]);
+  }
+  const wallTex = (len) => canvasTex(128, 128, (g, w, h) => {
+    g.fillStyle = "#e8d6b0"; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#dcc596"; for (let x = 0; x < w; x += 32) g.fillRect(x, 0, 12, h);
+    g.fillStyle = "#cfb47f"; for (let x = 6; x < w; x += 32) g.fillRect(x, 0, 2, h);
+  }, [len / 0.9, H / 1.4]);
+
+  const PAINTINGS = [
+    (g, w, h) => { // sunset over the sea (sun high, water low)
+      const s = g.createLinearGradient(0, 0, 0, h * 0.6); s.addColorStop(0, "#ff7b54"); s.addColorStop(1, "#ffd56b");
+      g.fillStyle = s; g.fillRect(0, 0, w, h * 0.6); g.fillStyle = "#fff3b0"; g.beginPath(); g.arc(w * 0.5, h * 0.3, h * 0.14, 0, 7); g.fill();
+      g.fillStyle = "#1f5f8b"; g.fillRect(0, h * 0.6, w, h * 0.4); g.fillStyle = "#ffd56b88"; for (let i = 0; i < 6; i++) g.fillRect(w * 0.4 + (i % 2) * 8, h * (0.64 + i * 0.05), w * 0.2 - i * 6, 3);
+    },
+    (g, w, h) => { // snowy mountains on green grass
+      g.fillStyle = "#9fd3f0"; g.fillRect(0, 0, w, h); g.fillStyle = "#5d6e7d";
+      g.beginPath(); g.moveTo(0, h * 0.75); g.lineTo(w * 0.3, h * 0.2); g.lineTo(w * 0.55, h * 0.75); g.fill();
+      g.beginPath(); g.moveTo(w * 0.35, h * 0.75); g.lineTo(w * 0.7, h * 0.12); g.lineTo(w, h * 0.75); g.fill();
+      g.fillStyle = "#fff"; g.beginPath(); g.moveTo(w * 0.3, h * 0.2); g.lineTo(w * 0.36, h * 0.32); g.lineTo(w * 0.24, h * 0.32); g.fill();
+      g.beginPath(); g.moveTo(w * 0.7, h * 0.12); g.lineTo(w * 0.77, h * 0.26); g.lineTo(w * 0.63, h * 0.26); g.fill();
+      g.fillStyle = "#4f9a3c"; g.fillRect(0, h * 0.72, w, h * 0.28);
+    },
+    (g, w, h) => { // flowers in a vase
+      g.fillStyle = "#3b2f4a"; g.fillRect(0, 0, w, h); g.fillStyle = "#c9a26b"; g.fillRect(0, h * 0.85, w, h * 0.15);
+      g.fillStyle = "#4a8fc4"; g.beginPath(); g.ellipse(w * 0.5, h * 0.72, w * 0.12, h * 0.16, 0, 0, 7); g.fill();
+      const cols = ["#ff5d8f", "#ffd23f", "#ff8c42", "#f7f7ff", "#c77dff"];
+      for (let i = 0; i < 7; i++) { const x = w * (0.3 + i * 0.065), y = h * (0.22 + (i % 3) * 0.08);
+        g.strokeStyle = "#3f8f3a"; g.lineWidth = 3; g.beginPath(); g.moveTo(w * 0.5, h * 0.6); g.lineTo(x, y); g.stroke();
+        g.fillStyle = cols[i % 5]; g.beginPath(); g.arc(x, y, 11, 0, 7); g.fill(); g.fillStyle = "#ffe66d"; g.beginPath(); g.arc(x, y, 4, 0, 7); g.fill(); }
+    },
+    (g, w, h) => { // sailboat
+      g.fillStyle = "#bde4f4"; g.fillRect(0, 0, w, h * 0.62); g.fillStyle = "#2a7ab0"; g.fillRect(0, h * 0.62, w, h * 0.38);
+      g.fillStyle = "#8b4a2b"; g.beginPath(); g.moveTo(w * 0.3, h * 0.62); g.lineTo(w * 0.7, h * 0.62); g.lineTo(w * 0.62, h * 0.74); g.lineTo(w * 0.38, h * 0.74); g.fill();
+      g.fillStyle = "#fff"; g.beginPath(); g.moveTo(w * 0.5, h * 0.12); g.lineTo(w * 0.5, h * 0.6); g.lineTo(w * 0.72, h * 0.6); g.fill();
+      g.fillStyle = "#ff6b6b"; g.beginPath(); g.moveTo(w * 0.48, h * 0.2); g.lineTo(w * 0.48, h * 0.6); g.lineTo(w * 0.32, h * 0.6); g.fill();
+    },
+    (g, w, h) => { // hot air balloon
+      g.fillStyle = "#8fd0ff"; g.fillRect(0, 0, w, h); g.fillStyle = "#fff"; g.beginPath(); g.arc(w * 0.2, h * 0.3, 16, 0, 7); g.arc(w * 0.27, h * 0.27, 20, 0, 7); g.fill();
+      const cols = ["#ff595e", "#ffca3a", "#8ac926", "#1982c4"]; for (let i = 0; i < 4; i++) { g.fillStyle = cols[i]; g.beginPath(); g.ellipse(w * 0.6, h * 0.36, w * 0.17 * (1 - i * 0.24), h * 0.26, 0, 0, 7); g.fill(); }
+      g.strokeStyle = "#5b3a1a"; g.lineWidth = 2; g.beginPath(); g.moveTo(w * 0.5, h * 0.55); g.lineTo(w * 0.56, h * 0.72); g.moveTo(w * 0.7, h * 0.55); g.lineTo(w * 0.64, h * 0.72); g.stroke();
+      g.fillStyle = "#8b5a2b"; g.fillRect(w * 0.55, h * 0.72, w * 0.1, h * 0.09); g.fillStyle = "#5aa84a"; g.fillRect(0, h * 0.9, w, h * 0.1);
+    },
+    (g, w, h) => { // pine forest
+      g.fillStyle = "#ffe0b5"; g.fillRect(0, 0, w, h); g.fillStyle = "#7cb56a"; g.fillRect(0, h * 0.78, w, h * 0.22);
+      for (let i = 0; i < 6; i++) { const x = w * (0.1 + i * 0.16), s = 0.7 + (i % 3) * 0.15; g.fillStyle = i % 2 ? "#2f6b3a" : "#3e8a4a";
+        g.beginPath(); g.moveTo(x, h * (0.78 - 0.6 * s)); g.lineTo(x + 26 * s, h * 0.78); g.lineTo(x - 26 * s, h * 0.78); g.fill();
+        g.fillStyle = "#6b4226"; g.fillRect(x - 3, h * 0.78, 6, 10); }
+    },
+  ];
+  function framedTex(draw) {
+    return canvasTex(256, 176, (g, w, h) => {
+      g.save(); g.translate(14, 14); draw(g, w - 28, h - 28); g.restore();
+      g.strokeStyle = "#c79b3b"; g.lineWidth = 14; g.strokeRect(7, 7, w - 14, h - 14);
+      g.strokeStyle = "#8a6420"; g.lineWidth = 2; g.strokeRect(14, 14, w - 28, h - 28);
+    });
+  }
+  const paintingTex = PAINTINGS.map((d) => framedTex(d));
+  const faceTex = framedTex((g, w, h) => {
+    g.fillStyle = "#4a3b5c"; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#3a2410"; g.beginPath(); g.ellipse(w / 2, h * 0.42, w * 0.22, h * 0.42, 0, 0, 7); g.fill();
+    g.fillStyle = "#f2c9a0"; g.beginPath(); g.ellipse(w / 2, h * 0.55, w * 0.17, h * 0.36, 0, 0, 7); g.fill();
+    g.fillStyle = "#fff"; g.beginPath(); g.ellipse(w * 0.44, h * 0.48, 11, 7, 0, 0, 7); g.ellipse(w * 0.56, h * 0.48, 11, 7, 0, 0, 7); g.fill();
+    g.strokeStyle = "#9b3b3b"; g.lineWidth = 3; g.beginPath(); g.arc(w / 2, h * 0.64, 12, 0.2, Math.PI - 0.2); g.stroke();
+    g.fillStyle = "#1f3b6b"; g.fillRect(w * 0.3, h * 0.88, w * 0.4, h * 0.12);
+  });
+  function textTex(w, h, bg, fg, lines, font, mirror) {
+    return canvasTex(w, h, (g) => {
+      g.fillStyle = bg; g.fillRect(0, 0, w, h);
+      if (mirror) { g.translate(w, 0); g.scale(-1, 1); }
+      g.fillStyle = fg; g.textAlign = "center"; g.textBaseline = "middle";
+      lines.forEach((ln, i) => { g.font = (Array.isArray(font) ? font[i] : font); g.fillText(ln, w / 2, h * (i + 0.5) / lines.length); });
+    });
+  }
+  const plateTex = (n, red) => textTex(128, 64, red ? "#b03030" : "#c9a54a", "#2a1a08", [String(n)], "bold 40px Georgia");
+  const noticeTex = canvasTex(512, 400, (g, w, h) => {
+    g.fillStyle = "#f7f0dd"; g.fillRect(0, 0, w, h); g.strokeStyle = "#8a6420"; g.lineWidth = 12; g.strokeRect(6, 6, w - 12, h - 12);
+    g.fillStyle = "#6b1d1d"; g.textAlign = "center"; g.font = "bold 40px Georgia"; g.fillText("GUEST NOTICE", w / 2, 62);
+    g.fillStyle = "#2a1a08"; g.font = "26px Georgia";
+    ["Our hallways are always the same.", "Our lights are always on.", "", "If everything looks normal,", "take the stairs at the far end.", "", "If ANYTHING seems wrong,", "turn back at once."]
+      .forEach((ln, i) => g.fillText(ln, w / 2, 118 + i * 36));
+  });
+
+  // ======================= shared materials =======================
+  const M = {
+    ceiling: new THREE.MeshLambertMaterial({ color: 0xf5efe2, emissive: 0x3a352c }),
+    base: new THREE.MeshLambertMaterial({ color: 0x5a2e1a }),
+    rail: new THREE.MeshLambertMaterial({ color: 0x7a4a2a }),
+    door: new THREE.MeshLambertMaterial({ color: 0x6b3b22 }),
+    doorPanel: new THREE.MeshLambertMaterial({ color: 0x5a301b }),
+    frame: new THREE.MeshLambertMaterial({ color: 0xe9e0cc }),
+    gold: new THREE.MeshLambertMaterial({ color: 0xd8b04a, emissive: 0x2a1c00 }),
+    dark: new THREE.MeshBasicMaterial({ color: 0x111111 }),
+    metal: new THREE.MeshLambertMaterial({ color: 0x8d949c }),
+    steel: new THREE.MeshLambertMaterial({ color: 0xc8ccd2, emissive: 0x202224 }),
+    glass: new THREE.MeshBasicMaterial({ color: 0x223040 }),
+    cloth: new THREE.MeshLambertMaterial({ color: 0xffffff }),
+    cart: new THREE.MeshLambertMaterial({ color: 0x9aa2ab }),
+    pot: new THREE.MeshLambertMaterial({ color: 0xb4572e }),
+    leaf: new THREE.MeshLambertMaterial({ color: 0x2f8a3a }),
+    leaf2: new THREE.MeshLambertMaterial({ color: 0x3fa64a }),
+    red: new THREE.MeshLambertMaterial({ color: 0xd42a2a }),
+    dnd: new THREE.MeshLambertMaterial({ color: 0xd42a2a, emissive: 0x220000 }),
+    ice: new THREE.MeshLambertMaterial({ color: 0xdff4ff, emissive: 0x334455 }),
+    iceBox: new THREE.MeshLambertMaterial({ color: 0x6f8fa8 }),
+    wet: new THREE.MeshBasicMaterial({ color: 0x120608, transparent: true, opacity: 0.55, depthWrite: false }),
+    roomGlow: new THREE.MeshBasicMaterial({ color: 0xff2a1a }),
+    slipper: new THREE.MeshLambertMaterial({ color: 0xffffff }),
+    pupil: new THREE.MeshBasicMaterial({ color: 0x111111 }),
+  };
+  const dndTex = textTex(64, 128, "#d42a2a", "#fff", ["DO", "NOT", "DISTURB"], ["bold 18px sans-serif", "bold 18px sans-serif", "bold 12px sans-serif"]);
+  M.dnd.map = dndTex;
+  const iceLabel = textTex(128, 64, "#2f5d7c", "#fff", ["ICE"], "bold 38px sans-serif");
+  const stairsTex = textTex(256, 96, "#0d6b2e", "#d8ffd8", ["STAIRS ↓"], "bold 54px sans-serif");
+  const stairsTexBackwards = textTex(256, 96, "#0d6b2e", "#d8ffd8", ["STAIRS ↓"], "bold 54px sans-serif", true);
+  const backTex = textTex(256, 96, "#3a3a3a", "#eee", ["STAIRS ↓"], "bold 54px sans-serif");
+
+  const box = (w, h, d, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  const plane = (w, h, mat) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+
+  // ======================= the hallway =======================
+  // The hallway runs along z. You enter at +L/2 facing -z; the far stairs are at -L/2.
+  // Left wall x = -W/2 (odd rooms), right wall x = +W/2 (even rooms).
+  const ANOMALIES = {
+    lightsOut:   "the lights went out",
+    wrongNumber: "a room number was wrong",
+    doorAjar:    "a door was open with a red glow inside",
+    cartRolls:   "the room service cart rolled toward you",
+    faceEyes:    "a painting turned into a face that watched you",
+    upsideDown:  "a painting was upside down",
+    greenCarpet: "the carpet was green",
+    dndAll:      "every door had a DO NOT DISTURB sign",
+    tinyDoor:    "there was a tiny extra door",
+    backwards:   "the STAIRS sign was backwards",
+    longHall:    "the hallway was way too long",
+    knocking:    "something was knocking on a door",
+    footprints:  "wet footprints went into a room",
+    giantPlant:  "the plant was GIANT",
+    iceSpill:    "ice was spilled all over the floor",
+    slippers:    "slippers were walking by themselves",
+    lowCeiling:  "the ceiling was getting lower",
+  };
+  const ANOM_KEYS = Object.keys(ANOMALIES);
+
+  let world = null;      // { group, L, lights, colliders, updaters, ceiling, anomaly, floor }
+  function disposeWorld() {
+    if (!world) return;
+    scene.remove(world.group);
+    world.group.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material && o.material.userData && o.material.userData.own) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); }
+    });
+    world = null;
+  }
+  const ownMat = (m) => { m.userData.own = true; return m; };
+
+  function buildFloor(floor, anomaly) {
+    disposeWorld();
+    const L = anomaly === "longHall" ? 62 : BASE_L;
+    ambient.intensity = AMB; hemi.intensity = HEMI; M.ceiling.emissive.setHex(0x3a352c);
+    const g = new THREE.Group();
+    const w = { group: g, L, lights: [], colliders: [], updaters: [], anomaly, floor, doors: [], paintings: [] };
+    const has = (a) => anomaly === a;
+
+    // floor, walls, ceiling
+    const carpet = plane(W, L, ownMat(new THREE.MeshLambertMaterial({ map: has("greenCarpet") ? carpetTex("#1f6b34", "#c9b04a", L) : carpetTex("#7a1c24", "#c9a04a", L) })));
+    carpet.rotation.x = -Math.PI / 2; g.add(carpet);
+    const wallMat = ownMat(new THREE.MeshLambertMaterial({ map: wallTex(L) }));
+    const lw = plane(L, H, wallMat); lw.rotation.y = Math.PI / 2; lw.position.set(-W / 2, H / 2, 0); g.add(lw);
+    const rw = plane(L, H, wallMat); rw.rotation.y = -Math.PI / 2; rw.position.set(W / 2, H / 2, 0); g.add(rw);
+    const endMat = ownMat(new THREE.MeshLambertMaterial({ map: wallTex(W) }));
+    const fw = plane(W, H, endMat); fw.position.set(0, H / 2, -L / 2); g.add(fw);
+    const bw = plane(W, H, endMat); bw.rotation.y = Math.PI; bw.position.set(0, H / 2, L / 2); g.add(bw);
+    for (const s of [-1, 1]) {
+      const b = box(0.04, 0.14, L, M.base); b.position.set(s * (W / 2 - 0.02), 0.07, 0); g.add(b);
+      const r = box(0.03, 0.05, L, M.rail); r.position.set(s * (W / 2 - 0.015), 0.95, 0); g.add(r);
+    }
+    const ceiling = new THREE.Group(); g.add(ceiling); w.ceiling = ceiling;
+    const ceil = plane(W, L, M.ceiling); ceil.rotation.x = Math.PI / 2; ceil.position.y = H; ceiling.add(ceil);
+
+    // ceiling lights (each its own material so it can flicker)
+    for (let z = L / 2 - 2.5; z > -L / 2 + 1; z -= 5.5) {
+      const mat = ownMat(new THREE.MeshBasicMaterial({ color: 0xfff4d6 }));
+      const panel = box(0.9, 0.05, 0.9, mat); panel.position.set(0, H - 0.03, z); ceiling.add(panel);
+      const pl = new THREE.PointLight(0xffe9c4, 1.15, 10, 1.6); pl.position.set(0, H - 0.45, z); ceiling.add(pl);
+      w.lights.push({ z, mat, pl, on: true });
+    }
+
+    // doors + room plates + paintings
+    let idx = 0;
+    for (let z = L / 2 - 5; z > -L / 2 + 4; z -= 6, idx++) {
+      for (const side of [-1, 1]) {
+        const room = floor * 100 + idx * 2 + (side < 0 ? 1 : 2);
+        w.doors.push(makeDoor(g, side, z, room, idx));
+        if (z - 3 > -L / 2 + 2) w.paintings.push(makePainting(g, side, z - 3, (idx * 2 + (side < 0 ? 0 : 1)) % PAINTINGS.length, idx));
+      }
+    }
+
+    // stairwell doors at both ends
+    makeStairDoor(g, -L / 2, false, has("backwards"));
+    makeStairDoor(g, L / 2, true, false);
+
+    // floor sign + guest notice near the start
+    const fsign = plane(0.9, 0.5, ownMat(new THREE.MeshLambertMaterial({ map: textTex(256, 144, "#2a1a08", "#ffd86b", ["FLOOR", String(floor)], ["bold 40px Georgia", "bold 70px Georgia"]) })));
+    fsign.rotation.y = Math.PI / 2; fsign.position.set(-W / 2 + 0.02, 1.7, L / 2 - 2.0); g.add(fsign);
+    const notice = plane(0.75, 0.59, ownMat(new THREE.MeshLambertMaterial({ map: noticeTex }))); notice.material.map = noticeTex; notice.material.userData.own = false;
+    notice.rotation.y = -Math.PI / 2; notice.position.set(W / 2 - 0.02, 1.55, L / 2 - 2.0); g.add(notice);
+
+    // props
+    makePlant(g, w, has("giantPlant"));
+    makeCart(g, w, has("cartRolls"));
+    makeIce(g, w, has("iceSpill"));
+    const ext = new THREE.Group();
+    const can = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.45, 12), M.red); can.position.y = 0.6; ext.add(can);
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.1, 8), M.dark); top.position.y = 0.87; ext.add(top);
+    ext.position.set(W / 2 - 0.12, 0, -8); g.add(ext);
+    // one Do Not Disturb sign, always on room x05
+    w.doors.forEach((d) => { if (has("dndAll") || d.room % 100 === 5) addDnd(d); });
+
+    // ---------- anomalies that need setting up ----------
+    if (has("wrongNumber")) { const d = w.doors[7]; d.plate.material.map = plateTex(floor * 100 + 13); d.plate.material.needsUpdate = true; }
+    if (has("doorAjar")) { const d = w.doors[2]; d.pivot.rotation.y = 0.5; const glow = plane(1.0, 2.2, M.roomGlow); glow.position.set(0, 1.1, 0.004); d.group.add(glow);
+      const pl = new THREE.PointLight(0xff3020, 0.6, 4, 2); pl.position.set(0, 1.2, 0.5); d.group.add(pl); }
+    if (has("upsideDown")) { const p = w.paintings[3]; p.art.rotation.z = Math.PI; }
+    if (has("faceEyes")) setupFace(w, w.paintings[4]);
+    if (has("tinyDoor")) { const td = new THREE.Group(); const s = box(0.42, 0.75, 0.05, M.door); s.position.y = 0.375; td.add(s);
+      const kn = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), M.gold); kn.position.set(0.14, 0.38, 0.04); td.add(kn);
+      td.rotation.y = -Math.PI / 2; td.position.set(W / 2 - 0.03, 0, w.paintings[1].z); g.add(td); }
+    if (has("knocking")) setupKnock(w, w.doors[3]);
+    if (has("footprints")) setupFootprints(g, w.doors[4]);
+    if (has("slippers")) setupSlippers(g, w);
+    if (has("lightsOut")) setupLightsOut(w);
+    if (has("lowCeiling")) w.updaters.push(() => { const p = THREE.MathUtils.clamp((L / 2 - 4 - player.z) / (L - 10), 0, 1); ceiling.position.y = -0.75 * p; });
+
+    scene.add(g);
+    world = w;
+    return w;
+  }
+
+  function makeDoor(g, side, z, room, idx) {
+    // local space: door face points +z (into the hallway), hinge on the left edge
+    const grp = new THREE.Group();
+    grp.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
+    grp.position.set(side * (W / 2), 0, z);
+    const fl = box(0.08, 2.32, 0.07, M.frame); fl.position.set(-0.55, 1.16, 0.035); grp.add(fl);
+    const fr = box(0.08, 2.32, 0.07, M.frame); fr.position.set(0.55, 1.16, 0.035); grp.add(fr);
+    const ft = box(1.18, 0.1, 0.07, M.frame); ft.position.set(0, 2.27, 0.035); grp.add(ft);
+    const dark = plane(1.0, 2.2, M.dark); dark.position.set(0, 1.1, 0.002); grp.add(dark);
+    const pivot = new THREE.Group(); pivot.position.set(-0.5, 0, 0.01); grp.add(pivot);
+    const slab = box(1.0, 2.2, 0.05, M.door); slab.position.set(0.5, 1.1, 0.025); pivot.add(slab);
+    const p1 = box(0.7, 0.75, 0.01, M.doorPanel); p1.position.set(0.5, 1.6, 0.055); pivot.add(p1);
+    const p2 = box(0.7, 0.75, 0.01, M.doorPanel); p2.position.set(0.5, 0.6, 0.055); pivot.add(p2);
+    const handle = box(0.16, 0.035, 0.05, M.gold); handle.position.set(0.85, 1.0, 0.08); pivot.add(handle);
+    const peep = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.03, 10), M.gold); peep.rotation.x = Math.PI / 2; peep.position.set(0.5, 1.55, 0.065); pivot.add(peep);
+    const plate = plane(0.3, 0.15, ownMat(new THREE.MeshLambertMaterial({ map: plateTex(room) }))); plate.position.set(0.82, 1.55, 0.012); grp.add(plate);
+    g.add(grp);
+    return { group: grp, pivot, slab, plate, room, z, side, idx, handleX: 0.85 };
+  }
+  function addDnd(d) {
+    const s = plane(0.13, 0.26, M.dnd); s.position.set(0.85, 0.82, 0.11); d.pivot.add(s);
+  }
+  function makePainting(g, side, z, kind, idx) {
+    const grp = new THREE.Group();
+    grp.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
+    grp.position.set(side * (W / 2 - 0.02), 1.65, z);
+    const back = box(1.12, 0.8, 0.04, M.base); grp.add(back);
+    const art = plane(1.08, 0.74, ownMat(new THREE.MeshLambertMaterial({ map: paintingTex[kind] }))); art.material.userData.own = false; art.position.z = 0.025; grp.add(art);
+    g.add(grp);
+    return { group: grp, art, z, side, kind };
+  }
+  function makeStairDoor(g, z, behind, backwards) {
+    const grp = new THREE.Group(); grp.position.set(0, 0, z); if (behind) grp.rotation.y = Math.PI;
+    const fr = box(1.3, 2.4, 0.06, M.frame); fr.position.set(0, 1.2, 0.03); grp.add(fr);
+    const slab = box(1.15, 2.25, 0.06, M.metal); slab.position.set(0, 1.13, 0.07); grp.add(slab);
+    const win = plane(0.3, 0.5, M.glass); win.position.set(0.25, 1.6, 0.105); grp.add(win);
+    const bar = box(0.8, 0.06, 0.08, M.steel); bar.position.set(0, 1.0, 0.13); grp.add(bar);
+    const mat = new THREE.MeshBasicMaterial({ map: behind ? backTex : (backwards ? stairsTexBackwards : stairsTex) });
+    const sign = plane(1.15, 0.42, mat); sign.position.set(0, 2.68, 0.02); grp.add(sign);
+    if (!behind) { const glow = new THREE.PointLight(0x40ff80, 0.35, 3.5); glow.position.set(0, 2.5, 0.4); grp.add(glow); }
+    g.add(grp);
+  }
+  function makePlant(g, w, giant) {
+    const grp = new THREE.Group();
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.2, 0.5, 14), M.pot); pot.position.y = 0.25; grp.add(pot);
+    for (let i = 0; i < 7; i++) {
+      const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.22, 10, 8), i % 2 ? M.leaf : M.leaf2);
+      const a = i * 0.9; leaf.position.set(Math.cos(a) * 0.16, 0.7 + (i % 3) * 0.2, Math.sin(a) * 0.16); leaf.scale.set(0.8, 1.3, 0.8); grp.add(leaf);
+    }
+    if (giant) grp.scale.set(2.3, 2.7, 2.3);
+    grp.position.set(W / 2 - 0.4, 0, w.L / 2 - 3.6); g.add(grp);
+    const r = giant ? 0.65 : 0.3;
+    w.colliders.push({ x: W / 2 - 0.4, z: w.L / 2 - 3.6, hx: r, hz: r });
+  }
+  function makeCart(g, w, rolls) {
+    const grp = new THREE.Group();
+    const body = box(0.6, 0.06, 1.0, M.cart); body.position.y = 0.78; grp.add(body);
+    const low = box(0.6, 0.04, 1.0, M.cart); low.position.y = 0.25; grp.add(low);
+    const cloth = box(0.66, 0.35, 1.06, M.cloth); cloth.position.y = 0.64; grp.add(cloth);
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), M.steel); dome.position.set(0, 0.81, 0.15); grp.add(dome);
+    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.04, 0.1, 10), M.cloth); cup.position.set(0.1, 0.86, -0.3); grp.add(cup);
+    const wheels = [];
+    for (const sx of [-0.25, 0.25]) for (const sz of [-0.42, 0.42]) { const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.04, 10), M.dark); wh.rotation.z = Math.PI / 2; wh.position.set(sx, 0.06, sz); grp.add(wh); wheels.push(wh); }
+    for (const sx of [-0.27, 0.27]) for (const sz of [-0.47, 0.47]) { const leg = box(0.03, 0.72, 0.03, M.steel); leg.position.set(sx, 0.45, sz); grp.add(leg); }
+    const cx = W / 2 - 0.5, cz = -2;
+    grp.position.set(cx, 0, cz); g.add(grp);
+    const col = { x: cx, z: cz, hx: 0.36, hz: 0.55 }; w.colliders.push(col);
+    if (rolls) w.updaters.push((dt) => {
+      const d = grp.position.z - player.z;            // player is "down-hall" of the cart when d < 0... cart rolls toward the player
+      if (Math.abs(d) < 11 && Math.abs(d) > 1.6) {
+        const v = -Math.sign(d) * 0.7 * dt; grp.position.z += v; col.z = grp.position.z;
+        wheels.forEach((wh) => { wh.rotation.x += v * 10; });
+      }
+    });
+  }
+  function makeIce(g, w, spill) {
+    const grp = new THREE.Group();
+    const m = box(0.6, 1.15, 0.9, M.iceBox); m.position.y = 0.575; grp.add(m);
+    const lab = plane(0.4, 0.2, new THREE.MeshLambertMaterial({ map: iceLabel })); lab.rotation.y = Math.PI / 2; lab.position.set(0.31, 0.98, 0); grp.add(lab);
+    const slot = box(0.02, 0.3, 0.4, M.dark); slot.position.set(0.3, 0.6, 0); grp.add(slot);
+    const iz = -8;
+    grp.position.set(-W / 2 + 0.32, 0, iz); g.add(grp);
+    w.colliders.push({ x: -W / 2 + 0.32, z: iz, hx: 0.32, hz: 0.47 });
+    if (spill) {
+      const geo = new THREE.BoxGeometry(0.07, 0.07, 0.07);
+      for (let i = 0; i < 90; i++) {
+        const c = new THREE.Mesh(geo, M.ice);
+        c.position.set(-W / 2 + 0.7 + Math.random() * 1.9, 0.035, iz - 1.6 + Math.random() * 3.2);
+        c.rotation.y = Math.random() * 3; g.add(c);
+      }
+    }
+  }
+  function setupFace(w, p) {
+    p.art.material = new THREE.MeshLambertMaterial({ map: faceTex });
+    const eyes = [];
+    for (const ex of [-0.058, 0.058]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.016, 10, 8), M.pupil); e.position.set(ex, 0.013, 0.04); p.group.add(e); eyes.push({ e, ex }); }
+    const v = new THREE.Vector3();
+    w.updaters.push(() => {
+      v.copy(camera.position); p.group.worldToLocal(v);
+      const len = Math.hypot(v.x, v.y - 0.013) || 1;
+      const k = Math.min(1, len / 2);
+      eyes.forEach(({ e, ex }) => { e.position.x = ex + (v.x / len) * 0.025 * k; e.position.y = 0.013 + ((v.y - 0.013) / len) * 0.008 * k; });
+    });
+  }
+  function setupKnock(w, d) {
+    let next = 0, wob = 0;
+    w.updaters.push((dt, t) => {
+      const near = Math.abs(player.z - d.z) < 7;
+      if (near && t > next) { next = t + 2.4; wob = 0.55; knock(); }
+      if (wob > 0) { wob -= dt; d.slab.position.z = 0.025 + Math.sin(wob * 60) * 0.012 * (wob > 0 ? 1 : 0); }
+    });
+  }
+  function setupFootprints(g, d) {
+    // from the middle of the hall, down toward the door, then into it
+    const pts = [];
+    for (let i = 0; i < 9; i++) pts.push([0.1 * Math.sin(i), d.z + 7 - i * 0.75]);
+    for (let i = 1; i <= 3; i++) pts.push([d.side * (0.35 * i), d.z + 0.2]);
+    pts.forEach(([x, z], i) => {
+      const f = new THREE.Mesh(new THREE.CircleGeometry(0.09, 12), M.wet);
+      f.rotation.x = -Math.PI / 2; f.scale.set(0.75, 1.5, 1); f.position.set(x + (i % 2 ? 0.12 : -0.12), 0.006, z); g.add(f);
+    });
+  }
+  function setupSlippers(g, w) {
+    const grp = new THREE.Group();
+    const s1 = box(0.12, 0.05, 0.28, M.slipper), s2 = box(0.12, 0.05, 0.28, M.slipper);
+    s1.position.x = -0.09; s2.position.x = 0.09; grp.add(s1, s2); grp.rotation.y = Math.PI / 2;
+    grp.position.set(-1, 0.03, 4.5); g.add(grp);
+    let ph = 0, dir = 1;
+    w.updaters.push((dt) => {
+      if (Math.abs(player.z - grp.position.z) > 14) return;
+      ph += dt * 6;
+      grp.position.x += dir * dt * 0.55;
+      if (grp.position.x > 1.2) { dir = -1; grp.rotation.y = -Math.PI / 2; }
+      if (grp.position.x < -1.2) { dir = 1; grp.rotation.y = Math.PI / 2; }
+      s1.position.z = Math.sin(ph) * 0.1; s2.position.z = -Math.sin(ph) * 0.1;
+      s1.position.y = Math.max(0, Math.sin(ph)) * 0.04; s2.position.y = Math.max(0, -Math.sin(ph)) * 0.04;
+    });
+  }
+  function setupLightsOut(w) {
+    // once you're a few steps in, the lights ahead flicker and go out one after another, far end first
+    let started = -1;
+    const ahead = w.lights.slice(2).reverse();
+    w.updaters.push((dt, t) => {
+      if (started < 0 && player.z < w.L / 2 - 6) started = t;
+      if (started < 0) return;
+      ahead.forEach((L, i) => {
+        const s = started + i * 0.45, e = s + 0.7;
+        if (t < s) return;
+        if (t < e) { const on = Math.random() > 0.5; L.pl.intensity = on ? 1.15 : 0.05; L.mat.color.setHex(on ? 0xfff4d6 : 0x333333); if (!on && Math.random() < 0.2) buzzLight(); }
+        else if (L.on) { L.on = false; L.pl.intensity = 0; L.mat.color.setHex(0x222222); }
+      });
+      const off = w.lights.filter((L) => !L.on).length / w.lights.length;
+      ambient.intensity = AMB * (1 - 0.8 * off); hemi.intensity = HEMI * (1 - 0.8 * off);
+      M.ceiling.emissive.setHex(off > 0.3 ? 0x0a0908 : 0x3a352c);
+    });
+  }
+
+  // ======================= player + input =======================
+  const player = { x: 0, z: 0, yaw: 0, pitch: 0, stepT: 0, armedBack: false };
+  const keys = {};
+  window.addEventListener("keydown", (e) => {
+    keys[e.code] = true;
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
+    if ((e.code === "Enter" || e.code === "Space") && state === "menu") start();
+    audio();
+  });
+  window.addEventListener("keyup", (e) => { keys[e.code] = false; });
+  window.addEventListener("blur", () => { for (const k in keys) keys[k] = false; });
+
+  // drag to look (mouse + touch); joystick on touch screens
+  const isTouch = matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+  let look = null; const stick = { id: null, x: 0, y: 0, cx: 0, cy: 0 };
+  const stickEl = $("stick"), knobEl = $("knob");
+  stage.addEventListener("pointerdown", (e) => {
+    audio();
+    if (state !== "play" && state !== "fade") return;
+    if (e.target.closest(".overlay")) return;
+    if (e.target === stickEl) {
+      const r = stickEl.getBoundingClientRect(); stick.id = e.pointerId; stick.cx = r.left + r.width / 2; stick.cy = r.top + r.height / 2; moveStick(e);
+    } else { look = { id: e.pointerId, x: e.clientX, y: e.clientY }; stage.classList.add("dragging"); }
+    try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  function moveStick(e) {
+    let dx = e.clientX - stick.cx, dy = e.clientY - stick.cy; const m = Math.hypot(dx, dy), R = 45;
+    if (m > R) { dx = dx / m * R; dy = dy / m * R; }
+    stick.x = dx / R; stick.y = dy / R; knobEl.style.transform = `translate(${dx}px, ${dy}px)`;
+  }
+  stage.addEventListener("pointermove", (e) => {
+    if (e.pointerId === stick.id) return moveStick(e);
+    if (!look || e.pointerId !== look.id) return;
+    const k = isTouch ? 0.006 : 0.0045;
+    player.yaw -= (e.clientX - look.x) * k; player.pitch = THREE.MathUtils.clamp(player.pitch - (e.clientY - look.y) * k, -0.7, 0.6);
+    look.x = e.clientX; look.y = e.clientY;
+  });
+  const endPtr = (e) => {
+    if (e.pointerId === stick.id) { stick.id = null; stick.x = stick.y = 0; knobEl.style.transform = ""; }
+    if (look && e.pointerId === look.id) { look = null; stage.classList.remove("dragging"); }
+  };
+  stage.addEventListener("pointerup", endPtr); stage.addEventListener("pointercancel", endPtr);
+
+  function movePlayer(dt) {
+    let f = 0, s = 0;
+    if (keys.KeyW || keys.ArrowUp) f += 1;
+    if (keys.KeyS || keys.ArrowDown) f -= 1;
+    if (keys.KeyD) s += 1;
+    if (keys.KeyA) s -= 1;
+    if (keys.ArrowLeft || keys.KeyQ) player.yaw += 2.2 * dt;
+    if (keys.ArrowRight || keys.KeyE) player.yaw -= 2.2 * dt;
+    if (stick.id !== null) { f -= stick.y; s += stick.x; }
+    const m = Math.hypot(f, s); if (m > 1) { f /= m; s /= m; }
+    const sp = (keys.ShiftLeft || keys.ShiftRight) ? RUN : SPEED;
+    const sin = Math.sin(player.yaw), cos = Math.cos(player.yaw);
+    let nx = player.x + (-sin * f + cos * s) * sp * dt;
+    let nz = player.z + (-cos * f - sin * s) * sp * dt;
+    const L = world.L;
+    nx = THREE.MathUtils.clamp(nx, -W / 2 + RADIUS, W / 2 - RADIUS);
+    nz = THREE.MathUtils.clamp(nz, -L / 2 + RADIUS, L / 2 - RADIUS);
+    for (const c of world.colliders) {
+      const dx = nx - c.x, dz = nz - c.z, ox = c.hx + RADIUS - Math.abs(dx), oz = c.hz + RADIUS - Math.abs(dz);
+      if (ox > 0 && oz > 0) { if (ox < oz) nx += Math.sign(dx || 1) * ox; else nz += Math.sign(dz || 1) * oz; }
+    }
+    const moved = Math.hypot(nx - player.x, nz - player.z);
+    player.x = nx; player.z = nz;
+    if (moved > 0.001) { player.stepT += moved; if (player.stepT > 0.85) { player.stepT = 0; step(); } }
+    camera.position.set(player.x, EYE + Math.sin(player.stepT / 0.85 * Math.PI * 2) * 0.025, player.z);
+    camera.rotation.set(player.pitch, player.yaw, 0);
+  }
+
+  // ======================= game flow =======================
+  let state = "menu", t = 0, runStart = 0, floor = START_FLOOR, resets = 0, normalStreak = 0, missed = [];
+  let used = new Set();
+  function pickAnomaly() {
+    if (floor === START_FLOOR) return null;                       // the first floor is always normal: learn it!
+    if (normalStreak < 2 && Math.random() > ANOMALY_CHANCE) return null;
+    if (used.size >= ANOM_KEYS.length) used = new Set();
+    const pool = ANOM_KEYS.filter((k) => !used.has(k));
+    const a = pool[Math.floor(Math.random() * pool.length)]; used.add(a); return a;
+  }
+  function enterFloor(anomaly) {
+    buildFloor(floor, anomaly);
+    normalStreak = anomaly ? 0 : normalStreak + 1;
+    player.x = 0; player.z = world.L / 2 - 1.4; player.yaw = 0; player.pitch = 0; player.armedBack = false;
+    $("hudFloor").textContent = "Floor " + floor;
+    movePlayer(0);
+  }
+  function setFade(on, big, small) {
+    $("fadeBig").textContent = big || ""; $("fadeSmall").textContent = small || "";
+    $("fade").classList.toggle("on", on);
+  }
+
+  let starting = false;
+  async function start() {
+    if (starting) return; starting = true;
+    audio();
+    if (mg) { const ok = await mg.gate(); if (!ok) { starting = false; return; } }
+    starting = false;
+    floor = START_FLOOR; resets = 0; used = new Set(); normalStreak = 0; missed = [];
+    enterFloor(null);
+    runStart = t;
+    $("menu").classList.add("hidden"); $("result").classList.add("hidden");
+    $("hud").classList.remove("hidden"); $("hint").classList.remove("hidden"); $("hint").style.opacity = 1;
+    $("stick").classList.toggle("hidden", !isTouch);
+    state = "play";
+    mg && mg.startPlaying();
+    setFade(true, "FLOOR " + floor, "Learn this hallway. It's normal... for now.");
+    setTimeout(() => { if (state === "play") setFade(false); }, 1300);
+    setTimeout(() => { $("hint").style.opacity = 0.75; }, 8000);
+  }
+
+  function choose(dir) {
+    if (state !== "play") return;
+    state = "fade";
+    const anomaly = world.anomaly;
+    const correct = (dir === "back") === !!anomaly;
+    if (correct) {
+      ding();
+      floor -= 1;
+      setFade(true, floor === 0 ? "LOBBY" : "FLOOR " + floor, anomaly ? "Good eye! " + cap(ANOMALIES[anomaly]) + "." : "All normal. Down you go.");
+      setTimeout(() => {
+        if (floor === 0) return win();
+        enterFloor(pickAnomaly());
+        state = "play";
+        setTimeout(() => setFade(false), 250);
+      }, 1500);
+    } else {
+      buzz();
+      resets += 1;
+      if (anomaly) missed.push(anomaly);
+      window.MGRounds && MGRounds.end();
+      const why = anomaly ? "You missed it: " + ANOMALIES[anomaly] + "." : "Nothing was weird on that floor.";
+      setFade(true, "BACK TO FLOOR " + START_FLOOR, why);
+      setTimeout(() => {
+        floor = START_FLOOR; used = new Set(); normalStreak = 0;
+        enterFloor(null);
+        state = "play";
+        setTimeout(() => setFade(false), 300);
+      }, 2600);
+    }
+  }
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+  function win() {
+    state = "won";
+    const cs = Math.max(1, Math.round((t - runStart) * 100));
+    const isBest = !best || cs < best;
+    window.MGRounds && MGRounds.end();
+    submit(cs);
+    ding(); setTimeout(ding, 400);
+    $("resTitle").textContent = isBest ? "NEW BEST CHECKOUT!" : "YOU CHECKED OUT!";
+    $("resStats").innerHTML = "Time <b>" + fmt(cs) + "</b><br>Sent back to Floor 6: <b>" + resets + "</b> time" + (resets === 1 ? "" : "s") + "<br>Best: <b>" + fmt(isBest ? cs : best) + "</b>";
+    $("hud").classList.add("hidden"); $("hint").classList.add("hidden"); $("stick").classList.add("hidden");
+    setTimeout(() => { setFade(false); $("result").classList.remove("hidden"); }, 600);
+  }
+  function toMenu() {
+    state = "menu";
+    $("result").classList.add("hidden"); $("menu").classList.remove("hidden");
+    $("hud").classList.add("hidden"); $("hint").classList.add("hidden"); $("stick").classList.add("hidden");
+    floor = START_FLOOR; enterFloor(null);
+  }
+  $("play").addEventListener("click", start);
+  $("again").addEventListener("click", start);
+  $("toMenu").addEventListener("click", toMenu);
+
+  // ======================= main loop =======================
+  floor = START_FLOOR; enterFloor(null);
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now; t += dt;
+    if (state === "play") {
+      movePlayer(dt);
+      const L = world.L;
+      if (player.z < L / 2 - 5) player.armedBack = true;
+      if (player.z < -L / 2 + 0.9) choose("forward");
+      else if (player.armedBack && player.z > L / 2 - 0.9) choose("back");
+      $("hudTime").textContent = (() => { const s = Math.floor(t - runStart); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); })();
+    } else if (state === "menu") {
+      // slow look down the hallway behind the menu
+      player.x = 0; player.z = world.L / 2 - 1.4; player.pitch = -0.04; player.yaw = Math.sin(t * 0.25) * 0.35;
+      camera.position.set(player.x, EYE, player.z); camera.rotation.set(player.pitch, player.yaw, 0);
+    }
+    if (world) for (const u of world.updaters) u(dt, t);
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // test hook: lets a quick check jump straight to a floor with a given anomaly (no effect on normal play)
+  window.__checkout = { buildFloor: (f, a) => { floor = f; enterFloor(a || null); }, anomalies: ANOM_KEYS, get state() { return state; }, player };
+})();
+</script>
+</body>
+</html>

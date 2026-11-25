@@ -2,12 +2,12 @@
 // only games on this allowlist may post to the shared leaderboard — so a random
 // or hostile slug can't create unbounded Redis keys. Add a slug here when a new
 // arcade game should keep a global leaderboard.
-export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege", "ragdoll-soccer", "glass-bridge", "hex-collapse", "nexus-stairs", "nexus-race", "tumble-rush", "laser-hop", "laser-hop-survive"]);
+export const SCORE_GAMES = new Set<string>(["flappy", "snowball-arena", "bounce", "net-rally", "ragdoll-siege", "ragdoll-soccer", "glass-bridge", "hex-collapse", "nexus-stairs", "nexus-race", "tumble-rush", "laser-hop", "laser-hop-survive", "checkout"]);
 
 // Boards where the LOWEST value wins (race times). Every other board ranks highest first. A slug here must
 // also be in SCORE_GAMES (or COOP_SCORE_GAMES). Values are integers; "nexus-race" is the finish time in
 // centiseconds. A lower-is-better value must be > 0: 0 is also the "no entry" answer of Store.userBest.
-export const LOWER_IS_BETTER = new Set<string>(["nexus-race"]);
+export const LOWER_IS_BETTER = new Set<string>(["nexus-race", "checkout"]);
 
 export type ScoreDirection = "higher" | "lower";
 
