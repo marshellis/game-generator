@@ -250,9 +250,10 @@ describe("lowest-wins boards (nexus-race)", () => {
   it("registers the nexus boards, and only nexus-race ranks lowest first", () => {
     expect(SCORE_GAMES.has("nexus-stairs")).toBe(true);
     expect(SCORE_GAMES.has("nexus-race")).toBe(true);
-    expect([...LOWER_IS_BETTER]).toEqual(["nexus-race"]);
+    expect([...LOWER_IS_BETTER]).toEqual(["nexus-race", "checkout"]);
     for (const g of LOWER_IS_BETTER) expect(SCORE_GAMES.has(g)).toBe(true);
     expect(scoreDirection("nexus-race")).toBe("lower");
+    expect(scoreDirection("checkout")).toBe("lower");
     for (const g of ["nexus-stairs", "flappy", "hex-collapse", "net-rally-duo"]) expect(scoreDirection(g)).toBe("higher");
   });
 
