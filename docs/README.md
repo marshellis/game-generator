@@ -8,6 +8,8 @@ Start here. Each doc owns one topic; this page says which.
 | Operate it: env vars, deploy/rollback, health, backups, DNS, secrets, "what do I do when X breaks" | [runbook.md](runbook.md) |
 | Add a generated puzzle game (generator + site) | [adding-a-game.md](adding-a-game.md) |
 | Add an arcade (static / multiplayer) game | [../site/public/arcade/README.md](../site/public/arcade/README.md) |
+| Make, build or ship a Unity game (accounts, template, builds, getting it on the site) | [unity.md](unity.md) |
+| Why things are the way they are (dated decisions) | [decisions.md](decisions.md) |
 | Turn the family platform features on (Stripe, passes, store) | [setup-checklist.md](setup-checklist.md) |
 | Verify a player in a multiplayer server (game pass, renew, time-up) | [game-pass.md](game-pass.md), [room-kit/](room-kit/README.md) |
 | Run, read or extend the tests and simulations | [testing.md](testing.md), [../site/e2e/multiplayer/README.md](../site/e2e/multiplayer/README.md) |
