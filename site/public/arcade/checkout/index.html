@@ -134,7 +134,7 @@
   // ======================= tuning =======================
   const START_FLOOR = 6;
   const W = 3.2, H = 3.0;              // hallway width / height
-  const BASE_L = 36;                   // normal hallway length
+  const BASE_L = 24;                   // normal hallway length
   const EYE = 1.6, SPEED = 3.0, RUN = 5.2, RADIUS = 0.32;
   const ANOMALY_CHANCE = 0.55;
 
@@ -323,7 +323,9 @@
     faceEyes:    "a painting turned into a face that watched you",
     upsideDown:  "a painting was upside down",
     greenCarpet: "the carpet was green",
-    dndAll:      "every door had a DO NOT DISTURB sign",
+    dndAll:      "a DO NOT DISTURB sign appeared",
+    flood:       "the hallway was flooding",
+    padlock:     "a door handle had a padlock on it",
     tinyDoor:    "there was a tiny extra door",
     backwards:   "the STAIRS sign was backwards",
     longHall:    "the hallway was way too long",
@@ -350,7 +352,7 @@
 
   function buildFloor(floor, anomaly) {
     disposeWorld();
-    const L = anomaly === "longHall" ? 62 : BASE_L;
+    const L = anomaly === "longHall" ? 44 : BASE_L;
     ambient.intensity = AMB; hemi.intensity = HEMI; M.ceiling.emissive.setHex(0x3a352c);
     const g = new THREE.Group();
     const w = { group: g, L, lights: [], colliders: [], updaters: [], anomaly, floor, doors: [], paintings: [] };
@@ -380,15 +382,13 @@
       w.lights.push({ z, mat, pl, on: true });
     }
 
-    // doors + room plates + paintings
-    let idx = 0;
-    for (let z = L / 2 - 5; z > -L / 2 + 4; z -= 6, idx++) {
-      for (const side of [-1, 1]) {
-        const room = floor * 100 + idx * 2 + (side < 0 ? 1 : 2);
-        w.doors.push(makeDoor(g, side, z, room, idx));
-        if (z - 3 > -L / 2 + 2) w.paintings.push(makePainting(g, side, z - 3, (idx * 2 + (side < 0 ? 0 : 1)) % PAINTINGS.length, idx));
-      }
-    }
+    // just two rooms and three paintings, all measured from the start of the hallway (Z0)
+    const Z0 = L / 2; w.Z0 = Z0;
+    w.doors.push(makeDoor(g, -1, Z0 - 8, floor * 100 + 1, 0));
+    w.doors.push(makeDoor(g, 1, Z0 - 15, floor * 100 + 2, 1));
+    w.paintings.push(makePainting(g, 1, Z0 - 8, 0, 0));    // sunset, across from room x01
+    w.paintings.push(makePainting(g, -1, Z0 - 15, 1, 1));  // mountains, across from room x02
+    w.paintings.push(makePainting(g, 1, Z0 - 21, 3, 2));   // sailboat, near the end
 
     // stairwell doors at both ends
     makeStairDoor(g, -L / 2, false, has("backwards"));
@@ -404,24 +404,21 @@
     makePlant(g, w, has("giantPlant"));
     makeCart(g, w, has("cartRolls"));
     makeIce(g, w, has("iceSpill"));
-    const ext = new THREE.Group();
-    const can = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.45, 12), M.red); can.position.y = 0.6; ext.add(can);
-    const top = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.1, 8), M.dark); top.position.y = 0.87; ext.add(top);
-    ext.position.set(W / 2 - 0.12, 0, -8); g.add(ext);
-    // one Do Not Disturb sign, always on room x05
-    w.doors.forEach((d) => { if (has("dndAll") || d.room % 100 === 5) addDnd(d); });
+    if (has("dndAll")) addDnd(w.doors[Math.random() < 0.5 ? 0 : 1]);
 
     // ---------- anomalies that need setting up ----------
-    if (has("wrongNumber")) { const d = w.doors[7]; d.plate.material.map = plateTex(floor * 100 + 13); d.plate.material.needsUpdate = true; }
-    if (has("doorAjar")) { const d = w.doors[2]; d.pivot.rotation.y = 0.5; const glow = plane(1.0, 2.2, M.roomGlow); glow.position.set(0, 1.1, 0.004); d.group.add(glow);
+    if (has("wrongNumber")) { const d = w.doors[1]; d.plate.material.map = plateTex(floor * 100 + 13); d.plate.material.needsUpdate = true; }
+    if (has("doorAjar")) { const d = w.doors[0]; d.pivot.rotation.y = 0.5; const glow = plane(1.0, 2.2, M.roomGlow); glow.position.set(0, 1.1, 0.004); d.group.add(glow);
       const pl = new THREE.PointLight(0xff3020, 0.6, 4, 2); pl.position.set(0, 1.2, 0.5); d.group.add(pl); }
-    if (has("upsideDown")) { const p = w.paintings[3]; p.art.rotation.z = Math.PI; }
-    if (has("faceEyes")) setupFace(w, w.paintings[4]);
+    if (has("upsideDown")) { const p = w.paintings[2]; p.art.rotation.z = Math.PI; }
+    if (has("faceEyes")) setupFace(w, w.paintings[1]);
     if (has("tinyDoor")) { const td = new THREE.Group(); const s = box(0.42, 0.75, 0.05, M.door); s.position.y = 0.375; td.add(s);
       const kn = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), M.gold); kn.position.set(0.14, 0.38, 0.04); td.add(kn);
-      td.rotation.y = -Math.PI / 2; td.position.set(W / 2 - 0.03, 0, w.paintings[1].z); g.add(td); }
-    if (has("knocking")) setupKnock(w, w.doors[3]);
-    if (has("footprints")) setupFootprints(g, w.doors[4]);
+      td.rotation.y = -Math.PI / 2; td.position.set(W / 2 - 0.03, 0, w.paintings[0].z); g.add(td); }
+    if (has("knocking")) setupKnock(w, w.doors[1]);
+    if (has("padlock")) addPadlock(w.doors[Math.random() < 0.5 ? 0 : 1]);
+    if (has("flood")) setupFlood(g, w);
+    if (has("footprints")) setupFootprints(g, w.doors[1]);
     if (has("slippers")) setupSlippers(g, w);
     if (has("lightsOut")) setupLightsOut(w);
     if (has("lowCeiling")) w.updaters.push(() => { const p = THREE.MathUtils.clamp((L / 2 - 4 - player.z) / (L - 10), 0, 1); ceiling.position.y = -0.75 * p; });
@@ -452,6 +449,42 @@
   }
   function addDnd(d) {
     const s = plane(0.13, 0.26, M.dnd); s.position.set(0.85, 0.82, 0.11); d.pivot.add(s);
+  }
+  function addPadlock(d) {
+    // a big silver padlock hanging off the handle, with a chain across to the frame
+    const lock = new THREE.Group();
+    const body = box(0.22, 0.24, 0.08, M.gold); body.position.y = -0.17; lock.add(body);
+    const hole = new THREE.Mesh(new THREE.CircleGeometry(0.015, 10), M.dark); hole.position.set(0, -0.2, 0.041); lock.add(hole);
+    const shackle = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.02, 8, 16, Math.PI), M.steel); shackle.position.y = -0.05; lock.add(shackle);
+    lock.position.set(0.85, 1.0, 0.11); d.pivot.add(lock);
+    for (let i = 0; i < 5; i++) {
+      const link = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.01, 6, 10), M.steel);
+      link.position.set(0.88 + i * 0.065, 1.0 - Math.sin(i / 4 * Math.PI) * 0.04, 0.1); link.rotation.y = i % 2 ? Math.PI / 2 : 0; d.pivot.add(link);
+    }
+  }
+  function setupFlood(g, w) {
+    // water creeps out from under room x02 and the whole hallway slowly fills up
+    const tex = canvasTex(128, 128, (c, cw, ch) => {
+      c.fillStyle = "#2f7fb8"; c.fillRect(0, 0, cw, ch);
+      c.strokeStyle = "rgba(255,255,255,.35)"; c.lineWidth = 2;
+      for (let i = 0; i < 9; i++) { c.beginPath(); const y = Math.random() * ch, x = Math.random() * cw; c.moveTo(x, y); c.quadraticCurveTo(x + 14, y - 6, x + 28, y); c.stroke(); }
+    }, [W / 2, w.L / 2]);
+    const mat = ownMat(new THREE.MeshLambertMaterial({ map: tex, transparent: true, opacity: 0.0, emissive: 0x0a2a44, depthWrite: false }));
+    const water = plane(W - 0.02, w.L - 0.02, mat); water.rotation.x = -Math.PI / 2; water.position.y = 0.01; g.add(water);
+    const d = w.doors[1];
+    const puddle = new THREE.Mesh(new THREE.CircleGeometry(1, 24), ownMat(new THREE.MeshLambertMaterial({ color: 0x2f7fb8, emissive: 0x0a2a44, transparent: true, opacity: 0.75, depthWrite: false })));
+    puddle.rotation.x = -Math.PI / 2; puddle.position.set(d.side * (W / 2 - 0.05), 0.012, d.z); puddle.scale.set(0.01, 0.01, 1); g.add(puddle);
+    let start = -1, nextDrip = 0;
+    w.updaters.push((dt, t) => {
+      if (start < 0 && player.z < w.Z0 - 1.6) start = t;
+      if (start < 0) return;
+      const k = t - start;
+      const pr = Math.min(1, k / 2.5); puddle.scale.set(0.3 + pr * 2.2, 0.3 + pr * 2.2, 1);
+      const fill = THREE.MathUtils.clamp((k - 1.5) / 7, 0, 1);
+      mat.opacity = 0.8 * Math.min(1, fill * 4); water.position.y = 0.01 + fill * 0.35;
+      tex.offset.x += dt * 0.05; tex.offset.y += dt * 0.08;
+      if (t > nextDrip) { nextDrip = t + 0.5 + Math.random(); beep(900 + Math.random() * 500, 0.08, "sine", 0.03, 300); }
+    });
   }
   function makePainting(g, side, z, kind, idx) {
     const grp = new THREE.Group();
@@ -495,7 +528,7 @@
     const wheels = [];
     for (const sx of [-0.25, 0.25]) for (const sz of [-0.42, 0.42]) { const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.04, 10), M.dark); wh.rotation.z = Math.PI / 2; wh.position.set(sx, 0.06, sz); grp.add(wh); wheels.push(wh); }
     for (const sx of [-0.27, 0.27]) for (const sz of [-0.47, 0.47]) { const leg = box(0.03, 0.72, 0.03, M.steel); leg.position.set(sx, 0.45, sz); grp.add(leg); }
-    const cx = W / 2 - 0.5, cz = -2;
+    const cx = W / 2 - 0.5, cz = w.L / 2 - 11.5;
     grp.position.set(cx, 0, cz); g.add(grp);
     const col = { x: cx, z: cz, hx: 0.36, hz: 0.55 }; w.colliders.push(col);
     if (rolls) w.updaters.push((dt) => {
@@ -511,7 +544,7 @@
     const m = box(0.6, 1.15, 0.9, M.iceBox); m.position.y = 0.575; grp.add(m);
     const lab = plane(0.4, 0.2, new THREE.MeshLambertMaterial({ map: iceLabel })); lab.rotation.y = Math.PI / 2; lab.position.set(0.31, 0.98, 0); grp.add(lab);
     const slot = box(0.02, 0.3, 0.4, M.dark); slot.position.set(0.3, 0.6, 0); grp.add(slot);
-    const iz = -8;
+    const iz = w.L / 2 - 20;
     grp.position.set(-W / 2 + 0.32, 0, iz); g.add(grp);
     w.colliders.push({ x: -W / 2 + 0.32, z: iz, hx: 0.32, hz: 0.47 });
     if (spill) {
@@ -546,7 +579,7 @@
   function setupFootprints(g, d) {
     // from the middle of the hall, down toward the door, then into it
     const pts = [];
-    for (let i = 0; i < 9; i++) pts.push([0.1 * Math.sin(i), d.z + 7 - i * 0.75]);
+    for (let i = 0; i < 8; i++) pts.push([0.1 * Math.sin(i), d.z + 6 - i * 0.75]);
     for (let i = 1; i <= 3; i++) pts.push([d.side * (0.35 * i), d.z + 0.2]);
     pts.forEach(([x, z], i) => {
       const f = new THREE.Mesh(new THREE.CircleGeometry(0.09, 12), M.wet);
@@ -557,7 +590,7 @@
     const grp = new THREE.Group();
     const s1 = box(0.12, 0.05, 0.28, M.slipper), s2 = box(0.12, 0.05, 0.28, M.slipper);
     s1.position.x = -0.09; s2.position.x = 0.09; grp.add(s1, s2); grp.rotation.y = Math.PI / 2;
-    grp.position.set(-1, 0.03, 4.5); g.add(grp);
+    grp.position.set(-1, 0.03, w.L / 2 - 5.5); g.add(grp);
     let ph = 0, dir = 1;
     w.updaters.push((dt) => {
       if (Math.abs(player.z - grp.position.z) > 14) return;
@@ -572,7 +605,7 @@
   function setupLightsOut(w) {
     // once you're a few steps in, the lights ahead flicker and go out one after another, far end first
     let started = -1;
-    const ahead = w.lights.slice(2).reverse();
+    const ahead = w.lights.slice(1).reverse();
     w.updaters.push((dt, t) => {
       if (started < 0 && player.z < w.L / 2 - 6) started = t;
       if (started < 0) return;
