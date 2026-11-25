@@ -275,6 +275,14 @@
       .forEach((ln, i) => g.fillText(ln, w / 2, 118 + i * 36));
   });
 
+  const noticeTex2 = canvasTex(512, 400, (g, w, h) => {
+    g.fillStyle = "#f7f0dd"; g.fillRect(0, 0, w, h); g.strokeStyle = "#8a6420"; g.lineWidth = 12; g.strokeRect(6, 6, w - 12, h - 12);
+    g.fillStyle = "#6b1d1d"; g.textAlign = "center"; g.font = "bold 40px Georgia"; g.fillText("GUEST NOTICE", w / 2, 62);
+    g.fillStyle = "#2a1a08"; g.font = "26px Georgia";
+    ["Everything is fine.", "Everything is normal.", "", "Do not turn back.", "Do not turn back.", "", "Keep going.", "We'd love you to stay."]
+      .forEach((ln, i) => g.fillText(ln, w / 2, 118 + i * 36));
+  });
+
   // ======================= shared materials =======================
   const M = {
     ceiling: new THREE.MeshLambertMaterial({ color: 0xf5efe2, emissive: 0x3a352c }),
@@ -326,6 +334,20 @@
     dndAll:      "a DO NOT DISTURB sign appeared",
     flood:       "the hallway was flooding",
     padlock:     "a door handle had a padlock on it",
+    swapped:     "two paintings had switched places",
+    missing:     "a painting was missing",
+    floorSign:   "the floor sign showed the wrong floor",
+    roomsSwapped:"the room numbers were on the wrong doors",
+    redLights:   "the lights were red",
+    cartGone:    "the room service cart was gone",
+    extraRoom:   "there was a third room",
+    balloon:     "a red balloon was floating in the hall",
+    plantFollows:"the plant followed you when you weren't looking",
+    tilted:      "the whole hallway was tilted",
+    breathing:   "a door was breathing",
+    floatingLid: "the lid on the cart was floating",
+    notice:      "the guest notice said something different",
+    giantDoor:   "one door was way too big",
     tinyDoor:    "there was a tiny extra door",
     backwards:   "the STAIRS sign was backwards",
     longHall:    "the hallway was way too long",
@@ -376,18 +398,21 @@
 
     // ceiling lights (each its own material so it can flicker)
     for (let z = L / 2 - 2.5; z > -L / 2 + 1; z -= 5.5) {
-      const mat = ownMat(new THREE.MeshBasicMaterial({ color: 0xfff4d6 }));
+      const mat = ownMat(new THREE.MeshBasicMaterial({ color: has("redLights") ? 0xff4a3a : 0xfff4d6 }));
       const panel = box(0.9, 0.05, 0.9, mat); panel.position.set(0, H - 0.03, z); ceiling.add(panel);
-      const pl = new THREE.PointLight(0xffe9c4, 1.15, 10, 1.6); pl.position.set(0, H - 0.45, z); ceiling.add(pl);
+      const pl = new THREE.PointLight(has("redLights") ? 0xff3a2a : 0xffe9c4, 1.15, 10, 1.6); pl.position.set(0, H - 0.45, z); ceiling.add(pl);
       w.lights.push({ z, mat, pl, on: true });
     }
 
     // just two rooms and three paintings, all measured from the start of the hallway (Z0)
     const Z0 = L / 2; w.Z0 = Z0;
-    w.doors.push(makeDoor(g, -1, Z0 - 8, floor * 100 + 1, 0));
-    w.doors.push(makeDoor(g, 1, Z0 - 15, floor * 100 + 2, 1));
-    w.paintings.push(makePainting(g, 1, Z0 - 8, 0, 0));    // sunset, across from room x01
-    w.paintings.push(makePainting(g, -1, Z0 - 15, 1, 1));  // mountains, across from room x02
+    const sw = has("roomsSwapped");
+    w.doors.push(makeDoor(g, -1, Z0 - 8, floor * 100 + (sw ? 2 : 1), 0));
+    w.doors.push(makeDoor(g, 1, Z0 - 15, floor * 100 + (sw ? 1 : 2), 1));
+    if (has("extraRoom")) makeDoor(g, -1, Z0 - 11.5, floor * 100 + 3, 2);
+    const ps = has("swapped");
+    w.paintings.push(makePainting(g, 1, Z0 - 8, ps ? 1 : 0, 0));    // sunset, across from room x01
+    w.paintings.push(makePainting(g, -1, Z0 - 15, ps ? 0 : 1, 1));  // mountains, across from room x02
     w.paintings.push(makePainting(g, 1, Z0 - 21, 3, 2));   // sailboat, near the end
 
     // stairwell doors at both ends
@@ -395,14 +420,14 @@
     makeStairDoor(g, L / 2, true, false);
 
     // floor sign + guest notice near the start
-    const fsign = plane(0.9, 0.5, ownMat(new THREE.MeshLambertMaterial({ map: textTex(256, 144, "#2a1a08", "#ffd86b", ["FLOOR", String(floor)], ["bold 40px Georgia", "bold 70px Georgia"]) })));
+    const fsign = plane(0.9, 0.5, ownMat(new THREE.MeshLambertMaterial({ map: textTex(256, 144, "#2a1a08", "#ffd86b", ["FLOOR", String(has("floorSign") ? (floor >= 4 ? floor - 3 : floor + 3) : floor)], ["bold 40px Georgia", "bold 70px Georgia"]) })));
     fsign.rotation.y = Math.PI / 2; fsign.position.set(-W / 2 + 0.02, 1.7, L / 2 - 2.0); g.add(fsign);
-    const notice = plane(0.75, 0.59, ownMat(new THREE.MeshLambertMaterial({ map: noticeTex }))); notice.material.map = noticeTex; notice.material.userData.own = false;
+    const notice = plane(0.75, 0.59, ownMat(new THREE.MeshLambertMaterial({ map: noticeTex }))); notice.material.map = has("notice") ? noticeTex2 : noticeTex; notice.material.userData.own = false;
     notice.rotation.y = -Math.PI / 2; notice.position.set(W / 2 - 0.02, 1.55, L / 2 - 2.0); g.add(notice);
 
     // props
     makePlant(g, w, has("giantPlant"));
-    makeCart(g, w, has("cartRolls"));
+    if (!has("cartGone")) makeCart(g, w, has("cartRolls"), has("floatingLid"));
     makeIce(g, w, has("iceSpill"));
     if (has("dndAll")) addDnd(w.doors[Math.random() < 0.5 ? 0 : 1]);
 
@@ -418,6 +443,15 @@
     if (has("knocking")) setupKnock(w, w.doors[1]);
     if (has("padlock")) addPadlock(w.doors[Math.random() < 0.5 ? 0 : 1]);
     if (has("flood")) setupFlood(g, w);
+    if (has("missing")) { const p = w.paintings[Math.floor(Math.random() * 3)]; p.group.visible = false;
+      const mark = plane(1.12, 0.8, ownMat(new THREE.MeshLambertMaterial({ color: 0xf3e6c6 }))); mark.position.copy(p.group.position); mark.rotation.copy(p.group.rotation); g.add(mark);
+      const nail = new THREE.Mesh(new THREE.SphereGeometry(0.012, 6, 6), M.dark); nail.position.copy(p.group.position); nail.position.y += 0.3; g.add(nail); }
+    if (has("tilted")) g.rotation.z = 0.08;
+    if (has("giantDoor")) { const d = w.doors[Math.random() < 0.5 ? 0 : 1]; d.group.scale.set(1.25, 1.27, 1); }
+    if (has("breathing")) { const d = w.doors[Math.random() < 0.5 ? 0 : 1];
+      w.updaters.push((dt, t) => { const k = Math.sin(t * 2.2); d.group.scale.set(1 + k * 0.04, 1 + k * 0.03, 1); d.slab.scale.z = 1 + Math.max(0, k) * 3; }); }
+    if (has("balloon")) setupBalloon(g, w);
+    if (has("plantFollows")) setupPlantFollows(w);
     if (has("footprints")) setupFootprints(g, w.doors[1]);
     if (has("slippers")) setupSlippers(g, w);
     if (has("lightsOut")) setupLightsOut(w);
@@ -461,6 +495,29 @@
       const link = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.01, 6, 10), M.steel);
       link.position.set(0.88 + i * 0.065, 1.0 - Math.sin(i / 4 * Math.PI) * 0.04, 0.1); link.rotation.y = i % 2 ? Math.PI / 2 : 0; d.pivot.add(link);
     }
+  }
+  function setupBalloon(g, w) {
+    const grp = new THREE.Group();
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12), ownMat(new THREE.MeshLambertMaterial({ color: 0xe0202a, emissive: 0x300000 })));
+    ball.scale.y = 1.15; grp.add(ball);
+    const knot = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.06, 8), ball.material); knot.position.y = -0.27; knot.rotation.x = Math.PI; grp.add(knot);
+    const str = box(0.008, 1.2, 0.008, M.cloth); str.position.y = -0.88; grp.add(str);
+    grp.position.set(-0.4, 2.5, w.Z0 - 11); g.add(grp);
+    w.updaters.push((dt, t) => { grp.position.y = 2.45 + Math.sin(t * 1.4) * 0.08; grp.position.x = -0.4 + Math.sin(t * 0.6) * 0.3; grp.rotation.z = Math.sin(t * 0.9) * 0.1; });
+  }
+  function setupPlantFollows(w) {
+    // whenever the plant is out of view it creeps a little closer to you
+    const v = new THREE.Vector3(), fwd = new THREE.Vector3();
+    w.updaters.push((dt) => {
+      const p = w.plant; if (!p || state !== "play") return;
+      v.set(p.grp.position.x, 1, p.grp.position.z).sub(camera.position).normalize();
+      camera.getWorldDirection(fwd);
+      if (v.dot(fwd) > 0.35) return;                       // you're looking at it: freeze
+      const dz = player.z - p.grp.position.z;
+      if (Math.abs(dz) < 1.4) return;
+      const nz = p.grp.position.z + Math.sign(dz) * Math.min(Math.abs(dz) - 1.4, 2.5 * dt);
+      p.grp.position.z = nz; p.col.z = nz;
+    });
   }
   function setupFlood(g, w) {
     // water creeps out from under room x02 and the whole hallway slowly fills up
@@ -516,14 +573,16 @@
     if (giant) grp.scale.set(2.3, 2.7, 2.3);
     grp.position.set(W / 2 - 0.4, 0, w.L / 2 - 3.6); g.add(grp);
     const r = giant ? 0.65 : 0.3;
-    w.colliders.push({ x: W / 2 - 0.4, z: w.L / 2 - 3.6, hx: r, hz: r });
+    const col = { x: W / 2 - 0.4, z: w.L / 2 - 3.6, hx: r, hz: r };
+    w.colliders.push(col); w.plant = { grp, col };
   }
-  function makeCart(g, w, rolls) {
+  function makeCart(g, w, rolls, floaty) {
     const grp = new THREE.Group();
     const body = box(0.6, 0.06, 1.0, M.cart); body.position.y = 0.78; grp.add(body);
     const low = box(0.6, 0.04, 1.0, M.cart); low.position.y = 0.25; grp.add(low);
     const cloth = box(0.66, 0.35, 1.06, M.cloth); cloth.position.y = 0.64; grp.add(cloth);
     const dome = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), M.steel); dome.position.set(0, 0.81, 0.15); grp.add(dome);
+    if (floaty) w.updaters.push((dt, t) => { dome.position.y = 1.25 + Math.sin(t * 2) * 0.12; dome.rotation.y += dt * 0.8; dome.rotation.z = Math.sin(t * 1.3) * 0.25; });
     const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.04, 0.1, 10), M.cloth); cup.position.set(0.1, 0.86, -0.3); grp.add(cup);
     const wheels = [];
     for (const sx of [-0.25, 0.25]) for (const sz of [-0.42, 0.42]) { const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.04, 10), M.dark); wh.rotation.z = Math.PI / 2; wh.position.set(sx, 0.06, sz); grp.add(wh); wheels.push(wh); }
