@@ -1,8 +1,14 @@
 {
   "title": "Laser Hop",
-  "description": "Run down a floating sky platform with laser fences on both sides. Hop the blocks rushing at you, slip through the gaps, jump the laser beams, and see how far you get. Endless, with a global leaderboard.",
+  "description": "Run down a floating sky platform with laser fences on both sides. Hop the blocks rushing at you, dodge the ones too tall to jump, and watch out for spike layers that bonk you backward. Endless, with a global leaderboard.",
   "emoji": "⚡",
   "author": "Marshall",
   "createdAt": "2026-11-25",
-  "tags": ["arcade", "3d", "runner", "endless", "leaderboard"]
+  "tags": [
+    "arcade",
+    "3d",
+    "runner",
+    "endless",
+    "leaderboard"
+  ]
 }
