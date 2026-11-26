@@ -206,75 +206,172 @@
   function speckle(g, w, h, n, a) {
     for (let i = 0; i < n; i++) { g.fillStyle = Math.random() < 0.5 ? `rgba(0,0,0,${a})` : `rgba(255,255,255,${a * 0.6})`; g.fillRect(Math.random() * w, Math.random() * h, 1 + Math.random() * 2, 1 + Math.random() * 2); }
   }
+  // per-pixel grain at the canvas's real resolution: carpet pile, paper fibre, wood pores
+  function grain(g, amt, mottle) {
+    const c = g.canvas, d = g.getImageData(0, 0, c.width, c.height), p = d.data, W = c.width, Hh = c.height;
+    // soft low-frequency mottling from a coarse random grid, sampled bilinearly (wraps, so tiles stay seamless)
+    const GN = 24, grid = new Float32Array(GN * GN); for (let i = 0; i < grid.length; i++) grid[i] = Math.random() - 0.5;
+    for (let y = 0, i = 0; y < Hh; y++) {
+      const gy = y / Hh * GN, y0 = Math.floor(gy), fy = gy - y0, y1 = (y0 + 1) % GN;
+      for (let x = 0; x < W; x++, i += 4) {
+        const gx = x / W * GN, x0 = Math.floor(gx), fx = gx - x0, x1 = (x0 + 1) % GN;
+        const m = (grid[y0 * GN + x0] * (1 - fx) + grid[y0 * GN + x1] * fx) * (1 - fy) + (grid[y1 * GN + x0] * (1 - fx) + grid[y1 * GN + x1] * fx) * fy;
+        const n = 1 + (Math.random() - 0.5) * amt + m * (mottle || 0);
+        p[i] = p[i] * n; p[i + 1] = p[i + 1] * n; p[i + 2] = p[i + 2] * n;
+      }
+    }
+    g.putImageData(d, 0, 0);
+  }
+  // Hotel carpet: a deep field with a fine ogee lattice, small rosettes where the cells meet, and dense pile.
+  // One tile is 0.8 m of floor.
+  // Hotel carpet: a deep field with a fine ogee lattice, small rosettes where the cells meet, and dense pile.
+  // One tile is 0.8 m of floor and holds 2 x 2 cells, with the rosette colours alternating.
   function carpetTex(base, line) {
     return canvasTex(256, 256, (g, w, h) => {
       g.fillStyle = base; g.fillRect(0, 0, w, h);
-      speckle(g, w, h, 9000, 0.12);
-      for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(0,0,0,${0.05 + Math.random() * 0.08})`; g.fillRect(Math.random() * w, Math.random() * h, 0.6, 0.6); }
-      g.strokeStyle = line; g.lineWidth = 7;
-      g.beginPath(); g.moveTo(128, 14); g.lineTo(242, 128); g.lineTo(128, 242); g.lineTo(14, 128); g.closePath(); g.stroke();
-      g.lineWidth = 2; g.beginPath(); g.moveTo(128, 34); g.lineTo(222, 128); g.lineTo(128, 222); g.lineTo(34, 128); g.closePath(); g.stroke();
-      g.fillStyle = line;
-      for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.beginPath(); g.ellipse(128 + Math.cos(a) * 26, 128 + Math.sin(a) * 26, 12, 5, a, 0, 7); g.fill(); }
-      g.beginPath(); g.arc(128, 128, 12, 0, 7); g.fill();
-      g.fillStyle = base; g.beginPath(); g.arc(128, 128, 5, 0, 7); g.fill();
-      g.fillStyle = line; g.globalAlpha = 0.55;
-      for (const [cx, cy] of [[0, 0], [256, 0], [0, 256], [256, 256]]) { g.beginPath(); g.arc(cx, cy, 22, 0, 7); g.fill(); }
-      g.globalAlpha = 1;
-    });
+      const curve = (flip, off) => { g.beginPath(); for (let y = 0; y <= 256; y += 2) { const x = 128 + (118 + off) * Math.sin(Math.PI * y / 256); g.lineTo(flip ? 256 - x : x, y); } g.stroke(); };
+      const rosette = (cx, cy, r, ground) => {
+        g.save(); g.translate(cx, cy);
+        g.fillStyle = ground; g.beginPath(); g.arc(0, 0, r * 1.08, 0, 7); g.fill();
+        g.strokeStyle = line; g.lineWidth = 2; g.stroke();
+        for (let k = 0; k < 8; k++) { g.save(); g.rotate(k * Math.PI / 4); g.fillStyle = k % 2 ? "#d9b56a" : line;
+          g.beginPath(); g.moveTo(0, 0); g.bezierCurveTo(r * 0.35, -r * 0.3, r * 0.95, -r * 0.18, r * 1.0, 0); g.bezierCurveTo(r * 0.95, r * 0.18, r * 0.35, r * 0.3, 0, 0); g.fill(); g.restore(); }
+        g.fillStyle = "#f1e2bd"; g.beginPath(); g.arc(0, 0, r * 0.24, 0, 7); g.fill();
+        g.fillStyle = base; g.beginPath(); g.arc(0, 0, r * 0.1, 0, 7); g.fill();
+        g.restore();
+      };
+      const cell = (qx, qy, ground) => {
+        g.save(); g.translate(qx * 128, qy * 128); g.scale(0.5, 0.5);
+        for (const dx of [-256, 0, 256]) { g.save(); g.translate(dx, 0);
+          g.strokeStyle = "rgba(0,0,0,.4)"; g.lineWidth = 11; curve(false, 0); curve(true, 0);
+          g.strokeStyle = line; g.lineWidth = 6; curve(false, 0); curve(true, 0);
+          g.strokeStyle = "rgba(255,236,190,.6)"; g.lineWidth = 1.6; curve(false, -10); curve(true, -10);
+          g.restore(); }
+        rosette(128, 128, 46, ground);
+        g.fillStyle = line;
+        for (const sy of [-1, 1]) { g.save(); g.translate(128, 128 + sy * 82); g.scale(1, sy);
+          g.beginPath(); g.ellipse(0, 0, 6, 15, 0, 0, 7); g.fill();
+          g.beginPath(); g.ellipse(-12, 10, 4, 11, -0.7, 0, 7); g.ellipse(12, 10, 4, 11, 0.7, 0, 7); g.fill(); g.restore(); }
+        for (const sx of [-1, 1]) { g.save(); g.translate(128 + sx * 78, 128); g.fillStyle = "#e9cf8f"; g.beginPath(); g.arc(0, 0, 5, 0, 7); g.fill(); g.restore(); }
+        g.restore();
+      };
+      cell(0, 0, "#1e2a4a"); cell(1, 1, "#1e2a4a"); cell(1, 0, "#1f3d2e"); cell(0, 1, "#1f3d2e");
+      // where four cells meet: a small gold knot
+      g.fillStyle = "#e9cf8f";
+      for (const [x, y] of [[0, 0], [128, 0], [256, 0], [0, 128], [128, 128], [256, 128], [0, 256], [128, 256], [256, 256]]) {
+        g.beginPath(); g.moveTo(x, y - 7); g.lineTo(x + 7, y); g.lineTo(x, y + 7); g.lineTo(x - 7, y); g.fill(); }
+      grain(g, 0.36, 0.14);
+    }, 4);
   }
-  const concreteTex = () => canvasTex(256, 256, (g, w, h) => { g.fillStyle = "#8a8782"; g.fillRect(0, 0, w, h); speckle(g, w, h, 9000, 0.18);
+  const concreteTex = () => canvasTex(256, 256, (g, w, h) => { g.fillStyle = "#8a8782"; g.fillRect(0, 0, w, h); grain(g, 0.22, 0.25);
     g.strokeStyle = "rgba(40,40,40,.4)"; g.lineWidth = 2; g.strokeRect(0, 0, w, h); });
+  // the carpet's edge band: dark field, two gold lines and a fine chain of small lozenges
   const borderTex = (trim) => canvasTex(64, 256, (g, w, h) => {
-    g.fillStyle = "#3a0c10"; g.fillRect(0, 0, w, h); speckle(g, w, h, 900, 0.12);
-    g.fillStyle = trim || "#c9a04a"; g.fillRect(6, 0, 4, h); g.fillRect(w - 10, 0, 4, h);
-    for (let y = 16; y < h; y += 32) { g.beginPath(); g.moveTo(w / 2, y - 10); g.lineTo(w / 2 + 10, y); g.lineTo(w / 2, y + 10); g.lineTo(w / 2 - 10, y); g.fill(); }
-  });
+    const t = trim || "#c9a04a";
+    g.fillStyle = "#3a0c10"; g.fillRect(0, 0, w, h);
+    g.fillStyle = t; g.fillRect(5, 0, 2.5, h); g.fillRect(w - 7.5, 0, 2.5, h);
+    g.fillStyle = "rgba(0,0,0,.35)"; g.fillRect(7.5, 0, 1, h); g.fillRect(w - 5, 0, 1, h);
+    for (let y = 8; y < h; y += 16) {
+      g.fillStyle = t; g.beginPath(); g.moveTo(w / 2, y - 6); g.lineTo(w / 2 + 6, y); g.lineTo(w / 2, y + 6); g.lineTo(w / 2 - 6, y); g.fill();
+      g.fillStyle = "#3a0c10"; g.beginPath(); g.arc(w / 2, y, 1.8, 0, 7); g.fill();
+      g.fillStyle = t; g.globalAlpha = 0.7; g.beginPath(); g.arc(w / 2 - 14, y + 8, 1.6, 0, 7); g.arc(w / 2 + 14, y + 8, 1.6, 0, 7); g.fill(); g.globalAlpha = 1;
+    }
+    grain(g, 0.38, 0.15);
+  }, 4);
   const H = 3.0;
   const WALL_STYLES = {
-    normal: { paper: "#e2cc9c", motif: "#d6bd88", stripe: "#d9c291" },
-    blue:   { paper: "#e0c6a6", motif: "#cfa98c", stripe: "#d9bd9c" },   // "blueWallpaper": now just a slightly pinker paper
+    normal: { paper: "#dcc796", motif: "#e7d6ae", line: "#c9b083", stripe: "#d2bb8a" },
+    blue:   { paper: "#dcc0a0", motif: "#e8d0b6", line: "#c8a68c", stripe: "#d1b393" },   // "blueWallpaper": now just a slightly pinker paper
   };
-  // One tile = 1.2 m of wall, full height: damask wallpaper on top, wood panelling below the rail.
+  // One damask ornament, centred on (0,0), about 2s wide and 3s tall: drawn as one half and mirrored.
+  function damask(g, s, fill, line) {
+    const half = () => {
+      g.beginPath();
+      // central palmette
+      g.moveTo(0, -1.45 * s);
+      g.bezierCurveTo(0.12 * s, -1.1 * s, 0.32 * s, -0.75 * s, 0.22 * s, -0.35 * s);
+      g.bezierCurveTo(0.14 * s, -0.05 * s, 0.3 * s, 0.25 * s, 0.12 * s, 0.55 * s);
+      g.lineTo(0, 0.6 * s); g.closePath();
+      // big acanthus leaf curling out and up
+      g.moveTo(0.1 * s, 0.35 * s);
+      g.bezierCurveTo(0.5 * s, 0.45 * s, 0.95 * s, 0.25 * s, 0.92 * s, -0.25 * s);
+      g.bezierCurveTo(0.9 * s, -0.6 * s, 0.6 * s, -0.75 * s, 0.48 * s, -0.5 * s);
+      g.bezierCurveTo(0.4 * s, -0.32 * s, 0.6 * s, -0.18 * s, 0.68 * s, -0.32 * s);
+      g.bezierCurveTo(0.7 * s, -0.05 * s, 0.45 * s, 0.15 * s, 0.1 * s, 0.2 * s);
+      g.closePath();
+      // lower scroll and foot
+      g.moveTo(0.04 * s, 0.6 * s);
+      g.bezierCurveTo(0.3 * s, 0.7 * s, 0.6 * s, 0.95 * s, 0.45 * s, 1.25 * s);
+      g.bezierCurveTo(0.38 * s, 1.4 * s, 0.2 * s, 1.35 * s, 0.24 * s, 1.2 * s);
+      g.bezierCurveTo(0.32 * s, 1.0 * s, 0.15 * s, 0.85 * s, 0.0 * s, 0.82 * s);
+      g.closePath();
+      // top bud leaves
+      g.moveTo(0.02 * s, -1.2 * s);
+      g.bezierCurveTo(0.25 * s, -1.35 * s, 0.45 * s, -1.25 * s, 0.5 * s, -1.05 * s);
+      g.bezierCurveTo(0.35 * s, -1.08 * s, 0.2 * s, -1.0 * s, 0.05 * s, -0.95 * s);
+      g.closePath();
+      g.fill(); g.stroke();
+      // leaf veins
+      g.beginPath(); g.moveTo(0.15 * s, 0.27 * s); g.bezierCurveTo(0.55 * s, 0.25 * s, 0.8 * s, 0.0 * s, 0.78 * s, -0.3 * s); g.stroke();
+      g.beginPath(); g.arc(0.58 * s, -0.42 * s, 0.07 * s, 0, 7); g.stroke();
+      // little side flourishes
+      g.beginPath(); g.ellipse(0.75 * s, 0.75 * s, 0.08 * s, 0.2 * s, -0.7, 0, 7); g.fill(); g.stroke();
+      g.beginPath(); g.ellipse(0.62 * s, -1.0 * s, 0.05 * s, 0.13 * s, 0.6, 0, 7); g.fill(); g.stroke();
+    };
+    g.fillStyle = fill; g.strokeStyle = line; g.lineWidth = 0.6; g.lineJoin = "round";
+    half(); g.save(); g.scale(-1, 1); half(); g.restore();
+    g.beginPath(); g.arc(0, -1.5 * s, 0.07 * s, 0, 7); g.fill(); g.stroke();
+  }
+  // One tile = 1.2 m of wall, full height: tone-on-tone damask wallpaper (two columns, drop-matched)
+  // with satin pinstripes, and wood panelling below the rail.
   function wallTex(style, horizontal) {
     const P = WALL_STYLES[style || "normal"];
     return canvasTex(256, 640, (g, w, h) => {
       const rail = h * (1 - 0.95 / H);
+      const sh = g.createLinearGradient(0, 0, w, 0);
+      sh.addColorStop(0, P.paper); sh.addColorStop(0.5, P.stripe); sh.addColorStop(1, P.paper);
       g.fillStyle = P.paper; g.fillRect(0, 0, w, rail);
-      g.fillStyle = P.stripe;
-      if (horizontal) for (let y = 0; y < rail; y += 40) g.fillRect(0, y, w, 12);
-      else for (let x = 0; x < w; x += 64) { g.fillRect(x, 0, 14, rail); g.fillRect(x + 22, 0, 3, rail); }
-      g.fillStyle = P.motif;
-      for (let y = 30; y < rail - 20; y += 80) for (let x = 32; x < w; x += 64) {
-        const cx = x + 8, cy = y + (Math.floor(x / 64) % 2) * 40;
-        g.beginPath(); g.ellipse(cx, cy, 7, 15, 0, 0, 7); g.fill();
-        g.beginPath(); g.ellipse(cx - 10, cy + 6, 6, 3, -0.6, 0, 7); g.ellipse(cx + 10, cy + 6, 6, 3, 0.6, 0, 7); g.fill();
-        g.beginPath(); g.arc(cx, cy - 20, 3, 0, 7); g.fill();
+      g.fillStyle = P.line; g.globalAlpha = 0.55;
+      if (horizontal) for (let y = 4; y < rail; y += 34) { g.fillRect(0, y, w, 1.2); g.fillRect(0, y + 3, w, 0.6); }
+      else for (const x of [0, 128]) { g.fillRect(x + 62, 0, 1.2, rail); g.fillRect(x + 66, 0, 0.6, rail); }
+      g.globalAlpha = 1;
+      g.save(); g.beginPath(); g.rect(0, 0, w, rail); g.clip();
+      const rowH = 190;
+      for (let col = 0; col < 3; col++) for (let r = -1; r * rowH < rail + rowH; r++) {
+        const cx = col * 128, cy = r * rowH + (col % 2 ? rowH / 2 : 0) + 70;
+        for (const dx of [0, 256]) { if (cx + dx > w + 60) continue; g.save(); g.translate(cx + dx, cy); damask(g, 34, P.motif, P.line); g.restore(); }
       }
-      speckle(g, w, rail, 2500, 0.05);
+      // small sprigs between the big ornaments so the paper reads as a pattern, not spots
+      g.fillStyle = P.motif; g.strokeStyle = P.line; g.lineWidth = 0.6;
+      for (let col = 0; col < 3; col++) for (let r = -1; r * rowH < rail + rowH; r++) {
+        const cx = col * 128 + 64, cy = r * rowH + (col % 2 ? 0 : rowH / 2) + 70;
+        for (let k = 0; k < 4; k++) { g.save(); g.translate(cx, cy); g.rotate(k * Math.PI / 2); g.beginPath(); g.ellipse(0, -9, 3.2, 8, 0, 0, 7); g.fill(); g.stroke(); g.restore(); }
+        g.beginPath(); g.arc(cx, cy, 2.6, 0, 7); g.fill(); g.stroke();
+      }
+      g.restore();
       g.fillStyle = "#5c321c"; g.fillRect(0, rail, w, h - rail);
-      speckle(g, w, h - rail, 1200, 0.08);
       for (let i = 0; i < 2; i++) {
         const x0 = i * 128 + 14, y0 = rail + 18, pw = 100, ph = h - rail - 48;
         g.fillStyle = "#6b3c22"; g.fillRect(x0, y0, pw, ph);
         g.fillStyle = "rgba(255,220,170,.22)"; g.fillRect(x0, y0, pw, 3); g.fillRect(x0, y0, 3, ph);
         g.fillStyle = "rgba(0,0,0,.4)"; g.fillRect(x0, y0 + ph - 3, pw, 3); g.fillRect(x0 + pw - 3, y0, 3, ph);
-        g.strokeStyle = "rgba(40,18,8,.25)"; g.lineWidth = 1; for (let k = 0; k < 6; k++) { g.beginPath(); g.moveTo(x0 + 8, y0 + 10 + k * 22); g.bezierCurveTo(x0 + 40, y0 + 4 + k * 22, x0 + 60, y0 + 18 + k * 22, x0 + pw - 8, y0 + 10 + k * 22); g.stroke(); }
+        g.strokeStyle = "rgba(40,18,8,.25)"; g.lineWidth = 0.6; for (let k = 0; k < 14; k++) { g.beginPath(); g.moveTo(x0 + 8, y0 + 10 + k * 10); g.bezierCurveTo(x0 + 40, y0 + 6 + k * 10, x0 + 60, y0 + 14 + k * 10, x0 + pw - 8, y0 + 10 + k * 10); g.stroke(); }
       }
-    });
+      grain(g, 0.05, 0.025);
+    }, 3);
   }
   const ceilingTex = () => canvasTex(256, 256, (g, w, h) => {
     g.fillStyle = "#f3ecdc"; g.fillRect(0, 0, w, h); speckle(g, w, h, 3000, 0.04);
   });
   const woodTex = () => canvasTex(256, 256, (g, w, h) => {
     g.fillStyle = "#8a5634"; g.fillRect(0, 0, w, h);
-    for (let i = 0; i < 70; i++) {
-      const y = Math.random() * h, a = 0.05 + Math.random() * 0.12;
-      g.strokeStyle = Math.random() < 0.6 ? `rgba(60,28,12,${a})` : `rgba(255,210,160,${a * 0.6})`; g.lineWidth = 0.6 + Math.random() * 2;
-      g.beginPath(); g.moveTo(0, y); for (let x = 0; x <= w; x += 16) g.lineTo(x, y + Math.sin(x * 0.03 + i) * 3); g.stroke();
+    for (let i = 0; i < 220; i++) {
+      const y = Math.random() * h, a = 0.04 + Math.random() * 0.1, ph = Math.random() * 6, amp = 1 + Math.random() * 2.5;
+      g.strokeStyle = Math.random() < 0.65 ? `rgba(60,28,12,${a})` : `rgba(255,210,160,${a * 0.5})`; g.lineWidth = 0.3 + Math.random() * 1.2;
+      g.beginPath(); for (let x = -4; x <= w + 4; x += 4) g.lineTo(x, y + Math.sin(x * 0.02 + ph) * amp + Math.sin(x * 0.07 + ph * 2) * amp * 0.3); g.stroke();
     }
-    speckle(g, w, h, 1500, 0.05);
-  });
+    grain(g, 0.1, 0.08);
+  }, 4);
   const PAINTINGS = [
     (g, w, h) => { const s = g.createLinearGradient(0, 0, 0, h * 0.6); s.addColorStop(0, "#ff7b54"); s.addColorStop(1, "#ffd56b");
       g.fillStyle = s; g.fillRect(0, 0, w, h * 0.6); g.fillStyle = "#fff3b0"; g.beginPath(); g.arc(w * 0.5, h * 0.3, h * 0.14, 0, 7); g.fill();
