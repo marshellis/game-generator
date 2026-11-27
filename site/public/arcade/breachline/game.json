@@ -1,8 +1,14 @@
 {
   "title": "Breachline",
-  "description": "A 5v5 tactical shooter against bots. Plant the core or stop it, break walls, and play as one of 24 operatives with their own abilities. 8 maps, weapon attachments, skins and levels. Best with a mouse and keyboard.",
+  "description": "A 5v5 tactical shooter against bots. Plant the core or stop it, break walls, and play as one of 24 operatives with their own abilities. 11 maps (houses, an office block, downtown streets), 14 guns with attachments, 72 skins and levels. Best with a mouse and keyboard.",
   "emoji": "💥",
   "author": "Ellis",
   "createdAt": "2026-11-27",
-  "tags": ["arcade", "3d", "shooter", "fps", "unity"]
+  "tags": [
+    "arcade",
+    "3d",
+    "shooter",
+    "fps",
+    "unity"
+  ]
 }
