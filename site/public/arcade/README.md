@@ -79,7 +79,8 @@ Test it: [`site/e2e/multiplayer/README.md`](../../e2e/multiplayer/README.md).
 ## Big engines (Godot, Unity, ...)
 A web export ships the engine: Godot's is a ~39 MB `index.wasm`. Fine for ONE game (`reverse-zelda`); do not commit the same engine into several
 folders - host one shared copy or use Git LFS. `arcade-contract.test.ts` fails any other file over 10 MB. Keep the game's source in its own repo and
-commit only the export.
+commit only the export. Unity: see `breachline` and [`docs/unity.md`](../../../docs/unity.md) (its data file is split into 9 MB parts that
+its page joins).
 
 ## Checks before you open the PR
 `cd site && npm test && npm run build`. `arcade-contract.test.ts` and `arcade.test.ts` validate the manifest, the learning-loop wiring, that no game

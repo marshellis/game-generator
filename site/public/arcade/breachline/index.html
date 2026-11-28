@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+    <title>Breachline</title>
+    <!-- games.marshellis.com: the arcade SDK and the round counter (parents' brain breaks). On any other host these
+         two files are just missing, and the game works the same. -->
+    <script src="/arcade/_sdk/marshellis.js"></script>
+    <script src="/arcade/_sdk/rounds.js" data-game="breachline"></script>
+    <style>
+      html, body { margin: 0; height: 100%; background: #07090c; overflow: hidden; }
+      #unity-canvas { width: 100%; height: 100%; display: block; background: #07090c; }
+      #loading { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                 color: #cfd8e0; font: 600 16px system-ui, sans-serif; gap: 18px; }
+      #loading h1 { margin: 0; font-size: 56px; letter-spacing: 6px; color: #fff; }
+      #bar { width: min(420px, 70vw); height: 10px; border-radius: 5px; background: #1a2129; overflow: hidden; }
+      #fill { width: 0; height: 100%; background: #4cc3ff; transition: width .2s; }
+      #msg { color: #8c96a0; font-weight: 400; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <div id="loading"><h1>BREACHLINE</h1><div id="bar"><div id="fill"></div></div><div id="msg">Loading…</div></div>
+    <script>
+      // the game calls this when a round ends (Assets/Plugins/WebGL/Marshellis.jslib)
+      window.breachlineRoundEnd = function () { window.MGRounds && MGRounds.end(); };
+      var canvas = document.querySelector("#unity-canvas");
+      var fill = document.querySelector("#fill"), msg = document.querySelector("#msg");
+      var buildUrl = "Build";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/WebGL.data.unityweb",
+        frameworkUrl: buildUrl + "/WebGL.framework.js.unityweb",
+        codeUrl: buildUrl + "/WebGL.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Marshellis",
+        productName: "Breachline",
+        productVersion: "1.0",
+        showBanner: function (m, type) { if (type === "error") { msg.textContent = m; msg.style.color = "#ff6b5b"; } },
+      };
+
+      // The game's data file is bigger than the website allows for one file, so on the website it is cut into
+      // pieces listed in Build/parts.json. Download the pieces and glue them back together. (A normal build has no
+      // parts.json and loads the one file.)
+      function loadParts() {
+        return fetch(buildUrl + "/parts.json").then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+          .then(function (list) {
+            if (!list || !list.parts || !list.parts.length) return null;
+            var total = list.size || 0, got = new Array(list.parts.length).fill(0);
+            return Promise.all(list.parts.map(function (name, i) {
+              return fetch(buildUrl + "/" + name).then(function (r) {
+                if (!r.ok) throw new Error("missing " + name);
+                if (!r.body || !total) return r.arrayBuffer();
+                var reader = r.body.getReader(), chunks = [];
+                function pump() {
+                  return reader.read().then(function (x) {
+                    if (x.done) return new Blob(chunks).arrayBuffer();
+                    chunks.push(x.value); got[i] += x.value.length;
+                    var sum = got.reduce(function (a, b) { return a + b; }, 0);
+                    fill.style.width = (80 * sum / total) + "%";
+                    return pump();
+                  });
+                }
+                return pump();
+              });
+            })).then(function (bufs) { return URL.createObjectURL(new Blob(bufs)); });
+          });
+      }
+
+      var script = document.createElement("script");
+      script.src = buildUrl + "/WebGL.loader.js";
+      script.onload = function () {
+        loadParts().then(function (blobUrl) {
+          var split = !!blobUrl;
+          if (split) config.dataUrl = blobUrl;
+          return createUnityInstance(canvas, config, function (p) {
+            fill.style.width = (split ? 80 + 20 * p : 100 * p) + "%";
+          });
+        }).then(function () {
+          document.querySelector("#loading").style.display = "none";
+        }).catch(function (e) {
+          msg.textContent = "Couldn't load the game: " + e; msg.style.color = "#ff6b5b";
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

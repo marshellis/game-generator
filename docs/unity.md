@@ -25,7 +25,7 @@ version means every machine changes together.
 - [`marshellis/unity-starter`](https://github.com/marshellis/unity-starter): private **template**. A small
   coin-collector game with the WebGL build, GitHub Actions workflow, a kid-facing README and a CLAUDE.md for
   agents. Start new games from it ("Use this template").
-- [`marshellis/breachline`](https://github.com/marshellis/breachline): Ellis's tactical 5v5 FPS (2026-11-25).
+- [`marshellis/breachline`](https://github.com/marshellis/breachline): Ellis's tactical 5v5 FPS (2026-11-25), on the site as `breachline`.
 
 ## How the kids work with Bailey
 
@@ -64,15 +64,18 @@ cold. Learned on the first builds:
 
 ## Putting a Unity game on the site
 
-No Unity game is on the site yet (`reverse-zelda` is Godot). The steps are the arcade contract
-([`site/public/arcade/README.md`](../site/public/arcade/README.md)): commit the WebGL export to
-`site/public/arcade/<slug>/` with a `game.json`, open a PR, green CI deploys. Deploying is public, so it needs
-Jonathan's OK. Before the first Unity game, the starter needs:
-- a Unity **WebGL template** (`Assets/WebGLTemplates/Marshellis/index.html`) with the two required SDK
-  `<script>` tags, so every build is arcade-ready;
-- a small **`.jslib` bridge** so C# can call `MGRounds.end()` when a round ends (required: it drives
-  parent-set brain breaks);
-- a check that no file is over **10 MB** (the contract's limit; an FPS may need compression or LFS).
+`breachline` is the first (2026-11-27). How it's wired, so the next Unity game can copy it:
+- **Page:** a Unity WebGL template in the game's repo (`Assets/WebGLTemplates/Marshellis/index.html`, selected in
+  `Builder.cs`) with the two SDK `<script>` tags and a full-window canvas.
+- **Rounds:** `Assets/Plugins/WebGL/Marshellis.jslib` calls `window.breachlineRoundEnd()`, which the page defines as
+  `window.MGRounds && MGRounds.end()` (the call has to be in the page: `arcade-contract.test.ts` can't read the
+  gzipped engine files).
+- **10 MB limit:** the data file (43 MB) is cut into 9 MB parts listed in `Build/parts.json`; the page downloads
+  and joins them. `python3 tools/site_build.py <WebGL artifact> site/public/arcade/<slug>` in the game's repo does
+  it (keeping `game.json`).
+- **Size:** normal maps import at 512 px and the Unity splash is off. Every update adds ~50 MB to this repo's
+  history, so update the site copy for real releases, not every change.
+- Deploying is public, so a new game or update needs Jonathan's OK (he merges the PR).
 
 ## Runner disk
 
