@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<script src="/arcade/_sdk/marshellis.js"></script>
+<script src="/arcade/_sdk/rounds.js" data-game="rodeo"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Dusty Creek Ranch &amp; Rodeo</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1d140d; color: #f5e6c8; font-family: Georgia, serif; overflow: hidden; }
+  #unity-canvas { width: 100vw; height: 100vh; display: block; background: #1d140d; outline: none; }
+  #loading { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+             background: radial-gradient(ellipse at top, #6b4423, #2a1b10 70%); }
+  #loading h1 { margin: 0; font-size: clamp(28px, 6vw, 56px); letter-spacing: .06em; color: #ffd98a; text-shadow: 0 3px 0 #5a2f12; text-align: center; }
+  #loading p { margin: 0; font-family: system-ui, sans-serif; font-size: 14px; opacity: .85; }
+  .bar { width: min(360px, 80vw); height: 10px; border-radius: 99px; background: rgba(255,255,255,.15); overflow: hidden; }
+  #fill { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #d08a2c, #ffe08a); transition: width .2s; }
+  #err { color: #ffb0a0; max-width: 520px; text-align: center; font-family: system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<canvas id="unity-canvas" tabindex="-1"></canvas>
+<div id="loading">
+  <h1>🤠 Dusty Creek Ranch &amp; Rodeo</h1>
+  <div class="bar"><span id="fill"></span></div>
+  <p id="msg">Saddling up... (the first load takes a little while)</p>
+  <p id="err"></p>
+</div>
+<script>
+  // Called from the game (Assets/Plugins/WebGL/Arcade.jslib) after each rodeo event: counts a round for brain breaks.
+  window.RanchArcade = { roundEnded: () => { window.MGRounds && MGRounds.end(); } };
+</script>
+<script src="Build/WebGL.loader.js"></script>
+<script>
+  const canvas = document.getElementById("unity-canvas");
+  const fill = document.getElementById("fill");
+  createUnityInstance(canvas, {
+    dataUrl: "Build/WebGL.data.unityweb",
+    frameworkUrl: "Build/WebGL.framework.js.unityweb",
+    codeUrl: "Build/WebGL.wasm.unityweb",
+    streamingAssetsUrl: "StreamingAssets",
+    companyName: "Marshellis",
+    productName: "Dusty Creek Ranch & Rodeo",
+    productVersion: "1.0",
+  }, (p) => { fill.style.width = Math.round(p * 100) + "%"; if (p >= 0.9) document.getElementById("msg").textContent = "Building the ranch..."; })
+  .then(() => { document.getElementById("loading").remove(); canvas.focus(); })
+  .catch((e) => { document.getElementById("err").textContent = "The game could not start: " + e; });
+  canvas.addEventListener("click", () => canvas.focus());
+</script>
+</body>
+</html>
