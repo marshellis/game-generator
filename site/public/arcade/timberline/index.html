@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Timberline</title>
+  <!-- games.marshellis.com: the family SDK and the learning loop (harmless anywhere else) -->
+  <script src="/arcade/_sdk/marshellis.js"></script>
+  <script src="/arcade/_sdk/rounds.js" data-game="timberline"></script>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #10140f; overflow: hidden; }
+    #unity-canvas { width: 100%; height: 100%; display: block; background: #10140f; }
+    #loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+               color: #f4cf7a; font: bold 42px Georgia, serif; letter-spacing: 6px; }
+    #bar { width: 320px; height: 6px; margin-top: 24px; background: #2a2f26; border-radius: 3px; overflow: hidden; }
+    #fill { width: 0; height: 100%; background: #f4cf7a; }
+    #hint { margin-top: 18px; font: 15px sans-serif; letter-spacing: 0; color: #c9c4b4; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="loading">TIMBERLINE<div id="bar"><div id="fill"></div></div><div id="hint">Loading the valley... click the game to use the mouse.</div></div>
+  <script src="Build/WebGL.loader.js"></script>
+  <script>
+    const canvas = document.querySelector('#unity-canvas');
+    // keep Tab and the arrow keys inside the game
+    window.addEventListener('keydown', e => { if (['Tab', 'ArrowUp', 'ArrowDown', ' '].includes(e.key)) e.preventDefault(); });
+    // a hunt ended (animal harvested, or the hunter knocked down): count a round for the learning loop
+    window.TimberlineRoundEnd = () => { window.MGRounds && MGRounds.end(); };
+    const fill = document.querySelector('#fill');
+    // Big files may be split into parts (Build/<name>.parts says how many): fetch the parts and join them.
+    let partsLoaded = 0, partsTotal = 0;
+    async function joined(name) {
+      try {
+        const r = await fetch('Build/' + name + '.parts');
+        if (!r.ok) return 'Build/' + name;
+        const n = parseInt(await r.text(), 10);
+        if (!(n > 0)) return 'Build/' + name;
+        partsTotal += n;
+        const bufs = await Promise.all(Array.from({ length: n }, (_, i) => fetch('Build/' + name + '.' + i)
+          .then(x => { if (!x.ok) throw new Error('missing part ' + i); return x.arrayBuffer(); })
+          .then(b => { partsLoaded++; fill.style.width = (partsLoaded / partsTotal * 70) + '%'; return b; })));
+        return URL.createObjectURL(new Blob(bufs));
+      } catch (e) { return 'Build/' + name; }
+    }
+    (async () => {
+      const [dataUrl, codeUrl] = await Promise.all([joined('WebGL.data.unityweb'), joined('WebGL.wasm.unityweb')]);
+      const base = partsTotal ? 70 : 0;
+      await createUnityInstance(canvas, {
+        dataUrl, codeUrl,
+        frameworkUrl: 'Build/WebGL.framework.js.unityweb',
+        streamingAssetsUrl: 'StreamingAssets',
+        companyName: 'Marshellis',
+        productName: 'Timberline',
+        productVersion: '1.0',
+        matchWebGLToCanvasSize: true,
+      }, p => { fill.style.width = (base + p * (100 - base)) + '%'; });
+      document.querySelector('#loading').remove();
+    })().catch(m => { document.querySelector('#hint').textContent = 'Could not start: ' + m; });
+  </script>
+</body>
+</html>
